@@ -1,0 +1,109 @@
+<script lang="ts" setup>
+import type { Job } from "~~/server/database/schema";
+import _ from "lodash";
+import type { Apply } from "~~/server/database/schema";
+import type { IDataResult } from "~~/server/interfaces";
+import UiLayout from "~/components/layout.vue";
+import type { BreadcrumbItem } from "@nuxt/ui";
+
+definePageMeta({ layout: false });
+
+const { job } = defineProps<{ job: Job }>();
+
+const sortBy = ref("updatedAt");
+const sortOrder = ref("desc");
+const page = ref(1);
+const pageSize = ref(9);
+const dayjs = useDayjs();
+
+const { data, status, refresh } = await useFetch<IDataResult<Apply>>(
+  `/api/admin/job/${Use.route.params.id}/applys`,
+  {
+    method: "get",
+    query: { sortBy, sortOrder, page, pageSize },
+    watch: [sortBy, sortOrder, page, pageSize],
+  },
+);
+
+const applys = ref(
+  _.cloneDeep(
+    data.value?.items.sort((a, b) => {
+      return dayjs(a.updatedAt).isAfter(b.updatedAt) ? -1 : 1;
+    }) || [],
+  ),
+);
+
+const items = ref<BreadcrumbItem[]>([
+  {
+    label: Use.i18n.t("job.labels.title"),
+    icon: "i-lucide-home",
+    to: Use.localePath({ name: "admin" }),
+  },
+  {
+    label: job.title,
+  },
+]);
+</script>
+
+<template>
+  <ui-layout>
+    <template #header>
+      <ui-admin-job-header :applys :job />
+    </template>
+
+    <div class="overflow-auto h-full">
+      <div v-if="status === 'pending'" class="px-5 pt-5">
+        <div class="mb-3 flex items-center gap-3">
+          <ui-skeleton class="h-12 rounded-xl w-50 bg-default/50" />
+
+          <div class="mx-auto"></div>
+
+          <ui-skeleton class="h-7 rounded-3xl w-15 bg-default/50" />
+          <ui-skeleton class="h-12 rounded-3xl w-35 bg-default/50" />
+        </div>
+
+        <div class="flex gap-2">
+          <div
+            v-for="i in 5"
+            :key="i"
+            class="w-1/5 min-w-80 relative rounded-2xl overflow-hidden border-default h-max"
+            :style="{ height: `${Math.random() * (750 - 380) + 380}px` }"
+          >
+            <ui-skeleton class="absolute! inset-0 bg-default/50" />
+          </div>
+        </div>
+      </div>
+
+      <template v-else>
+        <div
+          class="sticky top-0 z-50 backdrop-blur-2xl bg-surface/10 px-5 py-2 border-b border-default"
+        >
+          <UBreadcrumb :items="items" />
+        </div>
+
+        <div class="m-10 w-max mx-auto">
+          <div class="flex mb-3">
+            <div>
+              <u-button class="rounded-2xl px-5 py-3" size="xl">
+                Ajouter une candidature
+              </u-button>
+            </div>
+
+            <div class="mx auto"></div>
+
+            <div class="flex items-center gap-2 ml-auto">
+              <ui-admin-apply-candate-group
+                class="bg-default rounded-xl border border-default"
+                :job
+              />
+            </div>
+          </div>
+
+          <div class="mx-auto w-full overflow-hidden rounded-2xl">
+            <ui-admin-apply-kanban :job class="pb-5 overflow-x-auto mx-auto" />
+          </div>
+        </div>
+      </template>
+    </div>
+  </ui-layout>
+</template>

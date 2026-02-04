@@ -1,0 +1,55 @@
+{
+  "name": "personal-brand-website-design",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "eslint .",
+    "typecheck": "nuxt typecheck",
+    "db:push": "npx drizzle-kit push",
+    "db:generate": "npx drizzle-kit generate",
+    "db:migrate": "npx drizzle-kit migrate"
+  },
+  "dependencies": {
+    "@iconify-json/lucide": "^1.2.74",
+    "@iconify-json/simple-icons": "^1.2.59",
+    "@nuxt/content": "^3.9.0",
+    "@nuxt/ui": "^4.2.1",
+    "@nuxtjs/i18n": "10.2.1",
+    "@supabase/supabase-js": "^2.94.0",
+    "@tiptap/extension-text-align": "^3.18.0",
+    "@vueuse/components": "^14.1.0",
+    "animate.css": "^4.1.1",
+    "animejs": "^4.2.2",
+    "better-sqlite3": "^12.5.0",
+    "dayjs-nuxt": "^2.1.11",
+    "drizzle-orm": "^0.45.1",
+    "file-type": "^21.3.0",
+    "marked": "^17.0.1",
+    "nuxt": "^4.2.1",
+    "nuxt-swiper": "2.0.1",
+    "pg": "^8.18.0",
+    "puppeteer": "^24.34.0",
+    "sortablejs": "^1.15.6",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@nuxt/eslint": "^1.10.0",
+    "@types/sortablejs": "^1.15.9",
+    "bindings": "^1.5.0",
+    "drizzle-kit": "^0.31.8",
+    "eslint": "^9.39.1",
+    "sass": "^1.94.2",
+    "typescript": "^5.9.3",
+    "vue-tsc": "^3.1.5"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3"
+    ]
+  },
+  "packageManager": "pnpm@10.23.0"
+}

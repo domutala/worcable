@@ -1,0 +1,505 @@
+{
+  "site": {
+    "description": "Talent placement agency"
+  },
+
+  "cookies": {
+    "text": "To provide you with the best possible experience, we use cookies. They help us personalize content and understand how you use our site.",
+    "btn": "OK, got it"
+  },
+
+  "words": {
+    "on_this_page": "On this page",
+    "hire_me": "Hire me"
+  },
+
+  "services": {
+    "more": "Learn more",
+    "label": "Services",
+
+    "title": "The agency connecting you with the talent you need",
+    "description": "With BNJ Team Maker, outsourcing becomes a strategic growth lever. We find the most qualified profiles for you, ready to integrate into your team to help you reach your goals faster. You delegate, we place the best international talent. You save time, we bring you value.",
+
+    "list": [
+      {
+        "title": "Outsourcing",
+        "description": "Providing top talent for various missions (short, medium, or long-term) while reducing your HR costs.",
+        "objective": "Transform an aging frontend into a modern, high-performance interface.",
+        "icon": "i-lucide-external-link",
+        "code": "outsourcing"
+      },
+      {
+        "title": "Simplified Management",
+        "description": "We invest capital and human resources into your company.",
+        "objective": "Deliver reliable, efficient interfaces built to last.",
+        "icon": "i-fluent-people-team-48-regular",
+        "code": "management"
+      },
+      {
+        "title": "Assurance",
+        "description": "Rapid response in case of employee departure and future recruitment to guarantee your business continuity.",
+        "icon": "i-material-symbols-light-verified-user-outline",
+        "code": "assurance"
+      },
+      {
+        "title": "Training",
+        "description": "Develop your employees' skills with specialized experts to improve productivity and strengthen team spirit.",
+        "icon": "i-ph-book-open-text-light",
+        "code": "formation"
+      },
+      {
+        "title": "Fullstack Development",
+        "description": "End-to-end project management: Nuxt frontend, NestJS backend, database, integration, and optimization. I design complete, consistent architectures built for stability and scalability.",
+        "objective": "Deliver a complete, technically sound, and production-ready product.",
+        "icon": "i-mingcute-usb-flash-disk-line"
+      },
+      {
+        "title": "Technical Audit & Performance Optimization",
+        "description": "Deep analysis of your application (frontend and backend) to detect slowdowns, architectural issues, code duplication, or performance flaws. I provide a clear, prioritized report and apply the necessary optimizations.",
+        "objective": "Improve the quality, speed, and stability of your application.",
+        "icon": "i-lucide-laptop-minimal-check"
+      },
+      {
+        "title": "Automation, CI/CD & Deployment",
+        "description": "Setting up stable, automated deployment pipelines via GitHub Actions, GitLab CI, or Jenkins. Test automation, reliable builds, secure deployments, monitoring, and environment organization.",
+        "objective": "Make your deliveries faster, safer, and perfectly reproducible.",
+        "icon": "i-lucide-git-graph"
+      },
+      {
+        "title": "Dashboard & Business Tool Development",
+        "description": "Designing simple and effective internal tools: HRIS, document management, approval workflows, reporting, and custom business modules. I prioritize clarity, speed, and ease of use.",
+        "objective": "Improve team productivity with tools adapted to their reality.",
+        "icon": "i-lucide-tool-case"
+      }
+    ]
+  },
+
+  "home": {
+    "marquee": {
+      "title": "Our partners"
+    },
+
+    "hero": {
+      "text": "Outsource your team while reducing costs in record time",
+      "cta": "Our services"
+    },
+
+    "stats": {
+      "title": "Work with A-Players more affordably than interns, with total simplicity",
+      "list": [
+        { "count": "+108", "title": "Custom Recruitments" },
+        { "count": "+9", "title": "Partners who trust us" },
+        { "count": "+10", "title": "Available job offers" }
+      ]
+    },
+
+    "description": {
+      "text": "Work with the best profiles from the **international French-speaking market** and learn to delegate tasks to optimize your company's growth."
+    },
+
+    "services": {
+      "title": "The agency connecting you with the talent you need",
+      "description": "With BNJ Team Maker, outsourcing becomes a strategic growth lever. We find the most qualified profiles for you, ready to integrate into your team to help you reach your goals faster. You delegate, we place the best international talent. You save time, we bring you value."
+    }
+  },
+
+  "meeting": {
+    "cta": "Book a meeting"
+  },
+
+  "pages": {
+    "services": {
+      "outsourcing": {
+        "title": "Outsourcing",
+        "subtitle": "Optimize your performance by delegating the essentials",
+
+        "hero": {
+          "label": "Outsourcing",
+          "title": "Placing the best international talent to boost your company's growth."
+        },
+
+        "advantages": {
+          "list": [
+            {
+              "title": "Operational Cost Reduction",
+              "description": "Outsourcing reduces expenses related to recruitment, training, and internal infrastructure. You only pay for the services used, without additional fixed costs."
+            },
+            {
+              "title": "Access to Specialized Expertise",
+              "description": "Benefit immediately from sharp skills and best practices thanks to professionals specialized in their field, without having to recruit or train internally."
+            },
+            {
+              "title": "Flexibility and Adaptability",
+              "description": "Quickly adapt your resources based on your activity, projects, or seasonality, while maintaining full control over your costs."
+            },
+            {
+              "title": "Focus on Your Core Business",
+              "description": "By delegating time-consuming tasks, your teams can focus on high-value activities, fostering overall growth and performance."
+            }
+          ]
+        }
+      }
+    },
+
+    "career": {
+      "hero": {
+        "title": "Join a team that values talent and human excellence",
+        "subtitle": "At BNJ Team Maker, we build sustainable career paths by connecting the best talent to ambitious and meaningful projects.",
+        "cta": "Spontaneous Application",
+        "cta2": "Our job offers"
+      },
+      "whyUs": {
+        "title": "Why work with us?",
+        "description": "At BNJ Team Maker, we believe that business success starts with the men and women who drive it. Our mission is to connect talent with opportunities while creating a healthy, stimulating, and evolving work environment.",
+        "extra": "We support companies of all sizes in outsourcing and structuring their teams with a human-centric, transparent, and results-oriented approach."
+      },
+      "vision": {
+        "title": "Our Vision",
+        "items": [
+          "Valuing talent, regardless of background or location",
+          "Fostering continuous professional growth",
+          "Creating sustainable, win-win collaborations",
+          "Combining performance, well-being, and positive impact"
+        ]
+      },
+      "profiles": {
+        "title": "Profiles we are looking for",
+        "description": "We are constantly looking for motivated and passionate talent in several fields.",
+        "items": [
+          "Customer Support and Relations",
+          "Administrative Assistance",
+          "Digital Marketing and Community Management",
+          "Web Development and IT",
+          "Project Management",
+          "Accounting and Finance"
+        ],
+        "note": "Whether you are junior, mid-level, or expert, your motivation and mindset make the difference."
+      },
+      "benefits": {
+        "title": "What we offer",
+        "items": {
+          "flexibility": {
+            "title": "A Flexible Work Framework",
+            "description": "We promote an adaptable work environment that respects your personal balance while ensuring performance.",
+            "points": [
+              "Remote or hybrid environment",
+              "Adapted schedules based on projects",
+              "Culture based on trust and autonomy"
+            ]
+          },
+          "projects": {
+            "title": "Stimulating and Rewarding Projects",
+            "description": "You work on concrete, high-impact missions within demanding professional environments.",
+            "points": [
+              "Varied high-value missions",
+              "Collaboration with local and international companies",
+              "Structured professional environments"
+            ]
+          },
+          "support": {
+            "title": "Human and Structured Support",
+            "description": "We accompany you at every stage to ensure your integration, skill development, and success.",
+            "points": [
+              "Clear and human onboarding",
+              "Regular follow-ups and constructive feedback",
+              "Opportunities for growth based on performance"
+            ]
+          },
+          "recognition": {
+            "title": "Recognition Worthy of Your Value",
+            "description": "Your commitment and results are recognized in a transparent, fair, and sustainable way.",
+            "points": [
+              "Fair and transparent compensation",
+              "Valuation of skills and results",
+              "Long-term opportunities"
+            ]
+          }
+        }
+      },
+      "values": {
+        "title": "Our Values",
+        "items": [
+          {
+            "title": "Commitment",
+            "description": "We invest ourselves fully in every collaboration."
+          },
+          {
+            "title": "Respect",
+            "description": "We build healthy and balanced professional relationships."
+          },
+          {
+            "title": "Excellence",
+            "description": "We constantly strive for quality and continuous improvement."
+          },
+          {
+            "title": "Transparency",
+            "description": "We prioritize clear and honest communication."
+          }
+        ]
+      },
+      "recruitmentProcess": {
+        "title": "Recruitment Process",
+        "steps": [
+          {
+            "title": "Application Submission",
+            "description": "Submit your application directly via our online form by attaching your CV and a cover letter. This first step allows us to better understand your background, skills, and professional aspirations. We ensure the process is simple, fast, and accessible to everyone."
+          },
+          {
+            "title": "Profile Analysis",
+            "description": "Our team carefully reviews each application to identify profiles that match our values and our partners' needs. We consider your technical skills and experience, but also your motivation and growth potential. Every profile is analyzed fairly and humanely."
+          },
+          {
+            "title": "Interview with Our Team",
+            "description": "If your profile is selected, we organize an interview by video call or phone depending on your availability. This exchange allows us to get to know you better, evaluate your skills, and answer your questions. It is also an opportunity to check the alignment between your expectations and our opportunities."
+          },
+          {
+            "title": "Validation and Integration",
+            "description": "After validation, we support you through your integration to allow you to start in the best conditions. A structured onboarding is put in place to introduce you to tools, methods, and teams. Our goal is to promote a smooth start and a lasting collaboration."
+          }
+        ],
+        "note": "We prioritize a simple, fast, and human process."
+      },
+      "apply": {
+        "title": "Spontaneous Application",
+        "description": "Do you want to join a dynamic and ambitious team?",
+        "cta": "Send us your application via our online form.",
+        "footer": "We carefully study every profile."
+      }
+    },
+
+    "contact": {
+      "title": "Let's talk about your project and build a lasting collaboration",
+      "description": "A question, a specific need, or an outsourcing project? Our team is here to support you at every stage.",
+
+      "items": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "companyName": "Company Name",
+        "companySize": "Company Size",
+        "message": "Message"
+      },
+
+      "companySize": {
+        "-20": "Less than 20 employees",
+        "21-250": "Between 20 and 250 employees",
+        "251-2000": "Between 250 and 2,000 employees",
+        "+2000": "More than 2,000 employees"
+      },
+
+      "contactReasons": {
+        "title": "Why contact us?",
+        "items": [
+          {
+            "title": "Outsourcing Your Teams",
+            "description": "You want to delegate certain functions of your company while ensuring performance, reliability, and flexibility. We support you in setting up teams adapted to your goals."
+          },
+          {
+            "title": "Need for Qualified Talent",
+            "description": "We identify and provide you with competent and motivated profiles, capable of quickly integrating into your organization and culture."
+          },
+          {
+            "title": "Information Request",
+            "description": "You have questions about our services, our working methods, or our collaboration terms. Our team provides clear and transparent answers."
+          },
+          {
+            "title": "Partnership",
+            "description": "You want to collaborate with BNJ Team Maker as a partner or provider. Let's discuss collaboration opportunities together."
+          }
+        ]
+      },
+
+      "errors": {
+        "firstName": {
+          "required": "First name is required",
+          "invalid": "First name must be a string",
+          "min": "First name must contain at least 2 characters"
+        },
+        "lastName": {
+          "required": "Last name is required",
+          "invalid": "Last name must be a string",
+          "min": "Last name must contain at least 2 characters"
+        },
+        "email": {
+          "required": "Email address is required",
+          "invalid": "Please enter a valid email address"
+        },
+        "companyName": {
+          "required": "Company name is required",
+          "min": "Company name must contain at least 2 characters"
+        },
+        "companySize": {
+          "required": "Please select a company size"
+        },
+        "message": {
+          "required": "Message is required",
+          "min": "Message must contain at least 10 characters",
+          "max": "Message must not exceed 1,000 characters"
+        }
+      },
+
+      "submit": "Send",
+
+      "success": "**Thank you for your message!** \n\nWe have received it and our team will get back to you as soon as possible.\n\nSee you soon."
+    },
+
+    "apply": {
+      "title": "Spontaneous Application",
+
+      "items": {
+        "availability": "Your availability",
+        "desiredGrossSalary": "Desired salary (gross per year)",
+        "educationLevel": "Education level",
+        "motivation": "Motivation text",
+        "cv": "Drop or choose a file",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "phone": "Phone number",
+        "acceptCondition": "I have read and agree to the terms of use"
+      },
+
+      "availability": {
+        "immediately": "Immediately",
+        "1month": "Within 1 month",
+        "2mois": "Within 2 months",
+        "3mois": "Within 3 months",
+        "other": "Other"
+      },
+
+      "educationLevel": {
+        "none": "No degree",
+        "bepCap": "Vocational qualification (BEP, CAP)",
+        "baccalaureate": "High school diploma / A-Levels",
+        "bacPlus2": "Associate's degree (2 years)",
+        "bacPlus3": "Bachelor's degree (3 years)",
+        "bacPlus4": "Master's degree year 1 (4 years)",
+        "bacPlus5": "Master's degree / Engineering degree (5 years)",
+        "doctorate": "Doctorate or equivalent (8+ years)"
+      },
+
+      "errors": {
+        "firstName": {
+          "required": "First name is required",
+          "invalid": "First name must be a string",
+          "min": "First name must contain at least 2 characters"
+        },
+        "lastName": {
+          "required": "Last name is required",
+          "invalid": "Last name must be a string",
+          "min": "Last name must contain at least 2 characters"
+        },
+        "email": {
+          "required": "Email address is required",
+          "invalid": "Please enter a valid email address"
+        },
+        "phone": {
+          "required": "Phone number is required",
+          "invalid": "Please enter a valid phone number"
+        },
+        "desiredGrossSalary": {
+          "required": "Desired gross salary is required.",
+          "invalid": "Please enter a valid amount."
+        },
+        "educationLevel": {
+          "required": "Please select your education level."
+        },
+        "availability": {
+          "required": "Please provide your availability"
+        },
+        "acceptCondition": {
+          "required": "You must accept the terms of use."
+        },
+        "cv": {
+          "size": "File must not exceed 10 MB",
+          "type": "File must be a PDF",
+          "required": "A file is required"
+        }
+      },
+
+      "submit": "Send my application",
+      "success": "Thank you for your application. We have received your information and our team will review it carefully. If your profile matches our current or future opportunities, we will contact you for the next steps."
+    },
+
+    "faq": {
+      "description": "Find answers to the most frequently asked questions regarding our recruitment services.",
+
+      "items": [
+        {
+          "question": "Why outsource my company's recruitment?",
+          "response": "Outsourcing allows you to save time, access highly qualified international talent, and reduce human resource costs. By entrusting this task to a specialized placement agency like BNJ Talent Maker, you benefit from sharp expertise to identify, evaluate, and integrate the best profiles without having to manage a time-consuming internal process."
+        },
+        {
+          "question": "How does a placement agency like BNJ Team Maker work?",
+          "response": "A placement agency acts as an intermediary between companies and talent. At BNJ Team Maker, we analyze your needs, select the best candidates through our network and sourcing expertise, and support you in their integration. Our goal is to provide you with suitable profiles, in France and internationally, whether for one-off missions or long-term positions."
+        },
+        {
+          "question": "How much does a placement agency cost?",
+          "response": "The cost of a recruitment agency varies according to several criteria: the complexity of the position, the level of experience sought, the duration of the mission, and associated services (HR audit, training, replacement guarantee, etc.). At BNJ Talent Maker, we offer solutions adapted to your budget and objectives with a transparent pricing model."
+        },
+        {
+          "question": "What types of profiles can I outsource with BNJ Talent Maker?",
+          "response": "We recruit talent in various fields, ranging from support functions (HR, finance, administration) to more technical profiles (developers, engineers, digital marketing specialists, etc.). Our expertise allows us to source freelancers, consultants, and full-time employees, depending on your needs and industry."
+        },
+        {
+          "question": "What are the advantages of talent outsourcing?",
+          "response": "Using an outsourcing agency like BNJ Talent Maker allows you to: Reduce recruitment and HR management costs. Quickly access the skills you need. Gain flexibility and adapt your workforce to fluctuations in activity. Secure your recruitment through our recruitment insurance and replacement guarantee."
+        },
+        {
+          "question": "What guarantees do you offer on recruitment quality?",
+          "response": "We make it a point of honor to offer hand-picked talent. Each candidate goes through a rigorous process including skill assessment, reference checks, and an in-depth interview. Furthermore, thanks to our recruitment insurance, we commit to offering a quick solution in case of a premature departure of a recruited talent."
+        },
+        {
+          "question": "How do you ensure proper integration of outsourced talent into my company?",
+          "response": "We support our clients well beyond simple recruitment. Through our HR audit, we analyze how talent integrates into your organization, track their performance, and implement solutions to optimize their effectiveness. We also offer tailored training to strengthen their skills and facilitate their adaptation to your company."
+        },
+        {
+          "question": "Why choose BNJ Talent Maker over another recruitment firm?",
+          "response": "BNJ Talent Maker is not just a placement agency. We are a true strategic partner helping you optimize your recruitment and structure your teams for the long term. Our unique approach is based on: An international network of qualified talent. A proven recruitment methodology and tailor-made support. A complete offer including HR audit, training, and recruitment insurance. A replacement guarantee to secure your recruitments."
+        },
+        {
+          "question": "Does BNJ Talent Maker recruit only in France?",
+          "response": "We have an international reach and support companies in their search for talent anywhere in the world. Outsourcing allows you to access highly qualified international profiles while optimizing your recruitment costs."
+        },
+        {
+          "question": "How to start a collaboration with BNJ Talent Maker?",
+          "response": "It's simple! Book a meeting with our team for a free consultation. We will analyze your needs, present our solutions, and propose a tailor-made strategy to optimize your recruitment and strengthen your team."
+        }
+      ]
+    }
+  },
+
+  "testimonials": [
+    {
+      "name": "Julien Picard",
+      "function": "Sales Director",
+      "avatar": "/images/partners/Julien_Picard.jpeg",
+      "quote": "Benjamin connected us with Ibrahima, a specialist in lead generation. He feeds our CRM daily with new prospects. Since then, our sales team gets more appointments and our turnover has increased!"
+    },
+    {
+      "name": "Mathieu Dumont",
+      "function": "Travel Organizer",
+      "avatar": "/images/partners/Mathieu_Dumont.jpeg",
+      "quote": "In my business, good social media management is essential. However, it took up a lot of my time, and recruiting a community manager in France was expensive. Thanks to Benjamin, I was able to collaborate with Domoina, who manages all my communication and has new creative ideas every day!"
+    },
+    {
+      "name": "Sara Vallée",
+      "function": "Recruitment Consultant",
+      "avatar": "/images/partners/Sara_Vallée.jpeg",
+      "quote": "Thanks to BNJ Team Maker, I work with Julius, who manages all of my sourcing. This solution allows me to focus fully on prospecting and following up with my clients, to offer a superior quality and high-value-added service."
+    }
+  ],
+
+  "profiles": [
+    "Sales Representative",
+    "Versatile Assistant",
+    "Graphic Designer",
+    "Administrative Assistant",
+    "Growth Hacker",
+    "Copywriter",
+    "Community Manager",
+    "Customer Support Agent",
+    "Customer Success Manager",
+    "Business Developer"
+  ]
+}
