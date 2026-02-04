@@ -6,5 +6,5 @@ const { job } = defineProps<{ job: Job }>();
 </script>
 
 <template>
-  <ui-admin-job-create :job />
+  <ui-job-create :job />
 </template>

@@ -57,7 +57,7 @@ const applysGroup = computed(() => {
       </div>
 
       <div class="flex-1 overflow-auto px-5">
-        <ui-admin-kanban v-if="applys" :applys class="mx-auto" />
+        <ui-kanban v-if="applys" :applys class="mx-auto" />
       </div>
       <div class="h-10"></div>
     </div>

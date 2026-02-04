@@ -201,7 +201,7 @@ function setSortable() {
           class="absolute inset-0 rounded-xl border-primary hidden group-[.ghost]:block bg-surface"
         ></div>
 
-        <ui-admin-apply-kanban-apply
+        <ui-apply-kanban-apply
           :job
           :apply
           :status-changing="Object.values(statusChanging).includes(apply.id)"

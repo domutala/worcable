@@ -41,7 +41,6 @@ const items = ref<BreadcrumbItem[]>([
     <div class="mt-10">
       <div class="max-w-4xl flex flex-col gap-2 mx-auto">
         <div class="flex">
-          <u-button @click="() => refresh()">refresh</u-button>
           <div class="mx-auto"></div>
           <nuxt-link
             :to="$localePath({ name: 'admin-job-new' })"
@@ -95,7 +94,7 @@ const items = ref<BreadcrumbItem[]>([
 
                 <div class="mx-auto"></div>
 
-                <ui-admin-apply-candate-group
+                <ui-apply-candate-group
                   class="bg-default rounded-xl border border-default"
                   :job
                 />

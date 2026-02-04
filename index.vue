@@ -81,7 +81,7 @@ const items = ref<BreadcrumbItem[]>([
     </div>
 
     <div v-else-if="applys" class="h-full flex flex-col mx-auto">
-      <ui-admin-job-header :applys :job />
+      <ui-job-header :applys :job />
 
       <div
         class="bg-surface flex-1 mx-2 mb-2 rounded-2xl overflow-auto border border-default"
@@ -103,7 +103,7 @@ const items = ref<BreadcrumbItem[]>([
             <div class="mx auto"></div>
 
             <div class="flex items-center gap-2 ml-auto">
-              <ui-admin-apply-candate-group
+              <ui-apply-candate-group
                 class="bg-default rounded-xl border border-default"
                 :job
               />
@@ -111,7 +111,7 @@ const items = ref<BreadcrumbItem[]>([
           </div>
 
           <div class="mx-auto w-full overflow-hidden rounded-2xl">
-            <ui-admin-apply-kanban :job class="pb-5 overflow-x-auto mx-auto" />
+            <ui-apply-kanban :job class="pb-5 overflow-x-auto mx-auto" />
           </div>
         </div>
       </div>

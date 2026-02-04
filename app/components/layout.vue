@@ -1,17 +1,5 @@
 <script lang="ts" setup>
-import UiHeader from "~/components/header/index.vue";
-
-const appConfig = useAppConfig();
-const title = appConfig.site.name;
-const i18n = useI18n();
-
-useSeoMeta({
-  title: `${title} - ${i18n.t("site.description")}`,
-  description: i18n.t("site.description"),
-  ogTitle: `${title} - ${i18n.t("site.description")}`,
-  ogDescription: i18n.t("site.description"),
-  // ogImage: "https://ui.nuxt.com/assets/templates/nuxt/starter-light.png",
-});
+import UiHeader from "~/components/header.vue";
 
 onMounted(() => {
   useCookieConsent().init();

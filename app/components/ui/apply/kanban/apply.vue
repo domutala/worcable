@@ -92,7 +92,7 @@ const isOpen = ref(false);
 
   <u-modal v-model:open="isOpen" :ui="{ content: 'max-w-250 rounded-2xl' }">
     <template #content>
-      <ui-admin-apply-one :apply :job />
+      <ui-apply-one :apply :job />
     </template>
   </u-modal>
 </template>

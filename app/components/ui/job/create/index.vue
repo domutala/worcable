@@ -95,7 +95,7 @@ async function onSubmit() {
     :class="{ 'pointer-events-none': submitting }"
   >
     <template v-if="steps[iStep] === 'title'">
-      <ui-admin-job-create-step-title
+      <ui-job-create-step-title
         ref="title"
         :data
         @input="(dt) => (data = { ...data, ...dt })"
@@ -104,7 +104,7 @@ async function onSubmit() {
     </template>
 
     <template v-else-if="steps[iStep] === 'jobDetails'">
-      <ui-admin-job-create-step-job-details
+      <ui-job-create-step-job-details
         ref="jobDetails"
         :data
         @input="(dt) => (data = { ...data, ...dt })"
@@ -113,7 +113,7 @@ async function onSubmit() {
     </template>
 
     <template v-else-if="steps[iStep] === 'jobDescription'">
-      <ui-admin-job-create-step-job-description
+      <ui-job-create-step-job-description
         ref="jobDescription"
         :data
         @input="(dt) => (data = { ...data, ...dt })"
@@ -121,7 +121,7 @@ async function onSubmit() {
       />
     </template>
     <template v-else-if="steps[iStep] === 'candidateDetails'">
-      <ui-admin-job-create-step-candidate-details
+      <ui-job-create-step-candidate-details
         ref="candidateDetails"
         key="candidateDetails"
         :data
@@ -130,7 +130,7 @@ async function onSubmit() {
       />
     </template>
     <template v-else-if="steps[iStep] === 'companyDescription'">
-      <ui-admin-job-create-step-company-description
+      <ui-job-create-step-company-description
         ref="companyDescription"
         key="companyDescription"
         :data
