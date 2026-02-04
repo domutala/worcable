@@ -15,7 +15,7 @@ const refs = {
   companyDescription: useTemplateRef("companyDescription"),
 };
 
-const iStep = ref(0);
+const iStep = ref(2);
 const steps = [
   "title",
   "jobDetails",

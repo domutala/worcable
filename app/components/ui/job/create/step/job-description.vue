@@ -45,17 +45,15 @@ defineExpose({ form });
         :help="$t('job.items.jobDescription.hint')"
         :ui="{ help: 'px-5', error: 'px-5' }"
       >
-        <u-textarea
-          v-model="state.jobDescription"
-          class="w-full"
-          color="neutral"
-          :ui="{
-            base: 'rounded-2xl p-5 px-7',
-          }"
-          :rows="2"
-          :placeholder="$t('job.items.jobDescription.label')"
-          autoresize
-        ></u-textarea>
+        <div
+          class="bg-default border border-default rounded-2xl overflow-hidden"
+        >
+          <ui-editor
+            v-model="state.jobDescription"
+            :placeholder="$t('job.items.jobDescription.label')"
+            class="max-h-100 overflow-y-auto w-full"
+          />
+        </div>
       </UFormField>
 
       <UFormField

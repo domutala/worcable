@@ -1,11 +1,5 @@
-<script lang="ts" setup>
-import UiLayout from "~/components/layout.vue";
-</script>
+<script lang="ts" setup></script>
 
 <template>
-  <ui-layout>
-    <u-main>
-      <slot />
-    </u-main>
-  </ui-layout>
+  <slot />
 </template>

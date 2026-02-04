@@ -46,17 +46,15 @@ defineExpose({ form });
         :help="$t('job.items.candidateProfile.hint')"
         :ui="{ help: 'px-5', error: 'px-5' }"
       >
-        <u-textarea
-          v-model="state.candidateProfile"
-          class="w-full"
-          color="neutral"
-          :ui="{
-            base: 'rounded-2xl p-5 px-7',
-          }"
-          :rows="2"
-          :placeholder="$t('job.items.candidateProfile.label')"
-          autoresize
-        ></u-textarea>
+        <div
+          class="bg-default border border-default rounded-2xl overflow-hidden"
+        >
+          <ui-editor
+            v-model="state.candidateProfile"
+            :placeholder="$t('job.items.candidateProfile.label')"
+            class="max-h-100 overflow-auto"
+          />
+        </div>
       </UFormField>
 
       <button type="submit" class="size-0 p-0 opacity-0 absolute"></button>

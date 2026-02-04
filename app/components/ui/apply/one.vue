@@ -187,7 +187,13 @@ const { job, apply } = defineProps<{ job: Job; apply: Apply }>();
           <h2 class="text- font-bold">
             {{ $t("apply.items.motivation.label") }}
           </h2>
-          <p v-html="md.render(apply.data.motivation)"></p>
+
+          <ui-editor
+            v-model="apply.data.motivation"
+            :editable="false"
+            :placeholder="$t('job.items.jobDescription.label')"
+            class="max-h-100 overflow-y-auto w-full"
+          />
         </div>
       </div>
     </div>

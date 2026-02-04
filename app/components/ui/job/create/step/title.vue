@@ -26,7 +26,6 @@ watchImmediate(
   () => state.title,
   () => {
     if (state.title) state.title = state.title.replaceAll("\n", "");
-    console.log("+****");
   },
 );
 

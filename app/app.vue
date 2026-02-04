@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import { useFavicon, usePreferredDark } from "@vueuse/core";
-import { computed } from "vue";
+import { useFavicon } from "@vueuse/core";
 
 const appConfig = useAppConfig();
 const title = appConfig.site.name;

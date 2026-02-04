@@ -4,11 +4,23 @@
 @theme static {
   --font-sans: "Public Sans", sans-serif;
   --color-surface: oklab(93.403% 0 -0.00011);
+
+
+  --ui-color-primary-50: oklch(0.957 0.021 274.08);
+  --ui-color-primary-100: oklch(0.906 0.045 271.75);
+  --ui-color-primary-200: oklch(0.813 0.093 268.79);
+  --ui-color-primary-300: oklch(0.728 0.14 265.13);
+  --ui-color-primary-400: oklch(0.635 0.197 258.45);
+  --ui-color-primary-500: oklch(0.539 0.186 256.34);
+  --ui-color-primary-600: oklch(0.462 0.16 256.35);
+  --ui-color-primary-700: oklch(0.382 0.132 256.37);
+  --ui-color-primary-800: oklch(0.296 0.102 256.1);
+  --ui-color-primary-900: oklch(0.219 0.075 256.14);
+  --ui-color-primary-950: oklch(0.179 0.063 256.74);
 }
 
 
 
 .dark {
-  /* --color-surface: oklab(95.514% 0 -0.00011); */
   --color-surface: oklab(0.24 0 0);
 }
