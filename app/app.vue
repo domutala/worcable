@@ -14,8 +14,8 @@ useHead({
 useSeoMeta({
   title: `${title} - ${Use.i18n.t("site.description")}`,
   description: Use.i18n.t("site.description"),
-  ogTitle: `${title} - ${Use.i18n.t("site.description")}`,
-  ogDescription: Use.i18n.t("site.description"),
+  ogTitle: `${title} - ${Use.i18n.t("site.ogDescription")}`,
+  ogDescription: Use.i18n.t("site.ogDescription"),
   // ogImage: "https://ui.nuxt.com/assets/templates/nuxt/starter-light.png",
 });
 

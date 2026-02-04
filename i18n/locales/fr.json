@@ -1,6 +1,7 @@
 {
   "site": {
-    "description": "Agence de placement de talents"
+    "description": "Logiciel de recrutement tout-en-un. Créer, diffuser et gérer vos offres d'emploi en toute simplicité",
+    "ogDescription": "Simplifiez vos recrutements avec Worcable. Créez vos offres, centralisez les candidatures et gérez vos talents sur une plateforme intuitive conçue pour l'efficacité des entreprises."
   },
 
   "cookies": {
