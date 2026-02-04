@@ -3,7 +3,7 @@ const content = ref(
   `
 
   # Hello World\n\nThis is **Markdown**!
-  
+
   <h1>These 😃 are 🔥 some 😺 emojis</h1>
   🤯 rendered 👻 as 💆 inline ✌ nodes.
 
@@ -34,6 +34,6 @@ There is also support for emoticons. Try typing <3.
 <template>
   <u-container class="py-15">
     <UColorModeButton />
-    <ui-editor v-model="content" />
+    <ui-editor v-model="content" class="border rounded-2xl border-default" />
   </u-container>
 </template>

@@ -15,12 +15,25 @@ import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import Placeholder from "@tiptap/extension-placeholder";
 import HardBreak from "@tiptap/extension-hard-break";
 
-const { editable, placeholder } = defineProps<{
-  editable?: boolean;
-  placeholder?: string;
-}>();
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import { all, createLowlight } from "lowlight";
+import css from "highlight.js/lib/languages/css";
+import js from "highlight.js/lib/languages/javascript";
+import ts from "highlight.js/lib/languages/typescript";
+import html from "highlight.js/lib/languages/xml";
+
+const { editable, placeholder } = defineProps({
+  editable: { type: Boolean, default: true },
+  placeholder: String,
+});
 
 const content = defineModel<string>({ default: "" });
+
+const lowlight = createLowlight(all);
+lowlight.register("html", html);
+lowlight.register("css", css);
+lowlight.register("js", js);
+lowlight.register("ts", ts);
 
 const editor = useEditor({
   content: content.value,
@@ -51,6 +64,10 @@ const editor = useEditor({
       placeholder, // texte du placeholder
       showOnlyWhenEditable: true,
     }),
+
+    CodeBlockLowlight.configure({
+      lowlight,
+    }),
   ],
 
   // Don't render on the server, only on the client after hydration
@@ -59,7 +76,7 @@ const editor = useEditor({
   // place the cursor in the editor after initialization
   autofocus: true,
   // make the text editable (default is true)
-  editable: editable === undefined ? true : editable,
+  editable,
   // prevent loading the default ProseMirror CSS that comes with Tiptap
   // should be kept as `true` for most cases as it includes styles
   // important for Tiptap to work correctly
@@ -121,6 +138,14 @@ onBeforeUnmount(() => {
       <ui-editor-text-align :editor />
       <ui-editor-list-item :editor />
       <ui-editor-text-formating :editor />
+
+      <u-button
+        variant="ghost"
+        icon="i-lucide-code"
+        :color="editor.isActive('codeBlock') ? 'primary' : 'neutral'"
+        @click="editor.chain().focus().toggleCodeBlock().run()"
+      >
+      </u-button>
     </div>
 
     <EditorContent :editor="editor" v-model="content" />

@@ -113,4 +113,74 @@ function setAlign(align: Align) {
   margin-top: 0.25em;
   margin-bottom: 0.25em;
 }
+
+/* ******************* */
+
+/* Bloc code */
+.ui-editor pre {
+  @apply rounded-lg font-mono my-6 p-3;
+
+  /* Fond clair / foncé */
+  background-color: var(--color-surface);
+  color: var(--ui-text-highlighted);
+}
+
+/* Code interne */
+.ui-editor pre code {
+  @apply bg-transparent text-sm p-0;
+  font-family: "JetBrainsMono", monospace;
+  color: inherit;
+}
+
+/* Highlight.js */
+.ui-editor .hljs-comment,
+.ui-editor .hljs-quote {
+  @apply text-gray-500;
+}
+
+.ui-editor .hljs-variable,
+.ui-editor .hljs-template-variable,
+.ui-editor .hljs-attribute,
+.ui-editor .hljs-tag,
+.ui-editor .hljs-name,
+.ui-editor .hljs-regexp,
+.ui-editor .hljs-link,
+.ui-editor .hljs-selector-id,
+.ui-editor .hljs-selector-class {
+  @apply text-red-400;
+}
+
+.ui-editor .hljs-number,
+.ui-editor .hljs-meta,
+.ui-editor .hljs-built_in,
+.ui-editor .hljs-builtin-name,
+.ui-editor .hljs-literal,
+.ui-editor .hljs-type,
+.ui-editor .hljs-params {
+  @apply text-orange-400;
+}
+
+.ui-editor .hljs-string,
+.ui-editor .hljs-symbol,
+.ui-editor .hljs-bullet {
+  @apply text-amber-700;
+}
+
+.ui-editor .hljs-title,
+.ui-editor .hljs-section {
+  @apply text-yellow-300;
+}
+
+.ui-editor .hljs-keyword,
+.ui-editor .hljs-selector-tag {
+  @apply text-indigo-600;
+}
+
+.ui-editor .hljs-emphasis {
+  @apply italic;
+}
+
+.ui-editor .hljs-strong {
+  @apply font-bold;
+}
 </style>
