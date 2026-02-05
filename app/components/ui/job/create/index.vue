@@ -15,7 +15,7 @@ const refs = {
   companyDescription: useTemplateRef("companyDescription"),
 };
 
-const iStep = ref(1);
+const iStep = ref(0);
 const steps = [
   "title",
   "jobDetails",
@@ -53,6 +53,8 @@ const items = [
   },
 ] satisfies StepperItem[];
 
+const isEndStep = computed(() => iStep.value === steps.length - 1);
+
 function gotoNext() {
   const $el = refs[steps[iStep.value] as "title"];
   $el.value?.form?.submit();
@@ -64,7 +66,7 @@ function gotoPrev() {
 function onNext(dt: Record<string, any>) {
   data.value = { ...data.value, ...dt };
 
-  if (iStep.value === steps.length - 1) onSubmit();
+  if (isEndStep.value) onSubmit();
   else iStep.value++;
 }
 
@@ -182,7 +184,7 @@ async function onSubmit() {
             class="rounded-2xl p-3 px-4 cursor-pointer"
             @click="gotoNext"
           >
-            {{ $t("job.create.next") }}
+            {{ $t(isEndStep ? "job.create.save" : "job.create.next") }}
           </u-button>
         </div>
       </u-container>

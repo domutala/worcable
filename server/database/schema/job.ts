@@ -105,9 +105,7 @@ export function getJobShema($t: (str: string) => string = (str) => str) {
     })
     .optional();
 
-  const skills = z
-    .array(skillSchema)
-    .min(1, $t("job.items.skills.errors.required"));
+  const skills = z.array(skillSchema).default([]).optional();
 
   const candidateProfile = z
     .string($t("job.items.candidateProfile.errors.required"))
