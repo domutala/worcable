@@ -45,15 +45,11 @@ defineExpose({ form });
         :help="$t('job.items.jobDescription.hint')"
         :ui="{ help: 'px-5', error: 'px-5' }"
       >
-        <div
-          class="bg-default border border-default rounded-2xl overflow-hidden"
-        >
-          <ui-editor
-            v-model="state.jobDescription"
-            :placeholder="$t('job.items.jobDescription.label')"
-            class="max-h-100 overflow-y-auto w-full"
-          />
-        </div>
+        <ui-editor
+          v-model="state.jobDescription"
+          :placeholder="$t('apply.items.jobDescription.label')"
+          class="max-h-100 bg-default border border-default rounded-2xl overflow-auto"
+        />
       </UFormField>
 
       <UFormField

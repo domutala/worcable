@@ -1,26 +1,7 @@
 <script setup lang="ts">
-import { useEditor, EditorContent } from "@tiptap/vue-3";
-import { Markdown } from "@tiptap/markdown";
-
-import { BulletList, ListItem, OrderedList } from "@tiptap/extension-list";
-import Document from "@tiptap/extension-document";
-import Paragraph from "@tiptap/extension-paragraph";
-import Text from "@tiptap/extension-text";
-import Heading from "@tiptap/extension-heading";
-import TextAlign from "@tiptap/extension-text-align";
-import Underline from "@tiptap/extension-underline";
-import StarterKit from "@tiptap/starter-kit";
-import Blockquote from "@tiptap/extension-blockquote";
-import HorizontalRule from "@tiptap/extension-horizontal-rule";
-import Placeholder from "@tiptap/extension-placeholder";
-import HardBreak from "@tiptap/extension-hard-break";
-
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import { all, createLowlight } from "lowlight";
-import css from "highlight.js/lib/languages/css";
-import js from "highlight.js/lib/languages/javascript";
-import ts from "highlight.js/lib/languages/typescript";
-import html from "highlight.js/lib/languages/xml";
+import type { EditorEmojiMenuItem, EditorToolbarItem } from "@nuxt/ui";
+import { Emoji, gitHubEmojis } from "@tiptap/extension-emoji";
+import { TextAlign } from "@tiptap/extension-text-align";
 
 const { editable, placeholder } = defineProps({
   editable: { type: Boolean, default: true },
@@ -29,151 +10,285 @@ const { editable, placeholder } = defineProps({
 
 const content = defineModel<string>({ default: "" });
 
-const lowlight = createLowlight(all);
-lowlight.register("html", html);
-lowlight.register("css", css);
-lowlight.register("js", js);
-lowlight.register("ts", ts);
+const extensions = [TextAlign, Emoji] as any;
 
-const editor = useEditor({
-  content: content.value,
+const appendToBody = false ? () => document.body : undefined;
+const emojiItems: EditorEmojiMenuItem[] = gitHubEmojis.filter(
+  (emoji) => !emoji.name.startsWith("regional_indicator_"),
+);
 
-  // register extensions
-  extensions: [
-    StarterKit,
-    // @ts-ignore
-    Markdown,
-
-    Document,
-    Paragraph,
-    Text,
-    HardBreak,
-
-    Heading.configure({}),
-    TextAlign.configure({ types: ["heading", "paragraph"] }),
-    Underline,
-    BulletList,
-    OrderedList,
-    ListItem,
-    Blockquote,
-
-    // @ts-ignore
-    HorizontalRule,
-
-    Placeholder.configure({
-      placeholder, // texte du placeholder
-      showOnlyWhenEditable: true,
-    }),
-
-    CodeBlockLowlight.configure({
-      lowlight,
-    }),
+const toolbarItems: EditorToolbarItem[][] = [
+  // History controls
+  [
+    {
+      kind: "undo",
+      icon: "i-lucide-undo",
+      tooltip: { text: "Undo" },
+    },
+    {
+      kind: "redo",
+      icon: "i-lucide-redo",
+      tooltip: { text: "Redo" },
+    },
   ],
+  // Block types
+  [
+    {
+      icon: "i-lucide-heading",
+      tooltip: { text: "Headings" },
+      content: {
+        align: "start",
+      },
+      items: [
+        {
+          kind: "heading",
+          level: 1,
+          icon: "i-lucide-heading-1",
+          label: "Heading 1",
+        },
+        {
+          kind: "heading",
+          level: 2,
+          icon: "i-lucide-heading-2",
+          label: "Heading 2",
+        },
+        {
+          kind: "heading",
+          level: 3,
+          icon: "i-lucide-heading-3",
+          label: "Heading 3",
+        },
+        {
+          kind: "heading",
+          level: 4,
+          icon: "i-lucide-heading-4",
+          label: "Heading 4",
+        },
+      ],
+    },
+    {
+      icon: "i-lucide-list",
+      tooltip: { text: "Lists" },
+      content: {
+        align: "start",
+      },
+      items: [
+        {
+          kind: "bulletList",
+          icon: "i-lucide-list",
+          label: "Bullet List",
+        },
+        {
+          kind: "orderedList",
+          icon: "i-lucide-list-ordered",
+          label: "Ordered List",
+        },
+      ],
+    },
+    {
+      kind: "blockquote",
+      icon: "i-lucide-text-quote",
+      tooltip: { text: "Blockquote" },
+    },
+    {
+      kind: "codeBlock",
+      icon: "i-lucide-square-code",
+      tooltip: { text: "Code Block" },
+    },
+    {
+      kind: "horizontalRule",
+      icon: "i-lucide-separator-horizontal",
+      tooltip: { text: "Horizontal Rule" },
+    },
+  ],
+  // Text formatting
+  [
+    {
+      kind: "mark",
+      mark: "bold",
+      icon: "i-lucide-bold",
+      tooltip: { text: "Bold" },
+    },
+    {
+      kind: "mark",
+      mark: "italic",
+      icon: "i-lucide-italic",
+      tooltip: { text: "Italic" },
+    },
+    {
+      kind: "mark",
+      mark: "underline",
+      icon: "i-lucide-underline",
+      tooltip: { text: "Underline" },
+    },
+    {
+      kind: "mark",
+      mark: "strike",
+      icon: "i-lucide-strikethrough",
+      tooltip: { text: "Strikethrough" },
+    },
+    {
+      kind: "mark",
+      mark: "code",
+      icon: "i-lucide-code",
+      tooltip: { text: "Code" },
+    },
+  ],
+  // Link
+  [
+    {
+      kind: "link",
+      icon: "i-lucide-link",
+      tooltip: { text: "Link" },
+    },
+  ],
+  // Text alignment
+  [
+    {
+      icon: "i-lucide-align-justify",
+      tooltip: { text: "Text Align" },
+      content: { align: "end" },
+      items: [
+        {
+          kind: "textAlign",
+          align: "left",
+          icon: "i-lucide-align-left",
+          label: "Align Left",
+        },
+        {
+          kind: "textAlign",
+          align: "center",
+          icon: "i-lucide-align-center",
+          label: "Align Center",
+        },
+        {
+          kind: "textAlign",
+          align: "right",
+          icon: "i-lucide-align-right",
+          label: "Align Right",
+        },
+        {
+          kind: "textAlign",
+          align: "justify",
+          icon: "i-lucide-align-justify",
+          label: "Align Justify",
+        },
+      ],
+    },
+  ],
+];
 
-  // Don't render on the server, only on the client after hydration
-  // immediatelyRender: false,
-
-  // place the cursor in the editor after initialization
-  autofocus: true,
-  // make the text editable (default is true)
-  editable,
-  // prevent loading the default ProseMirror CSS that comes with Tiptap
-  // should be kept as `true` for most cases as it includes styles
-  // important for Tiptap to work correctly
-  injectCSS: false,
-
-  contentType: "markdown",
-
-  onUpdate: () => {
-    // @ts-ignore
-    content.value = editor.value!.getMarkdown();
-  },
-});
-
-watch(() => content.value, onContent);
-
-function onContent() {
-  if (!editor.value) return;
-
-  // @ts-ignore
-  const isSame = editor.value.getMarkdown() === content.value;
-
-  // JSON
-  // const isSame = JSON.stringify(this.editor.getJSON()) === JSON.stringify(value)
-
-  if (isSame) return;
-
-  editor.value.commands.setContent(content.value);
-}
-
-onBeforeUnmount(() => {
-  editor.value?.destroy();
-});
+const toolbarBubbledItems: EditorToolbarItem[][] = [
+  [
+    {
+      icon: "i-lucide-heading",
+      tooltip: { text: "Headings" },
+      content: {
+        align: "start",
+      },
+      items: [
+        {
+          kind: "heading",
+          level: 1,
+          icon: "i-lucide-heading-1",
+          label: "Heading 1",
+        },
+        {
+          kind: "heading",
+          level: 2,
+          icon: "i-lucide-heading-2",
+          label: "Heading 2",
+        },
+        {
+          kind: "heading",
+          level: 3,
+          icon: "i-lucide-heading-3",
+          label: "Heading 3",
+        },
+        {
+          kind: "heading",
+          level: 4,
+          icon: "i-lucide-heading-4",
+          label: "Heading 4",
+        },
+      ],
+    },
+  ],
+  [
+    {
+      kind: "mark",
+      mark: "bold",
+      icon: "i-lucide-bold",
+      tooltip: { text: "Bold" },
+    },
+    {
+      kind: "mark",
+      mark: "italic",
+      icon: "i-lucide-italic",
+      tooltip: { text: "Italic" },
+    },
+    {
+      kind: "mark",
+      mark: "underline",
+      icon: "i-lucide-underline",
+      tooltip: { text: "Underline" },
+    },
+    {
+      kind: "mark",
+      mark: "strike",
+      icon: "i-lucide-strikethrough",
+      tooltip: { text: "Strikethrough" },
+    },
+    {
+      kind: "mark",
+      mark: "code",
+      icon: "i-lucide-code",
+      tooltip: { text: "Code" },
+    },
+  ],
+];
 </script>
 
 <template>
-  <div class="ui-editor bg-inherit">
-    <div
-      v-if="editor && editable"
-      class="flex items-center gap-2 p-2 border-b border-default sticky top-0 z-50 bg-inherit"
-    >
-      <u-button
-        icon="i-lucide-undo"
-        color="neutral"
-        variant="ghost"
-        :disabled="!editor?.can().chain().focus().undo().run()"
-        @click="editor?.chain().focus().undo().run()"
-      >
-      </u-button>
+  <UEditor
+    v-slot="{ editor }"
+    v-model="content"
+    class="ui-editor"
+    content-type="markdown"
+    :ui="{ content: 'min-h-30' }"
+    :extensions
+    :placeholder
+    :editable
+  >
+    <template v-if="editable">
+      <!-- <UEditorDragHandle :editor="editor" /> -->
 
-      <!-- Redo (Next) -->
-      <u-button
-        icon="i-lucide-redo"
-        color="neutral"
-        variant="ghost"
-        :disabled="!editor?.can().chain().focus().redo().run()"
-        @click="editor?.chain().focus().redo().run()"
-      >
-      </u-button>
+      <UEditorToolbar
+        :editor
+        :items="toolbarItems"
+        class="px-5 py-2 overflow-x-auto sticky top-0 border-b border-default bg-inherit/50 backdrop-blur-2xl z-10"
+      />
 
-      <ui-editor-heading :editor />
-      <ui-editor-text-align :editor />
-      <ui-editor-list-item :editor />
-      <ui-editor-text-formating :editor />
+      <UEditorToolbar
+        :editor
+        :items="toolbarBubbledItems"
+        :append-to="appendToBody"
+        class="sm:px-8 overflow-x-auto"
+        layout="bubble"
+      />
 
-      <u-button
-        variant="ghost"
-        icon="i-lucide-code"
-        :color="editor.isActive('codeBlock') ? 'primary' : 'neutral'"
-        @click="editor.chain().focus().toggleCodeBlock().run()"
-      >
-      </u-button>
-    </div>
-
-    <EditorContent :editor="editor" v-model="content" />
-  </div>
+      <!-- <UEditorEmojiMenu :editor="editor" :items="emojiItems" :append-to="appendToBody" /> -->
+    </template>
+  </UEditor>
 </template>
 
 <style lang="scss">
 .ui-editor {
   .tiptap {
-    outline: none;
-    width: 100%;
-
-    :first-child {
-      margin-top: 0;
-    }
+    padding: 0 !important;
 
     &[contenteditable="true"] {
-      padding: 25px;
-    }
-
-    p.is-editor-empty:first-child::before {
-      color: var(--text-color-muted);
-      content: attr(data-placeholder);
-      float: left;
-      height: 0;
-      pointer-events: none;
+      padding: 25px !important;
     }
   }
 }

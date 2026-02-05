@@ -247,13 +247,11 @@ function onChange(key: "cv" | "avatar", file?: File | null | undefined) {
     </UFormField>
 
     <UFormField name="motivation" class="mt-10">
-      <div class="bg-default border border-default rounded-2xl overflow-hidden">
-        <ui-editor
-          v-model="state.motivation"
-          :placeholder="$t('apply.items.motivation.label')"
-          class="max-h-100 overflow-auto"
-        />
-      </div>
+      <ui-editor
+        v-model="state.motivation"
+        :placeholder="$t('apply.items.motivation.label')"
+        class="max-h-100 bg-default border border-default rounded-2xl overflow-auto"
+      />
     </UFormField>
 
     <UFormField name="acceptCondition" class="mt-10 px-5">
@@ -269,7 +267,7 @@ function onChange(key: "cv" | "avatar", file?: File | null | undefined) {
       <UButton
         v-if="!success"
         type="submit"
-        class="cursor-pointer p-3 px-5 mx-auto"
+        class="cursor-pointer p-3 px-5 mx-auto rounded-3xl"
         size="xl"
         :loading="submitting"
       >
