@@ -144,13 +144,10 @@ function openJobNewTab(e: Event, job: Job) {
                     @click="(e) => gotoJob(e, job)"
                   >
                     <div
-                      class="flex items-center w-full min-h-20 px-7 py-4 rounded-xl border border-transparent hover:border hover:border-primary/12 relative overflow-hidden"
+                      class="group flex items-center w-full min-h-20 px-7 py-4 rounded-xl border border-transparent hover:border hover:border-primary/12 relative overflow-hidden"
                     >
                       <div class="text-xl leading-[1.1]">
-                        <div
-                          @click="(e) => openJobNewTab(e, job)"
-                          class="text-primary"
-                        >
+                        <div>
                           {{ job.title }}
                         </div>
                         <div class="text-sm">
@@ -167,6 +164,14 @@ function openJobNewTab(e: Event, job: Job) {
                         class="absolute h-full w-1.5 left-0 top-0 bg-primary"
                         v-if="currentJob?.id === job.id"
                       ></div>
+
+                      <u-button
+                        icon="i-lucide-external-link"
+                        size="md"
+                        variant="ghost"
+                        class="absolute top-2 right-3 hidden group-hover:flex cursor-pointer"
+                        @click="(e) => openJobNewTab(e, job)"
+                      ></u-button>
                     </div>
                   </u-button>
                 </div>
