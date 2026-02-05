@@ -39,7 +39,6 @@
       size="xl"
       class="rounded-2xl"
       :chip="{ inset: true }"
-      ,
     />
   </header>
 </template>

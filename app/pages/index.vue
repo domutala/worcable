@@ -8,7 +8,7 @@ import {
 } from "@vueuse/core";
 import _ from "lodash";
 import { useRouteQuery } from "@vueuse/router";
-// import UiHeader from "~/components/header.vue";
+import UiHeader from "~/components/header.vue";
 
 definePageMeta({ layout: false });
 
@@ -62,7 +62,7 @@ function setCurrentJob(job: Job) {
 
 <template>
   <div class="h-screen flex flex-col">
-    <!-- <UiHeader class="border-b border-default" /> -->
+    <UiHeader class="border-b border-default" />
 
     <div
       class="flex-1 overflow-hidden flex flex-col mx-auto max-w-380 w-full px-6"
