@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Job } from "~~/server/database/schema";
 import type { IDataResult } from "~~/server/interfaces";
+import type { BreadcrumbItem } from "@nuxt/ui";
 
 const sortBy = ref("updatedAt");
 const sortOrder = ref("desc");
@@ -20,12 +21,14 @@ function onPaginate(p: number) {
   page.value = p;
 }
 
-import type { BreadcrumbItem } from "@nuxt/ui";
-
 const items = ref<BreadcrumbItem[]>([
   {
-    label: Use.i18n.t("job.labels.title"),
     icon: "i-lucide-home",
+    to: Use.localePath({ name: "index" }),
+  },
+  {
+    label: Use.i18n.t("job.labels.title"),
+    icon: "i-lucide-briefcase-business",
   },
 ]);
 </script>

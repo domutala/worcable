@@ -35,8 +35,12 @@ const applys = ref(
 
 const items = ref<BreadcrumbItem[]>([
   {
-    label: Use.i18n.t("job.labels.title"),
     icon: "i-lucide-home",
+    to: Use.localePath({ name: "index" }),
+  },
+  {
+    label: Use.i18n.t("job.labels.title"),
+    icon: "i-lucide-briefcase-business",
     to: Use.localePath({ name: "admin" }),
   },
   {

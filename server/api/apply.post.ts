@@ -1,4 +1,5 @@
-import { ApplyStatus, getApplyData } from "../database/schema";
+import { ApplyStatus } from "../database/schema";
+import { getApplyData } from "../services/apply_get_data_shema";
 import saveFile from "../tools/save_file";
 
 function parsePrimitiveValue(value: string): string | number | boolean | null {

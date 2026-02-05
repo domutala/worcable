@@ -55,6 +55,7 @@ const emit = defineEmits<{
 }>();
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
+  console.log("sdfsdf++++++++ddddddddddddddd");
   emit("submit", event.data);
 }
 
@@ -111,14 +112,16 @@ defineExpose({ form });
             }}
           </div>
 
-          <u-select
+          <u-select-menu
             class="w-50"
             color="neutral"
             size="xl"
             :ui="{ base: 'rounded-2xl p-5 px-7' }"
             :items="currenciesCodes"
             v-model="salaryCurrency"
-          ></u-select>
+          ></u-select-menu>
+
+          {{ state.salary }}
         </div>
 
         <u-input
@@ -133,9 +136,11 @@ defineExpose({ form });
 
         <u-select
           v-else
+          v-model="state[item]"
           class="w-full"
           color="neutral"
           size="xl"
+          value-key="value"
           :items="
             Object.keys(
               item === 'contractType' ? JobContractTypeEnum : JobNatureEnum,
@@ -146,7 +151,6 @@ defineExpose({ form });
           "
           :ui="{ base: 'rounded-2xl p-5 px-7' }"
           :placeholder="$t(`job.items.${item}.label`)"
-          v-model="state[item]"
         ></u-select>
       </UFormField>
 

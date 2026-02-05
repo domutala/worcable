@@ -85,7 +85,8 @@ const editor = useEditor({
   contentType: "markdown",
 
   onUpdate: () => {
-    content.value = editor.value!.getHTML();
+    // @ts-ignore
+    content.value = editor.value!.getMarkdown();
   },
 });
 
@@ -94,7 +95,8 @@ watch(() => content.value, onContent);
 function onContent() {
   if (!editor.value) return;
 
-  const isSame = editor.value.getHTML() === content.value;
+  // @ts-ignore
+  const isSame = editor.value.getMarkdown() === content.value;
 
   // JSON
   // const isSame = JSON.stringify(this.editor.getJSON()) === JSON.stringify(value)

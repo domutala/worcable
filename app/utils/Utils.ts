@@ -39,4 +39,40 @@ export default {
     if (file.url) return file.url;
     else return `/api/file/${file.data}`;
   },
+
+  /**
+   * Formate un nombre en fonction du code de devise (ISO 4217).
+   * @param amount - Le montant à formater
+   * @param currencyCode - Le code (ex: 'EUR', 'XOF', 'USD')
+   * @param locale - Optionnel : la locale (par défaut celle du navigateur)
+   */
+  formatCurrency: (
+    amount: number,
+    currencyCode: string,
+    {
+      locale = "fr",
+      style = "decimal",
+    }: { locale?: string; style?: Intl.NumberFormatOptionsStyle } = {},
+  ): string => {
+    try {
+      return new Intl.NumberFormat(locale, {
+        style,
+        currency: currencyCode,
+        // Optionnel : masquer les centimes pour les grosses monnaies comme le XOF
+        minimumFractionDigits: ["XOF", "XAF", "JPY", "KRW"].includes(
+          currencyCode,
+        )
+          ? 0
+          : 2,
+        maximumFractionDigits: ["XOF", "XAF", "JPY", "KRW"].includes(
+          currencyCode,
+        )
+          ? 0
+          : 2,
+      }).format(amount);
+    } catch (error) {
+      // Repli sécurisé si le code de devise est invalide
+      return `${amount}`;
+    }
+  },
 };

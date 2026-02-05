@@ -60,7 +60,8 @@ export function getJobShema($t: (str: string) => string = (str) => str) {
 
   const companyDescription = z
     .string($t("job.items.companyDescription.errors.required"))
-    .min(20, $t("job.items.companyDescription.errors.min"));
+    .min(20, $t("job.items.companyDescription.errors.min"))
+    .optional();
 
   const jobDescription = z
     .string($t("job.items.jobDescription.errors.required"))
@@ -101,7 +102,8 @@ export function getJobShema($t: (str: string) => string = (str) => str) {
     .refine((salary) => salary.min < salary.max, {
       message: $t("job.items.salary.errors.invalidRange"),
       path: ["max"],
-    });
+    })
+    .optional();
 
   const skills = z
     .array(skillSchema)

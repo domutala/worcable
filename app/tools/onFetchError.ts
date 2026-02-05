@@ -11,6 +11,7 @@ export default function onFetchError(error: any) {
   data.messages ||= [];
 
   if (data.message) data.messages.push({ message: data.message });
+  console.log(data.messages);
 
   toast.add({
     // title: "Success",

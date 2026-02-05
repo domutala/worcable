@@ -1,4 +1,4 @@
-import { listApplys } from "~~/server/database/schema";
+import { listApplys } from "~~/server/services/apply_list";
 
 export default defineEventHandler(async (event) => {
   const $t = await useTranslation(event);

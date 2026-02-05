@@ -13,7 +13,8 @@
     "on_this_page": "Sur cette page",
     "hire_me": "Engagez-moi",
     "show_more": "Voir plus",
-    "home": "Accueil"
+    "home": "Accueil",
+    "result": "Résult | Résultats"
   },
 
   "meeting": {
@@ -373,7 +374,8 @@
     },
 
     "labels": {
-      "title": "Offres d'emploi"
+      "title": "Offres d'emploi",
+      "new": "Nouvel offre d'emploi"
     },
 
     "errors": {
