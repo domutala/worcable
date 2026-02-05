@@ -1,6 +1,7 @@
 import { ApplyStatus } from "../database/schema";
 import { getApplyData } from "../services/apply_get_data_shema";
 import saveFile from "../tools/save_file";
+import * as z from "zod";
 
 function parsePrimitiveValue(value: string): string | number | boolean | null {
   const trimmed = value.trim();
@@ -20,6 +21,7 @@ function parsePrimitiveValue(value: string): string | number | boolean | null {
 }
 
 export default defineEventHandler(async (event) => {
+  const $t = await useTranslation(event);
   const form = await readMultipartFormData(event);
   if (!form) throw createError({ statusCode: 400 });
 
@@ -40,10 +42,29 @@ export default defineEventHandler(async (event) => {
     },
     {} as Record<string, any>,
   );
+  const jobID = body.id as string;
+
+  if (!jobID || !z.uuid().safeParse(jobID).success) {
+    throw createError({
+      statusCode: 400,
+      data: { message: $t("job.errors.invalid_id") },
+    });
+  }
+
+  const [job] = await db
+    .select()
+    .from(tables.job)
+    .where(eq(tables.job.id, jobID));
+
+  if (!job) {
+    throw createError({
+      statusCode: 404,
+      data: { message: $t("job.errors.job_not_found") },
+    });
+  }
 
   if (body.phone) body.phone = body.phone.toString();
 
-  const $t = await useTranslation(event);
   const ZApplyData = getApplyData($t);
 
   const dataParsed = ZApplyData.safeParse(body);
@@ -68,6 +89,7 @@ export default defineEventHandler(async (event) => {
   const [apply] = await db
     .insert(tables.apply)
     .values({
+      jobID,
       status: ApplyStatus.INIT,
       allStatus: [{ status: ApplyStatus.INIT, date: new Date().toISOString() }],
       data: dataParsed.data,

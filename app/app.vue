@@ -24,7 +24,9 @@ useFavicon("favicon-light.png");
 <template>
   <NuxtLoadingIndicator color="var(--ui-primary)" :height="5" />
 
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
+  <UApp>
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
+  </UApp>
 </template>

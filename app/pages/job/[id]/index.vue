@@ -139,4 +139,10 @@ const { job } = defineProps<{ job: Job }>();
   <u-container class="py-15 max-w-6xl">
     <ui-job-page :job />
   </u-container>
+
+  <div class="w-full bg-surface py-">
+    <u-container class="py-15 max-w-6xl">
+      <ui-apply-create :job />
+    </u-container>
+  </div>
 </template>
