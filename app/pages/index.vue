@@ -8,34 +8,36 @@ import {
 } from "@vueuse/core";
 import _ from "lodash";
 import { useRouteQuery } from "@vueuse/router";
-import UiHeader from "~/components/header.vue";
+// import UiHeader from "~/components/header.vue";
 
 definePageMeta({ layout: false });
+
+const breakpoints = useBreakpoints(breakpointsTailwind);
+const hideJobContent = breakpoints.smallerOrEqual("lg");
 
 const sortBy = ref("updatedAt");
 const sortOrder = ref("desc");
 const page = ref(1);
-const pageSize = ref(9);
+const pageSize = ref(8);
 
-const { data, status, refresh } = await useFetch<IDataResult<Job>>(
-  `/api/admin/job`,
-  {
-    method: "get",
-    query: { sortBy, sortOrder, page, pageSize },
-    watch: [sortBy, sortOrder, page, pageSize],
-  },
-);
+const { data, status, refresh } = await useFetch<IDataResult<Job>>(`/api/job`, {
+  method: "get",
+  query: { sortBy, sortOrder, page, pageSize },
+  watch: [sortBy, sortOrder, page, pageSize],
+});
 
-const breakpoints = useBreakpoints(breakpointsTailwind);
-const hideJobContent = breakpoints.smallerOrEqual("lg");
+const jobs = ref<Job[]>([]);
 const currentJob = ref<Job>();
 const currentJobQuery = useRouteQuery("job");
 
 watchImmediate(
   () => data.value,
   () => {
-    if (data.value?.items.length && !currentJob.value) {
-      setCurrentJob(data.value.items[0]!);
+    if (data.value?.items.length) {
+      jobs.value.push(..._.cloneDeep(data.value.items));
+      jobs.value = _.uniqBy(jobs.value, "id");
+
+      if (!currentJob.value) setCurrentJob(data.value.items[0]!);
     }
   },
   { deep: true },
@@ -60,7 +62,7 @@ function setCurrentJob(job: Job) {
 
 <template>
   <div class="h-screen flex flex-col">
-    <UiHeader class="border-b border-default" />
+    <!-- <UiHeader class="border-b border-default" /> -->
 
     <div
       class="flex-1 overflow-hidden flex flex-col mx-auto max-w-380 w-full px-6"
@@ -122,7 +124,7 @@ function setCurrentJob(job: Job) {
 
                 <div v-if="data" class="space-y-1 px-1">
                   <u-button
-                    v-for="job in data.items"
+                    v-for="job in jobs"
                     :key="job.id"
                     :to="
                       $localePath({ name: 'job-id', params: { id: job.id } })
@@ -156,21 +158,22 @@ function setCurrentJob(job: Job) {
                   </u-button>
                 </div>
 
-                <div v-if="data" class="flex items-center gap-3 p-3 px-3">
-                  <div class="mx-auto"></div>
-                  <UPagination
-                    show-edges
-                    variant="ghost"
+                <div
+                  v-if="data && data.total && data.page !== data.totalPages"
+                  class="flex items-center gap-3 p-3 px-3"
+                >
+                  <u-button
+                    class="cursor-pointer rounded-4xl"
                     color="neutral"
-                    active-color="neutral"
-                    active-variant="soft"
-                    size="sm"
-                    :page="data.page"
-                    :items-per-page="data.pageSize"
-                    :total="data.total"
-                    :ui="{ item: 'cursor-pointer' }"
-                    @update:page="onPaginate"
-                  />
+                    variant="ghost"
+                    icon="i-lucide-arrow-down-wide-narrow"
+                    :loading="status === 'pending'"
+                    @click="page++"
+                  >
+                    {{ $t("words.show_more") }}
+                  </u-button>
+
+                  <div class="mx-auto"></div>
                 </div>
               </div>
             </div>
