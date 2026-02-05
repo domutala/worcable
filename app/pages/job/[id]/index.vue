@@ -2,6 +2,7 @@
 import type { Job } from "~~/server/database/schema";
 
 const { job } = defineProps<{ job: Job }>();
+const apply = useTemplateRef("apply");
 </script>
 
 <template>
@@ -18,7 +19,13 @@ const { job } = defineProps<{ job: Job }>();
     </div>
 
     <div class="flex items-center ml-auto">
-      <u-button size="xl">Postuler</u-button>
+      <u-button
+        size="xl"
+        class="cursor-pointer"
+        @click="apply?.scrollIntoView({ behavior: 'smooth' })"
+      >
+        {{ $t("apply.actions.apply") }}
+      </u-button>
     </div>
   </div>
 
@@ -128,9 +135,14 @@ const { job } = defineProps<{ job: Job }>();
         </div>
 
         <div>
-          <u-button size="xl" color="primary" class="px-4 py-3"
-            >Postuler</u-button
+          <u-button
+            size="xl"
+            color="primary"
+            class="px-4 py-3 cursor-pointer"
+            @click="apply?.scrollIntoView({ behavior: 'smooth' })"
           >
+            {{ $t("apply.actions.apply") }}
+          </u-button>
         </div>
       </div>
     </u-container>
@@ -140,7 +152,7 @@ const { job } = defineProps<{ job: Job }>();
     <ui-job-page :job />
   </u-container>
 
-  <div class="w-full bg-surface py-">
+  <div ref="apply" class="w-full bg-surface py-">
     <u-container class="py-15 max-w-6xl">
       <ui-apply-create :job />
     </u-container>

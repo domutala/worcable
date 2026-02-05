@@ -58,6 +58,14 @@ function setCurrentJob(job: Job) {
   currentJob.value = _.cloneDeep(job);
   currentJobQuery.value = currentJob.value.id;
 }
+
+function openJobNewTab(e: Event, job: Job) {
+  e.preventDefault();
+  const route = Use.localePath({ name: "job-id", params: { id: job.id } });
+  window.open(route, "_blank");
+
+  setCurrentJob(job);
+}
 </script>
 
 <template>
@@ -122,7 +130,7 @@ function setCurrentJob(job: Job) {
                   <div></div>
                 </div>
 
-                <div v-if="data" class="space-y-1 px-1">
+                <div v-if="jobs.length" class="space-y-1 px-1">
                   <u-button
                     v-for="job in jobs"
                     :key="job.id"
@@ -139,7 +147,12 @@ function setCurrentJob(job: Job) {
                       class="flex items-center w-full min-h-20 px-7 py-4 rounded-xl border border-transparent hover:border hover:border-primary/12 relative overflow-hidden"
                     >
                       <div class="text-xl leading-[1.1]">
-                        {{ job.title }}
+                        <div
+                          @click="(e) => openJobNewTab(e, job)"
+                          class="text-primary"
+                        >
+                          {{ job.title }}
+                        </div>
                         <div class="text-sm">
                           {{ job.location }}
                           <div class="opacity-50">
@@ -156,6 +169,21 @@ function setCurrentJob(job: Job) {
                       ></div>
                     </div>
                   </u-button>
+                </div>
+
+                <div
+                  v-else
+                  class="h-full flex items-center justify-center py-20"
+                >
+                  <u-container class="text-center">
+                    <u-icon
+                      name="i-lucide-text-search"
+                      class="size-25 opacity-30"
+                    />
+                    <p class="mt-2">
+                      {{ $t("job.labels.empty_search") }}
+                    </p>
+                  </u-container>
                 </div>
 
                 <div
@@ -198,8 +226,62 @@ function setCurrentJob(job: Job) {
                     </div>
                   </div>
 
-                  <div class="flex items-center ml-auto">
-                    <u-button size="xl">Postuler</u-button>
+                  <div class="flex items-center gap-2 ml-auto">
+                    <u-button
+                      size="lg"
+                      icon="i-lucide-send"
+                      variant="soft"
+                      color="neutral"
+                      class="rounded- cursor-pointer"
+                      square
+                    >
+                    </u-button>
+
+                    <u-modal
+                      :ui="{
+                        content: 'max-w-250 rounded-2xl bg-surface!',
+                      }"
+                    >
+                      <u-button size="lg" class="cursor-pointer">
+                        {{ $t("apply.actions.apply") }}
+                      </u-button>
+
+                      <template #content="{ close }">
+                        <div class="h-11/12 flex-1 overflow-auto">
+                          <div
+                            class="py-4 px-5 flex gap-5 bg-inherit/10 backdrop-blur-lg border-b border-default sticky top-0 z-50 h-max"
+                          >
+                            <div class="leading-none flex-1 min-w-0 w-0">
+                              <h1 class="text-lg font-bold truncate">
+                                {{ currentJob.title }}
+                              </h1>
+                              <div class="truncate opacity-50">
+                                {{ Utils.getDateStatus(currentJob.createdAt) }}
+                              </div>
+                            </div>
+
+                            <div>
+                              <u-button
+                                size="lg"
+                                icon="i-lucide-x"
+                                variant="soft"
+                                color="neutral"
+                                class="rounded-2xl cursor-pointer"
+                                square
+                                @click="close"
+                              >
+                              </u-button>
+                            </div>
+                          </div>
+
+                          <div class="p-10">
+                            <u-container>
+                              <ui-apply-create :job="currentJob" />
+                            </u-container>
+                          </div>
+                        </div>
+                      </template>
+                    </u-modal>
                   </div>
                 </div>
 
@@ -210,7 +292,9 @@ function setCurrentJob(job: Job) {
               <div v-else class="h-full flex items-center justify-center">
                 <u-container class="text-center">
                   <u-icon name="i-lucide-layers" class="size-25 opacity-30" />
-                  <p class="mt-5">Aucun emploi trouvé</p>
+                  <p class="mt-5">
+                    {{ $t("job.labels.emty_select") }}
+                  </p>
                 </u-container>
               </div>
             </div>

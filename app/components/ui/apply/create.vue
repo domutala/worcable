@@ -24,6 +24,7 @@ const educationLevel = [
   "doctorate",
 ];
 
+const successContainer = useTemplateRef("successContainer");
 const submitting = ref(false);
 const success = ref(false);
 const schema = getApplyData(i18n.t);
@@ -50,6 +51,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     await $fetch("/api/apply", { method: "post", body: formData });
 
     success.value = true;
+    successContainer.value?.scrollIntoView({ behavior: "smooth" });
   } catch (error) {
     onFetchError(error);
   } finally {
@@ -68,12 +70,7 @@ function onChange(key: "cv" | "avatar", file?: File | null | undefined) {
 </script>
 
 <template>
-  <UForm
-    :schema="schema"
-    :state="state"
-    class="space-y-4 p-5"
-    @submit="onSubmit"
-  >
+  <UForm :schema="schema" :state="state" class="space-y-7" @submit="onSubmit">
     <UFormField name="avatar">
       <UFileUpload
         v-slot="{ open, removeFile }"
@@ -141,6 +138,7 @@ function onChange(key: "cv" | "avatar", file?: File | null | undefined) {
       <UInput
         v-model="state.firstName"
         :ui="{ base: 'p-5 px-5 ring-0 rounded-xl' }"
+        :placeholder="$t('apply.items.firstName.placeholder')"
         class="w-full"
         size="xl"
         required
@@ -155,6 +153,7 @@ function onChange(key: "cv" | "avatar", file?: File | null | undefined) {
       <UInput
         v-model="state.lastName"
         :ui="{ base: 'p-5 px-5 ring-0 rounded-xl' }"
+        :placeholder="$t('apply.items.lastName.placeholder')"
         class="w-full"
         size="xl"
       />
@@ -164,6 +163,7 @@ function onChange(key: "cv" | "avatar", file?: File | null | undefined) {
       <UInput
         v-model="state.email"
         :ui="{ base: 'p-5 px-5 ring-0 rounded-xl' }"
+        :placeholder="$t('apply.items.email.placeholder')"
         class="w-full"
         size="xl"
       />
@@ -173,21 +173,22 @@ function onChange(key: "cv" | "avatar", file?: File | null | undefined) {
       <UInput
         v-model="state.phone"
         :ui="{ base: 'p-5 px-5 ring-0 rounded-xl' }"
+        :placeholder="$t('apply.items.phone.placeholder')"
         class="w-full"
         size="xl"
         type="tel"
       />
     </UFormField>
 
-    <UFormField name="cv" required>
+    <UFormField :label="$t('apply.items.cv.label')" name="cv" required>
       <UFileUpload
-        :label="$t('apply.items.cv.label')"
+        :label="$t('apply.items.cv.placeholder')"
         :ui="{
           base: 'bg-default rounded-xl border border-primary/35 cursor-pointer',
         }"
         highlight
         color="neutral"
-        description="Fichier PDF (max. 10MB)"
+        :description="$t('apply.items.cv.helper')"
         class="w-full min-h-48"
         accept="application/pdf"
         layout="list"
@@ -202,6 +203,8 @@ function onChange(key: "cv" | "avatar", file?: File | null | undefined) {
     >
       <URadioGroup
         v-model="state.availability"
+        variant="card"
+        :ui="{ item: 'bg-default', fieldset: 'flex-row gap-1' }"
         :items="
           availability.map((c) => ({
             label: $t(`apply.items.availability.items.${c}`),
@@ -219,6 +222,7 @@ function onChange(key: "cv" | "avatar", file?: File | null | undefined) {
       <USelect
         v-model="state.educationLevel"
         :ui="{ base: 'p-5 px-5 ring-0 rounded-xl' }"
+        :placeholder="$t('apply.items.educationLevel.placeholder')"
         :items="
           educationLevel.map((c) => ({
             label: $t(`apply.items.educationLevel.items.${c}`),
@@ -236,28 +240,32 @@ function onChange(key: "cv" | "avatar", file?: File | null | undefined) {
       name="desiredGrossSalary"
       required
     >
-      <USlider
-        :step="500"
-        :min="20000"
-        :max="120000"
-        size="xl"
-        tooltip
-        v-model="state.desiredGrossSalary"
-      />
+      <div class="rounded-xl bg-default p-5">
+        <USlider
+          :step="500"
+          :min="20000"
+          :max="120000"
+          size="xl"
+          tooltip
+          v-model="state.desiredGrossSalary"
+        />
+      </div>
     </UFormField>
 
-    <UFormField name="motivation" class="mt-10">
+    <UFormField :label="$t('apply.items.motivation.label')" name="motivation">
       <ui-editor
         v-model="state.motivation"
-        :placeholder="$t('apply.items.motivation.label')"
+        :placeholder="$t('apply.items.motivation.placeholder')"
         class="max-h-100 bg-default border border-default rounded-2xl overflow-auto"
       />
     </UFormField>
 
-    <UFormField name="acceptCondition" class="mt-10 px-5">
+    <UFormField name="acceptCondition" class="mt-">
       <UCheckbox
         v-model="state.acceptCondition"
+        variant="card"
         :label="$t('apply.items.acceptCondition.label')"
+        :ui="{ root: 'bg-default border-none rounded-2xl' }"
         class="cursor-pointer"
         size="xl"
       />
@@ -271,7 +279,7 @@ function onChange(key: "cv" | "avatar", file?: File | null | undefined) {
         size="xl"
         :loading="submitting"
       >
-        {{ $t("apply.submit") }}
+        {{ $t("apply.actions.submit") }}
       </UButton>
 
       <div v-else class="text-center">
@@ -284,6 +292,7 @@ function onChange(key: "cv" | "avatar", file?: File | null | undefined) {
           class="max-w-2xl mx-auto mt-5"
         ></p>
       </div>
+      <div ref="successContainer"></div>
     </div>
   </UForm>
 </template>

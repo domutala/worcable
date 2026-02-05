@@ -104,8 +104,11 @@
   "apply": {
     "items": {
       "avatar": {
+        "placeholder": "Ajouter une photo de profil",
+        "hint": "Ajoutez une photo professionnelle (optionnel)",
+        "helper": "Formats acceptés : PNG ou JPEG, taille maximale 10 Mo",
         "create_btn": {
-          "update": "Modifer",
+          "update": "Modifier",
           "add": "Ajouter une photo"
         },
         "remove": "Supprimer",
@@ -114,9 +117,12 @@
 
       "availability": {
         "label": "Votre disponibilité",
+        "placeholder": "Sélectionnez votre disponibilité",
+        "hint": "Indiquez à partir de quand vous pouvez commencer",
+        "helper": "Cette information aide les recruteurs à planifier les entretiens",
         "items": {
           "immediately": "Immédiatement",
-          "1month": "Sous 1 moins",
+          "1month": "Sous 1 mois",
           "2mois": "Sous 2 mois",
           "3mois": "Sous 3 mois",
           "other": "Autres"
@@ -126,6 +132,9 @@
 
       "desiredGrossSalary": {
         "label": "Salaire souhaité (brut par an)",
+        "placeholder": "Ex : 6 000 000",
+        "hint": "Indiquez votre salaire brut annuel souhaité",
+        "helper": "Cette information reste confidentielle et sert à évaluer l’adéquation du poste",
         "errors": {
           "required": "Le salaire brut souhaité est requis.",
           "invalid": "Veuillez renseigner un montant valide."
@@ -134,6 +143,9 @@
 
       "educationLevel": {
         "label": "Niveau d'étude",
+        "placeholder": "Sélectionnez votre niveau d’étude",
+        "hint": "Choisissez le diplôme le plus élevé obtenu",
+        "helper": "Cela permet d’évaluer votre parcours académique",
         "items": {
           "none": "Aucun diplôme",
           "bepCap": "BEP, CAP ou équivalent",
@@ -149,13 +161,19 @@
 
       "motivation": {
         "label": "Texte de motivation",
+        "placeholder": "Expliquez en quelques mots pourquoi ce poste vous intéresse",
+        "hint": "Présentez votre motivation et votre intérêt pour le poste",
+        "helper": "Un message clair et personnalisé augmente vos chances",
         "errors": {
           "invalid": "La motivation doit être un texte"
         }
       },
 
       "cv": {
-        "label": "Déposer ou choisir un fichier",
+        "label": "Votre CV",
+        "placeholder": "Sélectionner un fichier PDF",
+        "hint": "Ajoutez votre CV à jour",
+        "helper": "Format PDF uniquement, taille maximale 10 Mo",
         "errors": {
           "size": "Le fichier ne doit pas dépasser 10 Mo",
           "type": "Le fichier doit être un PDF",
@@ -165,6 +183,9 @@
 
       "firstName": {
         "label": "Prénom",
+        "placeholder": "Votre prénom",
+        "hint": "Saisissez votre prénom tel qu’il apparaît sur vos documents",
+        "helper": "Utilisé pour identifier votre candidature",
         "errors": {
           "required": "Le prénom est obligatoire",
           "invalid": "Le prénom doit être une chaîne de caractères",
@@ -174,6 +195,9 @@
 
       "lastName": {
         "label": "Nom",
+        "placeholder": "Votre nom de famille",
+        "hint": "Saisissez votre nom de famille",
+        "helper": "Utilisé pour identifier votre candidature",
         "errors": {
           "required": "Le nom est obligatoire",
           "invalid": "Le nom doit être une chaîne de caractères",
@@ -183,6 +207,9 @@
 
       "email": {
         "label": "Email",
+        "placeholder": "exemple{'@'}email.com",
+        "hint": "Adresse email valide pour vous contacter",
+        "helper": "Les réponses seront envoyées à cette adresse",
         "errors": {
           "required": "L’adresse email est obligatoire",
           "invalid": "Veuillez saisir une adresse email valide"
@@ -191,6 +218,9 @@
 
       "phone": {
         "label": "Numéro de téléphone",
+        "placeholder": "Ex : +221 77 123 45 67",
+        "hint": "Numéro sur lequel vous êtes joignable",
+        "helper": "Utilisé uniquement pour vous contacter concernant votre candidature",
         "errors": {
           "required": "Le numéro de téléphone est obligatoire",
           "invalid": "Veuillez saisir un numéro de téléphone valide"
@@ -199,6 +229,8 @@
 
       "acceptCondition": {
         "label": "J'ai lu et déclare accepter les conditions d'utilisation",
+        "hint": "Vous devez accepter les conditions pour continuer",
+        "helper": "Cette validation est nécessaire pour soumettre votre candidature",
         "errors": {
           "required": "Vous devez accepter les conditions d'utilisations."
         }
@@ -223,10 +255,11 @@
     },
 
     "actions": {
-      "donwload_cv": "Télécharger"
+      "donwload_cv": "Télécharger",
+      "apply": "Postuler",
+      "submit": "Envoyer ma candidature"
     },
 
-    "submit": "Envoyer ma candidature",
     "success": "Merci pour votre candidature. Nous avons bien reçu vos informations et notre équipe va les analyser avec attention. Si votre profil correspond à nos opportunités actuelles ou futures, nous vous contacterons pour la suite du processus."
   },
 
@@ -376,7 +409,9 @@
 
     "labels": {
       "title": "Offres d'emploi",
-      "new": "Nouvel offre d'emploi"
+      "new": "Nouvel offre d'emploi",
+      "empty_search": "Votre recherche ne correspon à à aucun poste disponible",
+      "emty_select": "Veuillez séléctionner une offre d'emploi"
     },
 
     "errors": {
