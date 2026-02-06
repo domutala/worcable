@@ -1,5 +1,5 @@
 import { pgTable, uuid, timestamp, jsonb, varchar } from "drizzle-orm/pg-core";
-import { getApplyData } from "~~/server/services/apply_get_data_shema";
+import { getApplyData } from "../../services/apply_get_data_shema";
 import * as z from "zod";
 
 const ZApplyData = getApplyData((v) => v);

@@ -1,5 +1,8 @@
 <script lang="ts" setup>
 import { useFavicon } from "@vueuse/core";
+import onFetchError from "./tools/onFetchError";
+
+const gettingConfig = ref(true);
 
 const appConfig = useAppConfig();
 const title = appConfig.site.name;
@@ -19,6 +22,16 @@ useSeoMeta({
 });
 
 useFavicon("favicon-light.png");
+
+onMounted(async () => {
+  try {
+    await Store.config.init();
+  } catch (error) {
+    onFetchError(error);
+  } finally {
+    gettingConfig.value = false;
+  }
+});
 </script>
 
 <template>
@@ -26,7 +39,8 @@ useFavicon("favicon-light.png");
 
   <UApp>
     <NuxtLayout>
-      <NuxtPage />
+      <div v-if="gettingConfig">getttingConfig</div>
+      <NuxtPage v-else-if="Store.config.config" />
     </NuxtLayout>
   </UApp>
 </template>

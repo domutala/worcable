@@ -147,7 +147,7 @@ export const job = pgTable("job", {
 
   title: varchar("title", { length: 150 }).notNull(),
 
-  companyDescription: text("company_description").notNull(),
+  companyDescription: text("company_description"),
 
   contractType: varchar("contract_type", { length: 20 })
     .notNull()
@@ -174,7 +174,7 @@ export const job = pgTable("job", {
    * Exemple: "nodejs,$nestjs,postgres"
    * (ou à normaliser via table relationnelle – voir plus bas)
    */
-  skills: text("skills").array().notNull(),
+  skills: text("skills").array().default([]).notNull(),
 
   candidateProfile: text("candidate_profile").notNull(),
 
