@@ -1,4 +1,4 @@
-import { getConifShema } from "~~/server/services/config_get_shema";
+import { getConfigSchema } from "~~/server/services/config_get_shema";
 
 export default defineEventHandler(async (event) => {
   const $t = await useTranslation(event);
@@ -7,8 +7,10 @@ export default defineEventHandler(async (event) => {
   const [config] = await db.select().from(tables.config);
   if (!config) await db.insert(tables.config).values({}).returning();
 
-  const parsedBody = getConifShema($t).safeParse(body);
+  const parsedBody = await getConfigSchema($t).schema.safeParseAsync(body);
   if (parsedBody.error) {
+    console.log(parsedBody.error.issues);
+
     throw createError({
       statusCode: 400,
       data: {

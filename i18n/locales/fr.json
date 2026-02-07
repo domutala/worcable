@@ -418,5 +418,70 @@
       "job_not_found": "Aucun offre d'emple trouvé",
       "invalid_id": "L'ID de l'offre d'emploi est invalide"
     }
+  },
+
+  "uploads": {
+    "errors": {
+      "invalid_file": "Le fichier est invalide ou manquant"
+    }
+  },
+
+  "config": {
+    "items": {
+      "logo": {
+        "label": "Logo de l’organisation",
+        "placeholder": "Ajouter un logo",
+        "hint": "Logo officiel de votre organisation",
+        "helper": "Formats acceptés : JPEG, PNG ou WEBP",
+        "errors": {
+          "invalid": "Le fichier sélectionné n’est pas valide"
+        }
+      },
+
+      "orgName": {
+        "label": "Nom de l’organisation",
+        "placeholder": "Nom de votre organisation",
+        "hint": "Nom légal ou commercial de l’organisation",
+        "helper": "Ce nom sera visible sur les offres publiées",
+        "errors": {
+          "invalid": "Le nom de l’organisation est invalide"
+        }
+      },
+
+      "currency": {
+        "label": "Devise par défaut",
+        "placeholder": "Sélectionnez une devise",
+        "hint": "Devise utilisée pour les salaires et budgets",
+        "helper": "Cette devise sera utilisée par défaut sur la plateforme",
+        "errors": {
+          "invalid": "La devise sélectionnée est invalide"
+        }
+      },
+
+      "cities": {
+        "label": "Villes",
+        "placeholder": "Ajouter une ville",
+        "hint": "Villes dans lesquelles votre organisation est présente",
+        "helper": "Utilisé pour proposer des lieux lors de la création d’offres",
+        "errors": {
+          "invalid": "La liste des villes est invalide",
+          "id_invalid": "Identifiant de ville invalide"
+        }
+      }
+    },
+
+    "actions": {
+      "save": "Enregistrer",
+      "update": "Modifer votre organisation"
+    }
+  },
+
+  "currency": {
+    "label": "Monnaie",
+    "items": {
+      "XOF": { "label": "CFA" },
+      "EUR": { "label": "Euro" },
+      "USD": { "label": "Dollar" }
+    }
   }
 }

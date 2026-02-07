@@ -6,6 +6,7 @@ import { watchImmediate } from "@vueuse/core";
 import { getApplyData } from "~~/server/services/apply_get_data_shema";
 import type { Job } from "~~/server/database/schema";
 import onFetchError from "~/tools/onFetchError";
+import { CurrencyAvailaible } from "~~/server/interfaces";
 
 const { job } = defineProps<{ job: Job }>();
 
@@ -236,20 +237,13 @@ function onChange(key: "cv" | "avatar", file?: File | null | undefined) {
 
     <UFormField
       :label="$t('pages.apply.items.desiredGrossSalary')"
-      :hint="`${Utils.formatCurrency(state.desiredGrossSalary || 0, job.salary?.currency || 'XOF', { locale: $i18n.locale, style: 'currency' })}`"
       name="desiredGrossSalary"
       required
     >
-      <div class="rounded-xl bg-default p-5">
-        <USlider
-          :step="500"
-          :min="20000"
-          :max="120000"
-          size="xl"
-          tooltip
-          v-model="state.desiredGrossSalary"
-        />
-      </div>
+      <ui-salary-selector-select
+        v-model="state.desiredGrossSalary"
+        :force-currency="CurrencyAvailaible.EUR"
+      />
     </UFormField>
 
     <UFormField :label="$t('apply.items.motivation.label')" name="motivation">

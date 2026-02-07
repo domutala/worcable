@@ -56,8 +56,8 @@ export function getApplyData($t: (string: string) => string) {
 
     desiredGrossSalary: z
       .number($t("apply.items.desiredGrossSalary.errors.required"))
-      .min(20000)
-      .max(120000),
+      .min(0)
+      .max(200),
 
     availability: z.enum(
       availability,

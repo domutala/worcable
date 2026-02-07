@@ -1,4 +1,4 @@
-import upload from "../supabase/upload";
+import saveFile from "../tools/save_file";
 
 function parsePrimitiveValue(value: string): string | number | boolean | null {
   const trimmed = value.trim();
@@ -18,6 +18,12 @@ function parsePrimitiveValue(value: string): string | number | boolean | null {
 }
 
 export default defineEventHandler(async (event) => {
+  const runtime = useRuntimeConfig(event);
+  const $t = await useTranslation(event);
+
+  // const uploadsKey = getHeaders(event)["x-uploads-key"];
+  // console.log(uploadsKey, runtime.uploadsKey);
+
   const form = await readMultipartFormData(event);
   if (!form) throw createError({ statusCode: 400 });
 
@@ -39,8 +45,12 @@ export default defineEventHandler(async (event) => {
     {} as Record<string, any>,
   );
 
-  if (body.file) {
-    const file = await upload(body.file);
-    console.log(file);
+  if (!body.file) {
+    throw createError({
+      statusCode: 400,
+      data: { message: $t("uploads.errors.invalid_file") },
+    });
   }
+  const file = await saveFile(body.file);
+  return file;
 });

@@ -1,25 +1,13 @@
 export default function onFetchError(error: any) {
+  const data = getServerErrorData(error);
   const toast = useToast();
-  const { $i18n } = useNuxtApp();
-
-  let data = error.data.data as {
-    message?: string;
-    messages: { message: string }[];
-  };
-
-  data ||= { messages: [] };
-  data.messages ||= [];
-
-  if (data.message) data.messages.push({ message: data.message });
-  console.log(data.messages);
 
   toast.add({
-    // title: "Success",
     description: h(
       "div",
       { class: "mb-2" },
       data.messages.map((message) => {
-        return h("div", {}, $i18n.t(message.message));
+        return h("div", {}, message.message);
       }),
     ),
     color: "error",
@@ -43,10 +31,6 @@ export function getServerErrorData(error: any) {
   return {
     statusCode: error.statusCode,
     statusMessage: data.messages[0]?.message,
-    messages: data.message,
+    messages: data.messages,
   };
-
-  // data.messages.map((message) => {
-  //   return h("div", {}, $i18n.t(message.message));
-  // });
 }

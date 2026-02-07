@@ -32,6 +32,8 @@ onMounted(async () => {
     gettingConfig.value = false;
   }
 });
+
+
 </script>
 
 <template>

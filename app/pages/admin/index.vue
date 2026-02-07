@@ -90,17 +90,14 @@ const items = ref<BreadcrumbItem[]>([
               class="p-0 border-none bg-surface rounded-xl"
               block
             >
-              <div class="flex items-center w-full h-20 px-7">
+              <div class="flex items-center w-full min-h-20 px-7 py-4 gap-5">
                 <div class="text-xl">
                   {{ job.title }}
                 </div>
 
                 <div class="mx-auto"></div>
 
-                <ui-apply-candate-group
-                  class="bg-default rounded-xl border border-default"
-                  :job
-                />
+                <ui-apply-candate-group class="rounded-xl" :job />
               </div>
             </u-button>
           </template>

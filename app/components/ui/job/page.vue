@@ -54,21 +54,7 @@ const { job } = defineProps<{ job: Job }>();
             class="bg-surface border-none"
           >
             <u-icon name="i-lucide-banknote" sizz="8" />
-            {{
-              Utils.formatCurrency(job.salary.min * 5000, job.salary.currency, {
-                locale: $i18n.locale,
-                style: "decimal",
-              })
-            }}
-            -
-            {{
-              Utils.formatCurrency(job.salary.max * 5000, job.salary.currency, {
-                locale: $i18n.locale,
-                style: "decimal",
-              })
-            }}
-
-            {{ job.salary.currency }}
+            <ui-salary-selector v-model="job.salary" display />
           </u-badge>
         </template>
       </div>

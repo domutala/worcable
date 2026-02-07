@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   runtimeConfig: {
     databaseUrl: "",
+    uploadsKey: "",
 
     supabaseProjetcId: "",
     supabaseApiKey: "",
@@ -10,6 +11,7 @@ export default defineNuxtConfig({
 
     public: {
       appUrl: "",
+      areaCompletionUrl: "",
     },
   },
 

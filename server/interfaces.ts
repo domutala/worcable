@@ -14,11 +14,18 @@ export type UploadedFile = {
   url?: string;
 };
 
-// export class UploadedFile {
-//   constructor(
-//     public readonly filename: string,
-//     public readonly data: Buffer,
-//     public readonly size: number,
-//     public readonly type: string,
-//   ) {}
-// }
+export class UpFile {
+  constructor(
+    public readonly filename: string,
+    public readonly data: Buffer,
+    public readonly size: number,
+    public readonly type: string,
+    public readonly url?: string,
+  ) {}
+}
+
+export enum CurrencyAvailaible {
+  XOF = "XOF",
+  EUR = "EUR",
+  USD = "USD",
+}

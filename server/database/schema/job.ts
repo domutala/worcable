@@ -7,6 +7,7 @@ import {
   jsonb,
 } from "drizzle-orm/pg-core";
 import * as z from "zod";
+import { CurrencyAvailaible } from "~~/server/interfaces";
 
 export enum JobContractTypeEnum {
   CDI = "CDI",
@@ -31,8 +32,6 @@ export const allowedPrefixedSkills = [
 ] as const;
 
 export function getJobShema($t: (str: string) => string = (str) => str) {
-  const isMultipleOfFive = (value: number) => value % 5 === 0 && value < 100;
-
   const skillSchema = z
     .string()
     .transform((skill) => skill.trim())
@@ -82,24 +81,14 @@ export function getJobShema($t: (str: string) => string = (str) => str) {
   );
 
   const salary = z
-    .object({
-      min: z
-        .number()
-        .positive()
-        .refine(isMultipleOfFive, {
-          message: $t("job.items.salary.errors.multipleOfFive"),
-        }),
-
-      max: z
-        .number()
-        .positive()
-        .refine(isMultipleOfFive, {
-          message: $t("job.items.salary.errors.multipleOfFive"),
-        }),
-
-      currency: z.string().default("XOF"),
-    })
-    .refine((salary) => salary.min < salary.max, {
+    .tuple(
+      [
+        z.number().min(0, $t("job.items.salary.errors.invalidRange")),
+        z.number().max(200, $t("job.items.salary.errors.invalidRange")),
+      ],
+      $t("job.items.salary.errors.invalid"),
+    )
+    .refine((value) => value[0] < value[1], {
       message: $t("job.items.salary.errors.invalidRange"),
       path: ["max"],
     })
@@ -161,7 +150,7 @@ export const job = pgTable("job", {
     .notNull()
     .$type<JobNatureEnum>(),
 
-  salary: jsonb().$type<{ min: number; max: number; currency: string }>(),
+  salary: jsonb().$type<[number, number]>(),
 
   // salaryMin: integer("salary_min").notNull(),
   // salaryMax: integer("salary_max").notNull(),

@@ -4,7 +4,6 @@ import type { Apply } from "~~/server/database/schema";
 import _ from "lodash";
 import * as z from "zod";
 import MarkdownIt from "markdown-it";
-import { formatCurrency } from "~~/server/tools/currencies";
 
 const md = new MarkdownIt();
 const { job, apply } = defineProps<{ job: Job; apply: Apply }>();
@@ -173,12 +172,12 @@ const { job, apply } = defineProps<{ job: Job; apply: Apply }>();
             <h2 class="text- font-bold">
               {{ $t("apply.items.desiredGrossSalary.label") }}
             </h2>
+
             {{
-              formatCurrency(
-                apply.data.desiredGrossSalary,
-                job.salary?.currency || "XOF",
-                { style: "currency", locale: $i18n.locale },
-              )
+              Utils.formatCurrency(apply.data.desiredGrossSalary, "EUR", {
+                style: "currency",
+                locale: $i18n.locale,
+              })
             }}
           </div>
         </div>

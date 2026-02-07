@@ -1,3 +1,4 @@
+import onFetchError from "~/tools/onFetchError";
 import type { UploadedFile } from "~~/server/interfaces";
 
 export default {
@@ -74,5 +75,25 @@ export default {
       // Repli sécurisé si le code de devise est invalide
       return `${amount}`;
     }
+  },
+
+  async uploadFile(file: File) {
+    try {
+      const runtime = useRuntimeConfig();
+      const formData = new FormData();
+      formData.append("file", file);
+      const result = await $fetch("/api/upload", {
+        method: "post",
+        body: formData,
+        headers: { "x-uploads-key": runtime.uploadsKey },
+      });
+      return result;
+    } catch (error) {
+      onFetchError(error);
+    }
+  },
+  createObjectUrl(file?: File) {
+    if (!file) return;
+    return URL.createObjectURL(file);
   },
 };
