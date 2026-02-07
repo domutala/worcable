@@ -68,12 +68,13 @@ const items = ref<DropdownMenuItem[][]>([
       >
         <UButton
           size="lg"
-          icon="i-lucide-menu"
           color="neutral"
           variant="soft"
           class="cursor-pointer"
           square
-        />
+        >
+          <u-icon name="i-lucide-text" class="size-6 rotate-z-180" />
+        </UButton>
       </UDropdownMenu>
     </div>
   </div>
