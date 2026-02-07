@@ -54,6 +54,37 @@ export async function listApplys({
     totalWhere.push(eq(filterKey, value));
   }
 
+  if (query.q) {
+    const q = query.q
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9]/g, "")
+      .toLowerCase();
+
+    const w = sql`
+      regexp_replace(
+        unaccent(
+          lower(
+            COALESCE(${tables.apply.data}->>'firstName','') ||
+            COALESCE(${tables.apply.data}->>'lastName','')
+          )
+        ),
+        '[^a-z0-9]',
+        '',
+        'g'
+      )
+      LIKE '%' || regexp_replace(
+        unaccent(lower(${q})),
+        '[^a-z0-9]',
+        '',
+        'g'
+      ) || '%'
+    `;
+
+    itemsWhere.push(w);
+    totalWhere.push(w);
+  }
+
   itemsQuery.where(and(...itemsWhere));
   totalQuery.where(and(...totalWhere));
 

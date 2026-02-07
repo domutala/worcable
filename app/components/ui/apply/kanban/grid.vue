@@ -143,86 +143,93 @@ function setSortable() {
 
 <template>
   <div
-    ref="container"
-    :data-group="status"
-    :data-status="status"
+    class="overflow-hidden min-w-80 rounded-2xl"
     :style="{ width: `calc(1/${Object.keys(ApplyStatus).length} * 100%)` }"
-    class="kanban group border-default backdrop-blur-3xl h-max min-w-80 overflow-y-auto overflow-hidden flex flex-col rounded-2xl bg-default"
   >
     <div
-      class="px-5 border-default bg-default sticky top-0 z-15 py-3"
-      :style="{ borderTopColor: ApplyStatusColors[status] }"
+      ref="container"
+      :data-group="status"
+      :data-status="status"
+      class="kanban group border-default backdrop-blur-3xl max-h-full overflow-y-auto overflow-hidden flex flex-col bg-default rounded-2xl"
     >
-      <div class="flex items-center gap-2 relative">
-        <div
-          class="rounded-2xl relative px-4 py-2 flex items-center gap-2 text-highlighted"
+      <div
+        class="px-5 border-default bg-default sticky top-0 z-15 py-3"
+        :style="{ borderTopColor: ApplyStatusColors[status] }"
+      >
+        <div class="flex items-center gap-2 relative">
+          <div
+            class="rounded-2xl relative px-4 py-2 flex items-center gap-2 text-highlighted"
+          >
+            <div
+              class="absolute inset-0 opacity-12 rounded-2xl"
+              :style="{ backgroundColor: ApplyStatusColors[status] }"
+            ></div>
+
+            <u-icon
+              :name="$t(`apply.status.${status}.icon`)"
+              class="size-5"
+              :style="{ color: ApplyStatusColors[status] }"
+            />
+
+            {{ $t(`apply.status.${status}.label`) }}
+          </div>
+
+          <div class="ml-auto">
+            {{ applys.length }}
+          </div>
+        </div>
+      </div>
+
+      <ul
+        class="flex flex-col gap-2 flex-1 py-3 relative"
+        :data-status="status"
+      >
+        <li v-if="initFetching" class="mx-2 relative">
+          <ui-skeleton
+            class="w-full rounded-xl bg-surface/50"
+            :style="{ height: `${Math.random() * (550 - 150) + 150}px` }"
+          />
+        </li>
+
+        <li v-else-if="!applys.length" class="mx-2 relative">
+          <div
+            class="content sortable-item rounded-xl overflow-hidden border-default relative bg-surface h-35"
+          ></div>
+        </li>
+
+        <li
+          v-for="apply in applys || []"
+          :key="apply.id"
+          :data-id="apply.id"
+          class="mx-2 apply relative group"
         >
           <div
-            class="absolute inset-0 opacity-12 rounded-2xl"
-            :style="{ backgroundColor: ApplyStatusColors[status] }"
+            class="absolute inset-0 rounded-xl border-primary hidden group-[.ghost]:block bg-surface"
           ></div>
 
-          <u-icon
-            :name="$t(`apply.status.${status}.icon`)"
-            class="size-5"
-            :style="{ color: ApplyStatusColors[status] }"
+          <ui-apply-kanban-apply
+            :job
+            :apply
+            :status-changing="Object.values(statusChanging).includes(apply.id)"
           />
+        </li>
 
-          {{ $t(`apply.status.${status}.label`) }}
-        </div>
-
-        <div class="ml-auto">
-          {{ applys.length }}
-        </div>
-      </div>
-    </div>
-
-    <ul class="flex flex-col gap-2 flex-1 py-3 relative" :data-status="status">
-      <li v-if="initFetching" class="mx-2 relative">
-        <ui-skeleton
-          class="w-full rounded-xl bg-surface/50"
-          :style="{ height: `${Math.random() * (550 - 150) + 150}px` }"
-        />
-      </li>
-
-      <li v-else-if="!applys.length" class="mx-2 relative">
         <div
-          class="content sortable-item rounded-xl overflow-hidden border-default relative bg-surface h-35"
-        ></div>
-      </li>
-
-      <li
-        v-for="apply in applys || []"
-        :key="apply.id"
-        :data-id="apply.id"
-        class="mx-2 apply relative group"
-      >
-        <div
-          class="absolute inset-0 rounded-xl border-primary hidden group-[.ghost]:block bg-surface"
-        ></div>
-
-        <ui-apply-kanban-apply
-          :job
-          :apply
-          :status-changing="Object.values(statusChanging).includes(apply.id)"
-        />
-      </li>
-
-      <div
-        v-if="result && result.total && result.page !== result.totalPages"
-        class="flex justify-center"
-      >
-        <u-button
-          class="cursor-pointer rounded-4xl"
-          color="neutral"
-          variant="ghost"
-          icon="i-lucide-list-filter-plus"
-          :loading="fetching"
-          @click="page++"
+          v-if="result && result.total && result.page !== result.totalPages"
+          class="flex justify-center"
         >
-          {{ $t("words.show_more") }}
-        </u-button>
-      </div>
-    </ul>
+          <u-button
+            class="cursor-pointer rounded-4xl"
+            color="neutral"
+            variant="ghost"
+            icon="i-lucide-list-filter-plus"
+            :loading="fetching"
+            @click="page++"
+          >
+            {{ $t("words.show_more") }}
+          </u-button>
+        </div>
+      </ul>
+    </div>
   </div>
 </template>

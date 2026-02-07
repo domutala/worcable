@@ -14,7 +14,9 @@
     "hire_me": "Engagez-moi",
     "show_more": "Voir plus",
     "home": "Accueil",
-    "result": "Résult | Résultats"
+    "result": "Résult | Résultats",
+    "dashboard": "Dashboard",
+    "last_update": "Dernier modifier"
   },
 
   "meeting": {
@@ -245,7 +247,12 @@
         "icon": "i-lucide-phone-outgoing"
       },
       "interview": { "label": "Entretien", "icon": "i-lucide-calendar-range" },
-      "hired": { "label": "Recruté", "icon": "i-lucide-check-check" }
+      "hired": { "label": "Recruté", "icon": "i-lucide-check-check" },
+
+      "labels": {
+        "label": "Statut",
+        "all": "Tous les status"
+      }
     },
 
     "errors": {
@@ -258,6 +265,10 @@
       "donwload_cv": "Télécharger",
       "apply": "Postuler",
       "submit": "Envoyer ma candidature"
+    },
+
+    "labels": {
+      "no_apply": "Aucune candidature trouvé"
     },
 
     "success": "Merci pour votre candidature. Nous avons bien reçu vos informations et notre équipe va les analyser avec attention. Si votre profil correspond à nos opportunités actuelles ou futures, nous vous contacterons pour la suite du processus."
@@ -404,7 +415,11 @@
 
     "actions": {
       "update": "Modifer",
-      "new": "Créer un poste"
+      "new": "Créer un poste",
+      "add_new_apply": "Ajouter une candidature",
+      "share_job": "Partager",
+      "display": "Afficher",
+      "broadcast": "Diffuser"
     },
 
     "labels": {
@@ -470,6 +485,10 @@
       }
     },
 
+    "labels": {
+      "page_title": "Modifier votre organisation"
+    },
+
     "actions": {
       "save": "Enregistrer",
       "update": "Modifer votre organisation"
@@ -483,5 +502,7 @@
       "EUR": { "label": "Euro" },
       "USD": { "label": "Dollar" }
     }
-  }
+  },
+
+  "order": { "asc": "Croissant", "desc": "Décroissant" }
 }

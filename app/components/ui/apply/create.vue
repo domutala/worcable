@@ -30,7 +30,7 @@ const submitting = ref(false);
 const success = ref(false);
 const schema = getApplyData(i18n.t);
 type Schema = z.output<typeof schema>;
-const state = reactive<Partial<Schema>>({ desiredGrossSalary: 28000 });
+const state = reactive<Partial<Schema>>({});
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   submitting.value = true;

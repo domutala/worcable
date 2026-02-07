@@ -18,7 +18,10 @@ const emit = defineEmits<(e: "update", apply: Apply) => void>();
 </script>
 
 <template>
-  <div ref="container" class="flex gap-2 h-full w-full">
+  <div
+    ref="container"
+    class="flex gap-2 flex-1 overflow-hidden overflow-x-auto pb-3"
+  >
     <ui-apply-kanban-grid
       v-for="status in ApplyStatus"
       :key="status"

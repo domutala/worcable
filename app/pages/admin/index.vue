@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { Job } from "~~/server/database/schema";
 import type { IDataResult } from "~~/server/interfaces";
-import type { BreadcrumbItem } from "@nuxt/ui";
 
 const sortBy = ref("updatedAt");
 const sortOrder = ref("desc");
@@ -20,26 +19,11 @@ const { data, status, refresh } = await useFetch<IDataResult<Job>>(
 function onPaginate(p: number) {
   page.value = p;
 }
-
-const items = ref<BreadcrumbItem[]>([
-  {
-    icon: "i-lucide-home",
-    to: Use.localePath({ name: "index" }),
-  },
-  {
-    label: Use.i18n.t("job.labels.title"),
-    icon: "i-lucide-briefcase-business",
-  },
-]);
 </script>
 
 <template>
   <div class="overflow-auto h-full">
-    <div
-      class="sticky top-0 z-50 backdrop-blur-2xl bg-surface/10 px-5 py-2 border-b border-default"
-    >
-      <UBreadcrumb :items="items" />
-    </div>
+    <UiBreadcrumb :breads="['$home', '$admin']" />
 
     <div class="mt-10">
       <div class="max-w-4xl flex flex-col gap-2 mx-auto">

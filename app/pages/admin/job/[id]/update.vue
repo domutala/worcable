@@ -23,10 +23,17 @@ const items = ref<BreadcrumbItem[]>([
 </script>
 
 <template>
-  <div
-    class="fixed w-full top-0 z-50 backdrop-blur-2xl bg-surface/10 px-5 py-2 border-b border-default"
-  >
-    <UBreadcrumb :items="items" />
-  </div>
+  <UiBreadcrumb
+    class="fixed! w-full"
+    :breads="[
+      '$home',
+      '$admin',
+      {
+        label: job.title,
+        to: Use.localePath({ name: 'admin-job-id', params: { id: job.id } }),
+      },
+    ]"
+  />
+
   <ui-job-create :job />
 </template>

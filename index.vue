@@ -14,7 +14,6 @@ const sortOrder = ref("desc");
 const page = ref(1);
 const pageSize = ref(9);
 const dayjs = useDayjs();
-const side = ref("kanban");
 
 const { data, status, refresh } = await useFetch<IDataResult<Apply>>(
   `/api/admin/job/${Use.route.params.id}/applys`,
@@ -40,7 +39,7 @@ const applys = ref(
       <ui-job-header :applys :job />
     </template>
 
-    <div class="overflow-auto h-full flex flex-col">
+    <div class="overflow-auto h-full">
       <div v-if="status === 'pending'" class="px-5 pt-5">
         <div class="mb-3 flex items-center gap-3">
           <ui-skeleton class="h-12 rounded-xl w-50 bg-default/50" />
@@ -66,59 +65,28 @@ const applys = ref(
       <template v-else>
         <UiBreadcrumb :breads="['$home', '$admin', { label: job.title }]" />
 
-        <div class="flex mx-auto w-420 max-w-full pb-5 pt-10 px-5">
-          <div>
-            <u-button
-              class="rounded-2xl px-5 py-3"
-              size="lg"
-              icon="i-lucide-user-round-plus"
-            >
-              {{ $t("job.actions.add_new_apply") }}
-            </u-button>
-          </div>
-
-          <div class="mx auto"></div>
-
-          <div class="flex items-center gap-2 ml-auto">
-            <div
-              class="bg-default rounded-xl border border-default p-2 h-full flex gap-2 items-center"
-            >
-              <u-button
-                :class="{ 'bg-accented': side === 'kanban' }"
-                icon="i-lucide-kanban"
-                class="cursor-pointer"
-                color="neutral"
-                variant="ghost"
-                square
-                @click="side = 'kanban'"
-              >
-              </u-button>
-              <u-button
-                :class="{ 'bg-accented': side === 'list' }"
-                icon="i-lucide-text"
-                class="cursor-pointer"
-                color="neutral"
-                variant="ghost"
-                square
-                @click="side = 'list'"
-              >
+        <div class="m-10 w-max mx-auto">
+          <div class="flex mb-3">
+            <div>
+              <u-button class="rounded-2xl px-5 py-3" size="xl">
+                Ajouter une candidature
               </u-button>
             </div>
 
-            <ui-apply-candate-group
-              class="bg-default rounded-xl border border-default"
-              :job
-            />
+            <div class="mx auto"></div>
+
+            <div class="flex items-center gap-2 ml-auto">
+              <ui-apply-candate-group
+                class="bg-default rounded-xl border border-default"
+                :job
+              />
+            </div>
+          </div>
+
+          <div class="mx-auto w-full overflow-hidden rounded-2xl">
+            <ui-apply-kanban :job class="pb-5 overflow-x-auto mx-auto" />
           </div>
         </div>
-
-        <ui-apply-kanban
-          v-if="side === 'kanban'"
-          :job
-          class="mx-auto max-w-full w-420 px-5"
-        />
-
-        <ui-apply-list v-else :job class="mx-auto max-w-full w-420 px-5" />
       </template>
     </div>
   </ui-layout>

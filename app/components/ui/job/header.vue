@@ -8,6 +8,24 @@ const { job } = defineProps<{ job: Job }>();
 const items = ref<DropdownMenuItem[][]>([
   [
     {
+      label: Use.i18n.t("job.actions.broadcast"),
+      icon: "i-lucide-corner-up-right",
+    },
+    {
+      label: Use.i18n.t("job.actions.add_new_apply"),
+      icon: "i-lucide-user-round-plus",
+    },
+    {
+      label: Use.i18n.t("job.actions.display"),
+      icon: "i-lucide-file-text",
+      target: "_blank",
+      to: Use.localePath({ name: "job-id", params: { id: job.id } }),
+    },
+    {
+      label: Use.i18n.t("job.actions.share_job"),
+      icon: "i-lucide-send",
+    },
+    {
       label: Use.i18n.t("job.actions.update"),
       icon: "i-lucide-pencil-line",
       to: Use.localePath({
@@ -15,97 +33,46 @@ const items = ref<DropdownMenuItem[][]>([
         params: { id: job.id },
       }),
     },
-    {
-      label: "Settings",
-      icon: "i-lucide-cog",
-      kbds: [","],
-    },
-    {
-      label: "Keyboard shortcuts",
-      icon: "i-lucide-monitor",
-    },
-  ],
-  [
-    {
-      label: "Team",
-      icon: "i-lucide-users",
-    },
-    {
-      label: "Invite users",
-      icon: "i-lucide-user-plus",
-      children: [
-        [
-          {
-            label: "Email",
-            icon: "i-lucide-mail",
-          },
-          {
-            label: "Message",
-            icon: "i-lucide-message-square",
-          },
-        ],
-        [
-          {
-            label: "More",
-            icon: "i-lucide-circle-plus",
-          },
-        ],
-      ],
-    },
-    {
-      label: "New team",
-      icon: "i-lucide-plus",
-      kbds: ["meta", "n"],
-    },
-  ],
-  [
-    {
-      label: "GitHub",
-      icon: "i-simple-icons-github",
-      to: "https://github.com/nuxt/ui",
-      target: "_blank",
-    },
-    {
-      label: "Support",
-      icon: "i-lucide-life-buoy",
-      to: "/docs/components/dropdown-menu",
-    },
-    {
-      label: "API",
-      icon: "i-lucide-cloud",
-      disabled: true,
-    },
-  ],
-  [
-    {
-      label: "Logout",
-      icon: "i-lucide-log-out",
-      kbds: ["shift", "meta", "q"],
-    },
   ],
 ]);
 </script>
 
 <template>
-  <div class="py-3 px-5 flex bg-default backdrop-blur-xl">
-    <div class="leading-none">
-      <h1 class="text-xl font-bold">
+  <div
+    class="py-4 px-5 flex gap-5 bg-inherit/10 backdrop-blur-lg sticky top-0 z-50"
+  >
+    <div class="leading-none flex-1 min-w-0 w-0">
+      <h1 class="text-lg font-bold truncate">
         {{ job.title }}
       </h1>
-      <div>
-        {{ job.location }}
+      <div class="truncate opacity-50">
+        {{ Utils.getDateStatus(job.createdAt) }}
       </div>
     </div>
 
-    <div class="mx-auto"></div>
+    <div class="flex items-center gap-2 ml-auto">
+      <u-button
+        size="lg"
+        trailing-icon="i-lucide-corner-up-right"
+        variant="soft"
+        color="neutral"
+        class="rounded- cursor-pointer"
+      >
+        {{ $t("job.actions.broadcast") }}
+      </u-button>
 
-    <div class="flex items-center">
-      <UDropdownMenu :items="items" :content="{ align: 'end' }">
+      <UDropdownMenu
+        :items="items"
+        :content="{ align: 'end' }"
+        :ui="{ item: 'cursor-pointer' }"
+      >
         <UButton
+          size="lg"
           icon="i-lucide-menu"
           color="neutral"
-          variant="outline"
+          variant="soft"
           class="cursor-pointer"
+          square
         />
       </UDropdownMenu>
     </div>

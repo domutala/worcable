@@ -31,7 +31,7 @@ const sortItems = computed(() => {
     },
 
     {
-      label: i18n.t("table.sort.order.asc"),
+      label: i18n.t("order.asc"),
       icon: "i-lucide-arrow-up-narrow-wide",
       checked: sortOrder.value === "asc",
       slot: "checked",
@@ -42,7 +42,7 @@ const sortItems = computed(() => {
       },
     },
     {
-      label: i18n.t("table.sort.order.desc"),
+      label: i18n.t("order.desc"),
       icon: "i-lucide-arrow-down-wide-narrow",
       checked: sortOrder.value === "desc",
       slot: "checked",
