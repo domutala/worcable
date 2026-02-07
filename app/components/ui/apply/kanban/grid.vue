@@ -1,49 +1,33 @@
 <script lang="ts" setup>
-import {
-  ApplyStatus,
-  ApplyStatusColors,
-  type Apply,
-  type Job,
-} from "~~/server/database/schema";
+import { type Apply, type Job } from "~~/server/database/schema";
 import type { IDataResult } from "~~/server/interfaces";
 import Sortable from "sortablejs";
 import _ from "lodash";
 import onFetchError from "~/tools/onFetchError";
+import { ApplyStatus } from "~~/server/services/apply_get_shema";
+import { applyStatusColors } from "~/tools/apply";
 
-const { job, status } = defineProps<{ status: ApplyStatus; job: Job }>();
+const { status } = defineProps<{ status: ApplyStatus; job: Job }>();
+const job = defineModel<Job>("job", { required: true });
 
 const sortBy = ref("updatedAt");
 const sortOrder = ref("desc");
 const page = ref(1);
 const pageSize = ref(8);
+const searchTerm = ref("");
 
 const dayjs = useDayjs();
 const statusChanging = ref<Record<string, string>>({});
 const fetching = ref(false);
 const container = useTemplateRef("container");
 const initFetching = ref(false);
+const openSearch = ref(false);
 
 const result = ref<IDataResult<Apply>>();
 const applys = ref<Apply[]>([]);
 
-onMounted(() => {
-  window.addEventListener(`${status}:actions`, (e: any) => onEventActions(e));
-});
-
-function onEventActions(e: CustomEvent) {
-  if (e.detail.action === "remove-apply") {
-    const is = applys.value.findIndex((a) => a.id === e.detail.apply.id);
-    if (is !== -1) applys.value.splice(is, 1);
-  }
-}
-
-onBeforeUnmount(() => {
-  window.removeEventListener(`${status}:actions`, (e: any) =>
-    onEventActions(e),
-  );
-});
-
 onMounted(async () => {
+  window.addEventListener(`${status}:actions`, (e: any) => onEventActions(e));
   initFetching.value = true;
 
   try {
@@ -56,18 +40,35 @@ onMounted(async () => {
   }
 });
 
+function onEventActions(e: CustomEvent) {
+  if (e.detail.action === "remove-apply") {
+    const is = applys.value.findIndex((a) => a.id === e.detail.apply.id);
+    if (is !== -1) applys.value.splice(is, 1);
+  } else if (e.detail.action === "add-apply") {
+    const is = applys.value.findIndex((a) => a.id === e.detail.apply.id);
+    if (is === -1) applys.value.push(e.detail.apply);
+  }
+}
+
+onBeforeUnmount(() => {
+  window.removeEventListener(`${status}:actions`, (e: any) =>
+    onEventActions(e),
+  );
+});
+
 watch(() => page.value, getApplys);
+watch(() => searchTerm.value, getApplys);
 async function getApplys() {
   fetching.value = true;
 
   try {
-    result.value = await $fetch(`/api/admin/apply`, {
-      method: "get",
+    result.value = await $fetch("/api/admin/apply", {
       query: {
-        jobID: job.id,
+        jobID: job.value.id,
         filterBy: `status:${status}`,
         page: page.value,
         pageSize: pageSize.value,
+        q: searchTerm.value,
       },
     });
 
@@ -77,12 +78,36 @@ async function getApplys() {
       }),
     );
 
-    applys.value.push(...r);
+    if (searchTerm.value) applys.value = r;
+    else applys.value.push(...r);
+
     applys.value = _.uniqBy(applys.value, "id");
   } finally {
     fetching.value = false;
   }
 }
+
+watch(
+  () => applys.value,
+  () => {
+    const _applys = applys.value.filter((apply) => apply.status !== status);
+
+    for (const apply of _applys) {
+      dispatchEvent(
+        new CustomEvent(`${apply.status}:actions`, {
+          detail: { action: "add-apply", apply },
+        }),
+      );
+
+      dispatchEvent(
+        new CustomEvent(`${status}:actions`, {
+          detail: { action: "remove-apply", apply },
+        }),
+      );
+    }
+  },
+  { deep: true },
+);
 
 function setSortable() {
   if (!container.value) return;
@@ -115,6 +140,7 @@ function setSortable() {
           method: "patch",
           body: { id, to },
         });
+
         const lis = ul!.querySelectorAll("li[data-id]");
         lis.forEach((li, index) => {
           if (li.getAttribute("data-id") === result.id) {
@@ -154,7 +180,7 @@ function setSortable() {
     >
       <div
         class="px-5 border-default bg-default sticky top-0 z-15 py-3"
-        :style="{ borderTopColor: ApplyStatusColors[status] }"
+        :style="{ borderTopColor: applyStatusColors[status] }"
       >
         <div class="flex items-center gap-2 relative">
           <div
@@ -162,22 +188,66 @@ function setSortable() {
           >
             <div
               class="absolute inset-0 opacity-12 rounded-2xl"
-              :style="{ backgroundColor: ApplyStatusColors[status] }"
+              :style="{ backgroundColor: applyStatusColors[status] }"
             ></div>
 
             <u-icon
               :name="$t(`apply.status.${status}.icon`)"
               class="size-5"
-              :style="{ color: ApplyStatusColors[status] }"
+              :style="{ color: applyStatusColors[status] }"
             />
+
+            {{ applys.length }}
 
             {{ $t(`apply.status.${status}.label`) }}
           </div>
 
           <div class="ml-auto">
-            {{ applys.length }}
+            <u-button
+              icon="i-lucide-user-round-search"
+              color="neutral"
+              variant="ghost"
+              class="cursor-pointer"
+              @click="openSearch = true"
+              square
+            />
           </div>
         </div>
+
+        <u-input
+          v-if="openSearch"
+          v-model="searchTerm"
+          icon="i-lucide-user-round-search"
+          class="h-17 w-full outline-none absolute inset-0"
+          :placeholder="$t('apply.actions.search_candidate')"
+          size="xl"
+          autofocus
+          :ui="{ base: 'h-full rounded-0 ring-0! border-b border-default' }"
+        >
+          <template #trailing>
+            <u-button
+              icon="i-lucide-x"
+              color="neutral"
+              variant="subtle"
+              size="xs"
+              class="cursor-pointer rounded-4xl"
+              @click="
+                openSearch = false;
+                searchTerm = '';
+              "
+              square
+            />
+          </template>
+        </u-input>
+
+        <u-progress
+          v-if="fetching"
+          class="absolute bottom-0 left-0 rounded-0"
+          :ui="{
+            base: 'rounded-0!',
+            indicator: 'rounded-0!',
+          }"
+        />
       </div>
 
       <ul
@@ -193,12 +263,17 @@ function setSortable() {
 
         <li v-else-if="!applys.length" class="mx-2 relative">
           <div
-            class="content sortable-item rounded-xl overflow-hidden border-default relative bg-surface h-35"
-          ></div>
+            class="content sortable-item rounded-xl overflow-hidden border-default relative bg-surface text-center py-15"
+          >
+            <u-icon
+              name="i-lucide-gallery-vertical-end"
+              class="size-24 opacity-25 rotate-z-180"
+            />
+          </div>
         </li>
 
         <li
-          v-for="apply in applys || []"
+          v-for="(apply, i) in applys"
           :key="apply.id"
           :data-id="apply.id"
           class="mx-2 apply relative group"
@@ -208,8 +283,8 @@ function setSortable() {
           ></div>
 
           <ui-apply-kanban-apply
-            :job
-            :apply
+            v-model:apply="applys[i]!"
+            v-model:job="job"
             :status-changing="Object.values(statusChanging).includes(apply.id)"
           />
         </li>

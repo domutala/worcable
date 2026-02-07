@@ -1,12 +1,10 @@
 <script lang="ts" setup>
-import { ApplyStatusColors, type Job } from "~~/server/database/schema";
-import type { Apply } from "~~/server/database/schema";
+import type { Apply, Job } from "~~/server/database/schema";
 import _ from "lodash";
-import * as z from "zod";
-import MarkdownIt from "markdown-it";
+import { applyStatusColors } from "~/tools/apply";
 
-const md = new MarkdownIt();
-const { job, apply } = defineProps<{ job: Job; apply: Apply }>();
+const job = defineModel<Job>("job", { required: true });
+const apply = defineModel<Apply>("apply", { required: true });
 </script>
 
 <template>
@@ -32,22 +30,12 @@ const { job, apply } = defineProps<{ job: Job; apply: Apply }>();
     </div>
 
     <div class="flex items-center gap-2 relative ml-auto">
-      <div
-        class="rounded-2xl relative px-4 py-2 flex items-center gap-2 text-highlighted"
-      >
-        <div
-          class="absolute inset-0 opacity-12 rounded-2xl"
-          :style="{ backgroundColor: ApplyStatusColors[apply.status] }"
-        ></div>
-
-        <u-icon
-          :name="$t(`apply.status.${apply.status}.icon`)"
-          class="size-5"
-          :style="{ color: ApplyStatusColors[apply.status] }"
-        />
-
-        {{ $t(`apply.status.${apply.status}.label`) }}
-      </div>
+      <ui-apply-note
+        v-model:apply="apply"
+        v-model:job="job"
+        class="pointer-events-auto"
+      />
+      <ui-apply-status v-model:apply="apply" v-model:job="job" />
     </div>
   </div>
 

@@ -19,5 +19,5 @@ if (!job.value) {
 
 <template>
   <template v-if="status === 'pending'"></template>
-  <nuxt-page v-else-if="job" :job />
+  <nuxt-page v-else-if="job" v-model="job" />
 </template>

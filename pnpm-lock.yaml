@@ -101,6 +101,9 @@ importers:
       uuid:
         specifier: ^13.0.0
         version: 13.0.0
+      vue-rate:
+        specifier: ^3.1.1
+        version: 3.1.1(typescript@5.9.3)
       zod:
         specifier: ^4.3.6
         version: 4.3.6
@@ -6710,6 +6713,9 @@ packages:
     engines: {node: '>= 16'}
     peerDependencies:
       vue: ^3.0.0
+
+  vue-rate@3.1.1:
+    resolution: {integrity: sha512-td68rhpulsEl3MVLemzL3sf6ViPhWkPTTBfWC2jWLJK5SHSWrIPAQ+8ER/2srBlJvyQZl/spDUxPpG5b3NNq9Q==}
 
   vue-router@4.6.4:
     resolution: {integrity: sha512-Hz9q5sa33Yhduglwz6g9skT8OBPii+4bFn88w6J+J4MfEo4KRRpmiNG/hHHkdbRFlLBOqxN8y8gf2Fb0MTUgVg==}
@@ -14493,6 +14499,12 @@ snapshots:
       '@intlify/shared': 11.2.2
       '@vue/devtools-api': 6.6.4
       vue: 3.5.26(typescript@5.9.3)
+
+  vue-rate@3.1.1(typescript@5.9.3):
+    dependencies:
+      vue: 3.5.26(typescript@5.9.3)
+    transitivePeerDependencies:
+      - typescript
 
   vue-router@4.6.4(vue@3.5.26(typescript@5.9.3)):
     dependencies:

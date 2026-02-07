@@ -1,5 +1,4 @@
-import { ApplyStatus } from "../database/schema";
-import { getApplyData } from "../services/apply_get_data_shema";
+import { ApplyStatus, getApplyDataShema } from "../services/apply_get_shema";
 import saveFile from "../tools/save_file";
 import * as z from "zod";
 
@@ -65,7 +64,7 @@ export default defineEventHandler(async (event) => {
 
   if (body.phone) body.phone = body.phone.toString();
 
-  const ZApplyData = getApplyData($t);
+  const ZApplyData = getApplyDataShema($t);
 
   const dataParsed = ZApplyData.safeParse(body);
 

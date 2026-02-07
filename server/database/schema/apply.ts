@@ -1,39 +1,29 @@
-import { pgTable, uuid, timestamp, jsonb, varchar } from "drizzle-orm/pg-core";
-import { getApplyData } from "../../services/apply_get_data_shema";
+import {
+  pgTable,
+  uuid,
+  timestamp,
+  jsonb,
+  varchar,
+  integer,
+} from "drizzle-orm/pg-core";
+import { getApplyShema } from "../../services/apply_get_shema";
 import * as z from "zod";
 
-const ZApplyData = getApplyData((v) => v);
-type IApplyData = z.output<typeof ZApplyData>;
-
-export enum ApplyStatus {
-  REJECTED = "rejected",
-  INIT = "init",
-  TO_CONTACT = "toContact",
-  INTERVIEW = "interview",
-  HIRED = "hired",
-}
-
-export const ApplyStatusColors = {
-  rejected: "#ff0000",
-  init: "#0050da",
-  toContact: "#a41aff",
-  interview: "#F59E0B",
-  hired: "#18ca00",
-};
-
-export const ZApplyStaus = z.enum(ApplyStatus);
+const { data, note, status } = getApplyShema((v) => v);
 
 export const apply = pgTable("apply", {
   id: uuid().primaryKey().defaultRandom(),
-  data: jsonb().notNull().$type<IApplyData>(),
+  data: jsonb().notNull().$type<z.output<typeof data>>(),
 
-  status: varchar().default("init").notNull().$type<ApplyStatus>(),
+  status: varchar().default("init").notNull().$type<z.output<typeof status>>(),
   allStatus: jsonb()
     .notNull()
     .default([])
-    .$type<Array<{ status: ApplyStatus; date: string }>>(),
+    .$type<Array<{ status: z.output<typeof status>; date: string }>>(),
 
   jobID: uuid("job_id"),
+
+  note: integer().$type<z.output<typeof note>>(),
 
   createdAt: timestamp("created_at", { mode: "string", withTimezone: false })
     .defaultNow()

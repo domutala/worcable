@@ -25,8 +25,8 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const { status: schema } = getApplyShema($t);
-  const parsedBody = z.object({ to: schema }).safeParse(body);
+  const { note: schema } = getApplyShema($t);
+  const parsedBody = z.object({ note: schema }).safeParse(body);
 
   if (parsedBody.error) {
     throw createError({
@@ -40,22 +40,9 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  if (apply.status === parsedBody.data.to) {
-    throw createError({
-      statusCode: 400,
-      data: { message: $t("apply.errors.invalid_status") },
-    });
-  }
-
-  const allStatus = apply.allStatus;
-  allStatus.push({
-    status: parsedBody.data.to,
-    date: new Date().toISOString(),
-  });
-
   const [_apply] = await db
     .update(tables.apply)
-    .set({ status: parsedBody.data.to, allStatus })
+    .set({ note: parsedBody.data.note })
     .where(eq(tables.apply.id, id))
     .returning();
 

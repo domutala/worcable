@@ -3,7 +3,7 @@ import type { FormSubmitEvent } from "@nuxt/ui";
 import MarkdownIt from "markdown-it";
 import * as z from "zod";
 import { watchImmediate } from "@vueuse/core";
-import { getApplyData } from "~~/server/services/apply_get_data_shema";
+import { getApplyDataShema } from "~~/server/services/apply_get_shema";
 import type { Job } from "~~/server/database/schema";
 import onFetchError from "~/tools/onFetchError";
 import { CurrencyAvailaible } from "~~/server/interfaces";
@@ -28,7 +28,7 @@ const educationLevel = [
 const successContainer = useTemplateRef("successContainer");
 const submitting = ref(false);
 const success = ref(false);
-const schema = getApplyData(i18n.t);
+const schema = getApplyDataShema(i18n.t);
 type Schema = z.output<typeof schema>;
 const state = reactive<Partial<Schema>>({});
 

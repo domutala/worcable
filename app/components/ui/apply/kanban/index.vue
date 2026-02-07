@@ -1,19 +1,8 @@
 <script lang="ts" setup>
-import {
-  ApplyStatus,
-  ApplyStatusColors,
-  type Apply,
-  type Job,
-} from "~~/server/database/schema";
-import _ from "lodash";
-import Sortable from "sortablejs";
+import { type Apply, type Job } from "~~/server/database/schema";
+import { ApplyStatus } from "~~/server/services/apply_get_shema";
 
-const { job } = defineProps<{
-  job: Job;
-}>();
-// const applys = defineModel<Apply[]>("applys", { default: [] });
-
-const container = useTemplateRef("container");
+const job = defineModel<Job>("job", { required: true });
 const emit = defineEmits<(e: "update", apply: Apply) => void>();
 </script>
 
@@ -25,8 +14,8 @@ const emit = defineEmits<(e: "update", apply: Apply) => void>();
     <ui-apply-kanban-grid
       v-for="status in ApplyStatus"
       :key="status"
-      :job
       :status
+      v-model:job="job"
     />
   </div>
 </template>

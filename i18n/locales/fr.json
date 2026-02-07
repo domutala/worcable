@@ -255,6 +255,12 @@
       }
     },
 
+    "note": {
+      "labels": {
+        "label": "Note"
+      }
+    },
+
     "errors": {
       "invalid_id": "l'ID est invalide.",
       "apply_not_found": "Candidature non trouvé.",
@@ -264,7 +270,8 @@
     "actions": {
       "donwload_cv": "Télécharger",
       "apply": "Postuler",
-      "submit": "Envoyer ma candidature"
+      "submit": "Envoyer ma candidature",
+      "search_candidate": "Rechercher un candidat"
     },
 
     "labels": {

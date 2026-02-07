@@ -1,12 +1,10 @@
 <script lang="ts" setup>
-import { open } from "node:fs";
 import type { Apply, Job } from "~~/server/database/schema";
 
-const { job, apply, statusChanging } = defineProps<{
-  job: Job;
-  apply: Apply;
-  statusChanging?: boolean;
-}>();
+const job = defineModel<Job>("job", { required: true });
+const apply = defineModel<Apply>("apply", { required: true });
+
+const { statusChanging } = defineProps<{ statusChanging?: boolean }>();
 const isOpen = ref(false);
 </script>
 
@@ -52,12 +50,13 @@ const isOpen = ref(false);
       </div>
     </div>
 
-    <div class="flex flex-wrap gap-1 px-5 py-3 relative w-max">
+    <div class="flex flex-wrap gap-1 px-5 py-3 relative pointer-events-none">
       <UButton
         color="neutral"
         variant="ghost"
         icon="i-lucide-file-text"
         target="_blank"
+        class="pointer-events-auto"
         :href="Utils.getFileUrl(apply.data.cv)"
       >
       </UButton>
@@ -67,6 +66,7 @@ const isOpen = ref(false);
         variant="ghost"
         icon="i-lucide-at-sign"
         target="_blank"
+        class="pointer-events-auto"
         :href="`mailto:${apply.data.email}`"
       >
       </UButton>
@@ -75,10 +75,21 @@ const isOpen = ref(false);
         color="neutral"
         variant="ghost"
         icon="i-lucide-phone"
+        class="pointer-events-auto"
         target="_blank"
         :href="`tel:${apply.data.phone}`"
       >
       </UButton>
+
+      <div class="mx-auto"></div>
+
+      <div class="flex items-center">
+        <ui-apply-note
+          v-model:apply="apply"
+          v-model:job="job"
+          class="pointer-events-auto"
+        />
+      </div>
     </div>
 
     <u-progress
@@ -92,7 +103,7 @@ const isOpen = ref(false);
 
   <u-modal v-model:open="isOpen" :ui="{ content: 'max-w-250 rounded-2xl' }">
     <template #content>
-      <ui-apply-one :apply :job />
+      <ui-apply-display v-model:apply="apply" v-model:job="job" />
     </template>
   </u-modal>
 </template>

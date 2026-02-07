@@ -9,6 +9,7 @@ export default defineEventHandler(async (event) => {
     sortOrder?: "asc" | "desc";
     jobID: string;
     filterBy?: string;
+    q?: string;
   }>(event);
 
   return await listApplys({ $t, query });

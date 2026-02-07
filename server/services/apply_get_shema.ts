@@ -3,6 +3,14 @@ import * as z from "zod";
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const ACCEPTED_AVATAR_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
+export enum ApplyStatus {
+  REJECTED = "rejected",
+  INIT = "init",
+  TO_CONTACT = "toContact",
+  INTERVIEW = "interview",
+  HIRED = "hired",
+}
+
 const availability = ["immediately", "1month", "2mois", "3mois", "other"];
 const educationLevel = [
   "none",
@@ -15,7 +23,7 @@ const educationLevel = [
   "doctorate",
 ];
 
-export function getApplyData($t: (string: string) => string) {
+export function getApplyDataShema($t: (string: string) => string) {
   const ApplyData = z.object({
     firstName: z
       .string($t("apply.items.firstName.errors.required"))
@@ -56,8 +64,8 @@ export function getApplyData($t: (string: string) => string) {
 
     desiredGrossSalary: z
       .number($t("apply.items.desiredGrossSalary.errors.required"))
-      .min(0)
-      .max(200),
+      .min(0, $t("apply.items.desiredGrossSalary.errors.invalid"))
+      .max(200, $t("apply.items.desiredGrossSalary.errors.invalid")),
 
     availability: z.enum(
       availability,
@@ -79,4 +87,17 @@ export function getApplyData($t: (string: string) => string) {
   });
 
   return ApplyData;
+}
+
+export function getApplyShema($t: (string: string) => string) {
+  const note = z
+    .number($t("apply.note.errors.required"))
+    .min(0, $t("apply.note.errors.required"))
+    .max(200, $t("apply.note.errors.required"));
+
+  const status = z.enum(ApplyStatus, $t("apply.errors.invalid_status"));
+
+  const data = getApplyDataShema($t);
+
+  return { note, status, data };
 }

@@ -7,8 +7,7 @@ import UiLayout from "~/components/layout.vue";
 
 definePageMeta({ layout: false });
 
-const { job } = defineProps<{ job: Job }>();
-
+const job = defineModel<Job>({ required: true });
 const sortBy = ref("updatedAt");
 const sortOrder = ref("desc");
 const page = ref(1);
@@ -114,11 +113,15 @@ const applys = ref(
 
         <ui-apply-kanban
           v-if="side === 'kanban'"
-          :job
+          v-model:job="job"
           class="mx-auto max-w-full w-420 px-5"
         />
 
-        <ui-apply-list v-else :job class="mx-auto max-w-full w-420 px-5" />
+        <ui-apply-list
+          v-else
+          v-model:job="job"
+          class="mx-auto max-w-full w-420 px-5"
+        />
       </template>
     </div>
   </ui-layout>

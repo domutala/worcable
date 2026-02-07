@@ -1,12 +1,8 @@
 <script lang="ts" setup>
-import {
-  ApplyStatus,
-  ApplyStatusColors,
-  type Apply,
-  type Job,
-} from "~~/server/database/schema";
-import _, { orderBy } from "lodash";
+import { type Apply, type Job } from "~~/server/database/schema";
 import type { IDataResult } from "~~/server/interfaces";
+import { ApplyStatus } from "~~/server/services/apply_get_shema";
+import { watchImmediate } from "@vueuse/core";
 
 const { job } = defineProps<{ job: Job }>();
 
@@ -17,34 +13,40 @@ const page = ref(1);
 const pageSize = ref(8);
 const filterBy = ref<`${string}:${string}` | null>(null);
 
-const {
-  data: applys,
-  status,
-  refresh,
-} = await useFetch<IDataResult<Apply>>(`/api/admin/job/${job.id}/applys`, {
-  method: "get",
-  query: { sortBy, sortOrder, page, pageSize, filterBy, q: searchTerm },
-  watch: [sortBy, sortOrder, page, pageSize, filterBy, searchTerm],
-});
+const { data, status, refresh } = await useFetch<IDataResult<Apply>>(
+  `/api/admin/job/${job.id}/applys`,
+  {
+    method: "get",
+    query: { sortBy, sortOrder, page, pageSize, filterBy, q: searchTerm },
+    watch: [sortBy, sortOrder, page, pageSize, filterBy, searchTerm],
+  },
+);
 
-const container = useTemplateRef("container");
-const emit = defineEmits<(e: "update", apply: Apply) => void>();
+const applys = ref<Apply[]>([]);
+
+watchImmediate(
+  () => data.value,
+  () => {
+    applys.value = data.value?.items || [];
+  },
+  { deep: true },
+);
 </script>
 
 <template>
   <div ref="container" class="flex-1 flex flex-col gap-1">
-    <u-input
-      v-model="searchTerm"
-      :ui="{ base: 'h-full rounded-2xl ring-0' }"
-      :loading="status === 'pending'"
-      icon="i-lucide-search"
-      type="search"
-      class="h-17 w-full outline-none"
-      placeholder="Rechercher un emploi"
-      size="xl"
-    />
+    <template v-if="data">
+      <u-input
+        v-model="searchTerm"
+        :ui="{ base: 'h-full rounded-2xl ring-0' }"
+        :loading="status === 'pending'"
+        icon="i-lucide-search"
+        type="search"
+        class="h-17 w-full outline-none"
+        placeholder="Rechercher un emploi"
+        size="xl"
+      />
 
-    <template v-if="applys">
       <div class="mb-1 flex gap-1 items-center">
         <div class="mx-auto"></div>
         <u-select
@@ -65,10 +67,11 @@ const emit = defineEmits<(e: "update", apply: Apply) => void>();
         <ui-sort
           v-model:sort-by="sortBy"
           v-model:sort-order="sortOrder"
-          :content="{ align: 'start' }"
+          :content="{ align: 'end' }"
           :orderBy="{
             updatedAt: { label: $t('words.last_update') },
             status: { label: $t('apply.status.labels.label') },
+            note: { label: $t('apply.note.labels.label') },
           }"
         >
           <template #default="{ label, icon }">
@@ -84,10 +87,7 @@ const emit = defineEmits<(e: "update", apply: Apply) => void>();
         </ui-sort>
       </div>
 
-      <div
-        v-if="!applys.items.length"
-        class="max-w-lg mx-auto text-center py-30"
-      >
+      <div v-if="!applys.length" class="max-w-lg mx-auto text-center py-30">
         <u-icon name="i-lucide-users-round" class="size-10" />
         <p>
           {{ $t("apply.labels.no_apply") }}
@@ -95,107 +95,118 @@ const emit = defineEmits<(e: "update", apply: Apply) => void>();
       </div>
 
       <div class="w-full flex flex-col gap-2 mb-5">
-        <u-modal
-          v-for="apply in applys?.items"
+        <div
+          v-for="(apply, i) in applys"
           :key="apply.id"
-          :ui="{ content: 'max-w-250 rounded-2xl' }"
+          class="w-full rounded-2xl bg-default overflow-hidden group"
         >
-          <u-button
-            variant="ghost"
-            color="neutral"
-            class="rounded-2xl p-0 bg-default cursor-pointer"
-            block
-          >
-            <div
-              class="flex items-center gap-2 p-5 relative w-full rounded-2xl text-left"
+          <u-modal :ui="{ content: 'max-w-250 rounded-2xl' }">
+            <u-button
+              variant="ghost"
+              color="neutral"
+              class="rounded-0 p-0 bg-default cursor-pointer"
+              block
             >
-              <UAvatar
-                :src="Utils.getFileUrl(apply.data.avatar)"
-                :alt="[apply.data.firstName, apply.data.lastName].join(' ')"
-                class="border border-accented rounded-2xl text-md"
-                size="3xl"
-              />
-
-              <div class="select-none leading-[1.1] flex-1 min-w-0 w-0">
-                <div class="font-bold truncate">
-                  {{ apply.data.firstName }}
-                  {{ apply.data.lastName }}
-                </div>
-
-                <div>
-                  {{ Utils.getDateStatus(apply.createdAt) }}
-                </div>
-              </div>
-
-              <div class="flex flex-wrap gap-1 relative">
-                <UButton
-                  color="neutral"
-                  variant="ghost"
-                  icon="i-lucide-file-text"
-                  target="_blank"
-                  :href="Utils.getFileUrl(apply.data.cv)"
-                >
-                </UButton>
-
-                <UButton
-                  color="neutral"
-                  variant="ghost"
-                  icon="i-lucide-at-sign"
-                  target="_blank"
-                  :href="`mailto:${apply.data.email}`"
-                >
-                </UButton>
-
-                <UButton
-                  color="neutral"
-                  variant="ghost"
-                  icon="i-lucide-phone"
-                  target="_blank"
-                  :href="`tel:${apply.data.phone}`"
-                >
-                </UButton>
-
-                <UButton
-                  color="neutral"
-                  variant="ghost"
-                  icon="i-lucide-message-square-text"
-                  class="pointer-events-auto"
-                >
-                </UButton>
-              </div>
-
               <div
-                class="rounded-xl relative px-4 py-2 flex items-center gap-2 text-highlighted"
+                class="flex items-center gap-4 p-5 relative border-b border-default w-full text-left"
               >
-                <div
-                  class="absolute inset-0 opacity-12 rounded-xl"
-                  :style="{ backgroundColor: ApplyStatusColors[apply.status] }"
-                ></div>
-
-                <u-icon
-                  :name="$t(`apply.status.${apply.status}.icon`)"
-                  class="size-5"
-                  :style="{ color: ApplyStatusColors[apply.status] }"
+                <UAvatar
+                  :src="Utils.getFileUrl(apply.data.avatar)"
+                  :alt="[apply.data.firstName, apply.data.lastName].join(' ')"
+                  class="border border-accented rounded-2xl text-md"
+                  size="3xl"
                 />
 
-                {{ $t(`apply.status.${apply.status}.label`) }}
-              </div>
-            </div>
-          </u-button>
+                <div class="select-none leading-[1.1] flex-1 min-w-0 w-0">
+                  <div class="font-bold truncate">
+                    {{ apply.data.firstName }}
+                    {{ apply.data.lastName }}
+                  </div>
 
-          <template #content>
-            <ui-apply-one :apply :job />
-          </template>
-        </u-modal>
+                  <div>
+                    {{ Utils.getDateStatus(apply.createdAt) }}
+                  </div>
+
+                  <ui-apply-note
+                    v-model:apply="applys[i]!"
+                    class="pointer-events-auto group-hover:hidden"
+                    :job
+                  />
+                </div>
+
+                <div @click.stop>
+                  <ui-apply-status v-model:apply="applys[i]!" :job />
+                </div>
+              </div>
+            </u-button>
+
+            <template #content>
+              <ui-apply-display v-model:apply="applys[i]!" :job />
+            </template>
+          </u-modal>
+
+          <div
+            class="px-5 gap-5 flex items-center h-0 group-hover:h-10 transition-all overflow-hidden"
+          >
+            <ui-apply-note
+              v-model:apply="applys[i]!"
+              class="pointer-events-auto"
+              :job
+            />
+
+            <div class="mx-auto"></div>
+
+            <div class="flex flex-wrap gap-1 relative">
+              <UButton
+                color="neutral"
+                variant="ghost"
+                icon="i-lucide-file-text"
+                target="_blank"
+                size="sm"
+                :href="Utils.getFileUrl(apply.data.cv)"
+              >
+              </UButton>
+
+              <UButton
+                color="neutral"
+                variant="ghost"
+                icon="i-lucide-at-sign"
+                target="_blank"
+                size="sm"
+                :href="`mailto:${apply.data.email}`"
+              >
+              </UButton>
+
+              <UButton
+                color="neutral"
+                variant="ghost"
+                icon="i-lucide-phone"
+                target="_blank"
+                size="sm"
+                :href="`tel:${apply.data.phone}`"
+              >
+              </UButton>
+
+              <UButton
+                color="neutral"
+                variant="ghost"
+                icon="i-lucide-message-square-text"
+                class="pointer-events-auto"
+                size="sm"
+              >
+              </UButton>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div
-        v-if="applys.items.length"
+        v-if="applys.length"
         class="sticky flex items-center gap-5 bottom-0 z-20 bg-surface backdrop-blur-2xl mt-auto py-2"
       >
-        <template v-if="applys.items.length">
-          {{ (applys.page - 1) * applys.pageSize + applys.items.length }} sur
-          {{ applys.total }}
+        <template v-if="applys.length">
+          {{ (data.page - 1) * data.pageSize + data.items.length }} sur
+          {{ data.total }}
         </template>
 
         <div class="mx-auto"></div>
@@ -208,9 +219,9 @@ const emit = defineEmits<(e: "update", apply: Apply) => void>();
           active-color="neutral"
           active-variant="soft"
           size="sm"
-          :page="applys.page"
-          :items-per-page="applys.pageSize"
-          :total="applys.total"
+          :page="data.page"
+          :items-per-page="data.pageSize"
+          :total="data.total"
           :ui="{ item: 'cursor-pointer' }"
           @update:page="(p) => (page = p)"
         />
@@ -221,6 +232,14 @@ const emit = defineEmits<(e: "update", apply: Apply) => void>();
           size="xs"
         />
       </div>
+    </template>
+
+    <template v-else-if="status === 'pending'">
+      <ui-skeleton
+        v-for="i in 5"
+        :key="i"
+        class="h-20 w-full rounded-xl bg-default/30"
+      />
     </template>
   </div>
 </template>

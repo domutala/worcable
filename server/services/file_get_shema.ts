@@ -1,5 +1,4 @@
 import * as z from "zod";
-import { UpFile } from "../interfaces";
 
 export default function getFileShema({
   $t = (v) => v,

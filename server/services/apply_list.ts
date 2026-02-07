@@ -11,6 +11,7 @@ export async function listApplys({
   $t: (str: string) => string;
 }) {
   const sortableColumns = {
+    note: tables.apply.note,
     status: tables.apply.status,
     createdAt: tables.apply.createdAt,
     updatedAt: tables.apply.updatedAt,
