@@ -9,12 +9,15 @@ import {
 import _ from "lodash";
 import { useRouteQuery } from "@vueuse/router";
 import UiHeader from "~/components/header.vue";
+import type { FormSubmitEvent } from "@nuxt/ui";
+import * as z from "zod";
 
 definePageMeta({ layout: false });
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const hideJobContent = breakpoints.smallerOrEqual("lg");
 
+const searchTerm = useRouteQuery("q");
 const sortBy = ref("updatedAt");
 const sortOrder = ref("desc");
 const page = ref(1);
@@ -22,8 +25,8 @@ const pageSize = ref(8);
 
 const { data, status, refresh } = await useFetch<IDataResult<Job>>(`/api/job`, {
   method: "get",
-  query: { sortBy, sortOrder, page, pageSize },
-  watch: [sortBy, sortOrder, page, pageSize],
+  query: { sortBy, sortOrder, page, pageSize, q: searchTerm },
+  watch: [sortBy, sortOrder, page, pageSize, searchTerm],
 });
 
 const jobs = ref<Job[]>([]);
@@ -67,6 +70,14 @@ function openJobNewTab(e: Event, job: Job) {
 
   setCurrentJob(job);
 }
+
+const schemaSearchTerms = z.object({ q: z.string().optional() });
+type SchemaSearchTerms = z.output<typeof schemaSearchTerms>;
+const searchTermsState = reactive<Partial<SchemaSearchTerms>>({});
+async function searchByTerms(event: FormSubmitEvent<SchemaSearchTerms>) {
+  jobs.value = [];
+  searchTerm.value = event.data.q;
+}
 </script>
 
 <template>
@@ -77,46 +88,36 @@ function openJobNewTab(e: Event, job: Job) {
       class="flex-1 overflow-hidden flex flex-col mx-auto max-w-380 w-full px-2 sm:px-6"
     >
       <div class="pt-5">
-        <div class="bg-surface h-17 rounded-2xl flex items-center">
-          <div class="w-full h-full relative">
-            <input
+        <u-form
+          :state="searchTermsState"
+          :schema="schemaSearchTerms"
+          class="bg-surface rounded-2xl flex items-center overflow-hidden"
+          @submit="searchByTerms"
+        >
+          <UFormField name="q" class="w-full relative block">
+            <u-input
+              v-model="searchTermsState.q"
               type="search"
-              class="h-full w-full outline-none pl-18 pr-5"
+              class="h-17 w-full outline-none"
               placeholder="Rechercher un emploi"
+              :ui="{
+                base: 'h-full w-full ring-0! py-0 px-7 rounded-0! bg-transparent text-lg',
+              }"
             />
-            <div
+            <!-- <div
               class="h-full absolute top-0 flex items-center justify-center w-20 pointer-events-auto"
             >
               <u-icon name="i-lucide-search" class="size-8 opacity-50" />
-            </div>
-          </div>
-
-          <div
-            class="w-105 border-l h-full border-accented flex items-center relative"
+            </div> -->
+          </UFormField>
+          <u-button
+            type="submit"
+            variant="ghost"
+            class="h-17 border-l border-default w-17 rounded-none p-0 justify-center cursor-pointer"
           >
-            <input
-              type="search"
-              class="h-full w-full outline-none pl-18 pr-5"
-              placeholder="Rechercher un emploi"
-            />
-            <div
-              class="h-full absolute top-0 flex items-center justify-center w-20 pointer-events-auto"
-            >
-              <u-icon name="i-lucide-map-pin" class="size-6 opacity-50" />
-            </div>
-          </div>
-
-          <!-- <ui-area-completion-select
-            class="w-full"
-            :ui="{ base: 'rounded-2xl p-5 px-7 bg-surface' }"
-            :placeholder="$t(`config.items.cities.placeholder`)"
-            color="neutral"
-            size="xl"
-            v-model="cities"
-          >
-           
-          </ui-area-completion-select> -->
-        </div>
+            <u-icon name="i-lucide-search" class="size-8 opacity-50" />
+          </u-button>
+        </u-form>
       </div>
 
       <div class="flex-1 overflow-hidden flex gap-2 w-full mx-auto">

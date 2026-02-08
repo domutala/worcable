@@ -7,7 +7,7 @@ import {
   jsonb,
 } from "drizzle-orm/pg-core";
 import * as z from "zod";
-import { CurrencyAvailaible } from "~~/server/interfaces";
+import { sql } from "drizzle-orm";
 
 export enum JobContractTypeEnum {
   CDI = "CDI",
@@ -152,12 +152,6 @@ export const job = pgTable("job", {
 
   salary: jsonb().$type<[number, number]>(),
 
-  // salaryMin: integer("salary_min").notNull(),
-  // salaryMax: integer("salary_max").notNull(),
-  // salaryCurrency: varchar("salary_currency", { length: 5 })
-  //   .default("XOF")
-  //   .notNull(),
-
   /**
    * Skills stockées sous forme de texte séparé
    * Exemple: "nodejs,$nestjs,postgres"
@@ -166,6 +160,8 @@ export const job = pgTable("job", {
   skills: text("skills").array().default([]).notNull(),
 
   candidateProfile: text("candidate_profile").notNull(),
+
+  // searchVector: sql`job_search_vector`.as("searchVector"),
 
   createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "string" })
