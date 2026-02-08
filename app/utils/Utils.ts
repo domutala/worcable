@@ -35,7 +35,7 @@ export default {
     );
   },
 
-  getFileUrl(file?: UploadedFile) {
+  getFileUrl(file?: UploadedFile | null) {
     if (!file) return;
     if (file.url) return file.url;
     else return `/api/file/${file.data}`;

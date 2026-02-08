@@ -2,8 +2,7 @@
 import { useFavicon } from "@vueuse/core";
 import onFetchError from "./tools/onFetchError";
 
-const gettingConfig = ref(true);
-
+const initing = ref(true);
 const appConfig = useAppConfig();
 const title = appConfig.site.name;
 
@@ -26,14 +25,13 @@ useFavicon("favicon-light.png");
 onMounted(async () => {
   try {
     await Store.config.init();
+    await Store.session.init();
   } catch (error) {
     onFetchError(error);
   } finally {
-    gettingConfig.value = false;
+    initing.value = false;
   }
 });
-
-
 </script>
 
 <template>
@@ -41,7 +39,7 @@ onMounted(async () => {
 
   <UApp>
     <NuxtLayout>
-      <div v-if="gettingConfig">getttingConfig</div>
+      <div v-if="initing">getttingConfig</div>
       <NuxtPage v-else-if="Store.config.config" />
     </NuxtLayout>
   </UApp>

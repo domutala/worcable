@@ -5,6 +5,7 @@ import {
   varchar,
   text,
   jsonb,
+  index,
 } from "drizzle-orm/pg-core";
 import * as z from "zod";
 import { sql } from "drizzle-orm";
@@ -131,43 +132,58 @@ export function getJobShema($t: (str: string) => string = (str) => str) {
   };
 }
 
-export const job = pgTable("job", {
-  id: uuid().primaryKey().defaultRandom(),
+export const job = pgTable(
+  "job",
+  {
+    id: uuid().primaryKey().defaultRandom(),
 
-  title: varchar("title", { length: 150 }).notNull(),
+    title: varchar("title", { length: 150 }).notNull(),
 
-  companyDescription: text("company_description"),
+    companyDescription: text("company_description"),
 
-  contractType: varchar("contract_type", { length: 20 })
-    .notNull()
-    .$type<JobContractTypeEnum>(),
+    contractType: varchar("contract_type", { length: 20 })
+      .notNull()
+      .$type<JobContractTypeEnum>(),
 
-  jobDescription: text("job_description").notNull(),
+    jobDescription: text("job_description").notNull(),
 
-  location: varchar("location", { length: 100 }).notNull(),
+    location: varchar("location", { length: 100 }).notNull(),
 
-  jobNature: varchar("job_nature", { length: 20 })
-    .notNull()
-    .$type<JobNatureEnum>(),
+    jobNature: varchar("job_nature", { length: 20 })
+      .notNull()
+      .$type<JobNatureEnum>(),
 
-  salary: jsonb().$type<[number, number]>(),
+    salary: jsonb().$type<[number, number]>(),
 
-  /**
-   * Skills stockées sous forme de texte séparé
-   * Exemple: "nodejs,$nestjs,postgres"
-   * (ou à normaliser via table relationnelle – voir plus bas)
-   */
-  skills: text("skills").array().default([]).notNull(),
+    /**
+     * Skills stockées sous forme de texte séparé
+     * Exemple: "nodejs,$nestjs,postgres"
+     * (ou à normaliser via table relationnelle – voir plus bas)
+     */
+    skills: text("skills").array().default([]).notNull(),
 
-  candidateProfile: text("candidate_profile").notNull(),
+    candidateProfile: text("candidate_profile").notNull(),
 
-  // searchVector: sql`job_search_vector`.as("searchVector"),
+    // searchVector: sql`job_search_vector`.as("searchVector"),
 
-  createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", { mode: "string" })
-    .defaultNow()
-    .$onUpdate(() => new Date().toISOString())
-    .notNull(),
-});
+    createdAt: timestamp("created_at", { mode: "string" })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updated_at", { mode: "string" })
+      .defaultNow()
+      .$onUpdate(() => new Date().toISOString())
+      .notNull(),
+  },
+  (table) => [
+    index("search_index").using(
+      "gin",
+      sql`(
+          setweight(to_tsvector('simple', immutable_normalize(${table.title})), 'A') ||
+          setweight(to_tsvector('simple', immutable_normalize(${table.jobDescription})), 'B') ||
+          setweight(to_tsvector('simple', immutable_normalize(${table.candidateProfile})), 'C'),
+      )`,
+    ),
+  ],
+);
 
 export type Job = typeof job.$inferSelect;

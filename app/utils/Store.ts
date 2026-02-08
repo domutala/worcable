@@ -1,8 +1,13 @@
 import config from "~/store/config";
+import session from "~/store/session";
 
 class Store {
   get config() {
     return config();
+  }
+
+  get session() {
+    return session();
   }
 }
 

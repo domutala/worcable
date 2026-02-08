@@ -55,13 +55,24 @@ import UiAuth from "./auth.vue";
       </template>
 
       <u-button
-        v-else
+        v-else-if="Store.session.user"
         icon="i-lucide-layout-dashboard"
         size="lg"
         color="neutral"
+        variant="soft"
         :to="$localePath({ name: 'admin' })"
       >
         Dashboard
+      </u-button>
+
+      <u-button
+        v-else
+        size="lg"
+        color="neutral"
+        variant="soft"
+        :to="$localePath({ name: 'login' })"
+      >
+        {{ $t("login.labels.title") }}
       </u-button>
     </div>
 

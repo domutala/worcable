@@ -75,6 +75,11 @@ const items = computed(() => {
       {
         label: "Logout",
         icon: "i-lucide-log-out",
+        loading: Store.session.logouting,
+        onSelect(e) {
+          e.preventDefault();
+          Store.session.logout();
+        },
       },
     ],
   ];
@@ -85,16 +90,18 @@ const items = computed(() => {
 
 <template>
   <u-dropdown-menu
+    v-if="Store.session.user"
     :ui="{ item: 'cursor-pointer' }"
     :content="{ align: 'end' }"
     :items
   >
     <span class="cursor-pointer">
       <UAvatar
-        src="https://github.com/benjamincanac.png"
+        :src="Utils.getFileUrl(Store.session.user.avatar)"
+        :alt="`${Store.session.user.firstName} ${Store.session.user.lastName}`"
         size="xl"
         class="rounded-2xl"
-        :chip="{ inset: true }"
+        :chip="{ inset: true, position: 'bottom-right' }"
       />
     </span>
   </u-dropdown-menu>

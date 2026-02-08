@@ -9,7 +9,8 @@ export interface IDataResult<T = any> {
 export type UploadedFile = {
   filename: string;
   type?: string;
-  data: Buffer;
+  data: any;
+  // data: Buffer;
   size: number;
   url?: string;
 };

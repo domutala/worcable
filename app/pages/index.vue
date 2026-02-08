@@ -104,11 +104,6 @@ async function searchByTerms(event: FormSubmitEvent<SchemaSearchTerms>) {
                 base: 'h-full w-full ring-0! py-0 px-7 rounded-0! bg-transparent text-lg',
               }"
             />
-            <!-- <div
-              class="h-full absolute top-0 flex items-center justify-center w-20 pointer-events-auto"
-            >
-              <u-icon name="i-lucide-search" class="size-8 opacity-50" />
-            </div> -->
           </UFormField>
           <u-button
             type="submit"

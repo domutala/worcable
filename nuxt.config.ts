@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     databaseUrl: "",
     uploadsKey: "",
+    secretKey: "",
 
     supabaseProjetcId: "",
     supabaseApiKey: "",
@@ -23,6 +24,7 @@ export default defineNuxtConfig({
     "nuxt-swiper",
     "dayjs-nuxt",
     "@pinia/nuxt",
+    // "pinia-plugin-unstorage/nuxt",
   ],
 
   devtools: {
@@ -94,7 +96,6 @@ export default defineNuxtConfig({
   i18n: {
     defaultLocale: "fr",
     strategy: "prefix_and_default",
-
     experimental: { localeDetector: "localeDetector.ts" },
 
     locales: [

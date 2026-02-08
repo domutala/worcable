@@ -1,8 +1,7 @@
-import { desc } from "drizzle-orm";
+import { desc, getTableColumns } from "drizzle-orm";
 import { Job } from "../database/schema";
 import { IDataResult } from "../interfaces";
 import { paginationBuilderFromQuery } from "../tools/pagination_builder_from_query";
-import * as z from "zod";
 
 export async function listJobs({
   query,
@@ -19,30 +18,32 @@ export async function listJobs({
   const { limit, offset, page, pageSize, sortOrder } =
     paginationBuilderFromQuery(query, sortableColumns);
 
-  const searchVector = sql`job.search_vector`;
+  const search = ((query.q as string) || "")
+    .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9]/g, "")
+    .replace(/  +/g, " ")
+    .toLowerCase()
+    .split(" ")
+    .join(" | ");
+  const matchQuery = sql`
+    (
+      setweight(to_tsvector('simple', immutable_normalize(${tables.job.title})), 'A') ||
+      setweight(to_tsvector('simple', immutable_normalize(${tables.job.jobDescription})), 'B') ||
+      setweight(to_tsvector('simple', immutable_normalize(${tables.job.candidateProfile})), 'C')
+    ),
+    to_tsquery('simple', ${search})
+  `;
+
   const querySql = db
     .select({
-      id: tables.job.id,
-      title: tables.job.title,
-      jobDescription: tables.job.jobDescription,
-      contractType: tables.job.contractType,
-      location: tables.job.location,
-      jobNature: tables.job.jobNature,
-      salary: tables.job.salary,
-      skills: tables.job.skills,
-      candidateProfile: tables.job.candidateProfile,
-      createdAt: tables.job.createdAt,
-      updatedAt: tables.job.updatedAt,
-
-      score: sql<number>`
-        ts_rank_cd(
-          ${searchVector},
-          websearch_to_tsquery('simple', immutable_normalize(${query.q || ""}))
-        )
-      `.as("score"),
+      ...getTableColumns(tables.job),
+      rank: sql`ts_rank(${matchQuery})`,
+      rankCd: sql`ts_rank_cd(${matchQuery})`,
     })
     .from(tables.job)
-    .orderBy(query.q ? desc(sql`score`) : sortOrder);
+    .orderBy((t) => (query.q ? desc(t.rank) : sortOrder));
 
   const itemsQuery = querySql;
   const totalQuery = querySql;
@@ -66,7 +67,12 @@ export async function listJobs({
   // }
 
   if (query.q) {
-    const w = sql`${searchVector} @@ websearch_to_tsquery('simple', immutable_normalize(${query.q}))`;
+    const w = sql`(
+      setweight(to_tsvector('simple', immutable_normalize(${tables.job.title})), 'A') ||
+      setweight(to_tsvector('simple', immutable_normalize(${tables.job.jobDescription})), 'B') ||
+      setweight(to_tsvector('simple', immutable_normalize(${tables.job.candidateProfile})), 'C'))
+      @@ to_tsquery('simple', ${search}
+    )`;
     itemsWhere.push(w);
     totalWhere.push(w);
   }

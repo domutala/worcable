@@ -511,5 +511,46 @@
     }
   },
 
-  "order": { "asc": "Croissant", "desc": "Décroissant" }
+  "order": { "asc": "Croissant", "desc": "Décroissant" },
+
+  "login": {
+    "title": "Bienvenue sur Wocable",
+    "description": "Saisissez vos identifiants pour accéder à votre compte.",
+    "submit": "Se connecter",
+
+    "labels": {
+      "title": "Se connecter"
+    },
+
+    "mailer": {
+      "from": "Équipe des compte Sya",
+      "object": "Votre lien de connexion à Sya"
+    },
+
+    "errors": {
+      "invalid_credentials": "Les identifiants saisies sont incorrectes",
+      "global": "Nous avons rencontrer une erreur dans le traitement de la demande. Veuillez vérifier les informations saisies"
+    },
+
+    "register": {
+      "text": "Vous n'avez pas de compte ?",
+      "btn": "S'inscrire"
+    },
+
+    "items": {
+      "email": {
+        "label": "Email",
+        "placeholder": "Entrer votre adrese email"
+      },
+
+      "password": {
+        "label": "Mot de passe",
+        "placeholder": "Entrer votre mot de passe"
+      },
+
+      "remember": {
+        "label": "Se souvenir de moi"
+      }
+    }
+  }
 }
