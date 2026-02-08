@@ -23,35 +23,22 @@ const steps = [
   // "candidateDetails",
   "companyDescription",
 ];
+const stepIcons = {
+  title: "i-lucide-equal",
+  jobDetails: "i-lucide-list-checks",
+  jobDescription: "i-lucide-text",
+  // "candidateDetails": "i-lucide-user-round",
+  companyDescription: "i-lucide-building-2",
+};
 const data = ref<Record<string, any>>(_.cloneDeep(job || {}));
 
-const items = [
-  {
-    slot: "title" as const,
-    title: i18n.t("job.create.steps.title.label"),
-    icon: "i-lucide-equal",
-  },
-  {
-    slot: "jobDetails" as const,
-    title: i18n.t("job.create.steps.jobDetails.label"),
-    icon: "i-lucide-list-checks",
-  },
-  {
-    slot: "jobDescription" as const,
-    title: i18n.t("job.create.steps.jobDescription.label"),
-    icon: "i-lucide-text",
-  },
-  // {
-  //   slot: "candidateDetails" as const,
-  //   title: i18n.t("job.create.steps.candidateDetails.label"),
-  //   icon: "i-lucide-user-round",
-  // },
-  {
-    slot: "companyDescription" as const,
-    title: i18n.t("job.create.steps.companyDescription.label"),
-    icon: "i-lucide-building-2",
-  },
-] satisfies StepperItem[];
+const items = steps.map((step) => {
+  return {
+    slot: step,
+    title: i18n.t(`job.create.steps.${step}.label`),
+    icon: stepIcons[step as "title"],
+  };
+}) satisfies StepperItem[];
 
 const isEndStep = computed(() => iStep.value === steps.length - 1);
 

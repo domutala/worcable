@@ -5,8 +5,7 @@ import {
   getJobShema,
   JobContractTypeEnum,
   JobNatureEnum,
-} from "~~/server/database/schema";
-
+} from "~~/server/services/job_schema";
 import * as z from "zod";
 import _ from "lodash";
 import { CurrencyAvailaible } from "~~/server/interfaces";

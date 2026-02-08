@@ -6,8 +6,14 @@ const { timeInterval, forceCurrency, display } = defineProps<{
   forceCurrency?: CurrencyAvailaible;
   display?: boolean;
 }>();
-const value = defineModel<[number, number]>({ default: [45, 55] });
+const value = defineModel<[number, number]>({});
 const currency = ref(forceCurrency ?? CurrencyAvailaible.EUR);
+const inValue = ref<[number, number]>(value.value ?? ([0, 0] as any));
+
+watch(
+  () => inValue.value,
+  () => (value.value = inValue.value),
+);
 
 const min = computed(() => {
   if (timeInterval === "month") {
@@ -38,7 +44,7 @@ const interval = computed(() => {
           })
         }}
       </span>
-      <USlider v-model="value" color="neutral" :min="0" :max="200" multiple />
+      <USlider v-model="inValue" color="neutral" :min="0" :max="200" multiple />
       <span v-if="value !== undefined">
         {{
           Utils.formatCurrency(value[1] * interval + min, currency, {

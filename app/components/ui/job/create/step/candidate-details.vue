@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { watchImmediate } from "@vueuse/core";
 import type { FormSubmitEvent } from "@nuxt/ui";
-import { getJobShema } from "~~/server/database/schema";
 import * as z from "zod";
 import _ from "lodash";
+import { getJobShema } from "~~/server/services/job_schema";
 
 const i18n = useI18n();
 const { candidateProfile } = getJobShema(i18n.t);

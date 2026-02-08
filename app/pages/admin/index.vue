@@ -75,8 +75,14 @@ function onPaginate(p: number) {
               block
             >
               <div class="flex items-center w-full min-h-20 px-7 py-4 gap-5">
-                <div class="text-md md:text-xl">
-                  {{ job.title }}
+                <div class="text-muted">
+                  <div class="text-md md:text-xl">
+                    {{ job.title }}
+                  </div>
+
+                  <div>
+                    {{ Utils.getDateStatus(job.createdAt) }}
+                  </div>
                 </div>
 
                 <div class="mx-auto"></div>

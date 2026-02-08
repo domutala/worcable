@@ -1,4 +1,4 @@
-import { getJobShema } from "~~/server/database/schema";
+import { getJobShema } from "~~/server/services/job_schema";
 import * as z from "zod";
 
 function parsePrimitiveValue(value: string): string | number | boolean | null {
