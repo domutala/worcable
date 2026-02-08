@@ -29,9 +29,9 @@ export async function listJobs({
     .join(" | ");
   const matchQuery = sql`
     (
-      setweight(to_tsvector('simple', immutable_normalize(${tables.job.title})), 'A') ||
-      setweight(to_tsvector('simple', immutable_normalize(${tables.job.jobDescription})), 'B') ||
-      setweight(to_tsvector('simple', immutable_normalize(${tables.job.candidateProfile})), 'C')
+      setweight(to_tsvector('simple', f_normalize(${tables.job.title})), 'A') ||
+      setweight(to_tsvector('simple', f_normalize(${tables.job.jobDescription})), 'B') ||
+      setweight(to_tsvector('simple', f_normalize(${tables.job.candidateProfile})), 'C')
     ),
     to_tsquery('simple', ${search})
   `;
@@ -68,9 +68,9 @@ export async function listJobs({
 
   if (query.q) {
     const w = sql`(
-      setweight(to_tsvector('simple', immutable_normalize(${tables.job.title})), 'A') ||
-      setweight(to_tsvector('simple', immutable_normalize(${tables.job.jobDescription})), 'B') ||
-      setweight(to_tsvector('simple', immutable_normalize(${tables.job.candidateProfile})), 'C'))
+      setweight(to_tsvector('simple', f_normalize(${tables.job.title})), 'A') ||
+      setweight(to_tsvector('simple', f_normalize(${tables.job.jobDescription})), 'B') ||
+      setweight(to_tsvector('simple', f_normalize(${tables.job.candidateProfile})), 'C'))
       @@ to_tsquery('simple', ${search}
     )`;
     itemsWhere.push(w);

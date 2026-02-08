@@ -137,7 +137,7 @@ export const job = pgTable(
   {
     id: uuid().primaryKey().defaultRandom(),
 
-    title: varchar("title", { length: 150 }).notNull(),
+    title: text("title", {}).notNull(),
 
     companyDescription: text("company_description"),
 
@@ -178,9 +178,9 @@ export const job = pgTable(
     index("search_index").using(
       "gin",
       sql`(
-          setweight(to_tsvector('simple', immutable_normalize(${table.title})), 'A') ||
-          setweight(to_tsvector('simple', immutable_normalize(${table.jobDescription})), 'B') ||
-          setweight(to_tsvector('simple', immutable_normalize(${table.candidateProfile})), 'C'),
+          setweight(to_tsvector('simple', f_normalize(${table.title})), 'A') ||
+          setweight(to_tsvector('simple', f_normalize(${table.jobDescription})), 'B') ||
+          setweight(to_tsvector('simple', f_normalize(${table.candidateProfile})), 'C')
       )`,
     ),
   ],
