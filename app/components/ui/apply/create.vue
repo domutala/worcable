@@ -205,7 +205,7 @@ function onChange(key: "cv" | "avatar", file?: File | null | undefined) {
       <URadioGroup
         v-model="state.availability"
         variant="card"
-        :ui="{ item: 'bg-default', fieldset: 'flex-row gap-1' }"
+        :ui="{ item: 'bg-default', fieldset: 'flex-row flex-wrap gap-1' }"
         :items="
           availability.map((c) => ({
             label: $t(`apply.items.availability.items.${c}`),

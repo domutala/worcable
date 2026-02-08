@@ -36,17 +36,6 @@ watchImmediate(
 <template>
   <div ref="container" class="flex-1 flex flex-col gap-1">
     <template v-if="data">
-      <u-input
-        v-model="searchTerm"
-        :ui="{ base: 'h-full rounded-2xl ring-0' }"
-        :loading="status === 'pending'"
-        icon="i-lucide-search"
-        type="search"
-        class="h-17 w-full outline-none"
-        placeholder="Rechercher un emploi"
-        size="xl"
-      />
-
       <div class="mb-1 flex gap-1 items-center">
         <div class="mx-auto"></div>
         <u-select
@@ -86,6 +75,17 @@ watchImmediate(
           </template>
         </ui-sort>
       </div>
+
+      <u-input
+        v-model="searchTerm"
+        :ui="{ base: 'h-full rounded-2xl ring-0' }"
+        :placeholder="$t('apply.actions.search_candidate')"
+        :loading="status === 'pending'"
+        icon="i-lucide-search"
+        type="search"
+        class="h-17 w-full outline-none"
+        size="xl"
+      />
 
       <div v-if="!applys.length" class="max-w-lg mx-auto text-center py-30">
         <u-icon name="i-lucide-users-round" class="size-10" />
@@ -134,7 +134,7 @@ watchImmediate(
                   />
                 </div>
 
-                <div @click.stop>
+                <div class="hidden md:block" @click.stop>
                   <ui-apply-status v-model:apply="applys[i]!" :job />
                 </div>
               </div>

@@ -219,9 +219,9 @@ function setSortable() {
           v-model="searchTerm"
           icon="i-lucide-user-round-search"
           class="h-17 w-full outline-none absolute inset-0"
-          :placeholder="$t('apply.actions.search_candidate')"
           size="xl"
           autofocus
+          :placeholder="$t('apply.actions.search_candidate')"
           :ui="{ base: 'h-full rounded-0 ring-0! border-b border-default' }"
         >
           <template #trailing>

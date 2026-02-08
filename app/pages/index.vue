@@ -29,6 +29,7 @@ const { data, status, refresh } = await useFetch<IDataResult<Job>>(`/api/job`, {
 const jobs = ref<Job[]>([]);
 const currentJob = ref<Job>();
 const currentJobQuery = useRouteQuery("job");
+const cities = ref(_.cloneDeep(Store.config.config.cities));
 
 watchImmediate(
   () => data.value,
@@ -73,7 +74,7 @@ function openJobNewTab(e: Event, job: Job) {
     <UiHeader class="border-b border-default" />
 
     <div
-      class="flex-1 overflow-hidden flex flex-col mx-auto max-w-380 w-full px-6"
+      class="flex-1 overflow-hidden flex flex-col mx-auto max-w-380 w-full px-2 sm:px-6"
     >
       <div class="pt-5">
         <div class="bg-surface h-17 rounded-2xl flex items-center">
@@ -104,6 +105,17 @@ function openJobNewTab(e: Event, job: Job) {
               <u-icon name="i-lucide-map-pin" class="size-6 opacity-50" />
             </div>
           </div>
+
+          <!-- <ui-area-completion-select
+            class="w-full"
+            :ui="{ base: 'rounded-2xl p-5 px-7 bg-surface' }"
+            :placeholder="$t(`config.items.cities.placeholder`)"
+            color="neutral"
+            size="xl"
+            v-model="cities"
+          >
+           
+          </ui-area-completion-select> -->
         </div>
       </div>
 
@@ -146,8 +158,8 @@ function openJobNewTab(e: Event, job: Job) {
                     <div
                       class="group flex items-center w-full min-h-20 px-7 py-4 rounded-xl border border-transparent hover:border hover:border-primary/12 relative overflow-hidden"
                     >
-                      <div class="text-xl leading-[1.1]">
-                        <div>
+                      <div class="leading-[1.1]">
+                        <div class="text-md md:text-xl">
                           {{ job.title }}
                         </div>
                         <div class="text-sm">

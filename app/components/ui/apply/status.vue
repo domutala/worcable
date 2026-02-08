@@ -47,13 +47,15 @@ async function onSubmit(status: ApplyStatus) {
   <u-dropdown-menu
     v-else
     :items="
-      Object.values(ApplyStatus).map((status) => ({
-        label: $t(`apply.status.${status}.label`),
-        value: `status:${status}`,
-        icon: $t(`apply.status.${status}.icon`),
-        class: 'cursor-pointer',
-        onSelect: () => onSubmit(status),
-      }))
+      Object.values(ApplyStatus)
+        .filter((status) => status !== apply.status)
+        .map((status) => ({
+          label: $t(`apply.status.${status}.label`),
+          value: `status:${status}`,
+          icon: $t(`apply.status.${status}.icon`),
+          class: 'cursor-pointer',
+          onSelect: () => onSubmit(status),
+        }))
     "
   >
     <u-button

@@ -8,7 +8,7 @@ const { editable, placeholder } = defineProps({
   placeholder: String,
 });
 
-const content = defineModel<string>({ default: "" });
+const content = defineModel<string>({});
 
 const extensions = [TextAlign, Emoji] as any;
 
@@ -260,7 +260,7 @@ const toolbarBubbledItems: EditorToolbarItem[][] = [
     :placeholder
     :editable
   >
-    <template v-if="editable">
+    <template v-if="editor.isEditable">
       <!-- <UEditorDragHandle :editor="editor" /> -->
 
       <UEditorToolbar

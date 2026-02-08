@@ -66,7 +66,7 @@ const applys = ref(
         <UiBreadcrumb :breads="['$home', '$admin', { label: job.title }]" />
 
         <div class="flex mx-auto w-420 max-w-full pb-5 pt-10 px-5">
-          <div>
+          <div class="hidden md:block">
             <u-button
               class="rounded-2xl px-5 py-3"
               size="lg"
@@ -114,13 +114,13 @@ const applys = ref(
         <ui-apply-kanban
           v-if="side === 'kanban'"
           v-model:job="job"
-          class="mx-auto max-w-full w-420 px-5"
+          class="mx-auto max-w-full w-420 px-1 sm:px-5"
         />
 
         <ui-apply-list
           v-else
           v-model:job="job"
-          class="mx-auto max-w-full w-420 px-5"
+          class="mx-auto max-w-full w-420 px-1 sm:px-5"
         />
       </template>
     </div>
