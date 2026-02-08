@@ -41,11 +41,11 @@ const items = [
     title: i18n.t("job.create.steps.jobDescription.label"),
     icon: "i-lucide-text",
   },
-  {
-    slot: "candidateDetails" as const,
-    title: i18n.t("job.create.steps.candidateDetails.label"),
-    icon: "i-lucide-user-round",
-  },
+  // {
+  //   slot: "candidateDetails" as const,
+  //   title: i18n.t("job.create.steps.candidateDetails.label"),
+  //   icon: "i-lucide-user-round",
+  // },
   {
     slot: "companyDescription" as const,
     title: i18n.t("job.create.steps.companyDescription.label"),

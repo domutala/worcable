@@ -163,7 +163,7 @@ export const job = pgTable(
      */
     skills: text("skills").array().default([]).notNull(),
 
-    candidateProfile: text("candidate_profile").notNull(),
+    candidateProfile: text("candidate_profile"),
 
     // searchVector: sql`job_search_vector`.as("searchVector"),
 
