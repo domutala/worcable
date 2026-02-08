@@ -8,8 +8,13 @@ const store = defineStore(
     const user = ref<User | null>(null);
 
     async function init() {
-      const result = await $fetch<{ user: User }>("/api/auth");
-      setUser(result.user);
+      try {
+        const result = await $fetch<{ user: User }>("/api/auth");
+        setUser(result.user);
+      } catch (error) {
+        setToken();
+        setUser();
+      }
     }
 
     function setToken(value?: string) {

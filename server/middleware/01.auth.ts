@@ -26,9 +26,11 @@ export default defineEventHandler(async (event) => {
       );
 
     if (!session) {
-      throw createError({
-        statusCode: 403,
-        statusMessage: $t("session.errors.not_athorized"),
+      deleteCookie(event, "access_token", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "lax",
+        path: "/",
       });
     }
 

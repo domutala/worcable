@@ -38,9 +38,17 @@ onMounted(async () => {
   <NuxtLoadingIndicator color="var(--ui-primary)" :height="5" />
 
   <UApp>
-    <NuxtLayout>
-      <div v-if="initing">getttingConfig</div>
-      <NuxtPage v-else-if="Store.config.config" />
+    <div
+      v-if="initing"
+      class="w-screen h-screen flex items-center justify-center"
+    >
+      <u-icon
+        name="i-lucide-loader-circle"
+        class="text-primary animate-spin size-10"
+      />
+    </div>
+    <NuxtLayout v-else-if="Store.config.config">
+      <NuxtPage />
     </NuxtLayout>
   </UApp>
 </template>

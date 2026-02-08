@@ -1,4 +1,4 @@
-import { desc, getTableColumns } from "drizzle-orm";
+import { desc, getColumns } from "drizzle-orm";
 import { Job } from "../database/schema";
 import { IDataResult } from "../interfaces";
 import { paginationBuilderFromQuery } from "../tools/pagination_builder_from_query";
@@ -38,7 +38,7 @@ export async function listJobs({
 
   const querySql = db
     .select({
-      ...getTableColumns(tables.job),
+      ...getColumns(tables.job),
       rank: sql`ts_rank(${matchQuery})`,
       rankCd: sql`ts_rank_cd(${matchQuery})`,
     })
