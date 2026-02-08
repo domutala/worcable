@@ -20,7 +20,7 @@ const steps = [
   "title",
   "jobDetails",
   "jobDescription",
-  "candidateDetails",
+  // "candidateDetails",
   "companyDescription",
 ];
 const data = ref<Record<string, any>>(_.cloneDeep(job || {}));

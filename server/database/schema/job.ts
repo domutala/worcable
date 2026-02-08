@@ -99,7 +99,8 @@ export function getJobShema($t: (str: string) => string = (str) => str) {
 
   const candidateProfile = z
     .string($t("job.items.candidateProfile.errors.required"))
-    .min(30, $t("job.items.candidateProfile.errors.min"));
+    .min(30, $t("job.items.candidateProfile.errors.min"))
+    .optional();
 
   const jobOfferSchema = z.object({
     title,
