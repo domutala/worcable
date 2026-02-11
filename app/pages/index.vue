@@ -147,7 +147,14 @@ async function searchByTerms(event: FormSubmitEvent<SchemaSearchTerms>) {
                 <div></div>
               </div>
 
-              <div v-if="jobs.length" class="space-y-1 px-1">
+              <div v-if="status === 'pending'" class="text-center py-30">
+                <u-icon
+                  name="i-lucide-loader-circle"
+                  class="text-primary animate-spin size-10"
+                />
+              </div>
+
+              <div v-else-if="jobs.length" class="space-y-1 px-1">
                 <u-button
                   v-for="job in jobs"
                   :key="job.id"
