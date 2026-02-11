@@ -132,99 +132,96 @@ async function searchByTerms(event: FormSubmitEvent<SchemaSearchTerms>) {
             class="w-150 max-w-full my-5 flex-1 rounded-2xl overflow-hidden"
             :class="{ 'w-full': hideJobContent }"
           >
-            <div class="max-h-full overflow-auto content">
-              <div class="space-y-1 py-1 bg-surface rounded-2xl">
-                <div
-                  v-if="data"
-                  class="py-2 px-4 flex sticky top-0 border-b border-accented/80 dark:border-accented/30 mb-2"
+            <div
+              class="max-h-full overflow-auto content bg-surface rounded-[inherit]"
+            >
+              <div
+                v-if="data"
+                class="py-2 px-4 flex sticky top-0 border-b border-accented/80 dark:border-accented/30 mb-2 z-50 bg-inherit"
+              >
+                <p class="text-sm">
+                  {{ data.total }} {{ $t("words.result", data.total) }}
+                </p>
+                <div class="mx-auto"></div>
+
+                <div></div>
+              </div>
+
+              <div v-if="jobs.length" class="space-y-1 px-1">
+                <u-button
+                  v-for="job in jobs"
+                  :key="job.id"
+                  :to="$localePath({ name: 'job-id', params: { id: job.id } })"
+                  color="neutral"
+                  variant="ghost"
+                  class="p-0 border-none bg-default rounded-xl text-left"
+                  block
+                  @click="(e) => gotoJob(e, job)"
                 >
-                  <p class="text-sm">
-                    {{ data.total }} {{ $t("words.result", data.total) }}
-                  </p>
-                  <div class="mx-auto"></div>
-
-                  <div></div>
-                </div>
-
-                <div v-if="jobs.length" class="space-y-1 px-1">
-                  <u-button
-                    v-for="job in jobs"
-                    :key="job.id"
-                    :to="
-                      $localePath({ name: 'job-id', params: { id: job.id } })
-                    "
-                    color="neutral"
-                    variant="ghost"
-                    class="p-0 border-none bg-default rounded-xl text-left"
-                    block
-                    @click="(e) => gotoJob(e, job)"
+                  <div
+                    class="group flex items-center w-full min-h-20 px-7 py-4 rounded-xl border border-transparent hover:border hover:border-primary/12 relative overflow-hidden"
                   >
-                    <div
-                      class="group flex items-center w-full min-h-20 px-7 py-4 rounded-xl border border-transparent hover:border hover:border-primary/12 relative overflow-hidden"
-                    >
-                      <div class="leading-[1.1]">
-                        <div class="text-md md:text-xl">
-                          {{ job.title }}
-                        </div>
-                        <div class="text-sm">
-                          {{ job.location }}
-                          <div class="opacity-50">
-                            {{ Utils.getDateStatus(job.createdAt) }}
-                          </div>
+                    <div class="leading-[1.1]">
+                      <div class="text-md md:text-xl">
+                        {{ job.title }}
+                      </div>
+                      <div class="text-sm">
+                        {{ job.location }}
+                        <div class="opacity-50">
+                          {{ Utils.getDateStatus(job.createdAt) }}
                         </div>
                       </div>
-
-                      <div class="mx-auto"></div>
-
-                      <div
-                        class="absolute h-full w-1.5 left-0 top-0 bg-primary"
-                        v-if="currentJob?.id === job.id"
-                      ></div>
-
-                      <u-button
-                        icon="i-lucide-external-link"
-                        size="md"
-                        variant="ghost"
-                        class="absolute top-2 right-3 hidden group-hover:flex cursor-pointer"
-                        @click="(e) => openJobNewTab(e, job)"
-                      ></u-button>
                     </div>
-                  </u-button>
-                </div>
 
-                <div
-                  v-else
-                  class="h-full flex items-center justify-center py-20"
-                >
-                  <u-container class="text-center">
-                    <u-icon
-                      name="i-lucide-text-search"
-                      class="size-25 opacity-30"
-                    />
-                    <p class="mt-2">
-                      {{ $t("job.labels.empty_search") }}
-                    </p>
-                  </u-container>
-                </div>
+                    <div class="mx-auto"></div>
 
-                <div
-                  v-if="data && data.total && data.page !== data.totalPages"
-                  class="flex items-center gap-3 p-3 px-3"
-                >
-                  <u-button
-                    class="cursor-pointer rounded-4xl"
-                    color="neutral"
-                    variant="ghost"
-                    icon="i-lucide-arrow-down-wide-narrow"
-                    :loading="status === 'pending'"
-                    @click="page++"
-                  >
-                    {{ $t("words.show_more") }}
-                  </u-button>
+                    <div
+                      class="absolute h-full w-1.5 left-0 top-0 bg-primary"
+                      v-if="currentJob?.id === job.id"
+                    ></div>
 
-                  <div class="mx-auto"></div>
-                </div>
+                    <u-button
+                      icon="i-lucide-external-link"
+                      size="md"
+                      variant="ghost"
+                      class="absolute top-2 right-3 hidden group-hover:flex cursor-pointer"
+                      @click="(e) => openJobNewTab(e, job)"
+                    ></u-button>
+                  </div>
+                </u-button>
               </div>
+
+              <div v-else class="h-full flex items-center justify-center py-20">
+                <u-container class="text-center">
+                  <u-icon
+                    name="i-lucide-text-search"
+                    class="size-25 opacity-30"
+                  />
+                  <p class="mt-2">
+                    {{ $t("job.labels.empty_search") }}
+                  </p>
+                </u-container>
+              </div>
+
+              <div
+                v-if="data && data.total && data.page !== data.totalPages"
+                class="flex items-center gap-3 p-3 px-3"
+              >
+                <u-button
+                  class="cursor-pointer rounded-4xl"
+                  color="neutral"
+                  variant="ghost"
+                  icon="i-lucide-arrow-down-wide-narrow"
+                  :loading="status === 'pending'"
+                  @click="page++"
+                >
+                  {{ $t("words.show_more") }}
+                </u-button>
+
+                <div class="mx-auto"></div>
+              </div>
+
+              <div class="h-1"></div>
             </div>
           </div>
         </div>
