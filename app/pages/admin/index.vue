@@ -12,11 +12,11 @@ const jobs = ref<Job[]>([]);
       <UiBreadcrumb :breads="['$home', '$admin']" />
 
       <div class="flex-1 flex flex-col overflow-hidden">
-        <div class="hidden">
+        <div class="flex max-w-full w-4xl mx-auto mb-2">
           <div class="mx-auto"></div>
           <nuxt-link
             :to="$localePath({ name: 'admin-job-new' })"
-            class="relative rounded-2xl p-2 bg-yellow-200 text-black flex w-max"
+            class="relative rounded-4xl p-2 bg-yellow-200 text-black flex w-max"
           >
             <div class="text-sm ml-5 mr-3 h-max my-auto">
               {{ $t("job.actions.new") }}
@@ -29,8 +29,9 @@ const jobs = ref<Job[]>([]);
             </div>
           </nuxt-link>
         </div>
+
         <div
-          class="max-w-full w-4xl gap-2 mx-auto flex-1 rounded-2xl overflow-hidden my-5"
+          class="max-w-full w-4xl gap-2 mx-auto flex-1 rounded-2xl overflow-hidden mb-5"
         >
           <div
             class="max-h-full overflow-auto bg-default rounded-2xl col-span-6"
