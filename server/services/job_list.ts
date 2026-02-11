@@ -1,7 +1,8 @@
-import { desc, getColumns } from "drizzle-orm";
-import { Job } from "../database/schema";
 import { IDataResult } from "../interfaces";
-import { paginationBuilderFromQuery } from "../tools/pagination_builder_from_query";
+import { paginationBuilder } from "../tools/pagination_builder_from_query";
+import { useMongo } from "../mongoose";
+import { _Job, JobDocument } from "../mongoose/models/job";
+import { PipelineStage, QueryFilter } from "mongoose";
 
 export async function listJobs({
   query,
@@ -10,86 +11,214 @@ export async function listJobs({
   query: Record<string, any>;
   $t: (str: string) => string;
 }) {
+  await useMongo();
+  await _Job.syncIndexes();
+
+  function tokenize(str: string) {
+    return str
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, " ")
+      .replace(/[-_.*+?^${}()|[\]\\]/g, "");
+  }
+
+  function normalizeSkills() {
+    return {
+      $addFields: {
+        skillsNormalized: {
+          $map: {
+            input: { $ifNull: ["$skills", []] },
+            as: "skill",
+
+            in: {
+              $toLower: {
+                $replaceAll: {
+                  input: {
+                    $replaceAll: {
+                      input: {
+                        $replaceAll: {
+                          input: {
+                            $replaceAll: {
+                              input: {
+                                $replaceAll: {
+                                  input: {
+                                    $replaceAll: {
+                                      input: `$$skill`,
+                                      find: " ",
+                                      replacement: "",
+                                    },
+                                  },
+                                  find: ";",
+                                  replacement: "",
+                                },
+                              },
+                              find: "_",
+                              replacement: "",
+                            },
+                          },
+                          find: "-",
+                          replacement: "",
+                        },
+                      },
+                      find: ".",
+                      replacement: "",
+                    },
+                  },
+                  find: " ",
+                  replacement: ",",
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+  }
+
+  function buildSkillsFilter(skiills: string[]) {
+    skiills = skiills.map((skill) => tokenize(skill).replaceAll(" ", ""));
+
+    return {
+      $and: [
+        {
+          $expr: {
+            $gt: [
+              {
+                $size: {
+                  $filter: {
+                    input: "$skillsNormalized",
+                    as: "skill",
+                    cond: {
+                      $gt: [
+                        {
+                          $size: {
+                            $filter: {
+                              input: skiills,
+                              as: "search",
+                              cond: {
+                                $regexMatch: {
+                                  input: "$$skill",
+                                  regex: "$$search",
+                                },
+                              },
+                            },
+                          },
+                        },
+                        0,
+                      ],
+                    },
+                  },
+                },
+              },
+              0,
+            ],
+          },
+        },
+      ],
+    };
+  }
+
   const sortableColumns = {
     createdAt: tables.job.createdAt,
     updatedAt: tables.job.updatedAt,
   };
 
-  const { limit, offset, page, pageSize, sortOrder } =
-    paginationBuilderFromQuery(query, sortableColumns);
-
-  const search = ((query.q as string) || "")
-    .trim()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-zA-Z0-9]/g, "")
-    .replace(/  +/g, " ")
-    .toLowerCase()
-    .split(" ")
-    .join(" | ");
-  const matchQuery = sql`
-    (
-      setweight(to_tsvector('simple', f_normalize(${tables.job.title})), 'A') ||
-      setweight(to_tsvector('simple', f_normalize(${tables.job.jobDescription})), 'B') ||
-      setweight(to_tsvector('simple', f_normalize(${tables.job.candidateProfile})), 'C')
-    ),
-    to_tsquery('simple', ${search})
-  `;
-
-  const querySql = db
-    .select({
-      ...getColumns(tables.job),
-      rank: sql`ts_rank(${matchQuery})`,
-      rankCd: sql`ts_rank_cd(${matchQuery})`,
-    })
-    .from(tables.job)
-    .orderBy((t) => (query.q ? desc(t.rank) : sortOrder));
-
-  const itemsQuery = querySql;
-  const totalQuery = querySql;
-
-  itemsQuery.limit(limit).offset(offset);
-
-  const itemsWhere: any[] = [];
-  const totalWhere: any[] = [];
-
-  // if (query.filterBy) {
-  //   const filterableColumns = {
-  //     status: tables.job.status,
-  //   };
-
-  //   const [key, value] = query.filterBy.split(":");
-  //   const filterKey =
-  //     filterableColumns[key as "status"] ?? filterableColumns.status;
-
-  //   itemsWhere.push(eq(filterKey, value));
-  //   totalWhere.push(eq(filterKey, value));
-  // }
+  const { offset, page, pageSize } = paginationBuilder(query);
+  let filters: QueryFilter<any> = [];
 
   if (query.q) {
-    const w = sql`(
-      setweight(to_tsvector('simple', f_normalize(${tables.job.title})), 'A') ||
-      setweight(to_tsvector('simple', f_normalize(${tables.job.jobDescription})), 'B') ||
-      setweight(to_tsvector('simple', f_normalize(${tables.job.candidateProfile})), 'C'))
-      @@ to_tsquery('simple', ${search}
-    )`;
-    itemsWhere.push(w);
-    totalWhere.push(w);
+    const tokens = tokenize(query.q);
+    const searchRegex = new RegExp(tokens, "i");
+
+    filters.push({
+      $or: [
+        { normalizedTitle: { $regex: searchRegex } },
+        { jobDescription: { $regex: searchRegex } },
+      ],
+    });
   }
 
-  itemsQuery.where(and(...itemsWhere));
-  totalQuery.where(and(...totalWhere));
+  if (query.skills) {
+    filters.push(buildSkillsFilter(query.skills));
+  }
 
-  const jobs = await itemsQuery;
-  const total = await totalQuery;
+  const $match = (
+    filters.length ? { $match: { $and: filters } } : undefined
+  ) as any;
 
-  const result: IDataResult<Job> = {
-    items: jobs as any as Job[],
-    page,
-    pageSize,
-    total: total.length,
-    totalPages: Math.ceil(total.length / pageSize),
-  };
+  const pipe: PipelineStage[] = [
+    normalizeSkills(),
 
-  return result;
+    {
+      $facet: {
+        // total global sans filtre
+        total: [$match, { $count: "total" }].filter((p) => p),
+
+        // total après filtres
+        totalItems: [{ $count: "total" }],
+
+        // data paginée
+        data: [
+          $match,
+          // { $sort: { createdAt: -1 } },
+          { $skip: offset },
+          { $limit: pageSize },
+        ].filter((p) => p),
+      },
+    },
+    {
+      $project: {
+        items: "$data",
+
+        total: {
+          $ifNull: [{ $arrayElemAt: ["$total.total", 0] }, 0],
+        },
+
+        totalItems: {
+          $ifNull: [{ $arrayElemAt: ["$totalItems.total", 0] }, 0],
+        },
+
+        page: { $literal: page },
+        pageSize: { $literal: pageSize },
+
+        totalPages: {
+          $ceil: {
+            $divide: [
+              {
+                $ifNull: [{ $arrayElemAt: ["$totalItems.total", 0] }, 0],
+              },
+              pageSize,
+            ],
+          },
+        },
+      },
+    },
+  ];
+
+  let results: IDataResult<JobDocument & { score: number }>;
+  [results] = await _Job.aggregate(pipe);
+
+  if (query.q) {
+    const tokens = tokenize(query.q);
+
+    results.items = results.items.map((job) => {
+      let score = 0;
+
+      for (const token of tokens.split(" ")) {
+        const s1 = [...job.normalizedTitle.matchAll(new RegExp(token, "gi"))]
+          .length;
+
+        const s2 = [...job.jobDescription.matchAll(new RegExp(token, "gi"))]
+          .length;
+
+        score += s1 * 3 + s2;
+      }
+
+      return { ...job, score };
+    });
+
+    results.items.sort((a, b) => b.score - a.score);
+  }
+
+  return results;
 }

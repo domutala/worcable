@@ -1,5 +1,7 @@
 import { getJobShema } from "~~/server/services/job_schema";
 import * as z from "zod";
+import { useMongo } from "~~/server/mongoose";
+import { _Job } from "~~/server/mongoose/models/job";
 
 function parsePrimitiveValue(value: string): string | number | boolean | null {
   const trimmed = value.trim();
@@ -19,6 +21,16 @@ function parsePrimitiveValue(value: string): string | number | boolean | null {
 }
 
 export default defineEventHandler(async (event) => {
+  await useMongo();
+
+  function normalize(str: string) {
+    return str
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, " ")
+      .replace(/[-_.*+?^${}()|[\]\\]/g, "");
+  }
+
   const body = await readBody(event);
   if (body.phone) body.phone = body.phone.toString();
 
@@ -67,9 +79,25 @@ export default defineEventHandler(async (event) => {
       .where(eq(tables.job.id, id))
       .returning();
 
+    await _Job.updateOne(
+      {
+        ..._job,
+        normalizedTitle: normalize(_job.title),
+        normalizedJobDescription: normalize(_job.jobDescription),
+      } as any,
+      { id: _job.id },
+    );
+
     return _job;
   } else {
     const [job] = await db.insert(tables.job).values(jobData).returning();
+
+    await _Job.create({
+      ...job,
+      normalizedTitle: normalize(job.title),
+      normalizedJobDescription: normalize(job.jobDescription),
+    } as any);
+
     return job;
   }
 });

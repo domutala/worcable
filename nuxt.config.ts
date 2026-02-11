@@ -2,6 +2,8 @@
 export default defineNuxtConfig({
   runtimeConfig: {
     databaseUrl: "",
+    mongoUri: "",
+
     uploadsKey: "",
     secretKey: "",
 

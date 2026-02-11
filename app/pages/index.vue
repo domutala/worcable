@@ -25,7 +25,13 @@ const pageSize = ref(8);
 
 const { data, status, refresh } = await useFetch<IDataResult<Job>>(`/api/job`, {
   method: "get",
-  query: { sortBy, sortOrder, page, pageSize, q: searchTerm },
+  query: {
+    sortBy,
+    sortOrder,
+    page,
+    pageSize,
+    q: searchTerm,
+  },
   watch: [sortBy, sortOrder, page, pageSize, searchTerm],
 });
 
@@ -73,7 +79,9 @@ function openJobNewTab(e: Event, job: Job) {
 
 const schemaSearchTerms = z.object({ q: z.string().optional() });
 type SchemaSearchTerms = z.output<typeof schemaSearchTerms>;
-const searchTermsState = reactive<Partial<SchemaSearchTerms>>({});
+const searchTermsState = reactive<Partial<SchemaSearchTerms>>({
+  q: searchTerm.value as string,
+});
 async function searchByTerms(event: FormSubmitEvent<SchemaSearchTerms>) {
   jobs.value = [];
   searchTerm.value = event.data.q;

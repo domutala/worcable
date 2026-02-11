@@ -35,3 +35,17 @@ export function paginationBuilderFromQuery(
     pageSize: safePageSize,
   };
 }
+
+export function paginationBuilder(query: { page?: string; pageSize?: string }) {
+  const page = Number(query.page ?? 1);
+  const pageSize = Number(query.pageSize ?? 8);
+  const safePage = Math.max(1, page);
+  const safePageSize = Math.min(Math.max(1, pageSize), 100);
+  const offset = (safePage - 1) * safePageSize;
+
+  return {
+    offset,
+    page: safePage,
+    pageSize: safePageSize,
+  };
+}
