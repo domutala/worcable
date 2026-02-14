@@ -17,6 +17,10 @@ async function onSubmit(note: number) {
         body: { id: job.value.id, note },
       },
     );
+
+    dispatchEvent(
+      new CustomEvent(`${apply.value.id}:update`, { detail: apply.value }),
+    );
   } catch (error) {
     onFetchError(error);
   } finally {

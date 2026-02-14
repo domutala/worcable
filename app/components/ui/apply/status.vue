@@ -20,6 +20,12 @@ async function onSubmit(status: ApplyStatus) {
         body: { id: job.value.id, to: status },
       },
     );
+
+    setTimeout(() => {
+      dispatchEvent(
+        new CustomEvent(`${apply.value.id}:update`, { detail: apply.value }),
+      );
+    }, 0);
   } catch (error) {
     onFetchError(error);
   } finally {

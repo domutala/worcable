@@ -282,11 +282,23 @@ function setSortable() {
             class="absolute inset-0 rounded-xl border-primary hidden group-[.ghost]:block bg-surface"
           ></div>
 
-          <ui-apply-kanban-apply
+          <ui-apply-one
             v-model:apply="applys[i]!"
             v-model:job="job"
-            :status-changing="Object.values(statusChanging).includes(apply.id)"
-          />
+            @refesh:apply="
+              (v) => {
+                applys[i] = v;
+              }
+            "
+          >
+            <ui-apply-kanban-apply
+              v-model:apply="applys[i]!"
+              v-model:job="job"
+              :status-changing="
+                Object.values(statusChanging).includes(apply.id)
+              "
+            />
+          </ui-apply-one>
         </li>
 
         <div

@@ -1,11 +1,11 @@
 <script lang="ts" setup>
+import { useRouteQuery } from "@vueuse/router";
 import type { Apply, Job } from "~~/server/database/schema";
 
 const job = defineModel<Job>("job", { required: true });
 const apply = defineModel<Apply>("apply", { required: true });
-
+const applyModalID = useRouteQuery("modal-apply-id");
 const { statusChanging } = defineProps<{ statusChanging?: boolean }>();
-const isOpen = ref(false);
 </script>
 
 <template>
@@ -17,7 +17,7 @@ const isOpen = ref(false);
   >
     <div
       class="absolute inset-0 handler cursor-grab z-0"
-      @click="isOpen = true"
+      @click="applyModalID = apply.id"
     ></div>
 
     <div class="flex items-center gap-2 p-5 relative pointer-events-none">
@@ -100,10 +100,4 @@ const isOpen = ref(false);
       :ui="{ indicator: 'rounded-none bg-default', base: 'rounded-none' }"
     />
   </div>
-
-  <u-modal v-model:open="isOpen" :ui="{ content: 'max-w-250 rounded-2xl' }">
-    <template #content>
-      <ui-apply-display v-model:apply="apply" v-model:job="job" />
-    </template>
-  </u-modal>
 </template>
