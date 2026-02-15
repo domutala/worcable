@@ -15,7 +15,7 @@ export const apply = pgTable("apply", {
   id: uuid().primaryKey().defaultRandom(),
   data: jsonb().notNull().$type<z.output<typeof data>>(),
 
-  status: varchar().default("init").notNull().$type<z.output<typeof status>>(),
+  status: varchar().$type<z.output<typeof status>>(),
   allStatus: jsonb()
     .notNull()
     .default([])

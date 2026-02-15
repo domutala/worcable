@@ -95,7 +95,10 @@ export function getApplyShema($t: (string: string) => string) {
     .min(0, $t("apply.note.errors.required"))
     .max(200, $t("apply.note.errors.required"));
 
-  const status = z.enum(ApplyStatus, $t("apply.errors.invalid_status"));
+  const status = z
+    .string($t("apply.errors.invalid_status"))
+    .optional()
+    .nullable();
 
   const data = getApplyDataShema($t);
 

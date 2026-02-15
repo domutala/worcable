@@ -1,4 +1,5 @@
-import { Apply } from "../database/schema";
+import { isNull, notInArray } from "drizzle-orm";
+import { Apply, Job } from "../database/schema";
 import { IDataResult } from "../interfaces";
 import { paginationBuilderFromQuery } from "../tools/pagination_builder_from_query";
 import * as z from "zod";
@@ -29,12 +30,23 @@ export async function listApplys({
   const itemsWhere: any[] = [];
   const totalWhere: any[] = [];
 
+  let job: Job | undefined = undefined;
+
   const { jobID } = query;
   if (jobID) {
     if (!z.uuid().safeParse(jobID).success) {
       throw createError({
         statusCode: 400,
         data: { message: $t("job.errors.invalid_id") },
+      });
+    }
+
+    [job] = await db.select().from(tables.job).where(eq(tables.job.id, jobID));
+
+    if (!job) {
+      throw createError({
+        statusCode: 404,
+        data: { message: $t("job.errors.job_not_found") },
       });
     }
 
@@ -48,11 +60,34 @@ export async function listApplys({
     };
 
     const [key, value] = query.filterBy.split(":");
-    const filterKey =
-      filterableColumns[key as "status"] ?? filterableColumns.status;
 
-    itemsWhere.push(eq(filterKey, value));
-    totalWhere.push(eq(filterKey, value));
+    if (key === "status") {
+      if (!job) {
+        throw createError({
+          statusCode: 404,
+          data: { message: $t("job.errors.job_not_found") },
+        });
+      }
+
+      if (!value || value === "null") {
+        const w = or(
+          isNull(tables.apply.status),
+          notInArray(
+            tables.apply.status,
+            job.applyStatus.map((st) => st.key),
+          ),
+        );
+
+        itemsWhere.push(w);
+        totalWhere.push(w);
+      } else {
+        const filterKey =
+          filterableColumns[key as "status"] ?? filterableColumns.status;
+
+        itemsWhere.push(eq(filterKey, value));
+        totalWhere.push(eq(filterKey, value));
+      }
+    }
   }
 
   if (query.q) {

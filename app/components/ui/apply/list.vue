@@ -3,9 +3,12 @@ import { type Apply, type Job } from "~~/server/database/schema";
 import type { IDataResult } from "~~/server/interfaces";
 import { ApplyStatus } from "~~/server/services/apply_get_shema";
 import { watchImmediate } from "@vueuse/core";
+import type { SelectMenuItem } from "@nuxt/ui";
+import { applyStatusIcons } from "~/tools/apply";
+import { useRouteQuery } from "@vueuse/router";
 
 const { job } = defineProps<{ job: Job }>();
-
+const applyModalID = useRouteQuery("modal-apply-id");
 const searchTerm = ref("");
 const sortBy = ref("updatedAt");
 const sortOrder = ref("desc");
@@ -24,6 +27,12 @@ const { data, status, refresh } = await useFetch<IDataResult<Apply>>(
 
 const applys = ref<Apply[]>([]);
 
+watch(
+  () => filterBy.value,
+  () => {
+    applys.value = [];
+  },
+);
 watchImmediate(
   () => data.value,
   () => {
@@ -31,6 +40,33 @@ watchImmediate(
   },
   { deep: true },
 );
+
+const statusItems = computed(() => {
+  const items: SelectMenuItem[] = job.applyStatus.map((status) => {
+    return {
+      label: status.label || $t(`apply.status.${status.key}.label`),
+      value: `status:${status.key}`,
+      icon: status.icon || applyStatusIcons[status.key],
+      class: "cursor-pointer",
+    };
+  });
+
+  items.unshift({
+    label: Use.i18n.t(`apply.status.labels.all`),
+    value: null,
+    class: "cursor-pointer",
+    icon: "i-lucide-text",
+  });
+
+  items.push({
+    label: Use.i18n.t(`apply.status.labels.null`),
+    value: "status:null",
+    class: "cursor-pointer",
+    icon: applyStatusIcons.null,
+  });
+
+  return items;
+});
 </script>
 
 <template>
@@ -38,19 +74,15 @@ watchImmediate(
     <template v-if="data">
       <div class="mb-1 flex gap-1 items-center">
         <div class="mx-auto"></div>
+
         <u-select
           v-model="filterBy"
           color="neutral"
           variant="ghost"
           trailing-icon="i-lucide-list-filter"
           class="bg-default cursor-pointer rounded-2xl"
-          :items="[
-            { label: $t(`apply.status.labels.all`), value: null },
-            ...Object.values(ApplyStatus).map((status) => ({
-              label: $t(`apply.status.${status}.label`),
-              value: `status:${status}`,
-            })),
-          ]"
+          :items="statusItems"
+          :ui="{ content: 'min-w-40' }"
         ></u-select>
 
         <ui-sort
@@ -100,103 +132,101 @@ watchImmediate(
           :key="apply.id"
           class="w-full rounded-2xl bg-default overflow-hidden group"
         >
-          <u-modal :ui="{ content: 'max-w-250 rounded-2xl' }">
-            <u-button
+          <ui-apply-one v-slot="{ apply, job }" v-model:apply="applys[i]!" :job>
+            <!-- <u-button
               variant="ghost"
               color="neutral"
-              class="rounded-0 p-0 bg-default cursor-pointer"
+              class="rounded-0 rounded-b-2xl p-0 bg-default cursor-pointer"
               block
+              @click="applyModalID = apply.id"
+            > -->
+            <div
+              class="flex items-center gap-4 p-5 relative rounded-b-3xl border-default w-full text-left group-hover:border-b cursor-pointer"
+              @click="applyModalID = apply.id"
             >
-              <div
-                class="flex items-center gap-4 p-5 relative border-b border-default w-full text-left"
-              >
-                <UAvatar
-                  :src="Utils.getFileUrl(apply.data.avatar)"
-                  :alt="[apply.data.firstName, apply.data.lastName].join(' ')"
-                  class="border border-accented rounded-2xl text-md"
-                  size="3xl"
+              <UAvatar
+                :src="Utils.getFileUrl(apply.data.avatar)"
+                :alt="[apply.data.firstName, apply.data.lastName].join(' ')"
+                class="border border-accented rounded-2xl text-md"
+                size="3xl"
+              />
+
+              <div class="select-none leading-[1.1] flex-1 min-w-0 w-0">
+                <div class="font-bold truncate">
+                  {{ apply.data.firstName }}
+                  {{ apply.data.lastName }}
+                </div>
+
+                <div>
+                  {{ Utils.getDateStatus(apply.createdAt) }}
+                </div>
+
+                <ui-apply-note
+                  v-model:apply="applys[i]!"
+                  class="pointer-events-auto group-hover:hidden"
+                  :job
                 />
-
-                <div class="select-none leading-[1.1] flex-1 min-w-0 w-0">
-                  <div class="font-bold truncate">
-                    {{ apply.data.firstName }}
-                    {{ apply.data.lastName }}
-                  </div>
-
-                  <div>
-                    {{ Utils.getDateStatus(apply.createdAt) }}
-                  </div>
-
-                  <ui-apply-note
-                    v-model:apply="applys[i]!"
-                    class="pointer-events-auto group-hover:hidden"
-                    :job
-                  />
-                </div>
-
-                <div class="hidden md:block" @click.stop>
-                  <ui-apply-status v-model:apply="applys[i]!" :job />
-                </div>
               </div>
-            </u-button>
 
-            <template #content>
-              <ui-apply-display v-model:apply="applys[i]!" :job />
-            </template>
-          </u-modal>
-
-          <div
-            class="px-5 gap-5 flex items-center h-0 group-hover:h-10 transition-all overflow-hidden"
-          >
-            <ui-apply-note
-              v-model:apply="applys[i]!"
-              class="pointer-events-auto"
-              :job
-            />
-
-            <div class="mx-auto"></div>
-
-            <div class="flex flex-wrap gap-1 relative">
-              <UButton
-                color="neutral"
-                variant="ghost"
-                icon="i-lucide-file-text"
-                target="_blank"
-                size="sm"
-                :href="Utils.getFileUrl(apply.data.cv)"
-              >
-              </UButton>
-
-              <UButton
-                color="neutral"
-                variant="ghost"
-                icon="i-lucide-at-sign"
-                target="_blank"
-                size="sm"
-                :href="`mailto:${apply.data.email}`"
-              >
-              </UButton>
-
-              <UButton
-                color="neutral"
-                variant="ghost"
-                icon="i-lucide-phone"
-                target="_blank"
-                size="sm"
-                :href="`tel:${apply.data.phone}`"
-              >
-              </UButton>
-
-              <UButton
-                color="neutral"
-                variant="ghost"
-                icon="i-lucide-message-square-text"
-                class="pointer-events-auto"
-                size="sm"
-              >
-              </UButton>
+              <div class="hidden md:block" @click.stop>
+                <ui-apply-status-button v-model:apply="applys[i]!" :job />
+              </div>
             </div>
-          </div>
+            <!-- </u-button> -->
+
+            <div
+              class="px-5 gap-5 flex items-center h-0 group-hover:h-10 transition-all overflow-hidden"
+            >
+              <ui-apply-note
+                v-model:apply="applys[i]!"
+                class="pointer-events-auto"
+                :job
+              />
+
+              <div class="mx-auto"></div>
+
+              <div class="flex flex-wrap gap-1 relative">
+                <UButton
+                  color="neutral"
+                  variant="ghost"
+                  icon="i-lucide-file-text"
+                  target="_blank"
+                  size="sm"
+                  :href="Utils.getFileUrl(apply.data.cv)"
+                >
+                </UButton>
+
+                <UButton
+                  color="neutral"
+                  variant="ghost"
+                  icon="i-lucide-at-sign"
+                  target="_blank"
+                  size="sm"
+                  :href="`mailto:${apply.data.email}`"
+                >
+                </UButton>
+
+                <UButton
+                  color="neutral"
+                  variant="ghost"
+                  icon="i-lucide-phone"
+                  target="_blank"
+                  size="sm"
+                  :href="`tel:${apply.data.phone}`"
+                >
+                </UButton>
+
+                <UButton
+                  color="neutral"
+                  variant="ghost"
+                  icon="i-lucide-message-square-text"
+                  class="pointer-events-auto"
+                  size="sm"
+                >
+                </UButton>
+              </div>
+            </div>
+          </ui-apply-one>
         </div>
       </div>
 

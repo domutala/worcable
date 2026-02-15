@@ -1,4 +1,4 @@
-import { ApplyStatus, getApplyDataShema } from "../services/apply_get_shema";
+import { getApplyDataShema } from "../services/apply_get_shema";
 import saveFile from "../tools/save_file";
 import * as z from "zod";
 
@@ -89,8 +89,6 @@ export default defineEventHandler(async (event) => {
     .insert(tables.apply)
     .values({
       jobID,
-      status: ApplyStatus.INIT,
-      allStatus: [{ status: ApplyStatus.INIT, date: new Date().toISOString() }],
       data: dataParsed.data,
     })
     .returning();

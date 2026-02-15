@@ -37,6 +37,8 @@ async function fetchDatas() {
   } finally {
     fetching.value = false;
   }
+
+  if (!apply.value) applyID.value = undefined;
 }
 </script>
 

@@ -16,7 +16,9 @@
     "home": "Accueil",
     "result": "Résult | Résultats",
     "dashboard": "Dashboard",
-    "last_update": "Dernier modifier"
+    "last_update": "Dernier modifier",
+    "to_save": "Enregistrer",
+    "to_remove": "Supprimer"
   },
 
   "meeting": {
@@ -240,18 +242,21 @@
     },
 
     "status": {
-      "init": { "label": "Candidature", "icon": "i-lucide-square-chart-gantt" },
-      "rejected": { "label": "Non retenu", "icon": "i-lucide-user-round-x" },
-      "toContact": {
+      "INIT": { "label": "Candidature" },
+      "REJECTED": { "label": "Non retenu" },
+      "TO_CONTACT": {
         "label": "À contacter",
         "icon": "i-lucide-phone-outgoing"
       },
-      "interview": { "label": "Entretien", "icon": "i-lucide-calendar-range" },
-      "hired": { "label": "Recruté", "icon": "i-lucide-check-check" },
+      "INTERVIEW": { "label": "Entretien" },
+      "HIRED": { "label": "Recruté" },
+
+      "NULL_STATUS": { "label": "Non classé" },
 
       "labels": {
         "label": "Statut",
-        "all": "Tous les status"
+        "null": "Non classé",
+        "all": "Tous"
       }
     },
 
@@ -388,6 +393,18 @@
         "errors": {
           "required": "La description de l’entreprise est obligatoire",
           "min": "La description de l’entreprise doit contenir au moins 20 caractères"
+        }
+      },
+
+      "applyStatus": {
+        "labels": {
+          "color": "Couleur",
+          "label": "Nom du statut",
+          "icon": "Icone",
+          "new_title": "Nouveau statut",
+          "new_btn": "Ajouter un nouveau statut",
+          "without_name": "Sans nom",
+          "success_remove": "Status supprimer avec succès"
         }
       }
     },

@@ -33,14 +33,16 @@ import UiAuth from "./auth.vue";
     <div class="hidden md:flex items-center gap-1">
       <template v-if="$route.path.startsWith('/admin')">
         <u-button
-          icon="i-lucide-users-round"
+          trailing-icon="i-lucide-newspaper"
           size="xl"
           color="neutral"
           variant="ghost"
-        ></u-button>
+        >
+          CVThèque
+        </u-button>
 
         <u-button
-          icon="i-lucide-mail-open"
+          icon="i-lucide-users-round"
           size="xl"
           color="neutral"
           variant="ghost"

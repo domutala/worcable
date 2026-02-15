@@ -8,10 +8,10 @@ import {
   index,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
-import { getJobShema } from "~~/server/services/job_schema";
+import { getJobShema } from "../../services/job_schema";
 import * as z from "zod";
 
-const { contractType, jobNature } = getJobShema();
+const { contractType, jobNature, applyStatus } = getJobShema();
 
 export const job = pgTable(
   "job",
@@ -35,6 +35,16 @@ export const job = pgTable(
       .$type<z.output<typeof jobNature>>(),
 
     salary: jsonb().$type<[number, number]>(),
+
+    applyStatus: jsonb()
+      .$type<z.output<typeof applyStatus>>()
+      .default([
+        { key: "REJECTED" },
+        { key: "TO_CONTACT" },
+        { key: "INTERVIEW" },
+        { key: "HIRED" },
+      ])
+      .notNull(),
 
     /**
      * Skills stockées sous forme de texte séparé

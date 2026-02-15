@@ -1,4 +1,5 @@
 import * as z from "zod";
+import _ from "lodash";
 
 export enum JobContractTypeEnum {
   CDI = "CDI",
@@ -92,7 +93,28 @@ export function getJobShema($t: (str: string) => string = (str) => str) {
     .min(30, $t("job.items.candidateProfile.errors.min"))
     .optional();
 
-  const jobOfferSchema = z.object({
+  const singleApplyStatus = z.object({
+    key: z.string(),
+    label: z.string().max(180).optional(),
+    color: z.string().optional(),
+    icon: z.string().optional(),
+  });
+
+  const applyStatus = singleApplyStatus
+    .array()
+    .min(1)
+    .default([
+      { key: "REJECTED" },
+      { key: "TO_CONTACT" },
+      { key: "INTERVIEW" },
+      { key: "HIRED" },
+    ])
+    .transform((applyStatus) => {
+      applyStatus = _.uniqBy(applyStatus, "key");
+      return applyStatus;
+    });
+
+  const schema = z.object({
     title,
     companyDescription,
     contractType,
@@ -102,10 +124,11 @@ export function getJobShema($t: (str: string) => string = (str) => str) {
     salary,
     skills,
     candidateProfile,
+    applyStatus,
   });
 
   return {
-    schema: jobOfferSchema,
+    schema,
 
     title,
 
@@ -120,5 +143,8 @@ export function getJobShema($t: (str: string) => string = (str) => str) {
     candidateProfile,
 
     companyDescription,
+
+    applyStatus,
+    singleApplyStatus,
   };
 }

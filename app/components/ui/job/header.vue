@@ -51,6 +51,8 @@ const items = ref<DropdownMenuItem[][]>([
     </div>
 
     <div class="flex items-center gap-2 ml-auto">
+      <UColorModeButton />
+
       <u-button
         size="lg"
         trailing-icon="i-lucide-corner-up-right"

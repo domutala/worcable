@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import type { Apply, Job } from "~~/server/database/schema";
 import _ from "lodash";
-import { applyStatusColors } from "~/tools/apply";
 
 const job = defineModel<Job>("job", { required: true });
 const apply = defineModel<Apply>("apply", { required: true });
@@ -35,7 +34,7 @@ const apply = defineModel<Apply>("apply", { required: true });
         v-model:job="job"
         class="pointer-events-auto"
       />
-      <ui-apply-status v-model:apply="apply" v-model:job="job" />
+      <ui-apply-status-button v-model:apply="apply" v-model:job="job" />
     </div>
   </div>
 
