@@ -42,7 +42,7 @@ async function onSubmit() {
 </script>
 
 <template>
-  <u-modal v-model:open="open" :ui="{ content: 'max-w-2xl' }">
+  <u-modal v-model:open="open" :ui="{ content: 'max-w-xl' }">
     <slot />
 
     <template #content>
@@ -60,10 +60,7 @@ async function onSubmit() {
 
         <u-container class="py-10 max-w-2xl">
           <div class="mb-5">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sit,
-            labore illo praesentium accusantium laboriosam molestiae doloremque
-            soluta nobis tempore dolor ducimus quae non? Officia explicabo
-            incidunt quo! Reprehenderit, aspernatur ullam.
+            {{ $t("job.items.applyStatus.labels.text_remove") }}
           </div>
 
           <u-button

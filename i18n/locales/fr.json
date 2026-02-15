@@ -18,7 +18,8 @@
     "dashboard": "Dashboard",
     "last_update": "Dernier modifier",
     "to_save": "Enregistrer",
-    "to_remove": "Supprimer"
+    "to_remove": "Supprimer",
+    "to_update": "Modifier"
   },
 
   "meeting": {
@@ -404,7 +405,8 @@
           "new_title": "Nouveau statut",
           "new_btn": "Ajouter un nouveau statut",
           "without_name": "Sans nom",
-          "success_remove": "Status supprimer avec succès"
+          "success_remove": "Status supprimer avec succès",
+          "text_remove": "Vous allez supprimer ce statut de cette offre d'emploi. Les candidature avec ce statut seront non classé."
         }
       }
     },

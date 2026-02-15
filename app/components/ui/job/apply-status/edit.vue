@@ -60,7 +60,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <u-modal v-model:open="open" :ui="{ content: 'max-w-5xl' }">
+  <u-modal v-model:open="open" :ui="{ content: 'max-w-3xl' }">
     <slot />
 
     <template #content>
@@ -131,8 +131,20 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
                 </u-select>
               </u-form-field>
 
-              <u-form-field name="icon" label="icone" class="w-30">
-                <u-input class="w-full" :ui="{ base: 'p-4' }"></u-input>
+              <u-form-field name="icon" label="icone" class="w-20">
+                <ui-icon-selecter v-model="state.icon">
+                  <div
+                    class="h-13 rounded-lg flex items-center justify-center ring ring-accented w-full cursor-pointer"
+                    :icon="state.icon"
+                    square
+                  >
+                    <u-icon
+                      v-if="state.icon"
+                      :name="state.icon"
+                      class="size-6"
+                    />
+                  </div>
+                </ui-icon-selecter>
               </u-form-field>
             </div>
 

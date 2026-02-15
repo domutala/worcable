@@ -4,8 +4,6 @@ import type { IDataResult } from "~~/server/interfaces";
 import Sortable from "sortablejs";
 import _ from "lodash";
 import onFetchError from "~/tools/onFetchError";
-import { getJobShema } from "~~/server/services/job_schema";
-import * as z from "zod";
 
 const status = defineModel<string | null>("status", { required: true });
 const job = defineModel<Job>("job", { required: true });
@@ -229,24 +227,22 @@ function setSortable() {
           ></u-button>
         </div>
 
-        <div>
+        <div
+          class="rounded-2xl relative px-4 py-5"
+          :style="{ border: `1px solid ${borderColor}` }"
+        >
           <div
-            class="rounded-2xl relative px-4 py-5"
-            :style="{ border: `1px solid ${borderColor}` }"
-          >
-            <div
-              class="absolute inset-0 rounded-2xl"
-              :style="{ backgroundColor: bgColor }"
-            ></div>
+            class="absolute inset-0 rounded-2xl"
+            :style="{ backgroundColor: bgColor }"
+          ></div>
 
-            <div class="relative flex flex-col items-center gap-2">
-              <u-icon v-if="icon" :name="icon" class="size-6" />
+          <div class="relative flex flex-col items-center gap-2">
+            <u-icon v-if="icon" :name="icon" class="size-6" />
 
-              {{ applys.length }}
+            {{ applys.length }}
 
-              <div style="writing-mode: vertical-rl">
-                {{ label }}
-              </div>
+            <div style="writing-mode: vertical-rl">
+              {{ label }}
             </div>
           </div>
         </div>
@@ -277,15 +273,37 @@ function setSortable() {
         >
           <div class="flex items-center gap-2 relative">
             <div>
-              <u-button
-                v-if="status"
-                class="grid-handler cursor-pointer"
-                icon="i-lucide-ellipsis-vertical"
-                variant="ghost"
-                color="neutral"
-                square
-                @click="isApplyStatusRemoveOpen = true"
-              ></u-button>
+              <u-dropdown-menu
+                :content="{ align: 'start' }"
+                :items="[
+                  {
+                    label: $t('words.to_update'),
+                    icon: 'i-lucide-pencil-line',
+                    class: 'cursor-pointer',
+                    onSelect(e) {
+                      isApplyStatusEditOpen = true;
+                    },
+                  },
+                  {
+                    label: $t('words.to_remove'),
+                    icon: 'i-lucide-trash-2',
+                    class: 'cursor-pointer',
+                    onSelect(e) {
+                      isApplyStatusRemoveOpen = true;
+                    },
+                  },
+                ]"
+              >
+                <u-button
+                  v-if="status"
+                  class="grid-handler cursor-pointer"
+                  icon="i-lucide-ellipsis-vertical"
+                  variant="ghost"
+                  color="neutral"
+                  square
+                >
+                </u-button>
+              </u-dropdown-menu>
             </div>
 
             <div
