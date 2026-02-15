@@ -27,6 +27,20 @@
   },
 
   "pages": {
+    "index": {
+      "hero": {
+        "title": "plateforme open source moderne pour simplifier et structurer le recrutement",
+        "subtitle": "Focus delivery, performance et qualité en production",
+        "cta": "Accéder aux offres",
+        "cta_2": "Open source"
+      },
+
+      "description": {
+        "main": "**J’accompage les équipes produit à sécuriser et faire évoluer leurs applications en production**. Plus de stabilité. Plus de performance. Plus de maîtrise — sans ralentir la roadmap.",
+        "sub": "Je transforme les bases fragiles en socles solides, capables de supporter la croissance."
+      }
+    },
+
     "apply": {
       "title": "Candidature spontanée",
 
