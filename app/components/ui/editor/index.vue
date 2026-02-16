@@ -6,10 +6,10 @@ import { TextAlign } from "@tiptap/extension-text-align";
 const { editable, placeholder } = defineProps({
   editable: { type: Boolean, default: true },
   placeholder: String,
+  ui: { type: Object as PropType<{ editor?: string }> },
 });
 
 const content = defineModel<string>({});
-
 const extensions = [TextAlign, Emoji] as any;
 
 const appendToBody = false ? () => document.body : undefined;
@@ -250,40 +250,70 @@ const toolbarBubbledItems: EditorToolbarItem[][] = [
 </script>
 
 <template>
-  <UEditor
-    v-slot="{ editor }"
-    v-model="content"
-    class="ui-editor"
-    content-type="markdown"
-    :ui="{ content: 'min-h-30' }"
-    :extensions
-    :placeholder
-    :editable
-  >
-    <template v-if="editor.isEditable">
-      <!-- <UEditorDragHandle :editor="editor" /> -->
+  <div class="overflow-hidden rounded-2xl">
+    <UEditor
+      v-slot="{ editor }"
+      v-model="content"
+      class="ui-editor overflow-auto bg-inherit text-base"
+      content-type="markdown"
+      :ui="{ content: 'min--30' }"
+      :class="ui?.editor"
+      :extensions
+      :placeholder
+      :editable
+    >
+      <template v-if="editor.isEditable">
+        <!-- <UEditorDragHandle :editor="editor" /> -->
 
-      <UEditorToolbar
-        :editor
-        :items="toolbarItems"
-        class="px-5 py-2 overflow-x-auto sticky top-0 border-b border-default bg-inherit/50 backdrop-blur-2xl z-10"
-      />
+        <UEditorToolbar
+          :editor
+          :items="toolbarItems"
+          class="px-5 py-0 overflow-x-auto bg-inherit sticky top-0 border-b border-default z-10"
+        />
 
-      <UEditorToolbar
+        <!-- <UEditorToolbar
         :editor
         :items="toolbarBubbledItems"
         :append-to="appendToBody"
         class="sm:px-8 overflow-x-auto"
         layout="bubble"
-      />
+      /> -->
 
-      <!-- <UEditorEmojiMenu :editor="editor" :items="emojiItems" :append-to="appendToBody" /> -->
-    </template>
-  </UEditor>
+        <!-- <UEditorEmojiMenu :editor="editor" :items="emojiItems" :append-to="appendToBody" /> -->
+      </template>
+    </UEditor>
+  </div>
 </template>
 
 <style lang="scss">
 .ui-editor {
+  [role="toolbar"] {
+    &::-webkit-scrollbar {
+      height: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--ui-border);
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  }
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--ui-border);
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    border-left: 1px solid var(--ui-border);
+  }
+
   .tiptap {
     padding: 0 !important;
 

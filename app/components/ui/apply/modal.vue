@@ -46,7 +46,9 @@ async function fetchDatas() {
   <u-modal
     v-if="applyID"
     v-model:open="isOpen"
-    :ui="{ content: 'max-w-250 rounded-2xl' }"
+    :ui="{
+      content: [fetching ? 'max-w-14' : 'max-w-360', 'rounded-2xl'],
+    }"
     @update:open="
       () => {
         applyID = undefined;
@@ -54,6 +56,66 @@ async function fetchDatas() {
     "
   >
     <template #content>
+      <div v-if="fetching" class="flex items-center justify-center py-2">
+        <u-icon name="i-lucide-loader-circle" class="animate-spin size-10" />
+      </div>
+      <ui-layout v-else-if="job && apply">
+        <template #header>
+          <div class="flex items-center gap-2 px-5 pt-3 pb-1 border-b-0">
+            <UAvatar
+              :src="Utils.getFileUrl(apply.data.avatar)"
+              :alt="[apply.data.firstName, apply.data.lastName].join(' ')"
+              class="border border-accented rounded-2xl text-md"
+              size="3xl"
+            />
+
+            <div class="select-none leading-[1.1] flex-1 w-0">
+              <div class="font-bold truncate">
+                {{ apply.data.firstName }}
+                {{ apply.data.lastName }}
+              </div>
+
+              <div class="truncate text-sm opacity-50">
+                {{ Utils.getDateStatus(apply.createdAt) }}
+              </div>
+            </div>
+
+            <div class="mx-auto w-10"></div>
+
+            <ui-apply-options v-model:apply="apply" v-model:job="job" />
+          </div>
+        </template>
+
+        <u-container class="py-10">
+          <div class="flex gap-3 items-center mb-4 px-5">
+            <ui-apply-note v-model:apply="apply" v-model:job="job" readonly />
+
+            <ui-apply-status-button
+              v-slot="{ color, label, icon, borderColor, bgColor }"
+              v-model:apply="apply"
+              v-model:job="job"
+              readonly
+            >
+              <div class="flex items-center gap-2 leading-none">
+                <u-icon :name="icon" />
+                {{ label }}
+              </div>
+            </ui-apply-status-button>
+          </div>
+
+          <div class="grid grid-cols-12 gap-5">
+            <div class="lg:col-span-8 col-span-12">
+              <ui-apply-comment v-model:job="job" v-model:apply="apply" />
+            </div>
+
+            <div class="hidden lg:block col-span-4">
+              <ui-apply-details v-model:apply="apply" v-model:job="job" />
+            </div>
+          </div>
+        </u-container>
+      </ui-layout>
+    </template>
+    <!-- <template #content>
       <div v-if="fetching" class="py-40 flex items-center justify-center">
         <u-icon name="i-lucide-loader-circle" class="animate-spin size-10" />
       </div>
@@ -62,6 +124,6 @@ async function fetchDatas() {
         v-model:apply="apply"
         v-model:job="job"
       />
-    </template>
+    </template> -->
   </u-modal>
 </template>

@@ -7,77 +7,10 @@ import UiAuth from "./auth.vue";
     v-if="Store.config.config"
     class="flex items-center gap-3 px-3 sm:px-10 py-3 w-full"
   >
-    <nuxt-link :to="$localePath({ name: 'index' })">
-      <ui-logo v-if="!Store.config.config.orgName" />
-      <div v-else class="flex items-center gap-1">
-        <div
-          class="size-10 rounded-xl bg-surface flex items-center justify-center overflow-hidden"
-        >
-          <img
-            v-if="Store.config.config.logo"
-            :src="Utils.getFileUrl(Store.config.config.logo)"
-            class="size-full object-cover object-center"
-          />
-          <u-icon v-else name="i-lucide-building-2" class="size-6 text-" />
-        </div>
-        <div class="font-semibold text-2xl select-none">
-          {{ Store.config.config.orgName }}
-        </div>
-      </div>
-    </nuxt-link>
+    <ui-logo />
 
-    <div class="mx-auto"></div>
+    <div class="w-15"></div>
 
-    <!-- <UColorModeButton size="xl"> </UColorModeButton> -->
-
-    <div class="hidden md:flex items-center gap-1">
-      <template v-if="$route.path.startsWith('/admin')">
-        <u-button
-          trailing-icon="i-lucide-newspaper"
-          size="xl"
-          color="neutral"
-          variant="ghost"
-        >
-          CVThèque
-        </u-button>
-
-        <u-button
-          icon="i-lucide-users-round"
-          size="xl"
-          color="neutral"
-          variant="ghost"
-        ></u-button>
-
-        <u-button
-          icon="i-lucide-bell-dot"
-          size="xl"
-          color="neutral"
-          variant="ghost"
-        ></u-button>
-      </template>
-
-      <u-button
-        v-else-if="Store.session.user"
-        icon="i-lucide-layout-dashboard"
-        size="lg"
-        color="neutral"
-        variant="soft"
-        :to="$localePath({ name: 'admin' })"
-      >
-        Dashboard
-      </u-button>
-
-      <u-button
-        v-else
-        size="lg"
-        color="neutral"
-        variant="soft"
-        :to="$localePath({ name: 'login' })"
-      >
-        {{ $t("login.labels.title") }}
-      </u-button>
-    </div>
-
-    <UiAuth />
+    <ui-auth />
   </header>
 </template>

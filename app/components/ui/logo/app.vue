@@ -1,5 +1,3 @@
-<script setup lang="ts"></script>
-
 <template>
   <div class="flex items-center gap-1">
     <u-icon name="i-simple-icons-okta" class="size-8 text-primary" />

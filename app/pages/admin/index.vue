@@ -9,10 +9,14 @@ const jobs = ref<Job[]>([]);
     v-model:jobs="jobs"
   >
     <div class="h-[99%] flex flex-col overflow-hidden">
-      <UiBreadcrumb :breads="['$home', '$admin']" />
+      <UiBreadcrumb
+        :breads="['$home', '$admin']"
+        class="flex items-center gap-5"
+      >
+      </UiBreadcrumb>
 
       <div class="flex-1 flex flex-col overflow-hidden">
-        <div class="flex max-w-full w-4xl mx-auto mb-2">
+        <div class="hidden max-w-full w-4xl mx-auto mb-2">
           <div class="mx-auto"></div>
           <nuxt-link
             :to="$localePath({ name: 'admin-job-new' })"
@@ -31,7 +35,7 @@ const jobs = ref<Job[]>([]);
         </div>
 
         <div
-          class="max-w-full w-4xl gap-2 mx-auto flex-1 rounded-2xl overflow-hidden mb-5"
+          class="max-w-full w-4xl gap-2 mx-auto flex-1 rounded-2xl overflow-hidden mb-5 mt-5"
         >
           <div
             class="max-h-full overflow-auto bg-default rounded-2xl col-span-6"

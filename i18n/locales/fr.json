@@ -19,7 +19,8 @@
     "last_update": "Dernier modifier",
     "to_save": "Enregistrer",
     "to_remove": "Supprimer",
-    "to_update": "Modifier"
+    "to_update": "Modifier",
+    "on": "sur"
   },
 
   "meeting": {
@@ -295,10 +296,29 @@
     },
 
     "labels": {
-      "no_apply": "Aucune candidature trouvé"
+      "no_apply": "Aucune candidature trouvé",
+      "show_details": "Details"
     },
 
     "success": "Merci pour votre candidature. Nous avons bien reçu vos informations et notre équipe va les analyser avec attention. Si votre profil correspond à nos opportunités actuelles ou futures, nous vous contacterons pour la suite du processus."
+  },
+
+  "apply_comment": {
+    "items": {
+      "comment": {
+        "label": "Commentaire",
+        "placeholder": "Ecrivez un commentaire",
+        "errors": {
+          "invalid": "Le commentaire doit être un texte"
+        }
+      }
+    },
+
+    "labels": {
+      "unknown_user": "Utilisateur inconnu",
+      "send_to_candidate_by_mail": "Envoyer par mail au candidat",
+      "submit": "Commenter"
+    }
   },
 
   "job": {

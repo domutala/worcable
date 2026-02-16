@@ -72,52 +72,52 @@ const statusItems = computed(() => {
 <template>
   <div ref="container" class="flex-1 flex flex-col gap-1">
     <template v-if="data">
-      <div class="mb-1 flex gap-1 items-center">
-        <div class="mx-auto"></div>
-
-        <u-select
-          v-model="filterBy"
-          color="neutral"
-          variant="ghost"
-          trailing-icon="i-lucide-list-filter"
-          class="bg-default cursor-pointer rounded-2xl"
-          :items="statusItems"
-          :ui="{ content: 'min-w-40' }"
-        ></u-select>
-
-        <ui-sort
-          v-model:sort-by="sortBy"
-          v-model:sort-order="sortOrder"
-          :content="{ align: 'end' }"
-          :orderBy="{
-            updatedAt: { label: $t('words.last_update') },
-            status: { label: $t('apply.status.labels.label') },
-            note: { label: $t('apply.note.labels.label') },
-          }"
-        >
-          <template #default="{ label, icon }">
-            <u-button
-              color="neutral"
-              variant="ghost"
-              class="bg-default cursor-pointer rounded-2xl"
-              :trailing-icon="icon"
-            >
-              {{ label }}
-            </u-button>
-          </template>
-        </ui-sort>
-      </div>
-
       <u-input
         v-model="searchTerm"
-        :ui="{ base: 'h-full rounded-2xl ring-0' }"
+        :ui="{ base: 'h-full rounded-2xl ring-0', trailing: 'pr-5' }"
         :placeholder="$t('apply.actions.search_candidate')"
         :loading="status === 'pending'"
         icon="i-lucide-search"
         type="search"
         class="h-17 w-full outline-none"
         size="xl"
-      />
+      >
+        <template #trailing>
+          <u-select
+            v-model="filterBy"
+            color="neutral"
+            variant="ghost"
+            trailing-icon="i-lucide-list-filter"
+            class="bg-surface cursor-pointer rounded-lg"
+            :items="statusItems"
+            :ui="{ content: 'min-w-40' }"
+          ></u-select>
+
+          <div class="w-1"></div>
+
+          <ui-sort
+            v-model:sort-by="sortBy"
+            v-model:sort-order="sortOrder"
+            :content="{ align: 'end' }"
+            :orderBy="{
+              updatedAt: { label: $t('words.last_update') },
+              status: { label: $t('apply.status.labels.label') },
+              note: { label: $t('apply.note.labels.label') },
+            }"
+          >
+            <template #default="{ label, icon }">
+              <u-button
+                color="neutral"
+                variant="ghost"
+                class="bg-surface cursor-pointer rounded-lg"
+                :trailing-icon="icon"
+              >
+                {{ label }}
+              </u-button>
+            </template>
+          </ui-sort>
+        </template>
+      </u-input>
 
       <div v-if="!applys.length" class="max-w-lg mx-auto text-center py-30">
         <u-icon name="i-lucide-users-round" class="size-10" />
@@ -133,13 +133,6 @@ const statusItems = computed(() => {
           class="w-full rounded-2xl bg-default overflow-hidden group"
         >
           <ui-apply-one v-slot="{ apply, job }" v-model:apply="applys[i]!" :job>
-            <!-- <u-button
-              variant="ghost"
-              color="neutral"
-              class="rounded-0 rounded-b-2xl p-0 bg-default cursor-pointer"
-              block
-              @click="applyModalID = apply.id"
-            > -->
             <div
               class="flex items-center gap-4 p-5 relative rounded-b-3xl border-default w-full text-left group-hover:border-b cursor-pointer"
               @click="applyModalID = apply.id"

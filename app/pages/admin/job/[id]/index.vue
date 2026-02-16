@@ -65,20 +65,13 @@ const applys = ref(
       <template v-else>
         <UiBreadcrumb :breads="['$home', '$admin', { label: job.title }]" />
 
-        <div class="flex mx-auto w-420 max-w-full pb-5 pt-10 px-5">
-          <div class="hidden md:block">
-            <u-button
-              class="rounded-2xl px-5 py-3"
-              size="lg"
-              icon="i-lucide-user-round-plus"
-            >
-              {{ $t("job.actions.add_new_apply") }}
-            </u-button>
-          </div>
+        <div class="flex mx-auto w-420 max-w-full pb-2 pt-10 px-5">
+          <ui-apply-candate-group
+            class="bg-default rounded-xl border border-default"
+            :job
+          />
 
-          <div class="mx auto"></div>
-
-          <div class="flex items-center gap-2 ml-auto">
+          <div class="flex items-center gap-2">
             <div
               class="bg-default rounded-xl border border-default p-2 h-full flex gap-2 items-center"
             >
@@ -103,11 +96,18 @@ const applys = ref(
               >
               </u-button>
             </div>
+          </div>
 
-            <ui-apply-candate-group
-              class="bg-default rounded-xl border border-default"
-              :job
-            />
+          <div class="mx-auto"></div>
+
+          <div class="hidden">
+            <u-button
+              class="rounded-2xl px-5 py-3"
+              size="lg"
+              icon="i-lucide-user-round-plus"
+            >
+              {{ $t("job.actions.add_new_apply") }}
+            </u-button>
           </div>
         </div>
 

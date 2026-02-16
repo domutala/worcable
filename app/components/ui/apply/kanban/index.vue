@@ -66,7 +66,7 @@ function setSortable() {
       <ui-job-apply-status-edit v-model:job="job">
         <u-button
           size="xl"
-          class="py-4 px-4 flex-col cursor-pointer rounded-2xl"
+          class="py-4 px-4 flex-col cursor-pointer rounded-2xl ring-0"
           icon="i-lucide-plus"
           variant="outline"
           color="neutral"

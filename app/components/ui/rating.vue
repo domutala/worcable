@@ -18,6 +18,7 @@
       </defs>
     </svg>
     <input type="hidden" :name="name" v-model="rate" :required="required" />
+
     <template v-for="n in length" :key="n">
       <button
         type="button"
@@ -40,11 +41,13 @@
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
           xmlns:xlink="http://www.w3.org/1999/xlink"
+          :style="{ width: size, height: size }"
         >
           <use :xlink:href="`#${iconref}`"></use>
         </svg>
       </button>
     </template>
+
     <div class="Rate__view" :class="{ disabled: disabled }">
       <span v-if="showcount" class="count">{{ over }}</span>
       <span v-if="ratedesc.length > 0" class="desc">{{
@@ -60,6 +63,7 @@ const emit = defineEmits(["before-rate", "update:modelValue", "after-rate"]);
 const props = defineProps({
   modelValue: { type: [Number, String], default: 0 },
   value: { type: [Number, String], default: 0 },
+  size: { type: String, default: "19px" },
   name: { type: String, default: "rate" },
   length: { type: Number },
   showcount: { type: Boolean },
@@ -127,12 +131,14 @@ onBeforeMount(() => {
 <style>
 .Rate {
   cursor: default;
+  display: flex;
+  align-items: center;
 }
 
 .Rate .icon {
   display: inline-block;
-  width: 19px;
-  height: 19px;
+  /* width: 19px;
+  height: 19px; */
   stroke-width: 0;
   stroke: currentColor;
   fill: currentColor;

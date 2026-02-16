@@ -34,5 +34,7 @@ const _breads = computed(() => {
     class="sticky top-0 z-50 backdrop-blur-2xl bg-surface/10 px-5 py-2 border-b border-default"
   >
     <UBreadcrumb :items="_breads" />
+
+    <slot />
   </div>
 </template>

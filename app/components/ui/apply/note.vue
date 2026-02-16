@@ -2,7 +2,7 @@
 import onFetchError from "~/tools/onFetchError";
 import type { Apply, Job } from "~~/server/database/schema";
 
-const { readonly } = defineProps<{ readonly?: boolean }>();
+const { readonly, size } = defineProps<{ readonly?: boolean; size?: string }>();
 const submiting = ref(false);
 const job = defineModel<Job>("job", { required: true });
 const apply = defineModel<Apply>("apply", { required: true });
@@ -37,9 +37,10 @@ async function onSubmit(note: number) {
       class="animate-spin"
     />
     <ui-rating
+      v-model="apply.note"
       :length="5"
       :readonly
-      v-model="apply.note"
+      :size
       @update:model-value="onSubmit"
     />
   </div>
