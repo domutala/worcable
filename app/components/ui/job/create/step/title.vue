@@ -58,7 +58,7 @@ defineExpose({ form });
           class="w-full"
           color="neutral"
           :ui="{
-            base: 'rounded-2xl p-5 px-7 text-4xl',
+            base: 'bg-default text-4xl',
           }"
           :rows="2"
           :placeholder="$t('job.items.title.label')"

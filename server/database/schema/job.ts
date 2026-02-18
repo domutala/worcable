@@ -11,7 +11,7 @@ import { sql } from "drizzle-orm";
 import { getJobShema } from "../../services/job_schema";
 import * as z from "zod";
 
-const { contractType, jobNature, applyStatus } = getJobShema();
+const { contractType, jobNature, applyStatus, status } = getJobShema();
 
 export const job = pgTable(
   "job",
@@ -54,6 +54,12 @@ export const job = pgTable(
     skills: text("skills").array().default([]).notNull(),
 
     candidateProfile: text("candidate_profile"),
+
+    status: varchar("status")
+      .$type()
+      .default("open")
+      .$type<z.output<typeof status>>()
+      .notNull(),
 
     // searchVector: sql`job_search_vector`.as("searchVector"),
 

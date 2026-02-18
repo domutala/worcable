@@ -34,7 +34,7 @@ const interval = computed(() => {
 <template>
   <div v-if="!display" class="flex gap-1">
     <div
-      class="rounded-2xl bg-default border border-default h-16 w-full flex items-center px-5 gap-3"
+      class="rounded-default bg-default h-17 w-full flex items-center px-5 gap-3"
     >
       <span v-if="value !== undefined">
         {{

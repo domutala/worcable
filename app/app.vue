@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { useFavicon } from "@vueuse/core";
 import onFetchError from "./tools/onFetchError";
 
 const initing = ref(true);
@@ -8,7 +7,7 @@ const title = appConfig.site.name;
 
 useHead({
   meta: [{ name: "viewport", content: "width=device-width, initial-scale=1" }],
-  link: [{ rel: "icon", href: "/favicon.ico" }],
+  link: [{ rel: "icon", href: "/favicon.png" }],
   htmlAttrs: { lang: "en" },
 });
 
@@ -19,8 +18,6 @@ useSeoMeta({
   ogDescription: Use.i18n.t("site.ogDescription"),
   // ogImage: "https://ui.nuxt.com/assets/templates/nuxt/starter-light.png",
 });
-
-useFavicon("favicon-light.png");
 
 onMounted(async () => {
   try {
@@ -36,6 +33,24 @@ onMounted(async () => {
 
 <template>
   <NuxtLoadingIndicator color="var(--ui-primary)" :height="5" />
+
+  <span class="bg-red-500"></span>
+  <span class="bg-orange-500"></span>
+  <span class="bg-amber-500"></span>
+  <span class="bg-yellow-500"></span>
+  <span class="bg-lime-500"></span>
+  <span class="bg-green-500"></span>
+  <span class="bg-emerald-500"></span>
+  <span class="bg-teal-500"></span>
+  <span class="bg-cyan-500"></span>
+  <span class="bg-sky-500"></span>
+  <span class="bg-blue-500"></span>
+  <span class="bg-indigo-500"></span>
+  <span class="bg-violet-500"></span>
+  <span class="bg-purple-500"></span>
+  <span class="bg-fuchsia-500"></span>
+  <span class="bg-pink-500"></span>
+  <span class="bg-rose-500"></span>
 
   <UApp>
     <div

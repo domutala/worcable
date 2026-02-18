@@ -3,6 +3,8 @@ import * as z from "zod";
 import type { FormSubmitEvent, AuthFormField } from "@nuxt/ui";
 import onFetchError from "~/tools/onFetchError";
 
+definePageMeta({ layout: false });
+
 const toast = useToast();
 const loading = ref(false);
 
@@ -11,17 +13,19 @@ const fields: AuthFormField[] = [
     name: "email",
     type: "email",
     size: "xl",
-    label: Use.i18n.t("login.items.email.label"),
+    // label: Use.i18n.t("login.items.email.label"),
     placeholder: Use.i18n.t("login.items.email.placeholder"),
     required: true,
+    ui: { base: "p-5 rounded-2xl ring-0 bg-surface" },
   },
   {
     name: "password",
     type: "password",
     size: "xl",
-    label: Use.i18n.t("login.items.password.label"),
+    // label: Use.i18n.t("login.items.password.label"),
     placeholder: Use.i18n.t("login.items.password.placeholder"),
     required: true,
+    ui: { base: "p-5 rounded-2xl ring-0 bg-surface" },
   },
   {
     name: "remember",
@@ -72,8 +76,10 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center gap-4 p-4 min-h-screen">
-    <UPageCard class="w-full max-w-lg rounded-3xl bg-surface p-7">
+  <div
+    class="flex flex-col items-center justify-center gap-4 p-4 min-h-screen bg-surface/50"
+  >
+    <UPageCard class="w-full max-w-120 rounded-2xl bg-default p-7 shadow-xl">
       <UAuthForm
         :schema="schema"
         :fields="fields"
@@ -84,21 +90,20 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
           class: 'cursor-pointer',
         }"
         :loading
-        :providers
         icon="i-lucide-user"
         @submit="onSubmit"
       >
         <template #password-hint>
-          <ULink to="#" class="text-primary font-medium" tabindex="-1"
-            >Forgot password?</ULink
-          >
+          <ULink to="#" class="text-primary font-medium" tabindex="-1">
+            Forgot password?
+          </ULink>
         </template>
 
         <template #header>
-          <div class="text-center flex flex-col gap-5">
+          <div class="text-center flex flex-col gap-5 mb-15">
             <ui-logo class="mx-auto" />
 
-            <div>
+            <div class="mt-15 px-10">
               <h1 class="text-2xl">
                 {{ $t("login.title") }}
               </h1>

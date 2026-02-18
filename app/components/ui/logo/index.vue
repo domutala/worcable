@@ -1,9 +1,15 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+defineProps<{ shortable?: boolean }>();
+</script>
 
 <template>
   <nuxt-link :to="$localePath({ name: 'index' })">
-    <ui-logo-app v-if="!Store.config.config.orgName" />
-    <div v-else class="flex items-center gap-1">
+    <ui-logo-app v-if="!Store.config.config.orgName" :shortable />
+    <div
+      v-else
+      class="flex items-center gap-1 group"
+      :class="{ shortable: shortable }"
+    >
       <div
         class="size-10 rounded-xl bg-surface flex items-center justify-center overflow-hidden"
       >
@@ -14,7 +20,9 @@
         />
         <u-icon v-else name="i-lucide-building-2" class="size-6 text-" />
       </div>
-      <div class="font-semibold text-2xl select-none">
+      <div
+        class="font-semibold text-2xl select-none group-[.shortable]:bg-yellow-500"
+      >
         {{ Store.config.config.orgName }}
       </div>
     </div>

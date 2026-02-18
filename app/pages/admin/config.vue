@@ -8,15 +8,34 @@ import _ from "lodash";
 const { schema } = getConfigSchema(Use.i18n.t);
 type Schema = z.output<typeof schema>;
 const state = reactive<Partial<Schema>>(_.cloneDeep(Store.config.config));
-const logoUpload = useTemplateRef("logoUpload");
+// const logoUpload = useTemplateRef("logoUpload");
 const submiting = ref(false);
+const colors = [
+  "red",
+  "orange",
+  "amber",
+  "yellow",
+  "lime",
+  "green",
+  "emerald",
+  "teal",
+  "cyan",
+  "sky",
+  "blue",
+  "indigo",
+  "violet",
+  "purple",
+  "fuchsia",
+  "pink",
+  "rose",
+];
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   submiting.value = true;
   const data = event.data;
 
   try {
-    data.logo = await logoUpload.value?.upload();
+    // data.logo = await logoUpload.value?.upload();
     await Store.config.update(data);
   } catch (error) {
     onFetchError(error);
@@ -45,7 +64,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         @submit="onSubmit"
       >
         <!-- -->
-        <UFormField name="logo">
+        <!-- <UFormField name="logo">
           <ui-upload
             ref="logoUpload"
             class="relative w-max"
@@ -80,7 +99,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
               ></u-button>
             </div>
           </ui-upload>
-        </UFormField>
+        </UFormField> -->
 
         <UFormField
           :help="$t(`config.items.orgName.hint`)"
@@ -90,14 +109,47 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           <u-input
             class="w-full"
             color="neutral"
-            size="xl"
-            :ui="{ base: 'rounded-2xl p-5 px-7 bg-surface' }"
             :placeholder="$t(`config.items.orgName.placeholder`)"
             v-model="state.orgName"
           ></u-input>
         </UFormField>
 
-        <UFormField
+        <u-form-field
+          name="color"
+          :label="$t('job.items.applyStatus.labels.color')"
+          class="w-full"
+        >
+          <u-select v-model="state.primaryColor" :items="colors" class="w-full">
+            <!-- --color-cyan-500 -->
+            <template #default="{ modelValue }">
+              <template v-if="modelValue">
+                <div
+                  class="w-7 h-3 rounded-2xl border border-default mr-3 my-auto"
+                  :class="[`bg-${modelValue}-500`]"
+                  :style="{ backgroundColor: `var(--color-${modelValue}-500)` }"
+                ></div>
+
+                {{ modelValue }}
+              </template>
+            </template>
+
+            <template #item-leading="{ item }">
+              <div
+                class="w-7 h-3 rounded-2xl border border-default mr-3 my-auto"
+                :style="{ backgroundColor: `var(--color-${item}-500)` }"
+              ></div>
+            </template>
+          </u-select>
+        </u-form-field>
+
+        <u-textarea
+          class="w-full rounded-md rounded-default"
+          color="neutral"
+          :placeholder="$t(`config.items.orgName.placeholder`)"
+          v-model="state.orgName"
+        ></u-textarea>
+
+        <!-- <UFormField
           :help="$t(`config.items.cities.hint`)"
           name="cities"
           class="w-full"
@@ -111,7 +163,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             v-model="state.cities"
           >
           </ui-area-completion>
-        </UFormField>
+        </UFormField> -->
 
         <u-button
           type="submit"

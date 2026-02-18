@@ -49,7 +49,8 @@ defineExpose({ form });
         <ui-editor
           v-model="state.companyDescription"
           :placeholder="$t('job.items.companyDescription.label')"
-          class="max-h-100 bg-default border border-default rounded-2xl overflow-auto"
+          :ui="{ editor: 'max-h-80' }"
+          class="bg-default"
         />
       </UFormField>
 

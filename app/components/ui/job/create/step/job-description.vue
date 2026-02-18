@@ -32,7 +32,7 @@ defineExpose({ form });
 </script>
 
 <template>
-  <div class="flex-1 flex flex-col items-center justify-center">
+  <div class="flex-1 flex flex-col items-center justify-center border-default">
     <u-form
       ref="form"
       :schema="schema"
@@ -43,31 +43,20 @@ defineExpose({ form });
       <UFormField
         name="jobDescription"
         :help="$t('job.items.jobDescription.hint')"
-        :ui="{ help: 'px-5', error: 'px-5' }"
       >
         <ui-editor
           v-model="state.jobDescription"
           :placeholder="$t('job.items.jobDescription.label')"
-          class="max-h-100 bg-default border border-default rounded-2xl overflow-auto"
+          :ui="{ editor: 'max-h-80' }"
+          class="bg-default"
         />
       </UFormField>
 
-      <UFormField
-        name="skills"
-        :help="$t('job.items.skills.hint')"
-        :ui="{ help: 'px-5', error: 'px-5' }"
-      >
+      <UFormField name="skills" :help="$t('job.items.skills.hint')">
         <UInputTags
           class="w-full"
           color="neutral"
-          size="xl"
-          :ui="{
-            base: 'rounded-2xl p-5 px-7',
-            item: 'px-3 py-2 rounded-2xl',
-            itemText: 'mr-2',
-            itemDelete: 'cursor-pointer',
-            root: 'py-4',
-          }"
+          :ui="{ base: 'bg-default' }"
           :placeholder="$t(`job.items.skills.label`)"
           v-model="state.skills"
         >

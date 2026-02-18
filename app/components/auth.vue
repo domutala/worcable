@@ -2,165 +2,148 @@
 import type { DropdownMenuItem } from "@nuxt/ui";
 import { getThemeItems } from "~/tools/theme";
 
-const itemsdd = computed(() => {
-  const items: DropdownMenuItem[][] = [
-    [
-      {
-        label: Use.i18n.t("job.actions.update"),
-        icon: "i-lucide-pencil-line",
-      },
-      {
-        label: "Settings",
-        icon: "i-lucide-cog",
-        kbds: [","],
-      },
-      {
-        label: "Keyboard shortcuts",
-        icon: "i-lucide-monitor",
-      },
-    ],
-    [
-      {
-        label: "Team",
-        icon: "i-lucide-users",
-      },
-      {
-        label: "Invite users",
-        icon: "i-lucide-user-plus",
-        children: [
-          [
-            {
-              label: "Email",
-              icon: "i-lucide-mail",
-            },
-            {
-              label: "Message",
-              icon: "i-lucide-message-square",
-            },
-          ],
-          [
-            {
-              label: "More",
-              icon: "i-lucide-circle-plus",
-            },
-          ],
-        ],
-      },
-      {
-        label: Use.i18n.t("config.actions.update"),
-        icon: "i-lucide-folder-pen",
-        to: Use.localePath({ name: "admin-config" }),
-      },
-    ],
-    [
-      {
-        label: "GitHub",
-        icon: "i-simple-icons-github",
-        to: "https://github.com/nuxt/ui",
-        target: "_blank",
-      },
-      {
-        label: "Support",
-        icon: "i-lucide-life-buoy",
-        to: "/docs/components/dropdown-menu",
-      },
-      {
-        label: "API",
-        icon: "i-lucide-cloud",
-        disabled: true,
-      },
-    ],
-    [
-      getThemeItems(),
-      {
-        label: "Logout",
-        icon: "i-lucide-log-out",
-        loading: Store.session.logouting,
-        onSelect(e) {
-          e.preventDefault();
-          Store.session.logout();
-        },
-      },
-    ],
-  ];
-
-  return items;
-});
-
-const teamsMenu: DropdownMenuItem[] = [
-  {
-    label: "Team",
-    icon: "i-lucide-users",
-  },
-  {
-    label: "Invite users",
-    icon: "i-lucide-user-plus",
-    children: [
-      [
-        {
-          label: "Email",
-          icon: "i-lucide-mail",
-        },
-        {
-          label: "Message",
-          icon: "i-lucide-message-square",
-        },
-      ],
-      [
-        {
-          label: "More",
-          icon: "i-lucide-circle-plus",
-        },
-      ],
-    ],
-  },
-  {
-    label: Use.i18n.t("config.actions.update"),
-    icon: "i-lucide-folder-pen",
-    to: Use.localePath({ name: "admin-config" }),
-  },
-];
-
-const itemStates = ref<Record<string, "show" | "hide">>({});
-const nShow = ref(0);
-
 const items = computed(() => {
-  const items: DropdownMenuItem[][] = [
-    [{ slot: "auth", type: "label", class: "cursor-default" }],
+  const items: DropdownMenuItem[] = [
+    // { slot: "auth", type: "label", class: "cursor-default" },
+    {
+      label: Use.i18n.t("job.actions.new"),
+      icon: "i-lucide-plus",
+      variant: "solid",
+      color: "primary",
+      size: "lg",
+      class: "cursor-pointer",
+      to: Use.localePath({ name: "admin-job-new" }),
+    },
+
+    {
+      label: "Team",
+      icon: "i-lucide-users",
+      variant: "soft",
+      color: "neutral",
+      size: "lg",
+      class: "cursor-pointer",
+      children: [
+        {
+          label: "Invite users",
+          icon: "i-lucide-user-plus",
+          children: [
+            [
+              {
+                label: "Email",
+                icon: "i-lucide-mail",
+              },
+              {
+                label: "Message",
+                icon: "i-lucide-message-square",
+              },
+            ],
+            [
+              {
+                label: "More",
+                icon: "i-lucide-circle-plus",
+              },
+            ],
+          ],
+        },
+        {
+          label: Use.i18n.t("config.actions.update"),
+          icon: "i-lucide-folder-pen",
+          to: Use.localePath({ name: "admin-config" }),
+        },
+      ],
+    },
+
+    {
+      label: "CVThèque",
+      icon: "i-lucide-newspaper",
+      variant: "soft",
+      color: "neutral",
+      size: "lg",
+      class: "cursor-pointer",
+    },
+
+    {
+      icon: "i-lucide-bell-dot",
+      variant: "soft",
+      color: "neutral",
+      size: "lg",
+      class: "cursor-pointer",
+      square: true,
+      notHide: true,
+    },
   ];
 
-  if (!nShow.value || itemStates.value.cvtheque === "hide") {
-    items.push([
-      {
-        label: "CVThèque",
-        icon: "i-lucide-newspaper",
-      },
-    ]);
+  if (!Store.config.config.colorMode) {
+    items.push({
+      ...getThemeItems(),
+      alwaysHide: true,
+      variant: "soft",
+      color: "neutral",
+      size: "lg",
+    });
   }
 
-  if (!nShow.value || itemStates.value.team === "hide") {
-    items.push(teamsMenu);
-  }
-
-  items.push([
-    getThemeItems(),
-    {
-      label: "Logout",
-      icon: "i-lucide-log-out",
-      loading: Store.session.logouting,
-      onSelect(e) {
-        e.preventDefault();
-        Store.session.logout();
-      },
+  items.push({
+    label: "Logout",
+    icon: "i-lucide-log-out",
+    loading: Store.session.logouting,
+    variant: "soft",
+    color: "neutral",
+    size: "lg",
+    alwaysHide: true,
+    class: "cursor-pointer",
+    onSelect(e) {
+      e.preventDefault();
+      Store.session.logout();
     },
-  ]);
+  });
 
   return items;
 });
 </script>
 
 <template>
-  <ui-menu-horizontal
+  <u-button
+    v-if="!Store.session.user"
+    :to="$localePath({ name: 'login' })"
+    size="lg"
+    color="neutral"
+    variant="soft"
+  >
+    {{ $t("login.labels.title") }}
+  </u-button>
+
+  <ui-menu-horizontal-items
+    v-else-if="$route.path.startsWith('/admin')"
+    :items
+    :gap="5"
+    :ui="{ base: 'justify-end' }"
+  >
+    <template #activator>
+      <span class="cursor-pointer">
+        <UAvatar
+          :src="Utils.getFileUrl(Store.session.user.avatar)"
+          :alt="`${Store.session.user.firstName} ${Store.session.user.lastName}`"
+          size="xl"
+          class="rounded-xl text-sm bg-surface"
+        />
+      </span>
+    </template>
+  </ui-menu-horizontal-items>
+
+  <u-button
+    v-else
+    icon="i-lucide-layout-dashboard"
+    size="lg"
+    color="neutral"
+    variant="soft"
+    :to="$localePath({ name: 'admin' })"
+    :ui="{ base: '' }"
+  >
+    Dashboard
+  </u-button>
+
+  <!-- <ui-menu-horizontal
     v-if="Store.session.user"
     v-model:states="itemStates"
     v-model:n-show="nShow"
@@ -254,5 +237,5 @@ const items = computed(() => {
         </span>
       </u-dropdown-menu>
     </template>
-  </ui-menu-horizontal>
+  </ui-menu-horizontal> -->
 </template>

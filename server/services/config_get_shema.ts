@@ -41,7 +41,59 @@ export function getConfigSchema($t: (string: string) => string) {
     .array(cityId, $t("config.items.cities.errors.invalid"))
     .optional();
 
-  const schema = z.object({ logo, orgName, currency, cities });
+  const colorMode = z
+    .enum(["dark", "light"], $t("config.items.colorMode.errors.invalid"))
+    .optional()
+    .nullable();
 
-  return { schema, logo, orgName, currency, cities };
+  const primaryColor = z
+    .enum(
+      [
+        "red",
+        "orange",
+        "amber",
+        "yellow",
+        "lime",
+        "green",
+        "emerald",
+        "teal",
+        "cyan",
+        "sky",
+        "blue",
+        "indigo",
+        "violet",
+        "purple",
+        "fuchsia",
+        "pink",
+        "rose",
+      ],
+      $t("config.items.primary.errors.invalid"),
+    )
+    .optional()
+    .nullable();
+
+  const language = z
+    .enum(["fr"], $t("config.items.primary.errors.invalid"))
+    .default("fr");
+
+  const schema = z.object({
+    logo,
+    orgName,
+    currency,
+    cities,
+    colorMode,
+    primaryColor,
+    language,
+  });
+
+  return {
+    schema,
+    logo,
+    orgName,
+    currency,
+    cities,
+    colorMode,
+    primaryColor,
+    language,
+  };
 }

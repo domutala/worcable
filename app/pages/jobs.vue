@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { Job } from "~~/server/database/schema";
-import type { IDataResult } from "~~/server/interfaces";
 import {
   useBreakpoints,
   breakpointsTailwind,
@@ -8,12 +7,10 @@ import {
 } from "@vueuse/core";
 import _ from "lodash";
 import { useRouteQuery } from "@vueuse/router";
-import UiHeader from "~/components/header.vue";
-import type { FormSubmitEvent } from "@nuxt/ui";
-import * as z from "zod";
 
-definePageMeta({ layout: false });
+definePageMeta({ layout: "admin" });
 
+const content = useTemplateRef("content");
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const hideJobContent = breakpoints.smallerOrEqual("lg");
 const currentJobQuery = useRouteQuery("job");
@@ -41,6 +38,8 @@ function gotoJob(e: Event, job: Job) {
 function setCurrentJob(job: Job) {
   currentJob.value = _.cloneDeep(job);
   currentJobQuery.value = currentJob.value.id;
+
+  content.value?.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 }
 
 function openJobNewTab(e: Event, job: Job) {
@@ -57,11 +56,9 @@ function openJobNewTab(e: Event, job: Job) {
     v-slot="{ jobs, refresh, status, results, page, paginate }"
     v-model:jobs="jobs"
   >
-    <div class="h-screen flex flex-col">
-      <UiHeader class="border-b border-default" />
-
+    <div class="bg-default flex-1 flex flex-col overflow-hidden">
       <div
-        class="flex-1 overflow-hidden flex flex-col mx-auto max-w-380 w-full px-2 sm:px-6"
+        class="flex-1 flex flex-col mx-auto max-w-380 w-full px-2 sm:px-6 h-full rounded-2xl"
       >
         <div class="pt-5">
           <ui-job-search-form />
@@ -190,10 +187,10 @@ function openJobNewTab(e: Event, job: Job) {
             <div
               class="w-full border border-default my-5 flex-1 rounded-2xl overflow-hidden"
             >
-              <div class="h-full overflow-auto content">
+              <div ref="content" class="h-full overflow-auto content">
                 <template v-if="currentJob">
                   <div
-                    class="py-4 px-5 flex gap-5 bg-inherit/10 backdrop-blur-lg border-b border-default sticky top-0 z-50"
+                    class="py-4 px-5 flex gap-5 bg-default border-b border-default sticky top-0 z-50"
                   >
                     <div class="leading-none flex-1 min-w-0 w-0">
                       <h1 class="text-lg font-bold truncate">
@@ -285,19 +282,3 @@ function openJobNewTab(e: Event, job: Job) {
     </div>
   </ui-job-search>
 </template>
-
-<style lang="scss" scoped>
-.content {
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: rgb(73, 73, 73);
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-}
-</style>

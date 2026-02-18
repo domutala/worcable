@@ -20,7 +20,8 @@
     "to_save": "Enregistrer",
     "to_remove": "Supprimer",
     "to_update": "Modifier",
-    "on": "sur"
+    "on": "sur",
+    "playground": "Playgfound"
   },
 
   "meeting": {
@@ -30,9 +31,10 @@
   "pages": {
     "index": {
       "hero": {
-        "title": "plateforme open source moderne pour simplifier et structurer le recrutement",
+        "title2": "Open source. Flexible. Évolutive.",
+        "title": "Plateforme **open source** moderne pour simplifier et structurer le recrutement.",
         "subtitle": "Focus delivery, performance et qualité en production",
-        "cta": "Accéder aux offres",
+        "cta": "Documentation",
         "cta_2": "Open source"
       },
 
@@ -118,6 +120,22 @@
 
       "submit": "Envoyer ma candidature",
       "success": "Merci pour votre candidature. Nous avons bien reçu vos informations et notre équipe va les analyser avec attention. Si votre profil correspond à nos opportunités actuelles ou futures, nous vous contacterons pour la suite du processus."
+    }
+  },
+
+  "foot": {
+    "ressources": {
+      "title": "Ressources"
+    },
+    "legal": {
+      "title": "Legal",
+      "terms_of_service": "Terms of Service",
+      "sscurity": "Sécurité",
+      "licence": "Licence"
+    },
+    "about": {
+      "title": "A propos",
+      "why_open_source": "Open Source par conviction"
     }
   },
 
@@ -441,6 +459,14 @@
           "without_name": "Sans nom",
           "success_remove": "Status supprimer avec succès",
           "text_remove": "Vous allez supprimer ce statut de cette offre d'emploi. Les candidature avec ce statut seront non classé."
+        }
+      },
+
+      "status": {
+        "items": {
+          "open": { "label": "Ouvert" },
+          "close": { "label": "Fermé" },
+          "pause": { "label": "En pause" }
         }
       }
     },

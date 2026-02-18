@@ -8,7 +8,7 @@ const jobs = ref<Job[]>([]);
     v-slot="{ jobs, refresh, status, results, page, paginate }"
     v-model:jobs="jobs"
   >
-    <div class="h-[99%] flex flex-col overflow-hidden">
+    <div class="h-full flex-1 flex flex-col overflow-hidden">
       <UiBreadcrumb
         :breads="['$home', '$admin']"
         class="flex items-center gap-5"

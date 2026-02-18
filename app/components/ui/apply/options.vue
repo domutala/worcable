@@ -10,7 +10,7 @@ const nShow = ref(0);
 const uApply = useApply(job, apply);
 const isDetailsOpen = ref(false);
 
-const items = computed(() => {
+const items0 = computed(() => {
   const items: DropdownMenuItem[][] = [];
 
   if (!nShow.value || itemStates.value.details === "hide") {
@@ -34,10 +34,67 @@ const items = computed(() => {
 
   return items;
 });
+
+const items = computed(() => {
+  const items: DropdownMenuItem[] = [
+    {
+      label: Use.i18n.t("apply.labels.show_details"),
+      variant: "soft",
+      color: "neutral",
+      class: "cursor-pointer",
+      size: "lg",
+      onSelect(e) {
+        isDetailsOpen.value = true;
+      },
+    },
+    {
+      ...uApply.statusDropdown.value,
+      size: "lg",
+      variant: "soft",
+      color: "neutral",
+      class: "cursor-pointer",
+    },
+    { slot: "item-dropdown-note", type: "label", itemIndex: "note" },
+  ];
+
+  return items;
+});
 </script>
 
 <template>
-  <ui-menu-horizontal
+  <ui-menu-horizontal-items :items :gap="5" :ui="{ base: 'justify-end' }">
+    <template #item-note>
+      <u-button
+        color="neutral"
+        variant="soft"
+        size="lg"
+        class="rounded-lg relative px-4 text-highlighted cursor-pointer"
+      >
+        <ui-apply-note v-model:apply="apply" v-model:job="job" />
+      </u-button>
+    </template>
+
+    <template #item-dropdown-note>
+      <u-button
+        color="neutral"
+        variant="ghost"
+        size="lg"
+        class="rounded-lg relative px-4 text-highlighted cursor-pointer"
+      >
+        <ui-apply-note v-model:apply="apply" v-model:job="job" />
+      </u-button>
+    </template>
+  </ui-menu-horizontal-items>
+
+  <!-- <u-dropdown-menu
+    :ui="{ item: 'cursor-pointer' }"
+    :content="{ align: 'end' }"
+    :items
+  >
+    <div>sdfsfsf</div>
+    <template #item> sdfsdf </template>
+  </u-dropdown-menu> -->
+  <!-- <ui-menu-horizontal
     v-model:states="itemStates"
     v-model:n-show="nShow"
     :ui="{ base: 'justify-end' }"
@@ -107,7 +164,7 @@ const items = computed(() => {
         ></u-button>
       </u-dropdown-menu>
     </template>
-  </ui-menu-horizontal>
+  </ui-menu-horizontal> -->
 
   <u-modal
     v-model:open="isDetailsOpen"

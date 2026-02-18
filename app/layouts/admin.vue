@@ -4,8 +4,6 @@ import UiLayout from "~/components/layout.vue";
 
 <template>
   <ui-layout>
-    <u-main>
-      <slot />
-    </u-main>
+    <slot />
   </ui-layout>
 </template>

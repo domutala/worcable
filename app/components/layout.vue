@@ -8,17 +8,15 @@ onMounted(() => {
 
 <template>
   <UApp>
-    <u-main class="h-screen bg-default">
-      <div class="h-full flex flex-col mx-auto">
-        <ui-header v-if="!$slots.header" />
-        <slot name="header" />
+    <div class="h-screen flex flex-col">
+      <ui-header v-if="!$slots.header" />
+      <slot name="header" />
 
-        <div
-          class="bg-surface flex-1 mx-2 my-2 rounded-2xl overflow-hidden border border-default flex flex-col"
-        >
-          <slot />
-        </div>
+      <div
+        class="bg-surface flex-1 m-2 rounded-2xl overflow-auto border border-default flex flex-col"
+      >
+        <slot />
       </div>
-    </u-main>
+    </div>
   </UApp>
 </template>

@@ -1,13 +1,15 @@
 <script lang="ts" setup>
 import type { Job } from "~~/server/database/schema";
 
+definePageMeta({ layout: false });
+
 const { job } = defineProps<{ job: Job }>();
 const apply = useTemplateRef("apply");
 </script>
 
 <template>
   <div
-    class="py-4 px-5 flex gap-5 bg-inherit/10 backdrop-blur-lg border-b border-default fixed w-full top-0 z-50"
+    class="py-4 px-5 flex gap-5 bg-inherit/10 backdrop-blur-lg fixed w-full top-0 z-50"
   >
     <div class="leading-none flex-1 min-w-0 w-0">
       <h1 class="text-lg font-bold truncate">
@@ -30,18 +32,18 @@ const apply = useTemplateRef("apply");
   </div>
 
   <div
-    class="max-h-190 h-screen flex items-center justify-center relative overflow-hidden text-black z-51"
+    class="max-h-190 h-screen flex items-center justify-center relative overflow-hidden z-51 backdrop-blur-3xl bg-linear-to-r from-default to-primary/20"
   >
-    <img
+    <!-- <img
       src="https://i.pinimg.com/1200x/5f/eb/b5/5febb5e8286f466ff819dd432147f39a.jpg"
       class="absolute inset-0 z-0 object-cover object-center w-full opacity-99"
-    />
+    /> -->
 
-    <div class="absolute inset-0 z-1 bg-inherit/10 backdrop-blur-lg"></div>
+    <div class="absolute inset-0 z-1 bg-default/50 backdrop-blur-3xl"></div>
 
     <u-container class="relative z-2">
       <h1
-        class="text-3xl sm:tex:4xl lg:text-5xl xl:text-6xl font-semibold text-center"
+        class="text-3xl sm:tex:4xl lg:text-5xl xl:text-6xl font-semibold text-center text-highlighted"
       >
         {{ job.title }}
       </h1>
@@ -53,12 +55,7 @@ const apply = useTemplateRef("apply");
 
         <div class="">
           <div class="flex flex-wrap justify-center items-center gap-2">
-            <u-badge
-              color="neutral"
-              variant="subtle"
-              size="xl"
-              class="bg-surface border-none"
-            >
+            <u-badge color="neutral" variant="solid" size="xl">
               <u-icon
                 :name="
                   job.jobNature === 'ONSITE'
@@ -72,23 +69,13 @@ const apply = useTemplateRef("apply");
               {{ $t(`job.items.jobNature.types.${job.jobNature}`) }}
             </u-badge>
 
-            <u-badge
-              color="neutral"
-              variant="subtle"
-              size="xl"
-              class="bg-surface border-none"
-            >
+            <u-badge color="neutral" variant="solid" size="xl">
               <u-icon name="i-lucide-notebook-text" sizz="8" />
               {{ $t(`job.items.contractType.types.${job.contractType}`) }}
             </u-badge>
 
             <template v-if="job.salary">
-              <u-badge
-                color="neutral"
-                variant="subtle"
-                size="xl"
-                class="bg-surface border-none"
-              >
+              <u-badge color="neutral" variant="solid" size="xl">
                 <u-icon name="i-lucide-banknote" sizz="8" />
                 <ui-salary-selector v-model="job.salary" display />
               </u-badge>
@@ -103,9 +90,8 @@ const apply = useTemplateRef("apply");
               v-for="(skill, s) in job.skills"
               :key="s"
               color="neutral"
-              variant="subtle"
+              variant="solid"
               size="xl"
-              class="bg-surface border-none"
             >
               {{ skill }}
             </u-badge>

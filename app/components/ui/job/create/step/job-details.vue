@@ -59,7 +59,6 @@ defineExpose({ form });
         :name="item"
         :label="$t(`job.items.${item}.label`)"
         :help="$t(`job.items.${item}.hint`)"
-        :ui="{ help: 'px-5', error: 'px-5' }"
       >
         <ui-salary-selector
           v-if="item === 'salary'"
@@ -72,7 +71,7 @@ defineExpose({ form });
           class="w-full"
           color="neutral"
           size="xl"
-          :ui="{ base: 'rounded-2xl p-5 px-7' }"
+          :ui="{ base: 'bg-default' }"
           :placeholder="$t(`job.items.${item}.label`)"
           v-model="state[item]"
         ></u-input>
@@ -92,7 +91,7 @@ defineExpose({ form });
               label: $t(`job.items.${item}.types.${key}`),
             }))
           "
-          :ui="{ base: 'rounded-2xl p-5 px-7' }"
+          :ui="{ base: 'bg-default' }"
           :placeholder="$t(`job.items.${item}.label`)"
         ></u-select>
       </UFormField>

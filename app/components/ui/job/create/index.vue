@@ -1,10 +1,15 @@
 <script setup lang="ts">
+import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import type { StepperItem } from "@nuxt/ui";
 import type { Job } from "~~/server/database/schema";
 import onFetchError from "~/tools/onFetchError";
 import _ from "lodash";
 
 const { job } = defineProps<{ job?: Job }>();
+
+const breakpoints = useBreakpoints(breakpointsTailwind);
+const slimStepper = breakpoints.smallerOrEqual("2xl");
+const onTop = breakpoints.smallerOrEqual("lg");
 
 const i18n = useI18n();
 const refs = {
@@ -32,13 +37,17 @@ const stepIcons = {
 };
 const data = ref<Record<string, any>>(_.cloneDeep(job || {}));
 
-const items = steps.map((step) => {
-  return {
-    slot: step,
-    title: i18n.t(`job.create.steps.${step}.label`),
-    icon: stepIcons[step as "title"],
-  };
-}) satisfies StepperItem[];
+const items = computed(() => {
+  const items = steps.map((step) => {
+    return {
+      slot: step,
+      title: i18n.t(`job.create.steps.${step}.label`),
+      icon: stepIcons[step as "title"],
+    };
+  }) satisfies StepperItem[];
+
+  return items;
+});
 
 const isEndStep = computed(() => iStep.value === steps.length - 1);
 
@@ -128,18 +137,50 @@ async function onSubmit() {
       />
     </template>
 
-    <div class="fixed top-1/2 left-0 -translate-y-1/2 z-10">
+    <div
+      class="fixed top-1/2 left-0 -translate-y-1/2 z-10"
+      :class="{ 'top-18 left-1/2 translate-y-0 -translate-x-1/2': onTop }"
+    >
       <u-container>
-        <UStepper
+        <!-- <UStepper
           :items="items"
           :ui="{
             wrapper: 'mt-0 flex flex-col items-center justify-center',
             item: 'group/step',
-            title: `whitespace-nowrap opacity-50 transition-all group-aria-current:opacity-100 group-aria-current:font-normal group-aria-current:text-lg`,
+            title: [
+              `whitespace-nowrap opacity-50 transition-all group-aria-current:opacity-100 group-aria-current:font-normal group-aria-current:text-lg`,
+              slimStepper ? 'group-hover:flex hidden' : '',
+            ],
           }"
           v-model="iStep"
           color="neutral"
           orientation="vertical"
+          size="md"
+          disabled
+        >
+        
+        </UStepper> -->
+
+        <UStepper
+          :items="items"
+          :ui="{
+            wrapper: [
+              'mt-0 flex flex-col items-center justify-center relative',
+              onTop
+                ? 'absolute mt-1.5 left-1/2 -translate-x-1/2 group-aria-current:flex hidden'
+                : slimStepper
+                  ? 'group-hover:flex hidden'
+                  : '',
+            ],
+            item: ['group/step rounded-default', onTop ? 'mx-2' : ''],
+            title: [
+              `whitespace-nowrap opacity-50 transition-all group-aria-current:opacity-100 group-aria-current:font-normal group-aria-current:text-lg`,
+              slimStepper ? 'text-sm!' : '',
+            ],
+          }"
+          v-model="iStep"
+          color="neutral"
+          :orientation="onTop ? 'horizontal' : 'vertical'"
           size="md"
           disabled
         >
@@ -159,18 +200,13 @@ async function onSubmit() {
             size="xl"
             color="neutral"
             variant="soft"
-            class="rounded-2xl p-3 px-4 cursor-pointer border border-default"
+            class="p-3 px-4 cursor-pointer border border-default"
             icon="i-lucide-arrow-left"
             @click="gotoPrev"
           >
             {{ $t("job.create.prev") }}
           </u-button>
-          <u-button
-            :loading="submitting"
-            size="xl"
-            class="rounded-2xl p-3 px-4 cursor-pointer"
-            @click="gotoNext"
-          >
+          <u-button :loading="submitting" class="p-3 px-4" @click="gotoNext">
             {{ $t(isEndStep ? "job.create.save" : "job.create.next") }}
           </u-button>
         </div>

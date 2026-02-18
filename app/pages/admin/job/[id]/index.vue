@@ -36,7 +36,7 @@ const applys = ref(
 <template>
   <ui-layout>
     <template #header>
-      <ui-job-header :applys :job />
+      <ui-job-header v-model:job="job" />
     </template>
 
     <div class="overflow-auto h-full flex flex-col">

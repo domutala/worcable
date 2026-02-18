@@ -9,7 +9,7 @@ import UiAuth from "./auth.vue";
   >
     <ui-logo />
 
-    <div class="w-15"></div>
+    <div class="w-15 mr-auto"></div>
 
     <ui-auth />
   </header>

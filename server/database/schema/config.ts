@@ -2,7 +2,8 @@ import { pgTable, uuid, timestamp, jsonb, varchar } from "drizzle-orm/pg-core";
 import { getConfigSchema } from "../../services/config_get_shema";
 import * as z from "zod";
 
-const { logo, cities, currency } = getConfigSchema((v) => v);
+const { logo, cities, currency, colorMode, primaryColor, language } =
+  getConfigSchema((v) => v);
 
 export const config = pgTable("config", {
   id: uuid().primaryKey().defaultRandom(),
@@ -17,6 +18,14 @@ export const config = pgTable("config", {
     .$type<z.output<typeof currency>>(),
 
   cities: jsonb().default([]).notNull().$type<z.output<typeof cities>>(),
+
+  colorMode: varchar().$type<z.output<typeof colorMode>>(),
+  primaryColor: varchar().$type<z.output<typeof primaryColor>>(),
+
+  language: varchar()
+    .$type<z.output<typeof language>>()
+    .default("fr")
+    .notNull(),
 
   createdAt: timestamp("created_at", { mode: "string", withTimezone: false })
     .defaultNow()

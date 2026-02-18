@@ -56,7 +56,7 @@ function setSortable() {
   <div class="flex gap-2 flex-1 overflow-y-hidden overflow-x-auto pb-3">
     <ui-apply-kanban-grid :status="null" v-model:job="job" />
 
-    <div ref="container" class="flex gap-3">
+    <div ref="container" class="flex gap-2">
       <template v-for="status in job.applyStatus" :key="status.key">
         <ui-apply-kanban-grid v-model:status="status.key" v-model:job="job" />
       </template>
