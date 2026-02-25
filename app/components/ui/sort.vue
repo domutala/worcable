@@ -6,11 +6,21 @@ const { orderBy, onSort, onlyIcon } = defineProps<{
   onSort?: () => void;
   onlyIcon?: boolean;
 }>();
+
 const i18n = useI18n();
 const UDropdownMenu = resolveComponent("UDropdownMenu");
 
 const sortBy = defineModel<string>("sortBy", { default: "updatedAt" });
 const sortOrder = defineModel<string>("sortOrder", { default: "desc" });
+
+const {
+  items,
+  sortBy: sb,
+  sortOrder: so,
+  icon,
+  label,
+  itemsDropdown,
+} = useSort({ orderBy, onSort });
 
 const sortItems = computed(() => {
   const items: DropdownMenuItem[] = [
@@ -56,46 +66,35 @@ const sortItems = computed(() => {
   return items;
 });
 
-watch(() => sortBy.value, _onSort);
-watch(() => sortOrder.value, _onSort);
+watch(() => sb.value, _onSort);
+watch(() => so.value, _onSort);
 function _onSort() {
-  onSort?.();
+  sortBy.value = sb.value;
+  sortOrder.value = so.value;
 }
 </script>
 
 <template>
-  <UDropdownMenu :items="sortItems" :content="{ align: 'end' }">
+  <UDropdownMenu :items :content="{ align: 'end' }">
     <UButton
       v-if="!$slots.default"
-      :trailing-icon="
-        sortOrder === 'desc'
-          ? 'i-lucide-arrow-down-wide-narrow'
-          : 'i-lucide-arrow-up-narrow-wide'
-      "
-      :label="onlyIcon ? undefined : orderBy[sortBy]?.label"
+      :trailing-icon="icon"
+      :label="onlyIcon ? undefined : label"
       color="neutral"
       variant="subtle"
       class="cursor-pointer"
       aria-label="Actions dropdown"
     />
 
-    <slot
-      :icon="
-        sortOrder === 'desc'
-          ? 'i-lucide-arrow-down-wide-narrow'
-          : 'i-lucide-arrow-up-narrow-wide'
-      "
-      :label="orderBy[sortBy]?.label"
-      :onlyIcon
-    />
+    <slot :icon="icon" :label :onlyIcon />
 
-    <template #checked-leading="{ item }">
+    <!-- <template #checked-leading="{ item }">
       <div class="w-2 h-full flex items-center my-auto">
         <div
           v-if="item.checked"
           class="size-1 bg-neutral-500 rounded-full"
         ></div>
       </div>
-    </template>
+    </template> -->
   </UDropdownMenu>
 </template>

@@ -191,7 +191,7 @@ function setSortable() {
     v-model:status="status"
   >
     <div
-      class="overflow-hidden rounded-2x relative group"
+      class="overflow-hidden relative group rounded mb-3"
       ref="container"
       :data-grid="status"
       :data-group="status"
@@ -214,7 +214,7 @@ function setSortable() {
 
       <div
         :class="{ hidden: !isFlip }"
-        class="flex flex-col justify-center items-center gap-2 bg-default rounded-2xl py-3 relative group-[.dragging]:border group-[.dragging]:border-accented"
+        class="flex flex-col justify-center items-center border border-default gap-2 bg-default py-3 relative group-[.dragging]:border group-[.dragging]:border-accented rounded"
       >
         <div class="mx-auto h-8">
           <u-button
@@ -223,16 +223,17 @@ function setSortable() {
             icon="i-lucide-grip-horizontal"
             variant="ghost"
             color="neutral"
+            size="md"
             square
           ></u-button>
         </div>
 
         <div
-          class="rounded-2xl relative px-4 py-5"
+          class="rounded relative px-4 py-5"
           :style="{ border: `1px solid ${borderColor}` }"
         >
           <div
-            class="absolute inset-0 rounded-2xl"
+            class="absolute inset-0 rounded"
             :style="{ backgroundColor: bgColor }"
           ></div>
 
@@ -253,6 +254,7 @@ function setSortable() {
             icon="i-lucide-move-diagonal"
             variant="ghost"
             color="neutral"
+            size="md"
             square
             @click="isFlip = false"
           ></u-button>
@@ -264,7 +266,7 @@ function setSortable() {
       </div>
 
       <div
-        class="kanban group group-[.dragging]:border group-[.dragging]:border-accented backdrop-blur-3xl max-h-full overflow-y-auto overflow-hidden flex flex-col bg-default rounded-2xl"
+        class="scroller border border-default bg-default rounded group group-[.dragging]:border group-[.dragging]:border-accented backdrop-blur-3xl max-h-full overflow-y-auto overflow-hidden flex flex-col"
         :class="{ hidden: isFlip }"
       >
         <div
@@ -272,7 +274,7 @@ function setSortable() {
           :style="{ borderTopColor: color }"
         >
           <div class="flex items-center gap-2 relative">
-            <div>
+            <div v-if="status">
               <u-dropdown-menu
                 :content="{ align: 'start' }"
                 :items="[
@@ -295,11 +297,11 @@ function setSortable() {
                 ]"
               >
                 <u-button
-                  v-if="status"
                   class="grid-handler cursor-pointer"
                   icon="i-lucide-ellipsis-vertical"
                   variant="ghost"
                   color="neutral"
+                  size="md"
                   square
                 >
                 </u-button>
@@ -307,9 +309,8 @@ function setSortable() {
             </div>
 
             <div
-              class="px-3 py-1.5 rounded-2xl flex items-center gap-2 leading-none min-w-0"
+              class="px-3 py-2 rounded-min flex items-center gap-2 leading-none min-w-0"
               :style="{
-                border: `1px solid ${borderColor}`,
                 backgroundColor: bgColor,
               }"
             >
@@ -321,39 +322,13 @@ function setSortable() {
               </div>
             </div>
 
-            <div
-              class="rounded-2xl relative px-4 py-2 hidden"
-              :style="{ border: `1px solid ${borderColor}` }"
-            >
-              <div
-                class="absolute inset-0 opacity- rounded-2xl"
-                :style="{ backgroundColor: bgColor }"
-              ></div>
-
-              <div class="relative flex-1 min-w-0 w-0 leading-none">
-                <!-- flex items-center gap-2 -->
-                <!-- <div>
-                  <u-icon
-                    v-if="icon"
-                    :name="icon"
-                    class="size-5"
-                    :style="{ color }"
-                  />
-                </div> -->
-
-                <div class="truncate">
-                  {{ applys.length }}
-                  {{ label }} fsdfsd sdfsdfsdf sdfsfsfsdfsdfsdf
-                </div>
-              </div>
-            </div>
-
             <div class="ml-auto flex items-center gap-1">
               <u-button
                 icon="i-lucide-user-round-search"
                 color="neutral"
                 variant="ghost"
                 class="cursor-pointer"
+                size="md"
                 @click="openSearch = true"
                 square
               />
@@ -363,6 +338,7 @@ function setSortable() {
                 icon="i-lucide-minimize-2"
                 variant="ghost"
                 color="neutral"
+                size="md"
                 square
                 @click="isFlip = true"
               ></u-button>
@@ -373,6 +349,7 @@ function setSortable() {
                 icon="i-lucide-grip-vertical"
                 variant="ghost"
                 color="neutral"
+                size="md"
                 square
               ></u-button>
             </div>
@@ -381,20 +358,21 @@ function setSortable() {
           <u-input
             v-if="openSearch"
             v-model="searchTerm"
-            icon="i-lucide-user-round-search"
-            class="h-17 w-full outline-none absolute inset-0"
+            class="h-17 w-full outline-none absolute inset-0 z-50"
             size="xl"
             autofocus
             :placeholder="$t('apply.actions.search_candidate')"
-            :ui="{ base: 'h-full rounded-0 ring-0! border-b border-default' }"
+            :ui="{
+              base: 'h-full rounded-0 ring-0! border-b border-default bg-default',
+            }"
           >
             <template #trailing>
               <u-button
                 icon="i-lucide-x"
                 color="neutral"
-                variant="subtle"
+                variant="soft"
                 size="xs"
-                class="cursor-pointer rounded-4xl"
+                class="cursor-pointer rounded-default"
                 @click="
                   openSearch = false;
                   searchTerm = '';
@@ -407,6 +385,7 @@ function setSortable() {
           <u-progress
             v-if="fetching"
             class="absolute bottom-0 left-0 rounded-0"
+            size="xs"
             :ui="{
               base: 'rounded-0!',
               indicator: 'rounded-0!',
@@ -415,23 +394,23 @@ function setSortable() {
         </div>
 
         <ul
-          class="flex flex-col gap-2 flex-1 py-3 relative"
+          class="flex flex-col gap-2 flex-1 pt-3 pb-2 relative"
           :data-status="status"
         >
           <li v-if="initFetching" class="mx-2 relative">
             <ui-skeleton
-              class="w-full rounded-xl bg-surface/50"
+              class="w-full rounded-xl bg-surface/25"
               :style="{ height: `${Math.random() * (550 - 150) + 150}px` }"
             />
           </li>
 
           <li v-else-if="!applys.length" class="mx-2 relative">
             <div
-              class="content sortable-item rounded-xl overflow-hidden border-default relative bg-surface text-center py-15"
+              class="content sortable-item rounded overflow-hidden border-default relative bg-surface/35 text-center py-15 ring ring-default/50"
             >
               <u-icon
                 name="i-lucide-gallery-vertical-end"
-                class="size-24 opacity-25 rotate-z-180"
+                class="size-24 opacity-25 rotate-z-180 text-primary"
               />
             </div>
           </li>
@@ -443,7 +422,7 @@ function setSortable() {
             class="mx-2 apply relative group"
           >
             <div
-              class="absolute inset-0 rounded-xl border-primary hidden group-[.ghost]:block bg-surface"
+              class="absolute inset-0 rounded-min border-primary hidden group-[.ghost]:block bg-surface/35"
             ></div>
 
             <ui-apply-one
@@ -470,10 +449,9 @@ function setSortable() {
             class="flex justify-center"
           >
             <u-button
-              class="cursor-pointer rounded-4xl"
+              class="cursor-pointer rounded-max"
               color="neutral"
               variant="ghost"
-              icon="i-lucide-list-filter-plus"
               :loading="fetching"
               @click="page++"
             >

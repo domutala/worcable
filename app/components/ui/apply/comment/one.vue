@@ -40,12 +40,12 @@ const avatar = computed(() => {
 </script>
 
 <template>
-  <div class="bg-default rounded-2xl">
+  <div class="bg-default rounded-default ring ring-default">
     <div class="flex items-center gap-3 px-5 py-3 border-b border-default">
       <UAvatar
         :src="avatar"
         :alt="name"
-        class="bg-surface rounded-2xl text-md"
+        class="bg-surface rounded-default text-md"
         size="xl"
       >
         <u-icon name="i-lucide-user-round" class="opacity-50" />

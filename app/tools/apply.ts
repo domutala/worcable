@@ -16,7 +16,8 @@ export const applyStatusIcons: Record<string, string> = {
   // INIT: "i-lucide-square-chart-gantt",
   REJECTED: "i-lucide-badge-x",
   TO_CONTACT: "i-lucide-phone-outgoing",
-  INTERVIEW: "i-lucide-calendar-range",
+  INTERVIEW2: "i-lucide-calendar-range",
+  INTERVIEW: "i-lucide-video",
   HIRED: "i-lucide-check-check",
   null: "i-lucide-square-dashed-mouse-pointer",
 };

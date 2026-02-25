@@ -11,7 +11,7 @@ const { statusChanging } = defineProps<{ statusChanging?: boolean }>();
 <template>
   <div
     :class="[
-      'content sortable-item rounded-xl overflow-hidden border-default relative bg-surface',
+      'content sortable-item rounded-min overflow-hidden relative bg-surface/25 ring ring-default/50',
       'group-[.chosen]:bg-default group-[.chosen]:border group-[.chosen]:border-default group-[.chosen]:shadow-none group-[.ghost]:opacity-0',
     ]"
   >
@@ -24,7 +24,7 @@ const { statusChanging } = defineProps<{ statusChanging?: boolean }>();
       <UAvatar
         :src="Utils.getFileUrl(apply.data.avatar)"
         :alt="[apply.data.firstName, apply.data.lastName].join(' ')"
-        class="border border-accented rounded-2xl text-md"
+        class="border-accented rounded text-md"
         size="3xl"
       />
 
@@ -57,6 +57,7 @@ const { statusChanging } = defineProps<{ statusChanging?: boolean }>();
         icon="i-lucide-file-text"
         target="_blank"
         class="pointer-events-auto"
+        size="md"
         :href="Utils.getFileUrl(apply.data.cv)"
       >
       </UButton>
@@ -67,6 +68,7 @@ const { statusChanging } = defineProps<{ statusChanging?: boolean }>();
         icon="i-lucide-at-sign"
         target="_blank"
         class="pointer-events-auto"
+        size="md"
         :href="`mailto:${apply.data.email}`"
       >
       </UButton>
@@ -77,6 +79,7 @@ const { statusChanging } = defineProps<{ statusChanging?: boolean }>();
         icon="i-lucide-phone"
         class="pointer-events-auto"
         target="_blank"
+        size="md"
         :href="`tel:${apply.data.phone}`"
       >
       </UButton>

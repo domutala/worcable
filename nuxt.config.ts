@@ -26,7 +26,6 @@ export default defineNuxtConfig({
     "nuxt-swiper",
     "dayjs-nuxt",
     "@pinia/nuxt",
-    // "pinia-plugin-unstorage/nuxt",
   ],
 
   devtools: {

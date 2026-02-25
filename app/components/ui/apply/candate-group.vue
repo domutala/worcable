@@ -29,7 +29,12 @@ const candidates = computed(() => {
     :ui="{ base: 'bg-accented rounded-[inherit]' }"
     class="p-2 py-2"
   >
-    <UAvatar v-for="(candidate, c) in candidates" :key="c" v-bind="candidate" />
+    <UAvatar
+      v-for="(candidate, c) in candidates"
+      :key="c"
+      v-bind="candidate"
+      class="text-sm"
+    />
     <UAvatar v-if="data && data.total > 3">
       <span class="opacity-50">+{{ data.total - 3 }} </span>
     </UAvatar>

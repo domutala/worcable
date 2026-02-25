@@ -7,6 +7,7 @@ const { items, notDropdown } = defineProps<{
     notHide?: boolean;
     alwaysHide?: boolean;
   })[];
+  minToShow?: number;
   notDropdown?: boolean;
 }>();
 
@@ -32,6 +33,7 @@ const itemSlots = computed(() => {
     v-model:states="states"
     v-model:items-show="nShow"
     v-model:items-hide="nHide"
+    :min-to-show
   >
     <template #before>
       <slot name="before" />
@@ -44,6 +46,7 @@ const itemSlots = computed(() => {
           :item-index="item.itemIndex ?? i"
           :not-hide="item.notHide"
           :always-hide="item.alwaysHide"
+          size="lg"
           v-bind="item"
           type="button"
           @click="item.onSelect"
@@ -55,6 +58,7 @@ const itemSlots = computed(() => {
             :item-index="item.itemIndex ?? i"
             :not-hide="item.notHide"
             :always-hide="item.alwaysHide"
+            size="lg"
             v-bind="item"
             type="button"
             @click="item.onSelect"
@@ -79,18 +83,18 @@ const itemSlots = computed(() => {
         </template>
 
         <slot name="activator" />
-        <UButton
-          v-if="!$slots.activator"
-          size="lg"
-          color="neutral"
-          variant="ghost"
-          class="cursor-pointer"
-          square
-        >
-          <u-icon name="i-lucide-text" class="size-5 rotate-z-180" />
-        </UButton>
+        <div v-if="!$slots.activator" class="flex items-center">
+          <UButton
+            size="lg"
+            color="neutral"
+            variant="ghost"
+            class="cursor-pointer"
+            square
+          >
+            <u-icon name="i-lucide-text" class="size-5 rotate-z-180" />
+          </UButton>
+        </div>
       </UDropdownMenu>
-
       <slot name="after" />
     </template>
   </ui-menu-horizontal>

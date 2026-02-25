@@ -44,7 +44,8 @@ const store = defineStore(
 
       if (config.value.primaryColor) {
         appConfig.ui.colors.primary = config.value.primaryColor;
-      } else appConfig.ui.colors.primary = "blue";
+      }
+      //  else appConfig.ui.colors.primary = "orange";
 
       $i18n.setLocale(
         Object.keys($i18n.locales.value).includes(config.value.language)

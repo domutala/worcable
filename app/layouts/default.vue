@@ -8,14 +8,10 @@ const items = computed(() => {
       label: Use.i18n.t("job.actions.add_new_apply"),
       icon: "i-lucide-user-round-plus",
       variant: "ghost",
-      color: "neutral",
-      class: "cursor-pointer",
     },
     {
       label: $t("words.playground"),
       variant: "ghost",
-      color: "neutral",
-      class: "cursor-pointer",
       to: Use.localePath({ name: "jobs" }),
     },
 
@@ -23,15 +19,11 @@ const items = computed(() => {
       label: Use.i18n.t("job.actions.share_job"),
       icon: "i-lucide-send",
       variant: "ghost",
-      color: "neutral",
-      class: "cursor-pointer",
     },
     {
       label: Use.i18n.t("job.actions.update"),
       icon: "i-lucide-pencil-line",
       variant: "ghost",
-      color: "neutral",
-      class: "cursor-pointer",
     },
   ];
 
@@ -41,17 +33,17 @@ const items = computed(() => {
 
 <template>
   <header
-    class="sticky top-0 z-50 backdrop-blur-2xl flex items-center gap-2 px-10 py-3"
+    class="sticky top-0 z-50 backdrop-blur-2xl flex items-center gap-2 md:px-10 px-3 py-3"
   >
     <ui-logo shortable />
 
     <div class="w-10 mr-auto"></div>
 
     <ui-menu-horizontal-items :items :gap="5" :ui="{ base: 'justify-center' }">
-      <template #after>
+      <template #before>
         <ui-auth />
 
-        <u-button
+        <!-- <u-button
           href="https://github.com/domutala/worcable"
           target="_blank"
           size="lg"
@@ -59,7 +51,7 @@ const items = computed(() => {
           variant="ghost"
           icon="i-simple-icons-github"
         >
-        </u-button>
+        </u-button> -->
       </template>
     </ui-menu-horizontal-items>
   </header>

@@ -5,9 +5,7 @@ import onFetchError from "~/tools/onFetchError";
 
 definePageMeta({ layout: false });
 
-const toast = useToast();
 const loading = ref(false);
-
 const fields: AuthFormField[] = [
   {
     name: "email",
@@ -31,31 +29,15 @@ const fields: AuthFormField[] = [
     name: "remember",
     label: Use.i18n.t("login.items.remember.label"),
     type: "checkbox",
-  },
-];
-
-const providers = [
-  {
-    label: "Google",
-    icon: "i-simple-icons-google",
-    onClick: () => {
-      toast.add({ title: "Google", description: "Login with Google" });
-    },
-  },
-  {
-    label: "GitHub",
-    icon: "i-simple-icons-github",
-    onClick: () => {
-      toast.add({ title: "GitHub", description: "Login with GitHub" });
-    },
+    size: "xl",
+    class: "px-3",
+    ui: { base: "cursor-pointer", label: "cursor-pointer w-max" },
   },
 ];
 
 const schema = z.object({
   email: z.email("Invalid email"),
-  password: z
-    .string("Password is required")
-    .min(8, "Must be at least 8 characters"),
+  password: z.string("Password is required").min(1, "Password is required"),
 });
 
 type Schema = z.output<typeof schema>;
@@ -76,45 +58,61 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <div
-    class="flex flex-col items-center justify-center gap-4 p-4 min-h-screen bg-surface/50"
-  >
-    <UPageCard class="w-full max-w-120 rounded-2xl bg-default p-7 shadow-xl">
-      <UAuthForm
-        :schema="schema"
-        :fields="fields"
-        :submit="{
-          label: $t('login.submit'),
-          block: false,
-          size: 'xl',
-          class: 'cursor-pointer',
-        }"
-        :loading
-        icon="i-lucide-user"
-        @submit="onSubmit"
+  <ui-layout>
+    <div class="flex flex-col items-center justify-center gap-4 md:p-4 flex-1">
+      <UPageCard
+        class="w-full max-w-120 rounded-max bg-transparent md:bg-default sm:p-7 md:shadow-md dark:md:shadow-2xl md:ring-1 ring-0 ring-default"
       >
-        <template #password-hint>
-          <ULink to="#" class="text-primary font-medium" tabindex="-1">
-            Forgot password?
-          </ULink>
-        </template>
+        <UAuthForm
+          :schema="schema"
+          :fields="fields"
+          :submit="{
+            label: $t('login.submit'),
+            block: false,
+            size: 'xl',
+            class: 'cursor-pointer',
+          }"
+          :loading
+          icon="i-lucide-user"
+          @submit="onSubmit"
+        >
+          <template #password-hint>
+            <ULink to="#" class="text-primary font-medium" tabindex="-1">
+              Forgot password?
+            </ULink>
+          </template>
 
-        <template #header>
-          <div class="text-center flex flex-col gap-5 mb-15">
-            <ui-logo class="mx-auto" />
-
-            <div class="mt-15 px-10">
-              <h1 class="text-2xl">
-                {{ $t("login.title") }}
-              </h1>
-
-              <p class="text-muted">
-                {{ $t("login.description") }}
-              </p>
+          <template #submit="{ loading }">
+            <div class="flex justify-end px-1.5">
+              <u-button
+                type="submit"
+                size="lg"
+                variant="solid"
+                color="primary"
+                class="cursor-pointer p-3"
+              >
+                {{ $t("login.submit") }}
+              </u-button>
             </div>
-          </div>
-        </template>
-      </UAuthForm>
-    </UPageCard>
-  </div>
+          </template>
+
+          <template #header>
+            <div class="text-center flex flex-col gap-5 mb-15">
+              <ui-logo class="mx-auto" />
+
+              <div class="mt-15 sm:px-10">
+                <h1 class="text-2xl">
+                  {{ $t("login.title") }}
+                </h1>
+
+                <p class="text-muted">
+                  {{ $t("login.description") }}
+                </p>
+              </div>
+            </div>
+          </template>
+        </UAuthForm>
+      </UPageCard>
+    </div>
+  </ui-layout>
 </template>

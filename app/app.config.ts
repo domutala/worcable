@@ -1,6 +1,6 @@
 const inputClass = [
-  "rounded-default p-5 px-7 bg-surface",
-  "focus:ring-1 focus:ring-accented/60 focus-visible:ring-1 focus-visible:ring-accented/60 ring-transparent",
+  "rounded-min p-5 px-7 bg-default w-full min-h-17",
+  "focus:ring-1 focus:ring-accented/60 focus-visible:ring-1 focus-visible:ring-accented/60 ring-default",
   "has-focus-visible:ring-1 has-focus-visible:ring-accented/60",
 ].join(" ");
 
@@ -10,11 +10,13 @@ export default defineAppConfig({
 
   ui: {
     colors: {
-      primary: "red",
+      primary: "orange",
       neutral: "neutral",
     },
 
     input: {
+      slots: { root: "w-full" },
+
       compoundVariants: [{ class: inputClass }, { size: "xl" }],
     },
     inputTags: {
@@ -37,12 +39,24 @@ export default defineAppConfig({
     },
 
     button: {
-      compoundVariants: [
-        { class: "roundex-default cursor-pointer" },
-        { size: "xl" },
-        { variant: "soft" },
-        { color: "neutral" },
-      ],
+      defaultVariants: {
+        size: "xl",
+        variant: "soft",
+        color: "neutral",
+      },
+
+      compoundVariants: [{ class: "rounded-default cursor-pointer" }],
+    },
+
+    modal: {
+      slots: { content: "rounded-max" },
+    },
+
+    drawer: {
+      slots: {
+        handle: "mt-1! hidden!",
+        content: "rounded-t-max! overflow-hidden!",
+      },
     },
   },
 });

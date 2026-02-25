@@ -5,6 +5,7 @@ const icons = ref(Object.keys(allIcons.icons));
 const searchTerm = ref("");
 const page = ref(1);
 const value = defineModel<string>();
+const isOpen = ref(false);
 
 const iconFiltered = computed(() => {
   let _icons = icons.value;
@@ -41,7 +42,7 @@ watch(
 </script>
 
 <template>
-  <u-modal :ui="{ content: 'max-w-7xl' }">
+  <ui-modal v-model:open="isOpen" :ui="{ content: 'max-w-7xl' }">
     <slot />
 
     <template #title>
@@ -49,28 +50,26 @@ watch(
     </template>
 
     <template #body="{ close }">
-      <u-container class="">
-        <div class="flex flex-wrap justify-center gap-3">
-          <div
-            v-for="icon in _icons"
-            :key="icon"
-            class="group size-25 border border-default flex items-center justify-center cursor-pointer relative shadow-current/20 hover:shadow-md rounded-xl"
-            @click="
-              value = `i-lucide-${icon}`;
-              close();
-            "
-          >
-            <u-icon :name="`i-lucide-${icon}`" class="size-10" />
+      <div class="flex flex-wrap justify-center gap-3">
+        <div
+          v-for="icon in _icons"
+          :key="icon"
+          class="group size-18 md:size-25 border border-default flex items-center justify-center cursor-pointer relative shadow-current/20 hover:shadow-md rounded-xl"
+          @click="
+            value = `i-lucide-${icon}`;
+            isOpen = false;
+          "
+        >
+          <u-icon :name="`i-lucide-${icon}`" class="size-7 md:size-10" />
 
-            <div
-              v-if="value === `i-lucide-${icon}`"
-              class="size-5 bg-inverted flex items-center justify-center absolute top-1 right-1 rounded-full"
-            >
-              <u-icon name="i-lucide-check" class="text-inverted size-3" />
-            </div>
+          <div
+            v-if="value === `i-lucide-${icon}`"
+            class="size-5 bg-inverted flex items-center justify-center absolute top-1 right-1 rounded-full"
+          >
+            <u-icon name="i-lucide-check" class="text-inverted size-3" />
           </div>
         </div>
-      </u-container>
+      </div>
     </template>
 
     <template #footer>
@@ -79,6 +78,7 @@ watch(
         :items-per-page="100"
         :total="iconFiltered.length"
         :ui="{ item: 'cursor-pointer' }"
+        :sibling-count="0"
         variant="outline"
         color="neutral"
         active-color="neutral"
@@ -88,5 +88,5 @@ watch(
         show-edges
       />
     </template>
-  </u-modal>
+  </ui-modal>
 </template>

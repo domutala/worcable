@@ -20,17 +20,17 @@ async function searchByTerms(event: FormSubmitEvent<SchemaSearchTerms>) {
   <u-form
     :state="searchTermsState"
     :schema="schemaSearchTerms"
-    class="bg-surface rounded-2xl flex items-center overflow-hidden"
+    class="flex items-center overflow-hidden h-17"
     @submit="searchByTerms"
   >
     <UFormField name="q" class="w-full relative block">
       <u-input
         v-model="searchTermsState.q"
         type="search"
-        class="h-17 w-full outline-none"
+        class="h-full w-full outline-none"
         placeholder="Rechercher un emploi"
         :ui="{
-          base: 'h-full w-full ring-0! py-0 px-7 rounded-0! bg-transparent text-lg',
+          base: 'h-full w-full ring-0! py-0 px-7 rounded-none bg-transparent text-lg',
         }"
       />
     </UFormField>
@@ -38,9 +38,9 @@ async function searchByTerms(event: FormSubmitEvent<SchemaSearchTerms>) {
     <u-button
       type="submit"
       variant="ghost"
-      class="h-17 border-l border-default w-17 rounded-2xl p-0 justify-center cursor-pointer"
+      class="h-full border-default aspect-square rounded-none p-0 justify-center cursor-pointer"
     >
-      <u-icon name="i-lucide-search" class="size-8 opacity-50" />
+      <u-icon name="i-lucide-search" class="size-6 opacity-30" />
     </u-button>
   </u-form>
 </template>

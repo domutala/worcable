@@ -1,2 +1,23 @@
 @use "fonts";
 @use "animate.css";
+
+.scroller {
+  &::-webkit-scrollbar {
+    width: 0;
+    transition: all 0.5s ease;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--ui-border);
+  }
+
+  &::-webkit-scrollbar-track {
+    border-left: 1px solid var(--ui-border);
+  }
+
+  &:hover {
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+  }
+}

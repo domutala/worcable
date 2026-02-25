@@ -30,12 +30,11 @@ const { statusDropdownItems, statusSubmiting } = useApply(job, apply);
         :readonly
         :style="{
           backgroundColor: bgColor,
-          border: `1px solid ${borderColor}`,
         }"
         :icon
         color="neutral"
         variant="ghost"
-        class="rounded-2xl relative px-4 text-highlighted py-3"
+        class="rounded-min relative px-4 text-highlighted py-3"
       >
         {{ label }}
       </u-button>
@@ -55,12 +54,11 @@ const { statusDropdownItems, statusSubmiting } = useApply(job, apply);
         :loading="statusSubmiting"
         :style="{
           backgroundColor: bgColor,
-          border: `1px solid ${borderColor}`,
         }"
         :icon
         color="neutral"
         variant="ghost"
-        class="rounded-2xl relative px-4 text-highlighted py-3 cursor-pointer"
+        class="rounded-min relative px-4 text-highlighted py-3 cursor-pointer"
       >
         {{ label }}
       </u-button>

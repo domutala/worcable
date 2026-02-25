@@ -38,7 +38,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   <UForm
     :schema="schema"
     :state="state"
-    class="space-y-1 bg-default border-default rounded-2xl"
+    class="space-y-1 bg-default border-default rounded-default ring ring-default"
     @submit="onSubmit"
   >
     <UFormField name="comment">
@@ -46,7 +46,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         v-model="state.comment"
         :placeholder="$t('apply_comment.items.comment.placeholder')"
         :ui="{ editor: 'max-h-80' }"
-        class="bg-default rounded-2xl"
+        class="bg-default"
       />
     </UFormField>
 
@@ -57,7 +57,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       />
       <UButton
         type="submit"
-        class="cursor-pointer ml-auto rounded-full"
+        class="cursor-pointer ml-auto rounded-min"
+        size="sm"
         :loading="submitting"
       >
         {{ $t("apply_comment.labels.submit") }}

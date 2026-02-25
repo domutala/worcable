@@ -39,21 +39,11 @@ const items = computed(() => {
   const items: DropdownMenuItem[] = [
     {
       label: Use.i18n.t("apply.labels.show_details"),
-      variant: "soft",
-      color: "neutral",
-      class: "cursor-pointer",
-      size: "lg",
       onSelect(e) {
         isDetailsOpen.value = true;
       },
     },
-    {
-      ...uApply.statusDropdown.value,
-      size: "lg",
-      variant: "soft",
-      color: "neutral",
-      class: "cursor-pointer",
-    },
+    { ...uApply.statusDropdown.value },
     { slot: "item-dropdown-note", type: "label", itemIndex: "note" },
   ];
 
@@ -166,16 +156,18 @@ const items = computed(() => {
     </template>
   </ui-menu-horizontal> -->
 
-  <u-modal
+  <ui-modal
     v-model:open="isDetailsOpen"
     :ui="{
-      content: ['max-w-210', 'rounded-2xl bg-surface'],
+      content: ['max-w-210', 'rounded-2xl'],
     }"
   >
     <template #content>
-      <div class="p-10">
-        <ui-apply-details v-model:apply="apply" v-model:job="job" />
-      </div>
+      <ui-layout-inset>
+        <div class="sm:p-10 p-2 py-3">
+          <ui-apply-details v-model:apply="apply" v-model:job="job" />
+        </div>
+      </ui-layout-inset>
     </template>
-  </u-modal>
+  </ui-modal>
 </template>

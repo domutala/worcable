@@ -212,9 +212,9 @@ function openJobNewTab(e: Event, job: Job) {
                       >
                       </u-button>
 
-                      <u-modal
+                      <ui-modal
                         :ui="{
-                          content: 'max-w-250 rounded-2xl bg-surface!',
+                          content: 'max-w-250 rounded-2xl',
                         }"
                       >
                         <u-button size="lg" class="cursor-pointer">
@@ -222,43 +222,45 @@ function openJobNewTab(e: Event, job: Job) {
                         </u-button>
 
                         <template #content="{ close }">
-                          <div class="h-11/12 flex-1 overflow-auto">
-                            <div
-                              class="py-4 px-5 flex gap-5 bg-inherit/10 backdrop-blur-lg border-b border-default sticky top-0 z-50 h-max"
-                            >
-                              <div class="leading-none flex-1 min-w-0 w-0">
-                                <h1 class="text-lg font-bold truncate">
-                                  {{ currentJob.title }}
-                                </h1>
-                                <div class="truncate opacity-50">
-                                  {{
-                                    Utils.getDateStatus(currentJob.createdAt)
-                                  }}
+                          <ui-layout-inset>
+                            <template #header>
+                              <div
+                                class="py-4 px-5 flex gap-5 bg-inherit/10 backdrop-blur-lg border-b border-default sticky top-0 z-50 h-max"
+                              >
+                                <div class="leading-none flex-1 min-w-0 w-0">
+                                  <h1 class="text-lg font-bold truncate">
+                                    {{ currentJob.title }}
+                                  </h1>
+                                  <div class="truncate opacity-50">
+                                    {{
+                                      Utils.getDateStatus(currentJob.createdAt)
+                                    }}
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <u-button
+                                    size="lg"
+                                    icon="i-lucide-x"
+                                    variant="soft"
+                                    color="neutral"
+                                    class="rounded-2xl cursor-pointer"
+                                    square
+                                    @click="close"
+                                  >
+                                  </u-button>
                                 </div>
                               </div>
-
-                              <div>
-                                <u-button
-                                  size="lg"
-                                  icon="i-lucide-x"
-                                  variant="soft"
-                                  color="neutral"
-                                  class="rounded-2xl cursor-pointer"
-                                  square
-                                  @click="close"
-                                >
-                                </u-button>
-                              </div>
-                            </div>
+                            </template>
 
                             <div class="p-10">
                               <u-container>
                                 <ui-apply-create :job="currentJob" />
                               </u-container>
                             </div>
-                          </div>
+                          </ui-layout-inset>
                         </template>
-                      </u-modal>
+                      </ui-modal>
                     </div>
                   </div>
 

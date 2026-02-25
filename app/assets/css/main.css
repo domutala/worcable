@@ -1,12 +1,28 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
+@theme default {
+  --radius: var(--radius-2xl);
+  --radius-default: var(--radius);
+  --radius-min: var(--radius-xl);
+  --radius-max: var(--radius-3xl);
+}
+
 @theme static {
 
   --font-sans: "Public Sans", sans-serif;
   --color-surface: oklab(93.403% 0 -0.00011);
 
-  --ui-radius-default: 25;
+
+
+  /* --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+  --radius-4xl: 2rem; */
 
 
   /* --ui-color-primary-50: oklch(0.957 0.021 274.08);
@@ -24,9 +40,22 @@
 }
 
 
-.rounded-default {
-  @apply rounded-xl
+/* .rounded-default {
+  @apply rounded-lg;
 }
+
+.rounded {
+  @apply rounded-lg;
+}
+
+.rounded-2x {
+  @apply rounded-xl;
+}
+
+
+.rounded-3x {
+  @apply rounded-2xl;
+} */
 
 .dark {
   --color-surface: oklab(0.24 0 0);

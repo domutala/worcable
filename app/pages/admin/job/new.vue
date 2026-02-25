@@ -20,10 +20,5 @@ const items = ref<BreadcrumbItem[]>([
 </script>
 
 <template>
-  <UiBreadcrumb
-    class="fixed! w-full"
-    :breads="['$home', '$admin', { label: $t('job.labels.new') }]"
-  />
-
   <ui-job-create />
 </template>

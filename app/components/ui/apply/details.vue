@@ -7,9 +7,9 @@ const apply = defineModel<Apply>("apply", { required: true });
 </script>
 
 <template>
-  <div class="flex flex-col gap-1">
+  <div class="flex flex-col gap-1.5">
     <div
-      class="px-5 py-4 text-sm bg-default rounded-xl flex items-center gap-3 w-full"
+      class="px-5 py-4 text-sm bg-default rounded-min ring ring-default flex items-center gap-3 w-full"
     >
       <div>
         <u-icon name="i-lucide-file-text" class="size-8 text-highlighted" />
@@ -26,7 +26,7 @@ const apply = defineModel<Apply>("apply", { required: true });
 
       <div class="ml-auto">
         <u-button
-          class="rounded-xl cursor-pointer px-3 py-2"
+          class="rounded-default cursor-pointer px-3 py-2"
           color="neutral"
           icon="i-lucide-arrow-up-right"
           target="_blank"
@@ -39,7 +39,7 @@ const apply = defineModel<Apply>("apply", { required: true });
       </div>
     </div>
 
-    <div class="px-5 py-4 text-sm bg-default rounded-xl">
+    <div class="px-5 py-4 text-sm bg-default rounded-min ring ring-default">
       <h2 class="text- font-bold truncate">
         {{ $t("apply.items.firstName.label") }}
       </h2>
@@ -48,7 +48,7 @@ const apply = defineModel<Apply>("apply", { required: true });
       </div>
     </div>
 
-    <div class="px-5 py-4 text-sm bg-default rounded-xl">
+    <div class="px-5 py-4 text-sm bg-default rounded-min ring ring-default">
       <h2 class="text- font-bold">
         {{ $t("apply.items.lastName.label") }}
       </h2>
@@ -57,7 +57,9 @@ const apply = defineModel<Apply>("apply", { required: true });
       </div>
     </div>
 
-    <div class="px-5 py-4 text-sm bg-default rounded-xl flex items-center">
+    <div
+      class="px-5 py-4 text-sm bg-default rounded-min ring ring-default flex items-center"
+    >
       <div>
         <h2 class="text- font-bold">
           {{ $t("apply.items.email.label") }}
@@ -72,7 +74,7 @@ const apply = defineModel<Apply>("apply", { required: true });
           color="neutral"
           icon="i-lucide-mail-plus"
           target="_blank"
-          class="rounded-xl"
+          class="rounded-default"
           size="lg"
           variant="soft"
           :href="`mailto:${apply.data.email}`"
@@ -82,7 +84,9 @@ const apply = defineModel<Apply>("apply", { required: true });
       </div>
     </div>
 
-    <div class="px-5 py-4 text-sm bg-default rounded-xl flex items-center">
+    <div
+      class="px-5 py-4 text-sm bg-default rounded-min ring ring-default flex items-center"
+    >
       <div>
         <h2 class="text- font-bold">
           {{ $t("apply.items.phone.label") }}
@@ -97,7 +101,7 @@ const apply = defineModel<Apply>("apply", { required: true });
           color="neutral"
           icon="i-lucide-phone-outgoing"
           target="_blank"
-          class="rounded-xl"
+          class="rounded-default"
           size="lg"
           variant="soft"
           :href="`tel:${apply.data.phone}`"
@@ -107,21 +111,21 @@ const apply = defineModel<Apply>("apply", { required: true });
       </div>
     </div>
 
-    <div class="px-5 py-4 text-sm bg-default rounded-xl">
+    <div class="px-5 py-4 text-sm bg-default rounded-min ring ring-default">
       <h2 class="text- font-bold">
         {{ $t("apply.items.educationLevel.label") }}
       </h2>
       {{ $t(`apply.items.educationLevel.items.${apply.data.educationLevel}`) }}
     </div>
 
-    <div class="px-5 py-4 text-sm bg-default rounded-xl">
+    <div class="px-5 py-4 text-sm bg-default rounded-min ring ring-default">
       <h2 class="text- font-bold">
         {{ $t("apply.items.availability.label") }}
       </h2>
       {{ $t(`apply.items.availability.items.${apply.data.availability}`) }}
     </div>
 
-    <div class="px-5 py-4 text-sm bg-default rounded-xl">
+    <div class="px-5 py-4 text-sm bg-default rounded-min ring ring-default">
       <h2 class="text- font-bold">
         {{ $t("apply.items.desiredGrossSalary.label") }}
       </h2>
@@ -136,7 +140,7 @@ const apply = defineModel<Apply>("apply", { required: true });
 
     <div
       v-if="apply.data.motivation"
-      class="w-full px-5 py-4 rounded-xl bg-default"
+      class="w-full px-5 py-4 rounded-default bg-default"
     >
       <h2 class="text- font-bold">
         {{ $t("apply.items.motivation.label") }}

@@ -60,7 +60,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <u-modal v-model:open="open" :ui="{ content: 'max-w-3xl' }">
+  <ui-modal v-model:open="open" :ui="{ content: 'max-w-3xl' }">
     <slot />
 
     <template #content>
@@ -69,97 +69,110 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         v-model:job="job"
         :status="applyStatus?.key"
       >
-        <div class="flex items-center gap-2 px-5 py-4">
-          <u-icon :name="icon" class="size-6" />
+        <ui-layout-inset>
+          <template #header>
+            <div class="flex items-center gap-2 px-5 py-4 relative border-b-0">
+              <u-icon :name="icon" class="size-6" />
 
-          <div v-if="applyStatus">
-            {{ label }}
-          </div>
-          <div v-else>
-            {{ $t("job.items.applyStatus.labels.new_title") }}
-          </div>
-        </div>
+              <div v-if="applyStatus">
+                {{ label }}
+              </div>
+              <div v-else>
+                {{ $t("job.items.applyStatus.labels.new_title") }}
+              </div>
+            </div>
+          </template>
 
-        <u-container class="py-20 max-w-2xl">
-          <u-form
-            :schema="schema"
-            :state="state"
-            class="space-y-7"
-            @submit="onSubmit"
-          >
-            <u-form-field
-              name="label"
-              :label="$t('job.items.applyStatus.labels.label')"
-              class="w-full"
+          <u-container class="py-10 max-w-2xl">
+            <u-form
+              :schema="schema"
+              :state="state"
+              class="space-y-4"
+              @submit="onSubmit"
             >
-              <u-input
-                v-model="state.label"
-                class="w-full"
-                :ui="{ base: 'p-4' }"
-              ></u-input>
-            </u-form-field>
-
-            <div class="flex items-center gap-2">
               <u-form-field
-                name="color"
-                :label="$t('job.items.applyStatus.labels.color')"
+                name="label"
+                :label="$t('job.items.applyStatus.labels.label')"
                 class="w-full"
               >
-                <u-select
-                  v-model="state.color"
-                  :items="colors"
+                <u-input
+                  v-model="state.label"
+                  class="w-full"
                   :ui="{ base: 'p-4' }"
+                ></u-input>
+              </u-form-field>
+
+              <div class="flex items-center gap-2">
+                <u-form-field
+                  name="color"
+                  :label="$t('job.items.applyStatus.labels.color')"
                   class="w-full"
                 >
-                  <template #default="{ modelValue }">
-                    <template v-if="modelValue">
+                  <u-select
+                    v-model="state.color"
+                    :items="colors"
+                    :ui="{ base: 'p-4' }"
+                    class="w-full"
+                  >
+                    <template #default="{ modelValue }">
+                      <template v-if="modelValue">
+                        <div
+                          class="w-7 h-3 rounded-2xl border border-default mr-3 my-auto"
+                          :style="{ backgroundColor: modelValue }"
+                        ></div>
+
+                        {{ modelValue }}
+                      </template>
+                    </template>
+
+                    <template #item-leading="{ item }">
                       <div
                         class="w-7 h-3 rounded-2xl border border-default mr-3 my-auto"
-                        :style="{ backgroundColor: modelValue }"
+                        :style="{ backgroundColor: item }"
                       ></div>
-
-                      {{ modelValue }}
                     </template>
-                  </template>
+                  </u-select>
+                </u-form-field>
 
-                  <template #item-leading="{ item }">
+                <u-form-field name="icon" label="icone" class="w-20">
+                  <ui-icon-selecter v-model="state.icon">
                     <div
-                      class="w-7 h-3 rounded-2xl border border-default mr-3 my-auto"
-                      :style="{ backgroundColor: item }"
-                    ></div>
-                  </template>
-                </u-select>
-              </u-form-field>
+                      class="h-16 rounded-min flex items-center justify-center ring ring-default w-full cursor-pointer bg-default"
+                      :icon="state.icon"
+                      square
+                    >
+                      <u-icon
+                        v-if="state.icon"
+                        :name="state.icon"
+                        class="size-6"
+                      />
 
-              <u-form-field name="icon" label="icone" class="w-20">
-                <ui-icon-selecter v-model="state.icon">
-                  <div
-                    class="h-13 rounded-lg flex items-center justify-center ring ring-accented w-full cursor-pointer"
-                    :icon="state.icon"
-                    square
-                  >
-                    <u-icon
-                      v-if="state.icon"
-                      :name="state.icon"
-                      class="size-6"
-                    />
-                  </div>
-                </ui-icon-selecter>
-              </u-form-field>
-            </div>
+                      <u-icon
+                        v-else
+                        name="i-lucide-feather"
+                        class="size-6 opacity-30"
+                      />
+                    </div>
+                  </ui-icon-selecter>
+                </u-form-field>
+              </div>
 
-            <u-button
-              :loading="submiting"
-              class="cursor-pointer px-5 py-3"
-              color="neutral"
-              size="xl"
-              type="submit"
-            >
-              {{ $t("words.to_save") }}
-            </u-button>
-          </u-form>
-        </u-container>
+              <div class="flex items-center justify-">
+                <u-button
+                  :loading="submiting"
+                  class="cursor-pointer px-5 py-3 rounded-min"
+                  color="primary"
+                  variant="solid"
+                  size="xl"
+                  type="submit"
+                >
+                  {{ $t("words.to_save") }}
+                </u-button>
+              </div>
+            </u-form>
+          </u-container>
+        </ui-layout-inset>
       </ui-apply-status-display>
     </template>
-  </u-modal>
+  </ui-modal>
 </template>

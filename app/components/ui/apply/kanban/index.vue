@@ -53,46 +53,32 @@ function setSortable() {
 </script>
 
 <template>
-  <div class="flex gap-2 flex-1 overflow-y-hidden overflow-x-auto pb-3">
+  <!--  -->
+  <div
+    class="flex gap-2 flex-1 overflow-auto mb-10 mt-5 max-w-full w-450 mx-auto px-2 sm:px-5"
+  >
     <ui-apply-kanban-grid :status="null" v-model:job="job" />
 
     <div ref="container" class="flex gap-2">
       <template v-for="status in job.applyStatus" :key="status.key">
         <ui-apply-kanban-grid v-model:status="status.key" v-model:job="job" />
       </template>
-    </div>
 
-    <div>
-      <ui-job-apply-status-edit v-model:job="job">
-        <u-button
-          size="xl"
-          class="py-4 px-4 flex-col cursor-pointer rounded-2xl ring-0"
-          icon="i-lucide-plus"
-          variant="outline"
-          color="neutral"
-        >
-          <div style="writing-mode: sideways-rl">
-            {{ $t("job.items.applyStatus.labels.new_btn") }}
-          </div>
-        </u-button>
-      </ui-job-apply-status-edit>
+      <div>
+        <ui-job-apply-status-edit v-model:job="job">
+          <u-button
+            size="xl"
+            class="py-4 px-5 flex-col cursor-pointer rounded ring ring-default"
+            icon="i-lucide-plus"
+            variant="outline"
+            color="neutral"
+          >
+            <div style="writing-mode: sideways-rl">
+              {{ $t("job.items.applyStatus.labels.new_btn") }}
+            </div>
+          </u-button>
+        </ui-job-apply-status-edit>
+      </div>
     </div>
   </div>
 </template>
-
-<style lang="scss">
-.kanban {
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: var(--border-color-default);
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-    border-left: 1px solid var(--border-color-default);
-  }
-}
-</style>

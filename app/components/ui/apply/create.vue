@@ -138,10 +138,7 @@ function onChange(key: "cv" | "avatar", file?: File | null | undefined) {
     >
       <UInput
         v-model="state.firstName"
-        :ui="{ base: 'p-5 px-5 ring-0 rounded-xl' }"
         :placeholder="$t('apply.items.firstName.placeholder')"
-        class="w-full"
-        size="xl"
         required
       />
     </UFormField>
@@ -153,30 +150,21 @@ function onChange(key: "cv" | "avatar", file?: File | null | undefined) {
     >
       <UInput
         v-model="state.lastName"
-        :ui="{ base: 'p-5 px-5 ring-0 rounded-xl' }"
         :placeholder="$t('apply.items.lastName.placeholder')"
-        class="w-full"
-        size="xl"
       />
     </UFormField>
 
     <UFormField :label="$t('apply.items.email.label')" name="email" required>
       <UInput
         v-model="state.email"
-        :ui="{ base: 'p-5 px-5 ring-0 rounded-xl' }"
         :placeholder="$t('apply.items.email.placeholder')"
-        class="w-full"
-        size="xl"
       />
     </UFormField>
 
     <UFormField :label="$t('apply.items.phone.label')" name="phone" required>
       <UInput
         v-model="state.phone"
-        :ui="{ base: 'p-5 px-5 ring-0 rounded-xl' }"
         :placeholder="$t('apply.items.phone.placeholder')"
-        class="w-full"
-        size="xl"
         type="tel"
       />
     </UFormField>
@@ -222,7 +210,6 @@ function onChange(key: "cv" | "avatar", file?: File | null | undefined) {
     >
       <USelect
         v-model="state.educationLevel"
-        :ui="{ base: 'p-5 px-5 ring-0 rounded-xl' }"
         :placeholder="$t('apply.items.educationLevel.placeholder')"
         :items="
           educationLevel.map((c) => ({
@@ -230,8 +217,6 @@ function onChange(key: "cv" | "avatar", file?: File | null | undefined) {
             value: c,
           }))
         "
-        class="w-full"
-        size="xl"
       />
     </UFormField>
 
