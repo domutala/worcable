@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { FileSchema } from "../../mongoose/collectioons/file";
 import { getConfigSchema } from "~~/server/services/config_get_shema";
+import { InferSchemaType } from "~~/server/mongoose/types";
 
 const { colorEnum, colorModeEnum, language } = getConfigSchema((v) => v);
 
@@ -16,9 +17,10 @@ const ConfigSchema = new mongoose.Schema(
   },
 );
 
-export type Config = mongoose.InferSchemaType<typeof ConfigSchema> & {
-  id: string;
-};
+export type ConfigDocument = mongoose.HydratedDocumentFromSchema<
+  typeof ConfigSchema
+>;
+export type Config = InferSchemaType<typeof ConfigSchema>;
 
 ConfigSchema.set("toJSON", {
   transform: (_doc, ret) => {

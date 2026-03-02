@@ -11,8 +11,14 @@ export enum ApplyStatus {
   HIRED = "hired",
 }
 
-const availability = ["immediately", "1month", "2mois", "3mois", "other"];
-const educationLevel = [
+export const availability = [
+  "immediately",
+  "1month",
+  "2mois",
+  "3mois",
+  "other",
+];
+export const educationLevel = [
   "none",
   "bepCap",
   "baccalaureate",
@@ -99,7 +105,6 @@ export function getApplyShema($t: (string: string) => string) {
     .string($t("apply.errors.invalid_status"))
     .optional()
     .nullable();
-
   const data = getApplyDataShema($t);
 
   return { note, status, data };

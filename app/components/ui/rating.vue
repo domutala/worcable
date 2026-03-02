@@ -61,7 +61,7 @@
 const slots = useSlots();
 const emit = defineEmits(["before-rate", "update:modelValue", "after-rate"]);
 const props = defineProps({
-  modelValue: { type: [Number, String], default: 0 },
+  modelValue: { type: [Number, String, null], default: 0 },
   value: { type: [Number, String], default: 0 },
   size: { type: String, default: "19px" },
   name: { type: String, default: "rate" },

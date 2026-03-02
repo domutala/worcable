@@ -1,7 +1,13 @@
-import { pgTable, uuid, timestamp, text, jsonb } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  uuid,
+  timestamp,
+  text,
+  jsonb,
+  varchar,
+} from "drizzle-orm/pg-core";
 import { getApplyCommentSchema } from "../../services/apply_comment_schema";
 import * as z from "zod";
-import { apply } from "./apply";
 
 const { comment } = getApplyCommentSchema((str) => str);
 
@@ -20,9 +26,7 @@ export const applyComment = pgTable("apply_comment", {
     .notNull(),
 
   // TODO: Ajouter ON_DELETE:CASCADE
-  applyID: uuid("apply_id")
-    .references(() => apply.id)
-    .notNull(),
+  applyID: varchar("apply_id").notNull(),
 
   createdAt: timestamp("created_at", { mode: "string", withTimezone: false })
     .defaultNow()

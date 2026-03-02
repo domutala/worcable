@@ -26,5 +26,45 @@ export async function useMongo() {
   return connectionPromise;
 }
 
-useMongo();
+export function getFacet(offset: number, pageSize: number, all?: boolean) {
+  const facet: mongoose.PipelineStage.Facet = {
+    $facet: {
+      totalItems: [{ $count: "count" }],
+      data: [
+        { $sort: { createdAt: -1 } },
+        ...(all ? [] : [{ $skip: offset }, { $limit: pageSize }]),
+      ],
+    },
+  };
+
+  return facet;
+}
+
+export function getProject(
+  page: number,
+  pageSize: number,
+): mongoose.PipelineStage {
+  return {
+    $project: {
+      items: "$data",
+      totalItems: {
+        $ifNull: [{ $arrayElemAt: ["$totalItems.count", 0] }, 0],
+      },
+      total: { $size: "$data" },
+      page: { $literal: page },
+      pageSize: { $literal: pageSize },
+      totalPages: {
+        $ceil: {
+          $divide: [
+            { $ifNull: [{ $arrayElemAt: ["$totalItems.count", 0] }, 0] },
+            pageSize,
+          ],
+        },
+      },
+    },
+  };
+}
+
 export const collections = _collections;
+
+useMongo();

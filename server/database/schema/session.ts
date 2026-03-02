@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { InferSchemaType } from "~~/server/mongoose/types";
 
 const SessionSchema = new mongoose.Schema(
   {
@@ -16,9 +17,10 @@ const SessionSchema = new mongoose.Schema(
   },
 );
 
-export type Session = mongoose.InferSchemaType<typeof SessionSchema> & {
-  id: string;
-};
+export type SessionDocument = mongoose.HydratedDocumentFromSchema<
+  typeof SessionSchema
+>;
+export type Session = InferSchemaType<typeof SessionSchema>;
 
 SessionSchema.set("toJSON", {
   transform: (_doc, ret) => {

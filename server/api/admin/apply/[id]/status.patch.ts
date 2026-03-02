@@ -1,29 +1,12 @@
 import * as z from "zod";
+import { getApply } from "~~/server/services/apply_get";
 import { getApplyShema } from "~~/server/services/apply_get_shema";
 
 export default defineEventHandler(async (event) => {
   const $t = await useTranslation(event);
   const id = getRouterParam(event, "id") as string;
   const body = await readBody(event);
-
-  if (!id || !z.uuid().safeParse(id).success) {
-    throw createError({
-      statusCode: 400,
-      data: { message: $t("apply.errors.invalid_id") },
-    });
-  }
-
-  const [apply] = await db
-    .select()
-    .from(tables.apply)
-    .where(eq(tables.apply.id, id));
-
-  if (!apply) {
-    throw createError({
-      statusCode: 404,
-      data: { message: $t("apply.errors.apply_not_found") },
-    });
-  }
+  const apply = await getApply({ id, $t });
 
   const { status: schema } = getApplyShema($t);
   const parsedBody = z.object({ to: schema }).safeParse(body);
@@ -40,24 +23,16 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  if (apply.status === parsedBody.data.to) {
-    throw createError({
-      statusCode: 400,
-      data: { message: $t("apply.errors.invalid_status") },
-    });
-  }
-
   const allStatus = apply.allStatus;
   allStatus.push({
     status: parsedBody.data.to,
     date: new Date().toISOString(),
   });
 
-  const [_apply] = await db
-    .update(tables.apply)
-    .set({ status: parsedBody.data.to, allStatus })
-    .where(eq(tables.apply.id, id))
-    .returning();
+  await collections.$Apply.updateOne(
+    { _id: id },
+    { status: parsedBody.data.to, allStatus },
+  );
 
-  return _apply;
+  return await getApply({ id, $t });
 });

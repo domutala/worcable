@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { FileSchema } from "../../mongoose/collectioons/file";
+import { InferSchemaType } from "~~/server/mongoose/types";
 
 const UserSchema = new mongoose.Schema(
   {
@@ -14,7 +15,10 @@ const UserSchema = new mongoose.Schema(
   },
 );
 
-export type User = mongoose.InferSchemaType<typeof UserSchema> & { id: string };
+export type UserDocument = mongoose.HydratedDocumentFromSchema<
+  typeof UserSchema
+>;
+export type User = InferSchemaType<typeof UserSchema>;
 
 UserSchema.pre("validate", function () {
   if (this.email) {

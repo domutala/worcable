@@ -1,86 +1,83 @@
-import {
-  pgTable,
-  uuid,
-  timestamp,
-  varchar,
-  text,
-  jsonb,
-  index,
-} from "drizzle-orm/pg-core";
-import { sql } from "drizzle-orm";
-import { getJobShema } from "../../services/job_schema";
-import * as z from "zod";
+import mongoose from "mongoose";
+import { getJobShema } from "~~/server/services/job_schema";
+import { InferSchemaType } from "../../mongoose/types";
 
-const { contractType, jobNature, applyStatus, status } = getJobShema();
+const { contractType, jobNature, defaultApplyStatus, statusEnum } =
+  getJobShema();
 
-export const job = pgTable(
-  "job",
+const ApplyStatusSchema = new mongoose.Schema(
   {
-    id: uuid().primaryKey().defaultRandom(),
-
-    title: text("title", {}).notNull(),
-
-    companyDescription: text("company_description"),
-
-    contractType: varchar("contract_type", { length: 20 })
-      .notNull()
-      .$type<z.output<typeof contractType>>(),
-
-    jobDescription: text("job_description").notNull(),
-
-    location: varchar("location", { length: 100 }).notNull(),
-
-    jobNature: varchar("job_nature", { length: 20 })
-      .notNull()
-      .$type<z.output<typeof jobNature>>(),
-
-    salary: jsonb().$type<[number, number]>(),
-
-    applyStatus: jsonb()
-      .$type<z.output<typeof applyStatus>>()
-      .default([
-        { key: "REJECTED" },
-        { key: "TO_CONTACT" },
-        { key: "INTERVIEW" },
-        { key: "HIRED" },
-      ])
-      .notNull(),
-
-    /**
-     * Skills stockées sous forme de texte séparé
-     * Exemple: "nodejs,$nestjs,postgres"
-     * (ou à normaliser via table relationnelle – voir plus bas)
-     */
-    skills: text("skills").array().default([]).notNull(),
-
-    candidateProfile: text("candidate_profile"),
-
-    status: varchar("status")
-      .$type()
-      .default("open")
-      .$type<z.output<typeof status>>()
-      .notNull(),
-
-    // searchVector: sql`job_search_vector`.as("searchVector"),
-
-    createdAt: timestamp("created_at", { mode: "string" })
-      .defaultNow()
-      .notNull(),
-    updatedAt: timestamp("updated_at", { mode: "string" })
-      .defaultNow()
-      .$onUpdate(() => new Date().toISOString())
-      .notNull(),
+    key: { type: String, required: true },
+    label: { type: String, maxlength: 180 },
+    color: { type: String },
+    icon: { type: String },
   },
-  (table) => [
-    index("search_index").using(
-      "gin",
-      sql`(
-          setweight(to_tsvector('simple', f_normalize(${table.title})), 'A') ||
-          setweight(to_tsvector('simple', f_normalize(${table.jobDescription})), 'B') ||
-          setweight(to_tsvector('simple', f_normalize(${table.candidateProfile})), 'C')
-      )`,
-    ),
-  ],
+  { _id: false }, // évite un _id pour chaque élément
 );
 
-export type Job = typeof job.$inferSelect;
+const JobSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true },
+    normalizedTitle: { type: String, required: true },
+
+    jobDescription: { type: String, required: true },
+    normalizedJobDescription: { type: String, required: true },
+
+    contractType: { type: String, enum: contractType.options, required: true },
+    location: { type: String, required: true },
+    jobNature: { type: String, enum: jobNature.options, required: true },
+    companyDescription: { type: String },
+    salary: { type: [Number, Number] },
+    skills: { type: [String], default: [] },
+    status: {
+      type: String,
+      required: true,
+      enum: statusEnum.options,
+      default: "open",
+    },
+
+    applyStatus: {
+      type: [ApplyStatusSchema],
+      required: true,
+      default: defaultApplyStatus,
+    },
+  },
+  {
+    timestamps: true, // ✅ ajoute createdAt et updatedAt
+  },
+);
+
+export type JobDocument = mongoose.HydratedDocumentFromSchema<typeof JobSchema>;
+export type Job = InferSchemaType<typeof JobSchema>;
+
+JobSchema.index(
+  { normalizedTitle: "text", normalizedJobDescription: "text" },
+  { weights: { normalizedTitle: 5, normalizedJobDescription: 1 } },
+);
+
+JobSchema.pre("validate", function () {
+  if (this.title) {
+    this.normalizedTitle = normalize(this.title);
+  }
+
+  if (this.jobDescription) {
+    this.normalizedJobDescription = normalize(this.jobDescription);
+  }
+});
+
+JobSchema.pre("updateOne", function () {
+  const update = this.getUpdate() as mongoose.UpdateQuery<Job>;
+
+  if (update?.title) update.normalizedTitle = normalize(update.title);
+  if (update?.jobDescription) {
+    update.normalizedJobDescription = normalize(update.jobDescription);
+  }
+});
+
+JobSchema.set("toJSON", {
+  transform: (_doc, ret) => {
+    (ret as any).id = ret._id.toString();
+  },
+});
+
+export const $Job = mongoose.model("Job", JobSchema);

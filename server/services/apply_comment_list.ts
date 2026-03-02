@@ -2,6 +2,7 @@ import { Apply, ApplyComment } from "../database/schema";
 import { IDataResult } from "../interfaces";
 import { paginationBuilderFromQuery } from "../tools/pagination_builder_from_query";
 import * as z from "zod";
+import { getApply } from "./apply_get";
 
 export async function listApplyComments({
   query,
@@ -27,28 +28,9 @@ export async function listApplyComments({
   const itemsWhere: any[] = [];
   const totalWhere: any[] = [];
 
-  let apply: Apply | undefined = undefined;
-
   const { applyID } = query;
   if (applyID) {
-    if (!z.uuid().safeParse(applyID).success) {
-      throw createError({
-        statusCode: 400,
-        data: { message: $t("apply.errors.invalid_id") },
-      });
-    }
-
-    [apply] = await db
-      .select()
-      .from(tables.apply)
-      .where(eq(tables.apply.id, applyID));
-
-    if (!apply) {
-      throw createError({
-        statusCode: 404,
-        data: { message: $t("apply.errors.apply_not_found") },
-      });
-    }
+    const apply = await getApply({ id: applyID, $t });
 
     itemsWhere.push(eq(tables.applyComment.applyID, applyID));
     totalWhere.push(eq(tables.applyComment.applyID, applyID));

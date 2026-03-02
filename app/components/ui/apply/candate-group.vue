@@ -3,8 +3,9 @@ import type { Apply, Job } from "~~/server/database/schema";
 import type { IDataResult } from "~~/server/interfaces";
 
 const { job } = defineProps<{ job: Job }>();
-const { data, status, refresh } = await useFetch<IDataResult<Apply>>(
+const { data, status } = await useFetch<IDataResult<Apply>>(
   `/api/admin/job/${job.id}/applys`,
+  { query: { page: -1 } },
 );
 
 const candidates = computed(() => {

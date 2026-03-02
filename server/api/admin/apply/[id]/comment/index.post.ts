@@ -1,5 +1,6 @@
 import * as z from "zod";
 import { getApplyCommentSchema } from "~~/server/services/apply_comment_schema";
+import { getApply } from "~~/server/services/apply_get";
 
 export default defineEventHandler(async (event) => {
   const $t = await useTranslation(event);
@@ -13,18 +14,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const [apply] = await db
-    .select()
-    .from(tables.apply)
-    .where(eq(tables.apply.id, applyID));
-
-  if (!apply) {
-    throw createError({
-      statusCode: 404,
-      data: { message: $t("apply.errors.apply_not_found") },
-    });
-  }
-
+  const apply = await getApply({ id: applyID, $t });
   const { schema } = getApplyCommentSchema($t);
   const dataParsed = schema.safeParse(body);
 

@@ -108,7 +108,7 @@ export async function listJobs({
     };
   }
 
-  const { offset, page, pageSize, all } = paginationBuilder(query);
+  const { offset, page, pageSize } = paginationBuilder(query);
   let filters: QueryFilter<any> = [];
 
   if (query.q) {
@@ -127,25 +127,67 @@ export async function listJobs({
     filters.push(buildSkillsFilter(query.skills));
   }
 
-  // if (query.status) {
-  //   filters.push({ $and: {} });
-  // }
+  if (query.status) {
+    filters.push({ $and: {} });
+  }
 
   const $match = (
     filters.length ? { $match: { $and: filters } } : undefined
   ) as any;
 
-  const pipe2: PipelineStage[] = [
+  const pipe: PipelineStage[] = [
     normalizeSkills(),
-    getFacet(offset, pageSize, all),
-    getProject(page, pageSize),
+
+    { $addFields: { id: { $toString: "$_id" } } },
+
+    {
+      $facet: {
+        // total global sans filtre
+        total: [$match, { $count: "total" }].filter((p) => p),
+
+        // total après filtres
+        totalItems: [{ $count: "total" }],
+
+        // data paginée
+        data: [
+          $match,
+          // { $sort: { createdAt: -1 } },
+          { $skip: offset },
+          { $limit: pageSize },
+        ].filter((p) => p),
+      },
+    },
+    {
+      $project: {
+        items: "$data",
+
+        total: {
+          $ifNull: [{ $arrayElemAt: ["$total.total", 0] }, 0],
+        },
+
+        totalItems: {
+          $ifNull: [{ $arrayElemAt: ["$totalItems.total", 0] }, 0],
+        },
+
+        page: { $literal: page },
+        pageSize: { $literal: pageSize },
+
+        totalPages: {
+          $ceil: {
+            $divide: [
+              {
+                $ifNull: [{ $arrayElemAt: ["$totalItems.total", 0] }, 0],
+              },
+              pageSize,
+            ],
+          },
+        },
+      },
+    },
   ];
 
-  if (filters.length) pipe2.unshift({ $match: { $and: filters as any } });
-  pipe2.unshift({ $addFields: { id: { $toString: "$_id" } } });
-
   let results: IDataResult<Job & { score: number }>;
-  [results] = await collections.$Job.aggregate(pipe2);
+  [results] = await collections.$Job.aggregate(pipe);
 
   if (query.q) {
     const tokens = normalize(query.q);

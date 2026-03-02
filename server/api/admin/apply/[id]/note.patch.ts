@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { getApply } from "~~/server/services/apply_get";
 import { getApplyShema } from "~~/server/services/apply_get_shema";
 
 export default defineEventHandler(async (event) => {
@@ -6,24 +7,7 @@ export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, "id") as string;
   const body = await readBody(event);
 
-  if (!id || !z.uuid().safeParse(id).success) {
-    throw createError({
-      statusCode: 400,
-      data: { message: $t("apply.errors.invalid_id") },
-    });
-  }
-
-  const [apply] = await db
-    .select()
-    .from(tables.apply)
-    .where(eq(tables.apply.id, id));
-
-  if (!apply) {
-    throw createError({
-      statusCode: 404,
-      data: { message: $t("apply.errors.apply_not_found") },
-    });
-  }
+  await getApply({ id, $t });
 
   const { note: schema } = getApplyShema($t);
   const parsedBody = z.object({ note: schema }).safeParse(body);
@@ -40,11 +24,10 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const [_apply] = await db
-    .update(tables.apply)
-    .set({ note: parsedBody.data.note })
-    .where(eq(tables.apply.id, id))
-    .returning();
+  await collections.$Apply.updateOne(
+    { _id: id },
+    { note: parsedBody.data.note },
+  );
 
-  return _apply;
+  return await getApply({ id, $t });
 });
