@@ -5,7 +5,7 @@ import * as z from "zod";
 import type { FormSubmitEvent } from "@nuxt/ui";
 import _ from "lodash";
 
-const { schema } = getConfigSchema(Use.i18n.t);
+const { schema, colorEnum } = getConfigSchema(Use.i18n.t);
 type Schema = z.output<typeof schema>;
 const state = reactive<Partial<Schema>>(_.cloneDeep(Store.config.config));
 // const logoUpload = useTemplateRef("logoUpload");
@@ -28,7 +28,7 @@ const colors = [
   "fuchsia",
   "pink",
   "rose",
-];
+] as typeof colorEnum.options;
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   submiting.value = true;
@@ -110,7 +110,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             class="w-full"
             color="neutral"
             :placeholder="$t(`config.items.orgName.placeholder`)"
-            v-model="state.orgName"
+            v-model="state.name"
           ></u-input>
         </UFormField>
 
@@ -119,7 +119,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           :label="$t('job.items.applyStatus.labels.color')"
           class="w-full"
         >
-          <u-select v-model="state.primaryColor" :items="colors" class="w-full">
+          <u-select
+            v-model="state.primaryColor"
+            :items="colors"
+            class="w-full"
+            clearable
+          >
             <!-- --color-cyan-500 -->
             <template #default="{ modelValue }">
               <template v-if="modelValue">
@@ -139,15 +144,19 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
                 :style="{ backgroundColor: `var(--color-${item}-500)` }"
               ></div>
             </template>
+
+            <!-- <template #trailing>
+              <u-button
+                v-if="state.primaryColor"
+                icon="i-lucide-x"
+                size="xs"
+                class="rounded-full"
+                square
+                @click.stop="state.primaryColor = null"
+              ></u-button>
+            </template> -->
           </u-select>
         </u-form-field>
-
-        <u-textarea
-          class="w-full rounded-md rounded-default"
-          color="neutral"
-          :placeholder="$t(`config.items.orgName.placeholder`)"
-          v-model="state.orgName"
-        ></u-textarea>
 
         <!-- <UFormField
           :help="$t(`config.items.cities.hint`)"

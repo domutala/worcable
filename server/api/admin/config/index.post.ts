@@ -3,14 +3,10 @@ import { getConfigSchema } from "~~/server/services/config_get_shema";
 export default defineEventHandler(async (event) => {
   const $t = await useTranslation(event);
   const body = await readBody(event);
-
-  const [config] = await db.select().from(tables.config);
-  if (!config) await db.insert(tables.config).values({}).returning();
+  const config = await collections.$Config.findOne();
 
   const parsedBody = await getConfigSchema($t).schema.safeParseAsync(body);
   if (parsedBody.error) {
-    console.log(parsedBody.error.issues);
-
     throw createError({
       statusCode: 400,
       data: {
@@ -22,10 +18,8 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const [_config] = await db
-    .update(tables.config)
-    .set(parsedBody.data)
-    .returning();
+  await collections.$Config.updateOne({ _id: config?._id }, parsedBody.data);
 
+  const _config = await collections.$Config.findOne();
   return _config;
 });

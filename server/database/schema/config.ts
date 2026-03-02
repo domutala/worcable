@@ -1,39 +1,29 @@
-import { pgTable, uuid, timestamp, jsonb, varchar } from "drizzle-orm/pg-core";
-import { getConfigSchema } from "../../services/config_get_shema";
-import * as z from "zod";
+import mongoose from "mongoose";
+import { FileSchema } from "../../mongoose/collectioons/file";
+import { getConfigSchema } from "~~/server/services/config_get_shema";
 
-const { logo, cities, currency, colorMode, primaryColor, language } =
-  getConfigSchema((v) => v);
+const { colorEnum, colorModeEnum, language } = getConfigSchema((v) => v);
 
-export const config = pgTable("config", {
-  id: uuid().primaryKey().defaultRandom(),
+const ConfigSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    logo: { type: FileSchema },
+    primaryColor: { type: String, enum: colorEnum.options },
+    colorMode: { type: String, enum: colorModeEnum.options },
+  },
+  {
+    timestamps: true,
+  },
+);
 
-  orgName: varchar().$type<string>(),
+export type Config = mongoose.InferSchemaType<typeof ConfigSchema> & {
+  id: string;
+};
 
-  logo: jsonb().$type<z.output<typeof logo>>(),
-
-  currency: varchar()
-    .default("XOF")
-    .notNull()
-    .$type<z.output<typeof currency>>(),
-
-  cities: jsonb().default([]).notNull().$type<z.output<typeof cities>>(),
-
-  colorMode: varchar().$type<z.output<typeof colorMode>>(),
-  primaryColor: varchar().$type<z.output<typeof primaryColor>>(),
-
-  language: varchar()
-    .$type<z.output<typeof language>>()
-    .default("fr")
-    .notNull(),
-
-  createdAt: timestamp("created_at", { mode: "string", withTimezone: false })
-    .defaultNow()
-    .notNull(),
-  updatedAt: timestamp("updated_at", { mode: "string", withTimezone: false })
-    .defaultNow()
-    .$onUpdate(() => new Date().toISOString())
-    .notNull(),
+ConfigSchema.set("toJSON", {
+  transform: (_doc, ret) => {
+    (ret as any).id = ret._id.toString();
+  },
 });
 
-export type Config = typeof config.$inferSelect;
+export const $Config = mongoose.model("Config", ConfigSchema);

@@ -1,5 +1,5 @@
 import onFetchError from "~/tools/onFetchError";
-import type { Config } from "~~/server/database/schema";
+import type { Config } from "~~/server/mongoose/collectioons";
 
 const store = defineStore(
   "config",
@@ -47,11 +47,11 @@ const store = defineStore(
       }
       //  else appConfig.ui.colors.primary = "orange";
 
-      $i18n.setLocale(
-        Object.keys($i18n.locales.value).includes(config.value.language)
-          ? config.value.language
-          : "fr",
-      );
+      // $i18n.setLocale(
+      //   Object.keys($i18n.locales.value).includes(config.value.language)
+      //     ? config.value.language
+      //     : "fr",
+      // );
     }
     return {
       config,

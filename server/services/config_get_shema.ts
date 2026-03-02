@@ -13,11 +13,7 @@ export function getConfigSchema($t: (string: string) => string) {
     .nullable()
     .default(null);
 
-  const orgName = z
-    .string($t("config.items.orgName.errors.invalid"))
-    .optional()
-    .nullable()
-    .default(null);
+  const name = z.string($t("config.items.orgName.errors.invalid")).optional();
 
   const currency = z
     .enum(ConfigCurrency, $t("config.items.currency.errors.invalid"))
@@ -41,36 +37,36 @@ export function getConfigSchema($t: (string: string) => string) {
     .array(cityId, $t("config.items.cities.errors.invalid"))
     .optional();
 
-  const colorMode = z
-    .enum(["dark", "light"], $t("config.items.colorMode.errors.invalid"))
-    .optional()
-    .nullable();
+  const colorModeEnum = z.enum(
+    ["dark", "light"],
+    $t("config.items.colorMode.errors.invalid"),
+  );
 
-  const primaryColor = z
-    .enum(
-      [
-        "red",
-        "orange",
-        "amber",
-        "yellow",
-        "lime",
-        "green",
-        "emerald",
-        "teal",
-        "cyan",
-        "sky",
-        "blue",
-        "indigo",
-        "violet",
-        "purple",
-        "fuchsia",
-        "pink",
-        "rose",
-      ],
-      $t("config.items.primary.errors.invalid"),
-    )
-    .optional()
-    .nullable();
+  const colorMode = colorModeEnum.optional().nullable();
+
+  const colorEnum = z.enum(
+    [
+      "red",
+      "orange",
+      "amber",
+      "yellow",
+      "lime",
+      "green",
+      "emerald",
+      "teal",
+      "cyan",
+      "sky",
+      "blue",
+      "indigo",
+      "violet",
+      "purple",
+      "fuchsia",
+      "pink",
+      "rose",
+    ],
+    $t("config.items.primary.errors.invalid"),
+  );
+  const primaryColor = colorEnum.optional().nullable();
 
   const language = z
     .enum(["fr"], $t("config.items.primary.errors.invalid"))
@@ -78,22 +74,25 @@ export function getConfigSchema($t: (string: string) => string) {
 
   const schema = z.object({
     logo,
-    orgName,
-    currency,
-    cities,
+    name,
     colorMode,
     primaryColor,
-    language,
+
+    // language,
+    // currency,
+    // cities,
   });
 
   return {
     schema,
     logo,
-    orgName,
+    name,
     currency,
     cities,
     colorMode,
     primaryColor,
     language,
+    colorEnum,
+    colorModeEnum,
   };
 }
