@@ -1,5 +1,5 @@
 import { IDataResult } from "../interfaces";
-import { Job } from "../mongoose/collectioons";
+import { Job } from "../database/collections";
 import { paginationBuilder } from "../tools/pagination_builder_from_query";
 import { PipelineStage, QueryFilter } from "mongoose";
 

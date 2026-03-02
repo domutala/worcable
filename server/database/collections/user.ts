@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { FileSchema } from "../../mongoose/collectioons/file";
-import { InferSchemaType } from "~~/server/mongoose/types";
+import { FileSchema } from "./file";
+import { InferSchemaType } from "~~/server/database/types";
 
 const UserSchema = new mongoose.Schema(
   {

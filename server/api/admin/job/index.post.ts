@@ -1,6 +1,6 @@
 import { getJobShema } from "~~/server/services/job_schema";
 import { isValidObjectId } from "mongoose";
-import { Job } from "~~/server/mongoose/collectioons";
+import { Job } from "~~/server/database/collections";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);

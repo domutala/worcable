@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Job } from "~~/server/database/schema";
+import type { Job } from "~~/server/database/collections";
 import type { IDataResult } from "~~/server/interfaces";
 import { watchImmediate } from "@vueuse/core";
 import _ from "lodash";

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Apply, ApplyComment, Job } from "~~/server/database/schema";
+import type { Apply, ApplyComment, Job } from "~~/server/database/collections";
 import _ from "lodash";
 import { getApplyCommentSchema } from "~~/server/services/apply_comment_schema";
 import * as z from "zod";

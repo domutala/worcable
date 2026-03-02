@@ -1,4 +1,4 @@
-import type { Apply, Job } from "~~/server/database/schema";
+import type { Apply, Job } from "~~/server/database/collections";
 import { getJobShema } from "~~/server/services/job_schema";
 import * as z from "zod";
 import type { DropdownMenuItem } from "@nuxt/ui";

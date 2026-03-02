@@ -1,8 +1,8 @@
-import { Apply, ApplyComment } from "../database/schema";
+import { ApplyComment } from "../database/collections";
 import { IDataResult } from "../interfaces";
-import { paginationBuilderFromQuery } from "../tools/pagination_builder_from_query";
-import * as z from "zod";
+import { paginationBuilder } from "../tools/pagination_builder_from_query";
 import { getApply } from "./apply_get";
+import { isValidObjectId, PipelineStage, QueryFilter, Types } from "mongoose";
 
 export async function listApplyComments({
   query,
@@ -11,44 +11,25 @@ export async function listApplyComments({
   query: Record<string, any>;
   $t: (str: string) => string;
 }) {
-  const sortableColumns = {
-    createdAt: tables.applyComment.createdAt,
-    updatedAt: tables.applyComment.updatedAt,
-  };
-
-  const { limit, offset, page, pageSize, sortOrder } =
-    paginationBuilderFromQuery(query, sortableColumns);
-
-  const itemsQuery = db.select().from(tables.applyComment).orderBy(sortOrder);
-  const totalQuery = db.select().from(tables.applyComment).orderBy(sortOrder);
-
-  itemsQuery.limit(limit).offset(offset);
-  // totalQuery.limit(limit).offset(offset);
-
-  const itemsWhere: any[] = [];
-  const totalWhere: any[] = [];
+  const { offset, page, pageSize, all } = paginationBuilder(query);
+  let filters: QueryFilter<any> = [];
 
   const { applyID } = query;
-  if (applyID) {
-    const apply = await getApply({ id: applyID, $t });
-
-    itemsWhere.push(eq(tables.applyComment.applyID, applyID));
-    totalWhere.push(eq(tables.applyComment.applyID, applyID));
+  if (applyID && isValidObjectId(applyID)) {
+    await getApply({ id: applyID, $t });
+    filters.push({ applyID: new Types.ObjectId(applyID) });
   }
 
-  itemsQuery.where(and(...itemsWhere));
-  totalQuery.where(and(...totalWhere));
+  const pipe: PipelineStage[] = [
+    getFacet(offset, pageSize, all),
+    getProject(page, pageSize),
+  ];
 
-  const applys = await itemsQuery;
-  const total = await totalQuery;
+  if (filters.length) pipe.unshift({ $match: { $and: filters as any } });
+  pipe.unshift({ $addFields: { id: { $toString: "$_id" } } });
 
-  const result: IDataResult<ApplyComment> = {
-    items: applys,
-    page,
-    pageSize,
-    total: total.length,
-    totalPages: Math.ceil(total.length / pageSize),
-  };
+  let results: IDataResult<ApplyComment & { score: number }>;
+  [results] = await collections.$ApplyComment.aggregate(pipe);
 
-  return result;
+  return results;
 }

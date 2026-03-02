@@ -1,7 +1,7 @@
 // store.ts
 import type { DropdownMenuItem } from "@nuxt/ui";
 import { type ShallowRef } from "vue";
-import type { Apply, Job } from "~~/server/database/schema";
+import type { Apply, Job } from "~~/server/database/collections";
 
 export function useJob(job: ShallowRef<Job>) {
   const statusSubmiting = ref(false);

@@ -2,7 +2,7 @@
 import type { DropdownMenuItem } from "@nuxt/ui";
 import { shallowRef, type ShallowRef } from "vue";
 import { applyStatusIcons, ApplyUtils } from "~/tools/apply";
-import type { Apply, Job } from "~~/server/database/schema";
+import type { Apply, Job } from "~~/server/database/collections";
 
 export function useApply(job: ShallowRef<Job>, apply: ShallowRef<Apply>) {
   const statusSubmiting = ref(false);

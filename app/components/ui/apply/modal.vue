@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { watchImmediate } from "@vueuse/core";
 import { useRouteQuery } from "@vueuse/router";
-import type { Apply, Job } from "~~/server/database/schema";
+import type { Apply, Job } from "~~/server/database/collections";
 
 const applyID = useRouteQuery("modal-apply-id");
 

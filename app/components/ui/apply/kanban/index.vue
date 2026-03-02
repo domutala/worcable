@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type Apply, type Job } from "~~/server/database/schema";
+import { type Apply, type Job } from "~~/server/database/collections";
 import Sortable from "sortablejs";
 import { updateApplyStatus } from "~/tools/apply";
 

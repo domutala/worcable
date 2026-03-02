@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { FileSchema } from "../../mongoose/collectioons/file";
+import { FileSchema } from "./file";
 import { getConfigSchema } from "~~/server/services/config_get_shema";
-import { InferSchemaType } from "~~/server/mongoose/types";
+import { InferSchemaType } from "~~/server/database/types";
 
 const { colorEnum, colorModeEnum, language } = getConfigSchema((v) => v);
 

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import onFetchError from "~/tools/onFetchError";
-import type { Apply, Job } from "~~/server/database/schema";
+import type { Apply, Job } from "~~/server/database/collections";
 
 const { readonly, size } = defineProps<{ readonly?: boolean; size?: string }>();
 const submiting = ref(false);

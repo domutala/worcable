@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type Apply, type Job } from "~~/server/database/schema";
+import { type Apply, type Job } from "~~/server/database/collections";
 import type { IDataResult } from "~~/server/interfaces";
 import { watchImmediate } from "@vueuse/core";
 import type { DropdownMenuItem } from "@nuxt/ui";

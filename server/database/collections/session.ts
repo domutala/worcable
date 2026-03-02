@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { InferSchemaType } from "~~/server/mongoose/types";
+import { InferSchemaType } from "~~/server/database/types";
 
 const SessionSchema = new mongoose.Schema(
   {

@@ -1,5 +1,5 @@
 import onFetchError from "~/tools/onFetchError";
-import type { User } from "~~/server/database/schema";
+import type { User } from "~~/server/database/collections";
 
 const store = defineStore(
   "session",

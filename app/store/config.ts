@@ -1,5 +1,5 @@
 import onFetchError from "~/tools/onFetchError";
-import type { Config } from "~~/server/mongoose/collectioons";
+import type { Config } from "~~/server/database/collections";
 
 const store = defineStore(
   "config",

@@ -4,7 +4,7 @@ import MarkdownIt from "markdown-it";
 import * as z from "zod";
 import { watchImmediate } from "@vueuse/core";
 import { getApplyDataShema } from "~~/server/services/apply_get_shema";
-import type { Job } from "~~/server/database/schema";
+import type { Job } from "~~/server/database/collections";
 import onFetchError from "~/tools/onFetchError";
 import { CurrencyAvailaible } from "~~/server/interfaces";
 

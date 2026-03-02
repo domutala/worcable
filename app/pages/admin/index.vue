@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import UiHeader from "~/components/header.vue";
-import type { Job } from "~~/server/database/schema";
+import type { Job } from "~~/server/database/collections";
 const jobs = ref<Job[]>([]);
 </script>
 

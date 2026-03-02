@@ -1,4 +1,5 @@
 import onFetchError from "~/tools/onFetchError";
+import type { FileDocument } from "~~/server/database/collections";
 import type { UploadedFile } from "~~/server/interfaces";
 
 export default {
@@ -35,7 +36,7 @@ export default {
     );
   },
 
-  getFileUrl(file?: UploadedFile | null) {
+  getFileUrl(file?: UploadedFile | FileDocument | null) {
     if (!file) return;
     if (file.url) return file.url;
     else return `/api/file/${file.data}`;

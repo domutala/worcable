@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import _ from "lodash";
-import type { Apply } from "~~/server/database/schema";
+import type { Apply } from "~~/server/database/collections";
 import type { IDataResult } from "~~/server/interfaces";
 
 const sortBy = ref("updatedAt");

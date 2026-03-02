@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useRouteQuery } from "@vueuse/router";
-import type { Apply, Job } from "~~/server/database/schema";
+import type { Apply, Job } from "~~/server/database/collections";
 
 const job = defineModel<Job>("job", { required: true });
 const apply = defineModel<Apply>("apply", { required: true });

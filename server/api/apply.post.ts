@@ -1,7 +1,6 @@
 import { getApplyDataShema } from "../services/apply_get_shema";
 import { getJob } from "../services/job_get";
 import saveFile from "../tools/save_file";
-import * as z from "zod";
 
 function parsePrimitiveValue(value: string): string | number | boolean | null {
   const trimmed = value.trim();
@@ -67,13 +66,10 @@ export default defineEventHandler(async (event) => {
     dataParsed.data.avatar = await saveFile(dataParsed.data.avatar);
   }
 
-  const [apply] = await db
-    .insert(tables.apply)
-    .values({
-      jobID,
-      data: dataParsed.data,
-    })
-    .returning();
+  const apply = await collections.$Apply.create({
+    jobID,
+    data: dataParsed.data,
+  });
 
   return apply;
 });

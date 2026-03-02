@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { applyStatusColors, applyStatusIcons } from "~/tools/apply";
-import type { Job } from "~~/server/database/schema";
+import type { Job } from "~~/server/database/collections";
 
 const job = defineModel<Job>("job", { required: true });
 const status = defineModel<string | null>("status", {});

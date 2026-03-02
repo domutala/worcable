@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Apply, ApplyComment, Job } from "~~/server/database/schema";
+import type { Apply, ApplyComment, Job } from "~~/server/database/collections";
 import _ from "lodash";
 
 const job = defineModel<Job>("job", { required: true });

@@ -3,8 +3,8 @@ import {
   availability,
   educationLevel,
 } from "~~/server/services/apply_get_shema";
-import { FileSchema } from "../../mongoose/collectioons/file";
-import { InferSchemaType } from "~~/server/mongoose/types";
+import { FileSchema } from "./file";
+import { InferSchemaType } from "~~/server/database/types";
 
 const DataSchema = new mongoose.Schema(
   {

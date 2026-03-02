@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { getJobShema } from "~~/server/services/job_schema";
-import { InferSchemaType } from "../../mongoose/types";
+import { InferSchemaType } from "../types";
 
 const { contractType, jobNature, defaultApplyStatus, statusEnum } =
   getJobShema();

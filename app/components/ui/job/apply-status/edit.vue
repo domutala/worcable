@@ -3,7 +3,7 @@ import { getJobShema } from "~~/server/services/job_schema";
 import * as z from "zod";
 import _ from "lodash";
 import type { FormSubmitEvent } from "@nuxt/ui";
-import type { Job } from "~~/server/database/schema";
+import type { Job } from "~~/server/database/collections";
 import { updateApplyStatus } from "~/tools/apply";
 
 const { singleApplyStatus: schema } = getJobShema(Use.i18n.t);

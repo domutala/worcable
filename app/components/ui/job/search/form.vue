@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Job } from "~~/server/database/schema";
+import type { Job } from "~~/server/database/collections";
 import * as z from "zod";
 import type { FormSubmitEvent } from "@nuxt/ui";
 import { useRouteQuery } from "@vueuse/router";

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Job } from "~~/server/database/schema";
+import type { Job } from "~~/server/database/collections";
 import {
   useBreakpoints,
   breakpointsTailwind,

@@ -1,7 +1,7 @@
 import { IDataResult } from "../interfaces";
 import { paginationBuilder } from "../tools/pagination_builder_from_query";
 import { getJob } from "./job_get";
-import { Apply, JobDocument } from "../mongoose/collectioons";
+import { Apply, JobDocument } from "../database/collections";
 import { isValidObjectId, PipelineStage, QueryFilter, Types } from "mongoose";
 
 export async function listApplys({

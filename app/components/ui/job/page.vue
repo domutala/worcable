@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Job } from "~~/server/database/schema";
+import type { Job } from "~~/server/database/collections";
 
 const { job } = defineProps<{ job: Job }>();
 </script>

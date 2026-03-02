@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { InferSchemaType } from "mongoose";
 
 export const FileSchema = new mongoose.Schema(
   {
@@ -10,3 +10,5 @@ export const FileSchema = new mongoose.Schema(
   },
   { _id: false },
 );
+
+export type FileDocument = InferSchemaType<typeof FileSchema>;

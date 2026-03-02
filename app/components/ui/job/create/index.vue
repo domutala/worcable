@@ -3,7 +3,7 @@ import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import type { StepperItem } from "@nuxt/ui";
 import onFetchError from "~/tools/onFetchError";
 import _ from "lodash";
-import type { Job } from "~~/server/mongoose/collectioons";
+import type { Job } from "~~/server/database/collections";
 
 const { job } = defineProps<{ job?: Job }>();
 console.log(job);

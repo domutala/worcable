@@ -1,41 +1,42 @@
 <script lang="ts" setup>
-import type { Apply, ApplyComment, Job } from "~~/server/database/schema";
+import type { Apply, ApplyComment, Job } from "~~/server/database/collections";
 import _ from "lodash";
+import type { User } from "~~/server/database/collections";
 
 const job = defineModel<Job>("job", { required: true });
 const apply = defineModel<Apply>("apply", { required: true });
 const comment = defineModel<ApplyComment>("comment", { required: true });
+const user = ref<User>();
 
-const name = computed(() => {
-  if (comment.value.author.candidate) {
-    return `${apply.value.data.firstName} ${apply.value.data.lastName}`;
+onMounted(async () => {
+  if (comment.value.author.user) {
+    const url = `/api/admin/user/${comment.value.author.user}`;
+    user.value = await $fetch<User>(url, { method: "get" });
   }
-
-  return Use.i18n.t("apply_comment.labels.unknown_user");
 });
 
-const email = computed(() => {
-  if (comment.value.author.candidate) {
-    return apply.value.data.email;
+const author = computed(() => {
+  let name = "";
+  let email: string | undefined | null = undefined;
+  let avatar: string | undefined = undefined;
+
+  if (user.value) {
+    email = user.value.email;
+    avatar = Utils.getFileUrl(user.value.avatar);
+    name = [user.value.firstName, user.value.lastName].join(" ");
+  } else if (comment.value.author.candidate) {
+    email = apply.value.data.email;
+    avatar = Utils.getFileUrl(apply.value.data.avatar);
+    name = `${apply.value.data.firstName} ${apply.value.data.lastName}`;
+  } else {
+    avatar = Utils.getFileUrl(comment.value.author.author?.avatar);
+    email = comment.value.author.author?.email;
+    name =
+      comment.value.author.author?.name ??
+      Use.i18n.t("apply_comment.labels.unknown_user");
   }
 
-  if (comment.value.author.author) {
-    return comment.value.author.author.email;
-  }
-
-  return;
-});
-
-const avatar = computed(() => {
-  if (comment.value.author.candidate) {
-    return Utils.getFileUrl(apply.value.data.avatar);
-  }
-
-  if (comment.value.author.author) {
-    return comment.value.author.author.avatar;
-  }
-
-  return;
+  return { name, email, avatar };
 });
 </script>
 
@@ -43,8 +44,8 @@ const avatar = computed(() => {
   <div class="bg-default rounded-default ring ring-default">
     <div class="flex items-center gap-3 px-5 py-3 border-b border-default">
       <UAvatar
-        :src="avatar"
-        :alt="name"
+        :src="author.avatar"
+        :alt="author.name"
         class="bg-surface rounded-default text-md"
         size="xl"
       >
@@ -53,11 +54,11 @@ const avatar = computed(() => {
 
       <div class="select-none leading-none flex-1 w-0">
         <div class="truncate">
-          {{ name }}
+          {{ author.name }}
         </div>
 
         <div class="truncate text-sm opacity-50 leading-none">
-          {{ email }}
+          {{ author.email }}
         </div>
       </div>
 
