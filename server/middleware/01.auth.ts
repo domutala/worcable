@@ -1,4 +1,3 @@
-import { eq, isNull, and, or } from "drizzle-orm";
 import jwt from "jsonwebtoken";
 
 export default defineEventHandler(async (event) => {
@@ -14,26 +13,28 @@ export default defineEventHandler(async (event) => {
   else if (accesToken) token = accesToken;
 
   if (token) {
-    const r = jwt.verify(token, runtime.secretKey) as any;
-    const [session] = await db
-      .select()
-      .from(tables.session)
-      .where(
-        and(
-          eq(tables.session.id, r.sessionID),
-          or(isNull(tables.session.close), eq(tables.session.close, false)),
-        ),
-      );
-
-    if (!session) {
-      deleteCookie(event, "access_token", {
-        httpOnly: true,
-        secure: true,
-        sameSite: "lax",
-        path: "/",
+    try {
+      const r = jwt.verify(token, runtime.secretKey) as any;
+      const session = await collections.$Session.findOne({
+        _id: r.sessionID,
+        close: false,
       });
-    }
 
-    event.context.session = session;
+      if (!session) {
+        deleteCookie(event, "access_token", {
+          httpOnly: true,
+          secure: true,
+          sameSite: "lax",
+          path: "/",
+        });
+      } else {
+        const user = await collections.$User.findById(session.userID);
+        delete user?.password;
+
+        if (user) event.context.session = { ...session, user };
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 });

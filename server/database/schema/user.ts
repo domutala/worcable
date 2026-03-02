@@ -1,19 +1,32 @@
-import { pgTable, uuid, varchar, timestamp, jsonb } from "drizzle-orm/pg-core";
-import { UploadedFile } from "~~/server/interfaces";
+import mongoose from "mongoose";
+import { FileSchema } from "../../mongoose/collectioons/file";
 
-export const user = pgTable("user", {
-  id: uuid().primaryKey().defaultRandom(),
-  email: varchar().notNull(),
-  avatar: jsonb().$type<UploadedFile>(),
-  firstName: varchar().notNull(),
-  lastName: varchar().notNull(),
-  password: varchar(),
+const UserSchema = new mongoose.Schema(
+  {
+    email: { type: String, required: true },
+    firstName: { type: String, required: true, minlength: 1 },
+    lastName: { type: String, required: true, minlength: 1 },
+    password: { type: String, select: false },
+    avatar: { type: FileSchema },
+  },
+  {
+    timestamps: true,
+  },
+);
 
-  createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", { mode: "string" })
-    .defaultNow()
-    .$onUpdate(() => new Date().toISOString())
-    .notNull(),
+export type User = mongoose.InferSchemaType<typeof UserSchema> & { id: string };
+
+UserSchema.pre("validate", function () {
+  if (this.email) {
+    this.email = this.email.toLocaleLowerCase().trim();
+  }
 });
 
-export type User = typeof user.$inferSelect;
+UserSchema.set("toJSON", {
+  transform: (_doc, ret) => {
+    (ret as any).id = ret._id.toString();
+    delete ret.password;
+  },
+});
+
+export const $User = mongoose.model("User", UserSchema);

@@ -48,7 +48,7 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
   loading.value = true;
   try {
     const result = await Store.session.login(payload.data);
-    await Use.router.push(Use.localePath({ name: "admin" }));
+    await Use.router.push(Use.localePath({ name: "admin", replace: true }));
   } catch (error) {
     onFetchError(error);
   } finally {

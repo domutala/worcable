@@ -1,13 +1,29 @@
-import { pgTable, uuid, timestamp, boolean } from "drizzle-orm/pg-core";
-import { user } from "./user";
+import mongoose from "mongoose";
 
-export const session = pgTable("session", {
-  id: uuid().primaryKey().defaultRandom(),
-  close: boolean().default(false),
-  createdAt: timestamp().defaultNow().notNull(),
-  userID: uuid("user_id")
-    .references(() => user.id)
-    .notNull(),
+const SessionSchema = new mongoose.Schema(
+  {
+    close: { type: Boolean, required: true, default: false },
+
+    userID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      index: true,
+    },
+  },
+  {
+    timestamps: true,
+  },
+);
+
+export type Session = mongoose.InferSchemaType<typeof SessionSchema> & {
+  id: string;
+};
+
+SessionSchema.set("toJSON", {
+  transform: (_doc, ret) => {
+    (ret as any).id = ret._id.toString();
+  },
 });
 
-export type Session = typeof session.$inferSelect;
+export const $Session = mongoose.model("Session", SessionSchema);

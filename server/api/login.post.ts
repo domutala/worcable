@@ -15,10 +15,12 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const [user] = await db
-    .select()
-    .from(tables.user)
-    .where(eq(tables.user.email, body.email));
+  const user = await collections.$User
+    .findOne({
+      email: body.email.toLowerCase().trim(),
+    })
+    .select("+password")
+    .lean();
 
   if (!user || !user.password) {
     throw createError({
@@ -40,10 +42,11 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const [session] = await db
-    .insert(tables.session)
-    .values({ userID: user.id })
-    .returning({ id: tables.session.id });
+  delete user.password;
+
+  const session = await collections.$Session.create({
+    userID: user._id.toString(),
+  });
 
   const token = jwt.sign({ sessionID: session.id }, runtime.secretKey);
   return { token, user };

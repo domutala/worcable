@@ -8,10 +8,10 @@ export default defineEventHandler(async (event) => {
 
   if (!event.context.session) return;
 
-  await db
-    .update(tables.session)
-    .set({ close: false })
-    .where(eq(tables.session.id, event.context.session.id));
+  await collections.$Session.updateOne(
+    { _id: event.context.session.id },
+    { close: true },
+  );
 
   return;
 });
