@@ -1,4 +1,5 @@
 import { getApplyDataShema } from "../services/apply_get_shema";
+import { getJob } from "../services/job_get";
 import saveFile from "../tools/save_file";
 import * as z from "zod";
 
@@ -42,30 +43,11 @@ export default defineEventHandler(async (event) => {
     {} as Record<string, any>,
   );
   const jobID = body.id as string;
-
-  if (!jobID || !z.uuid().safeParse(jobID).success) {
-    throw createError({
-      statusCode: 400,
-      data: { message: $t("job.errors.invalid_id") },
-    });
-  }
-
-  const [job] = await db
-    .select()
-    .from(tables.job)
-    .where(eq(tables.job.id, jobID));
-
-  if (!job) {
-    throw createError({
-      statusCode: 404,
-      data: { message: $t("job.errors.job_not_found") },
-    });
-  }
+  const job = await getJob({ id: jobID, $t });
 
   if (body.phone) body.phone = body.phone.toString();
 
   const ZApplyData = getApplyDataShema($t);
-
   const dataParsed = ZApplyData.safeParse(body);
 
   if (dataParsed.error) {

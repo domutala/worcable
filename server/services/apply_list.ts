@@ -1,8 +1,10 @@
 import { isNull, notInArray } from "drizzle-orm";
-import { Apply, Job } from "../database/schema";
+import { Apply } from "../database/schema";
 import { IDataResult } from "../interfaces";
 import { paginationBuilderFromQuery } from "../tools/pagination_builder_from_query";
 import * as z from "zod";
+import { getJob } from "./job_get";
+import { Job } from "../mongoose/collectioons";
 
 export async function listApplys({
   query,
@@ -34,22 +36,7 @@ export async function listApplys({
 
   const { jobID } = query;
   if (jobID) {
-    if (!z.uuid().safeParse(jobID).success) {
-      throw createError({
-        statusCode: 400,
-        data: { message: $t("job.errors.invalid_id") },
-      });
-    }
-
-    [job] = await db.select().from(tables.job).where(eq(tables.job.id, jobID));
-
-    if (!job) {
-      throw createError({
-        statusCode: 404,
-        data: { message: $t("job.errors.job_not_found") },
-      });
-    }
-
+    job = await getJob({ id: jobID, $t });
     itemsWhere.push(eq(tables.apply.jobID, jobID));
     totalWhere.push(eq(tables.apply.jobID, jobID));
   }

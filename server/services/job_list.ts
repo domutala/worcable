@@ -1,7 +1,6 @@
 import { IDataResult } from "../interfaces";
+import { Job } from "../mongoose/collectioons";
 import { paginationBuilder } from "../tools/pagination_builder_from_query";
-import { useMongo } from "../mongoose";
-import { _Job, JobDocument } from "../mongoose/models/job";
 import { PipelineStage, QueryFilter } from "mongoose";
 
 export async function listJobs({
@@ -11,16 +10,7 @@ export async function listJobs({
   query: Record<string, any>;
   $t: (str: string) => string;
 }) {
-  await useMongo();
-  await _Job.syncIndexes();
-
-  function tokenize(str: string) {
-    return str
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, " ")
-      .replace(/[-_.*+?^${}()|[\]\\]/g, "");
-  }
+  await collections.$Job.syncIndexes();
 
   function normalizeSkills() {
     return {
@@ -76,7 +66,7 @@ export async function listJobs({
   }
 
   function buildSkillsFilter(skiills: string[]) {
-    skiills = skiills.map((skill) => tokenize(skill).replaceAll(" ", ""));
+    skiills = skiills.map((skill) => normalize(skill).replaceAll(" ", ""));
 
     return {
       $and: [
@@ -118,16 +108,11 @@ export async function listJobs({
     };
   }
 
-  const sortableColumns = {
-    createdAt: tables.job.createdAt,
-    updatedAt: tables.job.updatedAt,
-  };
-
   const { offset, page, pageSize } = paginationBuilder(query);
   let filters: QueryFilter<any> = [];
 
   if (query.q) {
-    const tokens = tokenize(query.q);
+    const tokens = normalize(query.q);
     const searchRegex = new RegExp(tokens, "i");
 
     filters.push({
@@ -142,12 +127,18 @@ export async function listJobs({
     filters.push(buildSkillsFilter(query.skills));
   }
 
+  if (query.status) {
+    filters.push({ $and: {} });
+  }
+
   const $match = (
     filters.length ? { $match: { $and: filters } } : undefined
   ) as any;
 
   const pipe: PipelineStage[] = [
     normalizeSkills(),
+
+    { $addFields: { id: { $toString: "$_id" } } },
 
     {
       $facet: {
@@ -195,11 +186,11 @@ export async function listJobs({
     },
   ];
 
-  let results: IDataResult<JobDocument & { score: number }>;
-  [results] = await _Job.aggregate(pipe);
+  let results: IDataResult<Job & { score: number }>;
+  [results] = await collections.$Job.aggregate(pipe);
 
   if (query.q) {
-    const tokens = tokenize(query.q);
+    const tokens = normalize(query.q);
 
     results.items = results.items.map((job) => {
       let score = 0;

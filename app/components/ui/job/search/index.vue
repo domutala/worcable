@@ -5,8 +5,7 @@ import { watchImmediate } from "@vueuse/core";
 import _ from "lodash";
 import { useRouteQuery } from "@vueuse/router";
 
-definePageMeta({ layout: false });
-
+const { admin } = defineProps<{ admin?: boolean }>();
 const searchQuery = useRouteQuery("q", "", { transform: String });
 const sortBy = ref("updatedAt");
 const sortOrder = ref("desc");
@@ -17,7 +16,7 @@ const {
   data: results,
   status,
   refresh,
-} = await useFetch<IDataResult<Job>>(`/api/job`, {
+} = await useFetch<IDataResult<Job>>(admin ? "/api/admin/job" : `/api/job`, {
   method: "get",
   query: {
     sortBy,

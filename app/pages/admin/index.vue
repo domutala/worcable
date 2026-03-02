@@ -9,6 +9,7 @@ const jobs = ref<Job[]>([]);
     v-if="Store.session.user"
     v-slot="{ jobs, refresh, status, results, page, paginate }"
     v-model:jobs="jobs"
+    admin
   >
     <ui-layout :breads="['$home', '$admin']">
       <!-- <UiBreadcrumb

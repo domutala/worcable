@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import * as _collections from "./collectioons";
 
 let connectionPromise: Promise<typeof mongoose> | null = null;
 
@@ -24,3 +25,6 @@ export async function useMongo() {
 
   return connectionPromise;
 }
+
+useMongo();
+export const collections = _collections;

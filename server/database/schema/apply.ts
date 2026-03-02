@@ -21,7 +21,7 @@ export const apply = pgTable("apply", {
     .default([])
     .$type<Array<{ status: z.output<typeof status>; date: string }>>(),
 
-  jobID: uuid("job_id"),
+  jobID: varchar("job_id"),
 
   note: integer().$type<z.output<typeof note>>(),
 

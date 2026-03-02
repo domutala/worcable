@@ -93,6 +93,13 @@ export function getJobShema($t: (str: string) => string = (str) => str) {
     .min(30, $t("job.items.candidateProfile.errors.min"))
     .optional();
 
+  const defaultApplyStatus = [
+    { key: "REJECTED" },
+    { key: "TO_CONTACT" },
+    { key: "INTERVIEW" },
+    { key: "HIRED" },
+  ];
+
   const singleApplyStatus = z.object({
     key: z.string(),
     label: z.string().max(180).optional(),
@@ -103,18 +110,14 @@ export function getJobShema($t: (str: string) => string = (str) => str) {
   const applyStatus = singleApplyStatus
     .array()
     .min(1)
-    .default([
-      { key: "REJECTED" },
-      { key: "TO_CONTACT" },
-      { key: "INTERVIEW" },
-      { key: "HIRED" },
-    ])
+    .default(defaultApplyStatus)
     .transform((applyStatus) => {
       applyStatus = _.uniqBy(applyStatus, "key");
       return applyStatus;
     });
 
-  const status = z.enum(["open", "close", "pause"]).default("open");
+  const statusEnum = z.enum(["open", "close", "pause"]);
+  const status = statusEnum.default("open");
 
   const schema = z.object({
     title,
@@ -149,7 +152,9 @@ export function getJobShema($t: (str: string) => string = (str) => str) {
 
     applyStatus,
     singleApplyStatus,
+    defaultApplyStatus,
 
+    statusEnum,
     status,
   };
 }

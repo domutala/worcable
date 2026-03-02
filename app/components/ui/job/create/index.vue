@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import type { StepperItem } from "@nuxt/ui";
-import type { Job } from "~~/server/database/schema";
 import onFetchError from "~/tools/onFetchError";
 import _ from "lodash";
+import type { Job } from "~~/server/mongoose/collectioons";
 
 const { job } = defineProps<{ job?: Job }>();
+console.log(job);
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const slimStepper = breakpoints.smallerOrEqual("2xl");
