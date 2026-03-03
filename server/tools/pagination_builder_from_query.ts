@@ -14,6 +14,8 @@
 //   const offset = (safePage - 1) * safePageSize;
 //   const limit = safePageSize;
 
+import { PaginateOptions } from "../database/types";
+
 //   Object.values(sortableColumns)[0];
 //   const sortBy =
 //     query.sortBy && sortableColumns[query.sortBy as "title"]
@@ -33,7 +35,20 @@
 //   };
 // }
 
-export function paginationBuilder(query: { page?: string; pageSize?: string }) {
+export function paginationBuilder(query: {
+  page?: string;
+  pageSize?: string;
+  sortableColumns?: string[];
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+}): PaginateOptions {
+  query.sortableColumns ||= ["updatedAt"];
+
+  const sortOrder = query.sortOrder === "asc" ? 1 : -1;
+  let sortBy = query.sortBy || "updatedAt";
+  const iSortBy = query.sortableColumns.findIndex((c) => c == sortBy);
+  if (iSortBy === -1) sortBy = "updatedAt";
+
   const page = Number(query.page ?? 1);
   const all = page === -1;
   const safePage = Math.max(1, page);
@@ -46,6 +61,10 @@ export function paginationBuilder(query: { page?: string; pageSize?: string }) {
     offset,
     page: safePage,
     pageSize: safePageSize,
+
+    sortBy,
+    sortOrder,
+
     all,
   };
 }

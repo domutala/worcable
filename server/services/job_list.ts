@@ -108,7 +108,7 @@ export async function listJobs({
     };
   }
 
-  const { offset, page, pageSize, all } = paginationBuilder(query);
+  const paginate = paginationBuilder(query);
   let filters: QueryFilter<any> = [];
 
   if (query.q) {
@@ -127,25 +127,29 @@ export async function listJobs({
     filters.push(buildSkillsFilter(query.skills));
   }
 
-  // if (query.status) {
-  //   filters.push({ $and: {} });
-  // }
+  if (query.filterBy) {
+    const filterBy = (query.filterBy as string).split(";");
 
-  const $match = (
-    filters.length ? { $match: { $and: filters } } : undefined
-  ) as any;
+    for (const filter of filterBy) {
+      const [key, value] = filter.split(":");
 
-  const pipe2: PipelineStage[] = [
+      if (key === "status") {
+        filters.push({ status: { $in: value.split(",") } });
+      }
+    }
+  }
+
+  const pipe: PipelineStage[] = [
     normalizeSkills(),
-    getFacet(offset, pageSize, all),
-    getProject(page, pageSize),
+    getFacet(paginate),
+    getProject(paginate),
   ];
 
-  if (filters.length) pipe2.unshift({ $match: { $and: filters as any } });
-  pipe2.unshift({ $addFields: { id: { $toString: "$_id" } } });
+  if (filters.length) pipe.unshift({ $match: { $and: filters as any } });
+  pipe.unshift({ $addFields: { id: { $toString: "$_id" } } });
 
   let results: IDataResult<Job & { score: number }>;
-  [results] = await collections.$Job.aggregate(pipe2);
+  [results] = await collections.$Job.aggregate(pipe);
 
   if (query.q) {
     const tokens = normalize(query.q);

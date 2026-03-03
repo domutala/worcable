@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import * as _collections from "./collections";
+import { PaginateOptions } from "./types";
 
 let connectionPromise: Promise<typeof mongoose> | null = null;
 
@@ -26,12 +27,18 @@ export async function useMongo() {
   return connectionPromise;
 }
 
-export function getFacet(offset: number, pageSize: number, all?: boolean) {
+export function getFacet({
+  offset,
+  pageSize,
+  all,
+  sortBy,
+  sortOrder,
+}: PaginateOptions) {
   const facet: mongoose.PipelineStage.Facet = {
     $facet: {
       totalItems: [{ $count: "count" }],
       data: [
-        { $sort: { createdAt: -1 } },
+        { $sort: { [sortBy]: sortOrder } },
         ...(all ? [] : [{ $skip: offset }, { $limit: pageSize }]),
       ],
     },
@@ -40,11 +47,8 @@ export function getFacet(offset: number, pageSize: number, all?: boolean) {
   return facet;
 }
 
-export function getProject(
-  page: number,
-  pageSize: number,
-): mongoose.PipelineStage {
-  return {
+export function getProject({ page, pageSize }: PaginateOptions) {
+  const project: mongoose.PipelineStage.Project = {
     $project: {
       items: "$data",
       totalItems: {
@@ -63,6 +67,8 @@ export function getProject(
       },
     },
   };
+
+  return project;
 }
 
 export const collections = _collections;

@@ -13,7 +13,7 @@ export async function listApplys({
 }) {
   await collections.$Apply.syncIndexes();
 
-  const { offset, page, pageSize, all } = paginationBuilder(query);
+  const paginate = paginationBuilder(query);
   let filters: QueryFilter<any> = [];
   let job: JobDocument | undefined;
 
@@ -30,26 +30,27 @@ export async function listApplys({
   }
 
   if (query.filterBy) {
-    const [key, value] = query.filterBy.split(":");
+    const filterBy = (query.filterBy as string).split(";");
 
-    if (key === "status" && job) {
-      if (!value || value === "null") {
-        filters.push({
-          $or: [
-            { status: { $nin: job.applyStatus.map((st) => st.key) } },
-            { status: null },
-          ],
-        });
-      } else {
-        filters.push({ status: value });
+    for (const filter of filterBy) {
+      const [key, value] = filter.split(":");
+
+      if (key === "status" && job) {
+        if (!value || value === "null") {
+          filters.push({
+            $or: [
+              { status: { $nin: job.applyStatus.map((st) => st.key) } },
+              { status: null },
+            ],
+          });
+        } else {
+          filters.push({ status: value });
+        }
       }
     }
   }
 
-  const pipe: PipelineStage[] = [
-    getFacet(offset, pageSize, all),
-    getProject(page, pageSize),
-  ];
+  const pipe: PipelineStage[] = [getFacet(paginate), getProject(paginate)];
 
   if (filters.length) pipe.unshift({ $match: { $and: filters as any } });
   pipe.unshift({ $addFields: { id: { $toString: "$_id" } } });
@@ -59,7 +60,6 @@ export async function listApplys({
 
   if (query.q) {
     const tokens = normalize(query.q);
-
     results.items = results.items.map((job) => {
       let score = 0;
 

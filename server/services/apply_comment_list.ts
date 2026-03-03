@@ -11,7 +11,7 @@ export async function listApplyComments({
   query: Record<string, any>;
   $t: (str: string) => string;
 }) {
-  const { offset, page, pageSize, all } = paginationBuilder(query);
+  const paginate = paginationBuilder(query);
   let filters: QueryFilter<any> = [];
 
   const { applyID } = query;
@@ -20,10 +20,7 @@ export async function listApplyComments({
     filters.push({ applyID: new Types.ObjectId(applyID) });
   }
 
-  const pipe: PipelineStage[] = [
-    getFacet(offset, pageSize, all),
-    getProject(page, pageSize),
-  ];
+  const pipe: PipelineStage[] = [getFacet(paginate), getProject(paginate)];
 
   if (filters.length) pipe.unshift({ $match: { $and: filters as any } });
   pipe.unshift({ $addFields: { id: { $toString: "$_id" } } });
