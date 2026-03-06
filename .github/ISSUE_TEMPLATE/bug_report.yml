@@ -1,0 +1,27 @@
+name: Bug Report
+description: Report an error or unexpected behavior.
+labels: [“bug”, “triage”]
+body:
+  - type: markdown
+    attributes:
+      value: “Thank you for helping us improve Worcable!”
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce the bug
+      placeholder: 1. Go to... 2. Click on...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      placeholder: Describe what should happen.
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Estimated priority
+      options:
+        - Low
+        - Medium
+        - High (Blocking)

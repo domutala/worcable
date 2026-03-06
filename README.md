@@ -1,264 +1,107 @@
-# Worcable 🚀  
-**Une plateforme open source moderne pour simplifier et structurer le recrutement**
+# Worcable
+
+**An open source platform to structure and simplify recruitment.**
 
 [![Open Source](https://img.shields.io/badge/Open%20Source-Yes-brightgreen)](https://github.com/domutala/worcable)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Worcable-black?logo=github)](https://github.com/domutala/worcable)
 
----
+Worcable is a modern **Applicant Tracking System (ATS)** designed to help teams manage their hiring process with clarity, collaboration, and transparency.
 
-## 1. Présentation du projet
+Instead of juggling emails, spreadsheets, and disconnected tools, Worcable centralizes the entire recruitment workflow into a single platform.
 
-**Worcable** est un logiciel open source de gestion du recrutement (ATS – Applicant Tracking System) conçu pour aider les entreprises à structurer, suivre et optimiser leurs processus de recrutement.
+## Why Worcable?
 
-### 🎯 Le problème
+Hiring the right people is one of the most important challenges organizations face.
 
-Beaucoup d’entreprises — startups, PME ou grandes structures — gèrent encore leurs recrutements avec :
-- Des emails dispersés
-- Des fichiers Excel peu structurés
-- Des outils coûteux ou fermés
-- Des processus peu collaboratifs
+Yet many teams still manage recruitment with:
 
-Résultat : perte de candidats qualifiés, manque de visibilité, décisions lentes.
+- scattered emails
+- complex spreadsheets
+- expensive proprietary tools
+- fragmented hiring workflows
 
-### 💡 La vision
+Worcable provides a **modern, open, and flexible alternative**.
 
-Worcable a pour ambition de devenir une **plateforme open source moderne, flexible et évolutive**, permettant :
+Built with open source principles, it allows organizations to **control, customize, and extend their recruitment infrastructure**.
 
-- Une gestion claire et collaborative des recrutements  
-- Une centralisation des candidatures  
-- Une meilleure prise de décision basée sur la donnée  
-- Une alternative open source aux ATS propriétaires  
+## Open Source
 
----
+Worcable is **fully open source**.
 
-## 2. Fonctionnalités principales
+This means:
 
-> Certaines fonctionnalités peuvent être en cours de développement.
+- full transparency
+- no vendor lock-in
+- complete control over your data
+- the ability to extend and customize the platform
 
-### 👥 Gestion des candidats
-- Centralisation des candidatures
-- Fiches candidats détaillées
-- Historique des interactions
-- Upload et gestion de CV
+Anyone can contribute to improving the project.
 
-### 📂 Gestion des offres d’emploi
-- Création et publication d’offres
-- Statut (ouverte, fermée, en pause)
-- Attribution à des recruteurs
+By embracing open source, Worcable aims to evolve with the needs of real teams and the contributions of its community.
 
-### 🔄 Pipeline de recrutement
-- Workflow personnalisable (Screening, Entretien, Test, Offre, etc.)
-- Drag & drop des candidats entre les étapes
-- Suivi clair de l’avancement
+## Features
 
-### 📝 Évaluations & feedback
-- Notes et commentaires internes
-- Collaboration entre recruteurs et managers
-- Historique des décisions
+Worcable provides the essential tools needed to manage recruitment efficiently.
 
-### 📊 Tableaux de bord & statistiques
-- Nombre de candidatures par offre
-- Taux de conversion entre étapes
-- Suivi des performances de recrutement
+### Candidate management
 
-### 🔐 Gestion des rôles & permissions
+- Centralized candidate profiles
+- Resume and document management
+- Interaction history
+
+### Job management
+
+- Create and manage job postings
+- Track applications per position
+- Assign recruiters to job openings
+
+### Recruitment pipeline
+
+- Visual recruitment stages
+- Track candidate progress
+- Move candidates between steps
+
+### Evaluations & feedback
+
+- Internal comments and notes
+- Collaborative evaluation
+- Decision tracking
+
+### Analytics & insights
+
+- Application metrics
+- Pipeline conversion rates
+- Recruitment performance overview
+
+### Roles & permissions
+
 - Admin
-- Recruteur
+- Recruiter
 - Manager
-- Accès contrôlé aux données
+- Controlled access to data
 
-### 🌍 API & extensibilité
-- API REST
-- Intégration possible avec d’autres outils (HR, email, etc.)
+## Documentation
 
----
+Full documentation is available here: https://worcable.netlify.app
 
-## 3. Pourquoi Worcable ?
+The documentation includes:
 
-### ⚡ Open Source par conviction
+- installation guide
+- core concepts
+- API usage
+- deployment instructions
+- contribution guide
 
-- Transparence totale du code
-- Liberté d’adaptation
-- Possibilité d’auto-hébergement
-- Communauté au cœur du projet
+## Author
 
-### 🧱 Pensé pour être extensible
+Created by [**@domutala**](https://github.com/domutala)
 
-Contrairement à de nombreux ATS fermés :
-- Worcable peut être personnalisé selon les besoins métier
-- L’architecture vise la modularité
-- Les entreprises peuvent l’adapter à leur contexte local
+## Support the project
 
-### 💸 Une alternative aux solutions coûteuses
+If you find Worcable useful:
 
-De nombreuses solutions SaaS de recrutement :
-- Sont onéreuses
-- Limitent les personnalisations
-- Enferment les données
+- ⭐ Star the repository
+- 📢 Share the project
+- 🤝 Contribute to the codebase
 
-Worcable propose une alternative :
-- Flexible
-- Évolutive
-- Contrôlée par ses utilisateurs
-
-### 🌍 Accessible partout
-
-Worcable vise à être utilisable par :
-- Startups
-- PME
-- ONG
-- Structures en croissance
-- Écosystèmes émergents
-
----
-
-## 4. Aperçu visuel
-
-> 🚧 À venir
-
-Des captures d’écran et/ou une démo en ligne seront ajoutées prochainement pour illustrer :
-
-- Le tableau de bord
-- Le pipeline de recrutement
-- La gestion des candidats
-- Les statistiques
-
----
-
-## 5. Installation rapide
-
-> ⚠️ Ceci est une installation simplifiée pour tester le projet.
-
-### 1️⃣ Cloner le dépôt
-
-```bash
-git clone https://github.com/domutala/worcable.git
-cd worcable
-````
-
-### 2️⃣ Installer les dépendances
-
-```bash
-pnpm install
-```
-
-### 3️⃣ Configurer les variables d’environnement
-
-Créer un fichier `.env` basé sur `.env.example` :
-
-```bash
-cp .env.example .env
-```
-
-Configurer :
-
-* Base de données
-* Port
-* Clés API si nécessaires
-
-### 4️⃣ Lancer l’application
-
-```bash
-yarn dev
-```
-
-L’application sera accessible sur :
-
-```
-https://localhost:4730
-```
-
-> Pour plus de détails techniques, consulter la documentation interne du projet.
-
----
-
-## 6. Contribution 🤝
-
-Worcable est un projet open source et toute contribution est la bienvenue.
-
-### Comment contribuer ?
-
-1. Fork le projet
-2. Créer une branche :
-
-   ```bash
-   git checkout -b feature/my-feature
-   ```
-3. Commit vos changements :
-
-   ```bash
-   git commit -m "feat: add new recruitment stage"
-   ```
-4. Push :
-
-   ```bash
-   git push origin feature/my-feature
-   ```
-5. Ouvrir une Pull Request
-
-### Autres façons de contribuer
-
-* Signaler un bug via les Issues
-* Proposer une amélioration
-* Améliorer le README ou la documentation
-* Partager le projet
-
----
-
-## 7. Roadmap 🛣️
-
-Voici quelques évolutions prévues :
-
-* [ ] Pipeline de recrutement entièrement personnalisable
-* [ ] Notifications email automatiques
-* [ ] Intégration avec LinkedIn / job boards
-* [ ] Système de scoring intelligent des candidats
-* [ ] Multi-entreprises (multi-tenant)
-* [ ] Tableau de bord analytique avancé
-* [ ] Version SaaS auto-hébergée
-
-La roadmap évoluera en fonction des contributions et des retours de la communauté.
-
----
-
-## 8. Licence 📄
-
-Worcable est un projet open source.
-
-Consultez le fichier `LICENSE` du dépôt pour connaître les détails de la licence utilisée.
-
----
-
-## 9. Auteur & Maintainers 👨‍💻
-
-**Créateur :**
-
-* [@domutala](https://github.com/domutala)
-
-Contributeurs :
-
-> À venir — soyez le prochain à apparaître ici ✨
-
----
-
-## ⭐ Soutenir le projet
-
-Si vous trouvez Worcable utile :
-
-* ⭐ Mettez une étoile sur GitHub
-* 🍴 Forkez le projet
-* 🗣️ Partagez-le autour de vous
-
----
-
-## 📌 En résumé
-
-Worcable est une initiative open source visant à rendre le recrutement :
-
-* Plus structuré
-* Plus collaboratif
-* Plus transparent
-* Plus accessible
-
-Rejoignez l’aventure et construisons ensemble un outil de recrutement moderne, libre et évolutif. 🚀
-
+Together we can build a better **open recruitment platform**.
