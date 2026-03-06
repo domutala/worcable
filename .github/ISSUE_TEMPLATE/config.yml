@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Questions & Discussion
+    url: https://github.com/domutala/worcable/discussions
+    about: For general questions or usage help, please use Discussions.
+  - name: 🛡️ Security Report
+    url: https://github.com/domutala/worcable/security/policy
+    about: If you find a vulnerability, please follow our security policy.
