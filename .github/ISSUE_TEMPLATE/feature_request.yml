@@ -1,0 +1,14 @@
+name: Feature Request
+description: Suggest a new idea for Worcable.
+labels: [“enhancement”]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this feature solve?
+      placeholder: “I find it difficult to...”
+  - type: textarea
+    id: solution
+    attributes:
+      label: Description of the proposed solution
+      placeholder: “We could add a button to...”

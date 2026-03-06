@@ -9,8 +9,6 @@ Worcable is a modern **Applicant Tracking System (ATS)** designed to help teams 
 
 Instead of juggling emails, spreadsheets, and disconnected tools, Worcable centralizes the entire recruitment workflow into a single platform.
 
----
-
 ## Why Worcable?
 
 Hiring the right people is one of the most important challenges organizations face.
@@ -26,8 +24,6 @@ Worcable provides a **modern, open, and flexible alternative**.
 
 Built with open source principles, it allows organizations to **control, customize, and extend their recruitment infrastructure**.
 
----
-
 ## Open Source
 
 Worcable is **fully open source**.
@@ -42,8 +38,6 @@ This means:
 Anyone can contribute to improving the project.
 
 By embracing open source, Worcable aims to evolve with the needs of real teams and the contributions of its community.
-
----
 
 ## Features
 
@@ -86,13 +80,9 @@ Worcable provides the essential tools needed to manage recruitment efficiently.
 - Manager
 - Controlled access to data
 
----
-
 ## Documentation
 
-Full documentation is available here:
-
-👉 https://worcable.netlify.app
+Full documentation is available here: https://worcable.netlify.app
 
 The documentation includes:
 
@@ -102,13 +92,9 @@ The documentation includes:
 - deployment instructions
 - contribution guide
 
----
-
 ## Author
 
-Created by **@domutala**
-
----
+Created by [**@domutala**](https://github.com/domutala)
 
 ## Support the project
 
