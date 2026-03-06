@@ -11,16 +11,8 @@ export default defineConfig({
 
   themeConfig: {
     sidebar: [
-      {
-        text: "Introduction",
-        items: [
-          {
-            text: "What is Worcable",
-            link: "/docs/introduction/what-is-worcable",
-          },
-          { text: "Why Worcable", link: "/docs/introduction/why-worcable" },
-        ],
-      },
+      { text: "What is Worcable", link: "/docs/what-is-worcable" },
+      { text: "Why Worcable", link: "/docs/why-worcable" },
 
       {
         text: "Getting Started",
