@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 import type { DropdownMenuItem } from "@nuxt/ui";
+import { useRouteQuery } from "@vueuse/router";
 import { getThemeItems } from "~/tools/theme";
 
+const isInviteUserOpen = useRouteQuery("invite-user");
 const items = computed(() => {
   const items: DropdownMenuItem[] = [
     {
@@ -27,26 +29,11 @@ const items = computed(() => {
       icon: "i-lucide-users",
       children: [
         {
-          label: "Invite users",
+          label: Use.i18n.t("user.labels.invite"),
           icon: "i-lucide-user-plus",
-          children: [
-            [
-              {
-                label: "Email",
-                icon: "i-lucide-mail",
-              },
-              {
-                label: "Message",
-                icon: "i-lucide-message-square",
-              },
-            ],
-            [
-              {
-                label: "More",
-                icon: "i-lucide-circle-plus",
-              },
-            ],
-          ],
+          onSelect(e) {
+            isInviteUserOpen.value = "true";
+          },
         },
         {
           label: Use.i18n.t("config.actions.update"),

@@ -1,6 +1,6 @@
 import { getJobShema } from "~~/server/services/job_schema";
 import { isValidObjectId } from "mongoose";
-import { Job } from "~~/server/database/collections";
+import { getJob } from "~~/server/services/job_get";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
@@ -43,10 +43,9 @@ export default defineEventHandler(async (event) => {
     }
     await collections.$Job.updateOne({ _id }, jobData).exec();
 
-    const job = await collections.$Job.findById(_id);
-    return job as Job;
+    return await getJob({ id: _id, $t });
   } else {
     const job = await collections.$Job.create(jobData);
-    return job as Job;
+    return job;
   }
 });

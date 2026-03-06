@@ -1,17 +1,20 @@
 import mongoose from "mongoose";
 import { FileSchema } from "./file";
 import { InferSchemaType } from "~~/server/database/types";
-import { USER_ROLE } from "~~/server/services/user_shema";
+import { USER_ROLES } from "~~/server/services/user_shema";
 
 const UserSchema = new mongoose.Schema(
   {
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
     firstName: { type: String, required: true, minlength: 1 },
     lastName: { type: String, required: true, minlength: 1 },
     password: { type: String, select: false },
     avatar: { type: FileSchema },
 
-    role: { type: String, enum: USER_ROLE, default: "admin" },
+    role: { type: String, enum: USER_ROLES, default: "admin" },
+
+    isValid: { type: Boolean, default: true },
+    isActive: { type: Boolean, default: true },
   },
   { timestamps: true },
 );
@@ -19,6 +22,7 @@ const UserSchema = new mongoose.Schema(
 export type UserDocument = mongoose.HydratedDocumentFromSchema<
   typeof UserSchema
 >;
+
 export type User = InferSchemaType<typeof UserSchema>;
 
 UserSchema.pre("validate", function () {

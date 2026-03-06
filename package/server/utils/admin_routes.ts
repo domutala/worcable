@@ -1,10 +1,10 @@
-import type { USER_ROLE } from "~~/server/services/user_shema";
+import type { USER_ROLES } from "~~/server/services/user_shema";
 import { HTTPMethod } from "h3";
 
 type RouteRule = {
   pattern: string | RegExp;
   methods: HTTPMethod[];
-  roles: (typeof USER_ROLE)[number][];
+  roles: (typeof USER_ROLES)[number][];
 };
 
 export const routeRules: RouteRule[] = [

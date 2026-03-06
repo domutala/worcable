@@ -1,7 +1,5 @@
 import * as z from "zod";
-
-const MAX_FILE_SIZE = 10 * 1024 * 1024;
-const ACCEPTED_AVATAR_TYPES = ["image/jpeg", "image/png", "image/webp"];
+import { ACCEPTED_AVATAR_TYPES, MAX_FILE_SIZE } from "../database/collections";
 
 export enum ApplyStatus {
   REJECTED = "rejected",

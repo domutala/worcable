@@ -570,6 +570,19 @@
           "invalid": "L'adresse e-mail n'est pas valide"
         }
       }
+    },
+
+    "labels": {
+      "invite": "Inviter un collaborateur"
+    },
+
+    "invite": {
+      "submit": "Inviter",
+      "success": "L'utilisateur a été invité avec succès. Il recevra un e-mail pour créer son compte.",
+
+      "errors": {
+        "user_already_exists": "Un utilisateur avec cet adrese email existe déjà"
+      }
     }
   },
 

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import UiHeader from "~/components/header.vue";
 import type { Job } from "~~/server/database/collections";
+
 const jobs = ref<Job[]>([]);
 </script>
 
@@ -156,4 +157,6 @@ const jobs = ref<Job[]>([]);
       </div>
     </ui-layout>
   </ui-job-search>
+
+  <ui-user-invite />
 </template>
