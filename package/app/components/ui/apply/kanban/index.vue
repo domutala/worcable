@@ -64,7 +64,7 @@ function setSortable() {
         <ui-apply-kanban-grid v-model:status="status.key" v-model:job="job" />
       </template>
 
-      <div>
+      <div v-if="Store.session.user?.role === 'admin'">
         <ui-job-apply-status-edit v-model:job="job">
           <u-button
             size="xl"

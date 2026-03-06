@@ -7,7 +7,7 @@ export default function onFetchError(error: any) {
       "div",
       { class: "mb-2" },
       data.messages.map((message) => {
-        return h("div", {}, message.message);
+        return h("div", {}, Use.i18n.t(message.message));
       }),
     ),
     color: "error",
@@ -22,7 +22,8 @@ export function getServerErrorData(error: any) {
 
   const { $i18n } = useNuxtApp();
 
-  let data: IError = error.data?.data || { message: error.statusMessage };
+  let data: IError = error.data?.data ||
+    error._data || { message: error.statusMessage };
   data.messages ||= [];
 
   if (data.message) data.messages.push({ message: data.message });

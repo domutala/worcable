@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
 
       throw createError({
         statusCode: 403,
-        statusMessage: $t("session.errors.not_athorized"),
+        statusMessage: $t("session.errors.not_authorized"),
       });
     }
   }

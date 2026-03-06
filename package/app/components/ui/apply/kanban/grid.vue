@@ -134,7 +134,7 @@ function setSortable() {
     group: "shared",
     invertSwap: true,
     sort: false,
-
+    disabled: Store.session.user?.role === "guest",
     chosenClass: "chosen",
     dragClass: "drag",
     ghostClass: "ghost",
@@ -218,7 +218,7 @@ function setSortable() {
       >
         <div class="mx-auto h-8">
           <u-button
-            v-if="status"
+            v-if="status && Store.session.user?.role === 'admin'"
             class="grid-handler cursor-grab"
             icon="i-lucide-grip-horizontal"
             variant="ghost"
@@ -274,7 +274,7 @@ function setSortable() {
           :style="{ borderTopColor: color }"
         >
           <div class="flex items-center gap-2 relative">
-            <div v-if="status">
+            <div v-if="status && Store.session.user?.role === 'admin'">
               <u-dropdown-menu
                 :content="{ align: 'start' }"
                 :items="[
@@ -344,7 +344,7 @@ function setSortable() {
               ></u-button>
 
               <u-button
-                v-if="status"
+                v-if="status && Store.session.user?.role === 'admin'"
                 class="grid-handler cursor-grab"
                 icon="i-lucide-grip-vertical"
                 variant="ghost"

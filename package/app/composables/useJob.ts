@@ -9,7 +9,7 @@ export function useJob(job: ShallowRef<Job>) {
     statusSubmiting.value = true;
 
     try {
-      job.value = await $fetch<Job>(`/api/admin/job`, {
+      job.value = await Api.$fetch(`/api/admin/job`, {
         method: "post",
         body: { ...job.value, status },
       });
@@ -61,6 +61,7 @@ export function useJob(job: ShallowRef<Job>) {
       // icon: ApplyUtils.getStatusIcon(job.value, apply.value.status),
       children: statusDropdownItems.value,
       class: "cursor-pointer",
+      disabled: Store.session.user?.role !== "admin",
     } as DropdownMenuItem;
   });
 

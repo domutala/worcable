@@ -696,5 +696,11 @@
         "label": "Se souvenir de moi"
       }
     }
+  },
+
+  "session": {
+    "errors": {
+      "not_authorized": "Vous n'êtes pas autorisé à accéder à ce service"
+    }
   }
 }
