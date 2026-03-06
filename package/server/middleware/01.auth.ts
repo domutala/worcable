@@ -31,7 +31,9 @@ export default defineEventHandler(async (event) => {
         const user = await collections.$User.findById(session.userID);
         delete user?.password;
 
-        if (user) event.context.session = { ...session, user };
+        if (user) {
+          event.context.session = { ...session, user };
+        }
       }
     } catch (error) {
       console.log(error);

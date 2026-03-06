@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { FileSchema } from "./file";
 import { InferSchemaType } from "~~/server/database/types";
+import { USER_ROLE } from "~~/server/services/user_shema";
 
 const UserSchema = new mongoose.Schema(
   {
@@ -9,10 +10,10 @@ const UserSchema = new mongoose.Schema(
     lastName: { type: String, required: true, minlength: 1 },
     password: { type: String, select: false },
     avatar: { type: FileSchema },
+
+    role: { type: String, enum: USER_ROLE, default: "admin" },
   },
-  {
-    timestamps: true,
-  },
+  { timestamps: true },
 );
 
 export type UserDocument = mongoose.HydratedDocumentFromSchema<

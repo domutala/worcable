@@ -133,8 +133,9 @@ const items = computed(() => {
             {{ Store.session.user.lastName }}
           </div>
 
-          <div class="text-sm opacity-50 leading-none">
-            {{ Store.session.user.email }}
+          <div class="text-sm text-primary leading-none">
+            {{ $t(`user.items.role.items.${Store.session.user.role}`) }}
+            <!-- {{ Store.session.user.email }} -->
           </div>
         </div>
       </div>

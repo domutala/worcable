@@ -521,6 +521,58 @@
     }
   },
 
+  "user": {
+    "items": {
+      "role": {
+        "label": "Rôle de l'utilisateur",
+        "placeholder": "Sélectionnez un rôle",
+        "hint": "Choisissez le rôle approprié pour cet utilisateur",
+        "help": "Le rôle détermine les permissions et l'accès aux fonctionnalités de la plateforme",
+        "items": {
+          "admin": "Admin",
+          "recruiter": "Recruteur",
+          "guest": "Invité"
+        },
+        "errors": {
+          "required": "Le rôle est obligatoire",
+          "invalid": "Le rôle sélectionné n'est pas valide"
+        }
+      },
+      "firstName": {
+        "label": "Prénom",
+        "placeholder": "Jean",
+        "hint": "Indiquez le prénom de l'utilisateur",
+        "help": "Le prénom sera affiché dans l'annuaire interne",
+        "errors": {
+          "required": "Le prénom est obligatoire",
+          "min": "Le prénom doit contenir au moins 2 caractères",
+          "max": "Le prénom ne doit pas dépasser 50 caractères"
+        }
+      },
+      "lastName": {
+        "label": "Nom de famille",
+        "placeholder": "Dupont",
+        "hint": "Indiquez le nom de famille de l'utilisateur",
+        "help": "Le nom de famille sera affiché dans l'annuaire interne",
+        "errors": {
+          "required": "Le nom de famille est obligatoire",
+          "min": "Le nom doit contenir au moins 2 caractères",
+          "max": "Le nom ne doit pas dépasser 50 caractères"
+        }
+      },
+      "email": {
+        "label": "Adresse e-mail",
+        "placeholder": "exemple{'@'}domaine.com",
+        "hint": "Utilisez une adresse e-mail valide",
+        "help": "L'e-mail servira pour la connexion et les notifications",
+        "errors": {
+          "required": "L'adresse e-mail est obligatoire",
+          "invalid": "L'adresse e-mail n'est pas valide"
+        }
+      }
+    }
+  },
+
   "uploads": {
     "errors": {
       "invalid_file": "Le fichier est invalide ou manquant"
