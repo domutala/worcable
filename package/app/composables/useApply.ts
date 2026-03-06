@@ -72,5 +72,25 @@ export function useApply(job: ShallowRef<Job>, apply: ShallowRef<Apply>) {
     };
   });
 
-  return { statusDropdownItems, statusDropdown, statusSubmiting, statusSubmit };
+  const canUserUpdateStatus = computed(() => {
+    if (!Store.session.user) return false;
+    if (!["admin", "recruiter"].includes(Store.session.user.role)) return false;
+    return true;
+  });
+
+  const canUserUpdateNote = computed(() => {
+    if (!Store.session.user) return false;
+    if (!["admin", "recruiter"].includes(Store.session.user.role)) return false;
+    return true;
+  });
+
+  return {
+    statusDropdownItems,
+    statusDropdown,
+    statusSubmiting,
+    statusSubmit,
+
+    canUserUpdateStatus,
+    canUserUpdateNote,
+  };
 }

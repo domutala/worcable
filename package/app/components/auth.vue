@@ -10,13 +10,18 @@ const items = computed(() => {
       class: "cursor-default",
       alwaysHide: true,
     },
-    {
+  ];
+
+  if (Store.session.user?.role === "admin") {
+    items.push({
       label: Use.i18n.t("job.actions.new"),
       icon: "i-lucide-plus",
       to: Use.localePath({ name: "admin-job-new" }),
       color: "primary",
-    },
+    });
+  }
 
+  items.push(
     {
       label: "Team",
       icon: "i-lucide-users",
@@ -61,7 +66,7 @@ const items = computed(() => {
       square: true,
       notHide: true,
     },
-  ];
+  );
 
   if (!Store.config.config.colorMode) {
     items.push({

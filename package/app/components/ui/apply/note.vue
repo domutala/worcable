@@ -6,6 +6,7 @@ const { readonly, size } = defineProps<{ readonly?: boolean; size?: string }>();
 const submiting = ref(false);
 const job = defineModel<Job>("job", { required: true });
 const apply = defineModel<Apply>("apply", { required: true });
+const { canUserUpdateNote } = useApply(job, apply);
 
 async function onSubmit(note: number) {
   submiting.value = true;
@@ -27,6 +28,11 @@ async function onSubmit(note: number) {
     submiting.value = false;
   }
 }
+
+const _readonly = computed(() => {
+  if (!canUserUpdateNote.value) return true;
+  return readonly;
+});
 </script>
 
 <template>
@@ -39,7 +45,7 @@ async function onSubmit(note: number) {
     <ui-rating
       v-model="apply.note"
       :length="5"
-      :readonly
+      :readonly="_readonly"
       :size
       @update:model-value="onSubmit"
     />

@@ -5,7 +5,10 @@ const { readonly } = defineProps<{ readonly?: boolean }>();
 const job = defineModel<Job>("job", { required: true });
 const apply = defineModel<Apply>("apply", { required: true });
 
-const { statusDropdownItems, statusSubmiting } = useApply(job, apply);
+const { statusDropdownItems, statusSubmiting, canUserUpdateStatus } = useApply(
+  job,
+  apply,
+);
 </script>
 
 <template>
@@ -14,7 +17,7 @@ const { statusDropdownItems, statusSubmiting } = useApply(job, apply);
     v-model:job="job"
     v-model:status="apply.status"
   >
-    <template v-if="readonly">
+    <template v-if="!canUserUpdateStatus || readonly">
       <slot
         :color
         :label

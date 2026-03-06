@@ -10,31 +10,6 @@ const nShow = ref(0);
 const uApply = useApply(job, apply);
 const isDetailsOpen = ref(false);
 
-const items0 = computed(() => {
-  const items: DropdownMenuItem[][] = [];
-
-  if (!nShow.value || itemStates.value.details === "hide") {
-    items.push([
-      {
-        label: Use.i18n.t("apply.labels.show_details"),
-        onSelect(e) {
-          isDetailsOpen.value = true;
-        },
-      },
-    ]);
-  }
-
-  if (!nShow.value || itemStates.value.status === "hide") {
-    items.push([uApply.statusDropdown.value]);
-  }
-
-  if (!nShow.value || itemStates.value.note === "hide") {
-    items.push([{ slot: "note", type: "label" }]);
-  }
-
-  return items;
-});
-
 const items = computed(() => {
   const items: DropdownMenuItem[] = [
     {
@@ -43,9 +18,19 @@ const items = computed(() => {
         isDetailsOpen.value = true;
       },
     },
-    { ...uApply.statusDropdown.value },
-    { slot: "item-dropdown-note", type: "label", itemIndex: "note" },
   ];
+
+  if (uApply.canUserUpdateStatus.value) {
+    items.push({ ...uApply.statusDropdown.value });
+  }
+
+  if (uApply.canUserUpdateNote.value) {
+    items.push({
+      slot: "item-dropdown-note",
+      type: "label",
+      itemIndex: "note",
+    });
+  }
 
   return items;
 });

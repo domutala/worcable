@@ -6,49 +6,6 @@ import _ from "lodash";
 const job = defineModel<Job>("job", { required: true });
 const uJob = useJob(job);
 const side = useCookie<string>(`job-side`, { default: () => "kanban" });
-
-const items = computed(() => {
-  const statusItems = uJob.statusDropdown.value;
-  statusItems.variant = "soft";
-  statusItems.color = "neutral";
-  // statusItems.notHide = true;
-
-  const items: DropdownMenuItem[] = [
-    statusItems,
-
-    {
-      label: Use.i18n.t("job.actions.add_new_apply"),
-      icon: "i-lucide-user-round-plus",
-    },
-    {
-      label: Use.i18n.t("job.actions.broadcast"),
-      icon: "i-lucide-corner-up-right",
-      onSelect(e) {
-        alert("dsdfsf");
-      },
-    },
-    {
-      label: Use.i18n.t("job.actions.display"),
-      icon: "i-lucide-file-text",
-      target: "_blank",
-      to: Use.localePath({ name: "job-id", params: { id: job.value.id } }),
-    },
-    {
-      label: Use.i18n.t("job.actions.share_job"),
-      icon: "i-lucide-send",
-    },
-    {
-      label: Use.i18n.t("job.actions.update"),
-      icon: "i-lucide-pencil-line",
-      to: Use.localePath({
-        name: "admin-job-id-update",
-        params: { id: job.value.id },
-      }),
-    },
-  ];
-
-  return items;
-});
 </script>
 
 <template>
@@ -75,7 +32,7 @@ const items = computed(() => {
       </div>
 
       <ui-menu-horizontal-items
-        :items
+        :items="uJob.menuItems.value"
         :gap="5"
         :min-to-show="3"
         :ui="{ base: 'justify-end' }"
@@ -137,7 +94,7 @@ const items = computed(() => {
         </u-button>
       </div>
 
-      <u-dropdown-menu :items>
+      <u-dropdown-menu :items="uJob.menuItems.value">
         <u-button
           icon="i-lucide-ellipsis-vertical"
           class="cursor-pointer"
