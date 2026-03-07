@@ -4,6 +4,35 @@ import { useRouteQuery } from "@vueuse/router";
 import { getThemeItems } from "~/tools/theme";
 
 const isInviteUserOpen = useRouteQuery("invite-user");
+
+const teamsItem = computed(() => {
+  const children: DropdownMenuItem[] = [];
+
+  if (Store.session.user?.role === "admin") {
+    children.push({
+      label: Use.i18n.t("user.labels.invite"),
+      icon: "i-lucide-user-plus",
+      onSelect(e) {
+        isInviteUserOpen.value = "true";
+      },
+    });
+  }
+
+  //     {
+  //       label: Use.i18n.t("config.actions.update"),
+  //       icon: "i-lucide-folder-pen",
+  //       to: Use.localePath({ name: "admin-config" }),
+  //     },
+
+  const item: DropdownMenuItem = {
+    label: "Team",
+    icon: "i-lucide-users",
+    children,
+  };
+
+  return item;
+});
+
 const items = computed(() => {
   const items: DropdownMenuItem[] = [
     {
@@ -23,26 +52,9 @@ const items = computed(() => {
     });
   }
 
-  items.push(
-    {
-      label: "Team",
-      icon: "i-lucide-users",
-      children: [
-        {
-          label: Use.i18n.t("user.labels.invite"),
-          icon: "i-lucide-user-plus",
-          onSelect(e) {
-            isInviteUserOpen.value = "true";
-          },
-        },
-        {
-          label: Use.i18n.t("config.actions.update"),
-          icon: "i-lucide-folder-pen",
-          to: Use.localePath({ name: "admin-config" }),
-        },
-      ],
-    },
+  items.push(teamsItem.value);
 
+  items.push(
     {
       label: "CVThèque",
       icon: "i-lucide-newspaper",

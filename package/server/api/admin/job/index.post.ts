@@ -1,6 +1,6 @@
 import { getJobShema } from "~~/server/services/job_schema";
 import { isValidObjectId } from "mongoose";
-import { getJob } from "~~/server/services/job_get";
+import { getJob, getUserJobIDs } from "~~/server/services/job_get";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
@@ -34,7 +34,14 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    const exists = await collections.$Job.exists({ _id });
+    const exists = await getJob({
+      $t,
+      id: _id,
+      query: {
+        ids: await getUserJobIDs({ $t, userID: event.context.session.user.id }),
+      },
+    });
+
     if (!exists) {
       throw createError({
         statusCode: 404,
@@ -46,6 +53,12 @@ export default defineEventHandler(async (event) => {
     return await getJob({ id: _id, $t });
   } else {
     const job = await collections.$Job.create(jobData);
+
+    await collections.$JobUser.create({
+      userID: event.context.session.user.id,
+      jobID: job._id,
+    });
+
     return job;
   }
 });

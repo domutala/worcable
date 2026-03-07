@@ -1,7 +1,7 @@
 import { IDataResult } from "../interfaces";
 import { Job } from "../database/collections";
 import { paginationBuilder } from "../tools/pagination_builder_from_query";
-import { PipelineStage, QueryFilter } from "mongoose";
+import { PipelineStage, QueryFilter, Types } from "mongoose";
 
 export async function listJobs({
   query,
@@ -137,6 +137,13 @@ export async function listJobs({
         filters.push({ status: { $in: value.split(",") } });
       }
     }
+  }
+
+  if (query.ids) {
+    const ids: string[] =
+      typeof query.ids === "string" ? query.ids.split(",") : query.ids;
+
+    filters.push({ _id: { $in: ids.map((id) => new Types.ObjectId(id)) } });
   }
 
   const pipe: PipelineStage[] = [
