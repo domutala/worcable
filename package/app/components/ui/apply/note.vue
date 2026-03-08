@@ -1,44 +1,26 @@
 <script lang="ts" setup>
-import onFetchError from "~/tools/onFetchError";
-import type { Apply, Job } from "~~/server/database/collections";
+const {
+  applyId: applyID,
+  readonly,
+  size,
+} = defineProps<{
+  applyId: string;
+  readonly?: boolean;
+  size?: string;
+}>();
 
-const { readonly, size } = defineProps<{ readonly?: boolean; size?: string }>();
-const submiting = ref(false);
-const job = defineModel<Job>("job", { required: true });
-const apply = defineModel<Apply>("apply", { required: true });
-const { canUserUpdateNote } = useApply(job, apply);
-
-async function onSubmit(note: number) {
-  submiting.value = true;
-  try {
-    apply.value = await $fetch<Apply>(
-      `/api/admin/apply/${apply.value.id}/note`,
-      {
-        method: "patch",
-        body: { id: job.value.id, note },
-      },
-    );
-
-    dispatchEvent(
-      new CustomEvent(`${apply.value.id}:update`, { detail: apply.value }),
-    );
-  } catch (error) {
-    onFetchError(error);
-  } finally {
-    submiting.value = false;
-  }
-}
+const { note, apply } = useApply(applyID);
 
 const _readonly = computed(() => {
-  if (!canUserUpdateNote.value) return true;
+  if (!note.value.canUpdate.value) return true;
   return readonly;
 });
 </script>
 
 <template>
-  <div class="flex items-center gap-1">
+  <div v-if="apply" class="flex items-center gap-1">
     <u-icon
-      v-if="submiting"
+      v-if="note.loading"
       name="i-lucide-loader-circle"
       class="animate-spin"
     />
@@ -47,7 +29,7 @@ const _readonly = computed(() => {
       :length="5"
       :readonly="_readonly"
       :size
-      @update:model-value="onSubmit"
+      @update:model-value="note.submit"
     />
   </div>
 </template>

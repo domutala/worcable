@@ -1,16 +1,14 @@
 <script lang="ts" setup>
-import type { Job } from "~~/server/database/collections";
-
 definePageMeta({ layout: false });
 
-const job = defineModel<Job>({ required: true });
+const id = defineModel<string>("id", { required: true });
 const side = useCookie<string>(`job-side`, { default: () => "kanban" });
 </script>
 
 <template>
   <ui-layout class="h-screen">
     <template #header>
-      <ui-job-header v-model:job="job" />
+      <ui-job-header :job-id="id" />
     </template>
 
     <!-- <UiBreadcrumb :breads="['$home', '$admin', { label: job.title }]">
@@ -78,8 +76,8 @@ const side = useCookie<string>(`job-side`, { default: () => "kanban" });
         </div>
       </div>
 
-      <ui-apply-kanban v-if="side === 'kanban'" v-model:job="job" />
-      <ui-apply-list v-else v-model:job="job" />
+      <ui-apply-kanban v-if="side === 'kanban'" :job-id="id" />
+      <ui-apply-list v-else :job-id="id" />
     </div>
   </ui-layout>
 </template>

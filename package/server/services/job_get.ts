@@ -1,14 +1,13 @@
-import { QueryFilter } from "mongoose";
 import { isValidObjectId } from "mongoose";
 
 export async function getJob({
   id,
   $t,
-  query = {},
+  userID,
 }: {
   id: string;
   $t: (str: string) => string;
-  query?: Record<string, any>;
+  userID?: string;
 }) {
   if (!id || !isValidObjectId(id)) {
     throw createError({
@@ -26,11 +25,9 @@ export async function getJob({
     });
   }
 
-  if (query.ids) {
-    const ids: string[] =
-      typeof query.ids === "string" ? query.ids.split(",") : query.ids;
-
-    if (!ids.includes(job._id.toString())) {
+  if (userID) {
+    const jobIDs = await getUserJobIDs({ $t, userID });
+    if (!jobIDs.includes(job._id.toString())) {
       throw createError({
         statusCode: 404,
         data: { message: $t("job.errors.job_not_found") },

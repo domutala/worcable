@@ -1,38 +1,17 @@
 import mongoose from "mongoose";
-import {
-  availability,
-  educationLevel,
-} from "~~/server/services/apply_get_shema";
-import { FileSchema } from "./file";
+import { getApplyShema } from "~~/server/services/apply_get_shema";
 import { InferSchemaType } from "~~/server/database/types";
+import * as z from "zod";
 
-const DataSchema = new mongoose.Schema(
-  {
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    email: { type: String, required: true },
-    cv: { type: FileSchema, required: true },
+const { schema, status } = getApplyShema((v) => v);
 
-    avatar: { type: FileSchema },
-    phone: { type: String },
-    desiredGrossSalary: { type: Number },
-    motivation: { type: String },
+type Apply0 = z.output<typeof schema> & {
+  normalizedFullname: string;
+  jobID: mongoose.Types.ObjectId;
+  allStatus: { status: z.output<typeof status>; date: string }[];
+};
 
-    educationLevel: { type: String, enum: educationLevel },
-    availability: { type: String, enum: availability },
-  },
-  { _id: false },
-);
-
-const AllStatusSchema = new mongoose.Schema(
-  {
-    status: { type: String, required: true },
-    date: { type: String, required: true },
-  },
-  { _id: false },
-);
-
-const ApplySchema = new mongoose.Schema(
+const ApplySchema = new mongoose.Schema<Apply0>(
   {
     normalizedFullname: { type: String, required: true },
 
@@ -43,12 +22,17 @@ const ApplySchema = new mongoose.Schema(
       index: true,
     },
 
-    status: { type: String },
-    allStatus: { type: [AllStatusSchema], required: true, default: [] },
-
     note: { type: Number },
 
-    data: { type: DataSchema, required: true },
+    status: { type: String },
+
+    allStatus: {
+      type: mongoose.Schema.Types.Mixed,
+      required: true,
+      default: [],
+    },
+
+    data: { type: mongoose.Schema.Types.Mixed, required: true },
   },
   {
     timestamps: true,

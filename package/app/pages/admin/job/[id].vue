@@ -1,23 +1,21 @@
 <script lang="ts" setup>
-import { getServerErrorData } from "~/tools/onFetchError";
+import type { Job } from "~~/server/database/collections/types";
+const { job0 } = defineProps<{ job0: Job }>();
+// if (error.value) throw createError(getServerErrorData(error.value));
 
-const {
-  data: job,
-  status,
-  refresh,
-  error,
-} = await useFetch(`/api/admin/job/${Use.route.params.id}`);
-
-if (error.value) throw createError(getServerErrorData(error.value));
-if (!job.value) {
-  throw createError({
-    status: 404,
-    statusText: Use.i18n.t("job.errors.job_not_found"),
-  });
-}
+const { job, loading, ready } = useJob(Use.route.params.id as string, {
+  onReady() {
+    if (!job.value) {
+      throw createError({
+        status: 404,
+        statusText: Use.i18n.t("job.errors.job_not_found"),
+      });
+    }
+  },
+});
 </script>
 
 <template>
-  <template v-if="status === 'pending'"></template>
-  <nuxt-page v-else-if="job" v-model="job" />
+  <template v-if="loading"></template>
+  <nuxt-page v-else-if="job && ready" v-model:id="job.id" :job />
 </template>

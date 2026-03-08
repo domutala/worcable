@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { InferSchemaType } from "../types";
+import { USER_ROLES } from "~~/server/services/user_shema";
 
 const JobUserSchema = new mongoose.Schema(
   {
@@ -15,6 +16,7 @@ const JobUserSchema = new mongoose.Schema(
       required: true,
       index: true,
     },
+    role: { type: String, enum: USER_ROLES, default: "admin" },
   },
   { timestamps: true },
 );

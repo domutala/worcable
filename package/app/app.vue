@@ -62,8 +62,11 @@ onMounted(async () => {
         class="text-primary animate-spin size-10"
       />
     </div>
+
     <NuxtLayout v-else-if="Store.config.config">
       <NuxtPage />
+
+      <ui-apply-create-modal />
     </NuxtLayout>
   </UApp>
 </template>

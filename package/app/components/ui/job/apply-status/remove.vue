@@ -1,38 +1,21 @@
 <script setup lang="ts">
-import { getJobShema } from "~~/server/services/job_schema";
-import * as z from "zod";
 import _ from "lodash";
-import type { FormSubmitEvent } from "@nuxt/ui";
-import type { Job } from "~~/server/database/collections";
-import { updateApplyStatus } from "~/tools/apply";
 
-const { singleApplyStatus: schema } = getJobShema(Use.i18n.t);
-type Schema = z.output<typeof schema>;
-
-const job = defineModel<Job>("job", { required: true });
-const applyStatus = defineModel<z.output<typeof schema>>("applyStatus");
-
+const { applyStatusKey, jobId: jobID } = defineProps<{
+  applyStatusKey: string;
+  jobId: string;
+}>();
 const open = defineModel<boolean>("open");
+
+const { job, applyStatus } = useJob(jobID);
 const submiting = ref(false);
 const toast = useToast();
 
 async function onSubmit() {
   submiting.value = true;
 
-  let all = _.cloneDeep(job.value.applyStatus);
-  const i = all.findIndex((a) => a.key === applyStatus.value?.key);
-  all.splice(i, 1);
-
   try {
-    const result = await updateApplyStatus(job.value, all);
-
-    toast.add({
-      description: Use.i18n.t("job.items.applyStatus.labels.success_remove"),
-      color: "success",
-      icon: "i-lucide-trash-2",
-    });
-
-    job.value = result;
+    await applyStatus.value.remove(applyStatusKey);
     open.value = false;
   } catch (error) {
   } finally {
@@ -47,9 +30,9 @@ async function onSubmit() {
 
     <template #content>
       <ui-apply-status-display
-        v-slot="{ color, label, icon, bgColor, borderColor }"
+        v-slot="{ label, icon }"
         v-model:job="job"
-        :status="applyStatus?.key"
+        :status="applyStatusKey"
       >
         <ui-layout-inset>
           <div class="flex items-center gap-2 px-5 py-4">

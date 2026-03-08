@@ -1,13 +1,10 @@
 <script lang="ts" setup>
-import type { Apply, Job } from "~~/server/database/collections";
-import _ from "lodash";
-
-const job = defineModel<Job>("job", { required: true });
-const apply = defineModel<Apply>("apply", { required: true });
+const { applyId: applyID } = defineProps<{ applyId: string }>();
+const { apply } = useApply(applyID);
 </script>
 
 <template>
-  <div class="flex flex-col gap-1.5">
+  <div v-if="apply" class="flex flex-col gap-1.5">
     <div
       class="px-5 py-4 text-sm bg-default rounded-min ring ring-default flex items-center gap-3 w-full"
     >

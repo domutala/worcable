@@ -1,5 +1,5 @@
 import { listApplys } from "~~/server/services/apply_list";
-import { getJob, getUserJobIDs } from "~~/server/services/job_get";
+import { getJob } from "~~/server/services/job_get";
 
 export default defineEventHandler(async (event) => {
   const query = getQuery<{
@@ -15,9 +15,7 @@ export default defineEventHandler(async (event) => {
   await getJob({
     $t,
     id: jobID,
-    query: {
-      ids: await getUserJobIDs({ $t, userID: event.context.session.user.id }),
-    },
+    userID: event.context.session.user.id,
   });
 
   return await listApplys({ $t, query: { ...query, jobID } });

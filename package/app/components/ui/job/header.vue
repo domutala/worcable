@@ -1,15 +1,11 @@
 <script lang="ts" setup>
-import type { Job } from "~~/server/database/collections";
-import type { DropdownMenuItem } from "@nuxt/ui";
-import _ from "lodash";
-
-const job = defineModel<Job>("job", { required: true });
-const uJob = useJob(job);
+const { jobId: jobID } = defineProps<{ jobId: string }>();
+const { job, menu, ready } = useJob(jobID);
 const side = useCookie<string>(`job-side`, { default: () => "kanban" });
 </script>
 
 <template>
-  <div class="relative">
+  <div v-if="ready" class="relative">
     <div
       class="py-3 pl-3 pr-5 hidden lg:flex items-center gap-2 bg-inherit/10 backdrop-blur-lg sticky top-0 z-50"
     >
@@ -32,7 +28,7 @@ const side = useCookie<string>(`job-side`, { default: () => "kanban" });
       </div>
 
       <ui-menu-horizontal-items
-        :items="uJob.menuItems.value"
+        :items="menu.items.value"
         :gap="5"
         :min-to-show="3"
         :ui="{ base: 'justify-end' }"
@@ -94,7 +90,7 @@ const side = useCookie<string>(`job-side`, { default: () => "kanban" });
         </u-button>
       </div>
 
-      <u-dropdown-menu :items="uJob.menuItems.value">
+      <u-dropdown-menu :items="menu.items.value">
         <u-button
           icon="i-lucide-ellipsis-vertical"
           class="cursor-pointer"

@@ -1,13 +1,8 @@
 <script lang="ts" setup>
 import type { DropdownMenuItem } from "@nuxt/ui";
-import type { Apply, Job } from "~~/server/database/collections";
 
-const job = defineModel<Job>("job", { required: true });
-const apply = defineModel<Apply>("apply", { required: true });
-
-const itemStates = ref<Record<string, "show" | "hide">>({});
-const nShow = ref(0);
-const uApply = useApply(job, apply);
+const { applyId: applyID } = defineProps<{ applyId: string }>();
+const { status, note } = useApply(applyID);
 const isDetailsOpen = ref(false);
 
 const items = computed(() => {
@@ -20,11 +15,11 @@ const items = computed(() => {
     },
   ];
 
-  if (uApply.canUserUpdateStatus.value) {
-    items.push({ ...uApply.statusDropdown.value });
+  if (status.value.canUpdate.value) {
+    items.push({ ...status.value.dropdownMenuItems.value });
   }
 
-  if (uApply.canUserUpdateNote.value) {
+  if (note.value.canUpdate.value) {
     items.push({
       slot: "item-dropdown-note",
       type: "label",
@@ -45,7 +40,7 @@ const items = computed(() => {
         size="lg"
         class="rounded-lg relative px-4 text-highlighted cursor-pointer"
       >
-        <ui-apply-note v-model:apply="apply" v-model:job="job" />
+        <ui-apply-note :apply-id="applyID" />
       </u-button>
     </template>
 
@@ -56,7 +51,7 @@ const items = computed(() => {
         size="lg"
         class="rounded-lg relative px-4 text-highlighted cursor-pointer"
       >
-        <ui-apply-note v-model:apply="apply" v-model:job="job" />
+        <ui-apply-note :apply-id="applyID" />
       </u-button>
     </template>
   </ui-menu-horizontal-items>
@@ -150,7 +145,7 @@ const items = computed(() => {
     <template #content>
       <ui-layout-inset>
         <div class="sm:p-10 p-2 py-3">
-          <ui-apply-details v-model:apply="apply" v-model:job="job" />
+          <ui-apply-details :apply-id="applyID" />
         </div>
       </ui-layout-inset>
     </template>

@@ -59,7 +59,7 @@ const { job } = defineProps<{ job: Job }>();
         </template>
       </div>
 
-      <div v-if="job.skills.length" class="flex flex-wrap gap-1 mt-2">
+      <div v-if="job.skills?.length" class="flex flex-wrap gap-1 mt-2">
         <u-badge
           v-for="(skill, s) in job.skills"
           :key="s"

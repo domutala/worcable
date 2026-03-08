@@ -4,5 +4,7 @@ definePageMeta({ layout: "admin" });
 
 <template>
   <nuxt-page />
+
   <ui-apply-modal />
+  <ui-user-invite />
 </template>

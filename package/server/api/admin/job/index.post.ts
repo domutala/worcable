@@ -1,6 +1,6 @@
 import { getJobShema } from "~~/server/services/job_schema";
 import { isValidObjectId } from "mongoose";
-import { getJob, getUserJobIDs } from "~~/server/services/job_get";
+import { getJob } from "~~/server/services/job_get";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
@@ -37,9 +37,7 @@ export default defineEventHandler(async (event) => {
     const exists = await getJob({
       $t,
       id: _id,
-      query: {
-        ids: await getUserJobIDs({ $t, userID: event.context.session.user.id }),
-      },
+      userID: event.context.session.user.id,
     });
 
     if (!exists) {

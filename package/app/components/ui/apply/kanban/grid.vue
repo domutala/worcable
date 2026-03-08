@@ -1,18 +1,14 @@
 <script lang="ts" setup>
-import { type Apply, type Job } from "~~/server/database/collections";
+import { type Apply } from "~~/server/database/collections";
 import type { IDataResult } from "~~/server/interfaces";
 import Sortable from "sortablejs";
 import _ from "lodash";
 import onFetchError from "~/tools/onFetchError";
 
+const { jobId: jobID } = defineProps<{ jobId: string }>();
 const status = defineModel<string | null>("status", { required: true });
-const job = defineModel<Job>("job", { required: true });
-const applyStatus = ref(
-  job.value.applyStatus.find((a) => a.key === status.value),
-);
+const { job } = useJob(jobID);
 
-const sortBy = ref("updatedAt");
-const sortOrder = ref("desc");
 const page = ref(1);
 const pageSize = ref(8);
 const searchTerm = ref("");
@@ -29,14 +25,15 @@ const dayjs = useDayjs();
 const statusChanging = ref<Record<string, string>>({});
 const fetching = ref(false);
 const container = useTemplateRef("container");
+
 const initFetching = ref(false);
 const openSearch = ref(false);
-
 const isApplyStatusEditOpen = ref(false);
 const isApplyStatusRemoveOpen = ref(false);
 
 const result = ref<IDataResult<Apply>>();
-const applys = ref<Apply[]>([]);
+const items = ref<Apply[]>([]);
+const applys = useApplys();
 
 onMounted(async () => {
   window.addEventListener(`${status.value}:actions`, (e: any) =>
@@ -54,21 +51,35 @@ onMounted(async () => {
   }
 });
 
-function onEventActions(e: CustomEvent) {
-  if (e.detail.action === "remove-apply") {
-    const is = applys.value.findIndex((a) => a.id === e.detail.apply.id);
-    if (is !== -1) applys.value.splice(is, 1);
-  } else if (e.detail.action === "add-apply") {
-    const is = applys.value.findIndex((a) => a.id === e.detail.apply.id);
-    if (is === -1) applys.value.push(e.detail.apply);
-  }
-}
-
 onBeforeUnmount(() => {
   window.removeEventListener(`${status}:actions`, (e: any) =>
     onEventActions(e),
   );
 });
+
+watch(
+  () => items.value,
+  () => {
+    const _applys = items.value.filter(
+      (apply) => apply.status !== status.value,
+    );
+
+    for (const apply of _applys) {
+      dispatchEvent(
+        new CustomEvent(`${apply.status}:actions`, {
+          detail: { action: "apply:add", apply },
+        }),
+      );
+
+      dispatchEvent(
+        new CustomEvent(`${status.value}:actions`, {
+          detail: { action: "apply:remove", apply },
+        }),
+      );
+    }
+  },
+  { deep: true },
+);
 
 watch(() => page.value, getApplys);
 watch(() => searchTerm.value, getApplys);
@@ -84,7 +95,9 @@ async function getApplys() {
       q: searchTerm.value,
     };
 
-    result.value = await $fetch("/api/admin/apply", { query });
+    result.value = await $fetch<IDataResult<Apply>>("/api/admin/apply", {
+      query,
+    });
 
     const r = _.cloneDeep(
       result.value!.items.sort((a, b) => {
@@ -92,38 +105,14 @@ async function getApplys() {
       }),
     );
 
-    if (searchTerm.value) applys.value = r;
-    else applys.value.push(...r);
+    if (searchTerm.value) items.value = r;
+    else items.value.push(...r);
 
-    applys.value = _.uniqBy(applys.value, "id");
+    items.value = _.uniqBy(items.value, "id");
   } finally {
     fetching.value = false;
   }
 }
-
-watch(
-  () => applys.value,
-  () => {
-    const _applys = applys.value.filter(
-      (apply) => apply.status !== status.value,
-    );
-
-    for (const apply of _applys) {
-      dispatchEvent(
-        new CustomEvent(`${apply.status}:actions`, {
-          detail: { action: "add-apply", apply },
-        }),
-      );
-
-      dispatchEvent(
-        new CustomEvent(`${status.value}:actions`, {
-          detail: { action: "remove-apply", apply },
-        }),
-      );
-    }
-  },
-  { deep: true },
-);
 
 function setSortable() {
   if (!container.value) return;
@@ -153,23 +142,23 @@ function setSortable() {
       statusChanging.value[loadID] = id;
 
       try {
-        const result = await $fetch<Apply>(`/api/admin/apply/${id}/status`, {
-          method: "patch",
-          body: { id, to: to ?? null },
-        });
+        const a0 = applys.get(id);
+        if (!a0) return;
+
+        await a0.status.value.submit(to ?? null);
 
         const lis = ul!.querySelectorAll("li[data-id]");
         lis.forEach((li, index) => {
-          if (li.getAttribute("data-id") === result.id) {
-            const is = applys.value.findIndex(
+          if (li.getAttribute("data-id") === a0.apply.value.id) {
+            const is = items.value.findIndex(
               (a) => a.id === li.getAttribute("data-id"),
             );
 
-            if (is === -1) applys.value.splice(index, 0, result);
+            if (is === -1) items.value.splice(index, 0, a0.apply.value);
 
             dispatchEvent(
               new CustomEvent(`${from}:actions`, {
-                detail: { action: "remove-apply", apply: result },
+                detail: { action: "apply:remove", apply: result },
               }),
             );
           }
@@ -181,6 +170,19 @@ function setSortable() {
       }
     },
   });
+}
+
+function onEventActions(e: CustomEvent) {
+  if (e.detail.action === "apply:remove") {
+    const i = items.value.findIndex((a) => a.id === e.detail.apply.id);
+    if (i !== -1) items.value.splice(i, 1);
+  } else if (e.detail.action === "apply:add") {
+    const i = items.value.findIndex((a) => a.id === e.detail.apply.id);
+    if (i === -1) items.value.push(e.detail.apply);
+  } else if (e.detail.action === "apply:update") {
+    const i = items.value.findIndex((a) => a.id === e.detail.apply.id);
+    if (i !== -1) items.value[i] = e.detail.apply;
+  }
 }
 </script>
 
@@ -198,17 +200,17 @@ function setSortable() {
       :data-status="status"
       :class="{ 'min-w-88.5 w-1/5': !isFlip, 'min-w-21': isFlip }"
     >
-      <template v-if="applyStatus">
+      <template v-if="status">
         <ui-job-apply-status-edit
           v-model:open="isApplyStatusEditOpen"
-          v-model:apply-status="applyStatus"
-          v-model:job="job"
+          :job-id="jobID"
+          :apply-status-key="status"
         />
 
         <ui-job-apply-status-remove
           v-model:open="isApplyStatusRemoveOpen"
-          v-model:apply-status="applyStatus"
-          v-model:job="job"
+          :job-id="jobID"
+          :apply-status-key="status"
         />
       </template>
 
@@ -240,7 +242,7 @@ function setSortable() {
           <div class="relative flex flex-col items-center gap-2">
             <u-icon v-if="icon" :name="icon" class="size-6" />
 
-            {{ applys.length }}
+            {{ items.length }}
 
             <div style="writing-mode: vertical-rl">
               {{ label }}
@@ -317,7 +319,7 @@ function setSortable() {
               <u-icon v-if="icon" :name="icon" class="size-6" />
 
               <div class="truncate">
-                {{ applys.length }}
+                {{ items.length }}
                 {{ label }}
               </div>
             </div>
@@ -404,7 +406,7 @@ function setSortable() {
             />
           </li>
 
-          <li v-else-if="!applys.length" class="mx-2 relative">
+          <li v-else-if="!items.length" class="mx-2 relative">
             <div
               class="content sortable-item rounded overflow-hidden border-default relative bg-surface/35 text-center py-15 ring ring-default/50"
             >
@@ -416,7 +418,7 @@ function setSortable() {
           </li>
 
           <li
-            v-for="(apply, i) in applys"
+            v-for="(apply, i) in items"
             :key="apply.id"
             :data-id="apply.id"
             class="mx-2 apply relative group"
@@ -425,23 +427,17 @@ function setSortable() {
               class="absolute inset-0 rounded-min border-primary hidden group-[.ghost]:block bg-surface/35"
             ></div>
 
-            <ui-apply-one
-              v-model:apply="applys[i]!"
+            <!-- <ui-apply-one
+              v-model:apply="items[i]!"
               v-model:job="job"
               @refesh:apply="
                 (v) => {
-                  applys[i] = v;
+                  items[i] = v;
                 }
               "
-            >
-              <ui-apply-kanban-apply
-                v-model:apply="applys[i]!"
-                v-model:job="job"
-                :status-changing="
-                  Object.values(statusChanging).includes(apply.id)
-                "
-              />
-            </ui-apply-one>
+            > -->
+            <ui-apply-kanban-apply :apply-id="apply.id" />
+            <!-- </ui-apply-one> -->
           </li>
 
           <div

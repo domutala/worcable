@@ -157,6 +157,4 @@ const jobs = ref<Job[]>([]);
       </div>
     </ui-layout>
   </ui-job-search>
-
-  <ui-user-invite />
 </template>

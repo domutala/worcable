@@ -3,14 +3,18 @@ import { getJobShema } from "~~/server/services/job_schema";
 import * as z from "zod";
 import _ from "lodash";
 import type { FormSubmitEvent } from "@nuxt/ui";
-import type { Job } from "~~/server/database/collections";
-import { updateApplyStatus } from "~/tools/apply";
 
 const { singleApplyStatus: schema } = getJobShema(Use.i18n.t);
 type Schema = z.output<typeof schema>;
 
-const job = defineModel<Job>("job", { required: true });
-const applyStatus = defineModel<z.output<typeof schema>>("applyStatus");
+const { applyStatusKey, jobId: jobID } = defineProps<{
+  applyStatusKey?: string;
+  jobId: string;
+}>();
+
+const state = ref<Partial<Schema>>({});
+const { job, applyStatus } = useJob(jobID);
+
 const colors = [
   "red",
   "orange",
@@ -27,31 +31,25 @@ const colors = [
   "pink",
 ];
 
-let state = reactive<Partial<Schema>>(
-  _.cloneDeep(
-    applyStatus.value || { key: Math.random().toString().substring(2, 8) },
-  ),
-);
-
 const open = defineModel<boolean>("open");
 const submiting = ref(false);
+
+onMounted(setState);
+function setState() {
+  state.value = _.cloneDeep(
+    job.value.applyStatus.find((a) => a.key === applyStatusKey) ?? {
+      key: Math.random().toString().substring(2, 8),
+    },
+  );
+}
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   submiting.value = true;
 
-  const all = _.cloneDeep(job.value.applyStatus);
-  const i = all.findIndex((a) => a.key === applyStatus.value?.key);
-
-  if (i === -1) all.push(event.data);
-  else all[i] = event.data;
-
   try {
-    job.value = await updateApplyStatus(job.value, all);
+    await applyStatus.value.update(event.data);
     open.value = false;
-
-    state = _.cloneDeep(
-      applyStatus.value || { key: Math.random().toString().substring(2, 8) },
-    );
+    setState();
   } catch (error) {
   } finally {
     submiting.value = false;
@@ -65,9 +63,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
     <template #content>
       <ui-apply-status-display
-        v-slot="{ color, label, icon, bgColor, borderColor }"
+        v-slot="{ label, icon }"
         v-model:job="job"
-        :status="applyStatus?.key"
+        :status="applyStatusKey"
       >
         <ui-layout-inset>
           <template #header>
@@ -84,6 +82,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           </template>
 
           <u-container class="py-10 max-w-2xl">
+            {{ applyStatusKey }} sfsdf
             <u-form
               :schema="schema"
               :state="state"

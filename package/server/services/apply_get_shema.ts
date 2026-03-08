@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { ACCEPTED_AVATAR_TYPES, MAX_FILE_SIZE } from "../database/collections";
+import { ACCEPTED_AVATAR_TYPES, MAX_FILE_SIZE } from "./file_schema";
 
 export enum ApplyStatus {
   REJECTED = "rejected",
@@ -105,5 +105,7 @@ export function getApplyShema($t: (string: string) => string) {
     .nullable();
   const data = getApplyDataShema($t);
 
-  return { note, status, data };
+  const schema = z.object({ note, status, data });
+
+  return { note, status, data, schema };
 }

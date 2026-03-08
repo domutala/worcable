@@ -2,6 +2,7 @@ import { IDataResult } from "../interfaces";
 import { Job } from "../database/collections";
 import { paginationBuilder } from "../tools/pagination_builder_from_query";
 import { PipelineStage, QueryFilter, Types } from "mongoose";
+import { getUserJobIDs } from "./job_get";
 
 export async function listJobs({
   query,
@@ -142,7 +143,11 @@ export async function listJobs({
   if (query.ids) {
     const ids: string[] =
       typeof query.ids === "string" ? query.ids.split(",") : query.ids;
+    filters.push({ _id: { $in: ids.map((id) => new Types.ObjectId(id)) } });
+  }
 
+  if (query.userID) {
+    const ids = await getUserJobIDs({ $t, userID: query.userID });
     filters.push({ _id: { $in: ids.map((id) => new Types.ObjectId(id)) } });
   }
 
