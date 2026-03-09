@@ -1,15 +1,21 @@
 <script lang="ts" setup>
-import UiHeader from "~/components/header.vue";
+import UiAuth from "~/components/auth.vue";
 </script>
 
 <template>
-  <!-- <ui-layout class="h-screen">
+  <ui-layout v-if="Store.config.config" class="h-screen">
     <template #header>
-      <ui-header class="relative" />
+      <header class="flex items-center gap-3 px-3 sm:px-6 py-3 w-full relative">
+        <nuxt-link :to="$localePath({ name: 'admin' })">
+          <ui-logo-app shortable />
+        </nuxt-link>
+
+        <div class="w-15 mr-auto"></div>
+
+        <ui-auth />
+      </header>
     </template>
 
     <slot />
-  </ui-layout> -->
-
-  <slot />
+  </ui-layout>
 </template>

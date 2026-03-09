@@ -1,31 +1,30 @@
 <script setup lang="ts">
-import _ from "lodash";
-
 const { applyStatusKey, jobId: jobID } = defineProps<{
   applyStatusKey: string;
   jobId: string;
 }>();
-const open = defineModel<boolean>("open");
 
 const { job, applyStatus } = useJob(jobID);
 const submiting = ref(false);
-const toast = useToast();
+const modal = useTemplateRef("modal");
 
 async function onSubmit() {
   submiting.value = true;
 
   try {
     await applyStatus.value.remove(applyStatusKey);
-    open.value = false;
+    modal.value!.open = false;
   } catch (error) {
   } finally {
     submiting.value = false;
   }
 }
+
+defineExpose({ modal });
 </script>
 
 <template>
-  <ui-modal v-model:open="open" :ui="{ content: 'max-w-xl' }">
+  <ui-modal-2 ref="modal" :ui="{ content: 'max-w-xl' }">
     <slot />
 
     <template #content>
@@ -63,5 +62,5 @@ async function onSubmit() {
         </ui-layout-inset>
       </ui-apply-status-display>
     </template>
-  </ui-modal>
+  </ui-modal-2>
 </template>

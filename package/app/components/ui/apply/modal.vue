@@ -27,11 +27,14 @@ watchImmediate(
     ref="modal"
     v-if="applyID"
     v-bind:uid="uid"
-    :ui="{ content: [loading ? 'max-w-14' : 'max-w-360', 'rounded-2xl'] }"
+    :ui="{ content: [loading ? 'md:max-w-14' : 'max-w-360', 'rounded-2xl'] }"
   >
     <template #content>
       <div v-if="loading" class="flex items-center justify-center py-2">
-        <u-icon name="i-lucide-loader-circle" class="animate-spin size-10" />
+        <u-icon
+          name="i-lucide-loader-circle"
+          class="animate-spin size-10 mx-auto"
+        />
       </div>
 
       <ui-layout-inset v-else-if="apply" class="flex-1">

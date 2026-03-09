@@ -28,8 +28,9 @@ const container = useTemplateRef("container");
 
 const initFetching = ref(false);
 const openSearch = ref(false);
-const isApplyStatusEditOpen = ref(false);
-const isApplyStatusRemoveOpen = ref(false);
+
+const applyStatusEditModal = useTemplateRef("applyStatusEditModal");
+const applyStatusRemoveModal = useTemplateRef("applyStatusRemoveModal");
 
 const result = ref<IDataResult<Apply>>();
 const items = ref<Apply[]>([]);
@@ -202,13 +203,13 @@ function onEventActions(e: CustomEvent) {
     >
       <template v-if="status">
         <ui-job-apply-status-edit
-          v-model:open="isApplyStatusEditOpen"
+          ref="applyStatusEditModal"
           :job-id="jobID"
           :apply-status-key="status"
         />
 
         <ui-job-apply-status-remove
-          v-model:open="isApplyStatusRemoveOpen"
+          ref="applyStatusRemoveModal"
           :job-id="jobID"
           :apply-status-key="status"
         />
@@ -285,7 +286,7 @@ function onEventActions(e: CustomEvent) {
                     icon: 'i-lucide-pencil-line',
                     class: 'cursor-pointer',
                     onSelect(e) {
-                      isApplyStatusEditOpen = true;
+                      applyStatusEditModal!.modal!.open = true;
                     },
                   },
                   {
@@ -293,7 +294,7 @@ function onEventActions(e: CustomEvent) {
                     icon: 'i-lucide-trash-2',
                     class: 'cursor-pointer',
                     onSelect(e) {
-                      isApplyStatusRemoveOpen = true;
+                      applyStatusRemoveModal!.modal!.open = true;
                     },
                   },
                 ]"

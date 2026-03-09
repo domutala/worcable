@@ -2,6 +2,7 @@ export type IModal = {
   uid: string;
   open: Ref<boolean>;
   value: Ref<string | undefined>;
+  alias?: string;
 };
 
 export type IModalOptions = {

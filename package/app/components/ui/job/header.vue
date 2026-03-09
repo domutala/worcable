@@ -9,14 +9,14 @@ const side = useCookie<string>(`job-side`, { default: () => "kanban" });
     <div
       class="py-3 pl-3 pr-5 hidden lg:flex items-center gap-2 bg-inherit/10 backdrop-blur-lg sticky top-0 z-50"
     >
-      <u-button
+      <!-- <u-button
         size="xs"
         variant="ghost"
         icon="i-lucide-house"
         square
         :to="Use.localePath({ name: 'admin' })"
       >
-      </u-button>
+      </u-button> -->
 
       <div class="leading-none flex-1 min-w-0 w-0">
         <h1 class="text-lg font-semibold truncate leading-none">

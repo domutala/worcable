@@ -3,19 +3,14 @@ import type { FormSubmitEvent } from "@nuxt/ui";
 import * as z from "zod";
 import _ from "lodash";
 import { getUserShema, USER_ROLES } from "~~/server/services/user_shema";
-import { useRouteQuery } from "@vueuse/router";
 
 const { email, role } = getUserShema(Use.i18n.t);
 const schema = z.object({ email, role });
 type Schema = z.output<typeof schema>;
 const toast = useToast();
 
-const isOpen = useRouteQuery("invite-user", "false", {
-  transform: (val: string) => (val === "true" ? true : false),
-});
-
 const state = ref<Partial<Schema>>({});
-const form = useTemplateRef("form");
+const modal = useTemplateRef("modal");
 const submitting = ref(false);
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
@@ -31,7 +26,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       color: "success",
       description: Use.i18n.t("user.invite.success"),
     });
-    isOpen.value = false;
+
+    if (modal.value) modal.value.open = false;
     state.value = {};
   } catch (error) {
     OnFetchError(error);
@@ -42,7 +38,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <ui-modal v-model:open="isOpen" :ui="{ content: 'max-w-3xl' }">
+  <ui-modal-2 ref="modal" alias="invite-user" :ui="{ content: 'max-w-3xl' }">
     <template #content>
       <ui-layout-inset>
         <div class="flex-1 flex flex-col items-center justify-center py-10">
@@ -121,5 +117,5 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         </div>
       </ui-layout-inset>
     </template>
-  </ui-modal>
+  </ui-modal-2>
 </template>

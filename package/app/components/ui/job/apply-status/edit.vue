@@ -31,7 +31,7 @@ const colors = [
   "pink",
 ];
 
-const open = defineModel<boolean>("open");
+const modal = useTemplateRef("modal");
 const submiting = ref(false);
 
 onMounted(setState);
@@ -48,17 +48,20 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
   try {
     await applyStatus.value.update(event.data);
-    open.value = false;
+
+    if (modal.value) modal.value.open = false;
     setState();
   } catch (error) {
   } finally {
     submiting.value = false;
   }
 }
+
+defineExpose({ modal });
 </script>
 
 <template>
-  <ui-modal v-model:open="open" :ui="{ content: 'max-w-3xl' }">
+  <ui-modal-2 ref="modal" :ui="{ content: 'max-w-3xl' }">
     <slot />
 
     <template #content>
@@ -82,7 +85,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           </template>
 
           <u-container class="py-10 max-w-2xl">
-            {{ applyStatusKey }} sfsdf
             <u-form
               :schema="schema"
               :state="state"
@@ -173,5 +175,5 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         </ui-layout-inset>
       </ui-apply-status-display>
     </template>
-  </ui-modal>
+  </ui-modal-2>
 </template>

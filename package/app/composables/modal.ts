@@ -48,7 +48,7 @@ export const useModal = ({
 
     if (alias) aliases[alias] = uid;
 
-    instances.set(uid, { uid, open, value });
+    instances.set(uid, { uid, open, value, alias });
   }
 
   return instances.get(uid)!;

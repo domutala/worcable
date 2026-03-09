@@ -15,6 +15,8 @@ const UserSchema = new mongoose.Schema(
 
     isValid: { type: Boolean, default: true },
     isActive: { type: Boolean, default: true },
+
+    normalizedFullname: { type: String, required: true },
   },
   { timestamps: true },
 );
@@ -25,9 +27,28 @@ export type UserDocument = mongoose.HydratedDocumentFromSchema<
 
 export type User = InferSchemaType<typeof UserSchema>;
 
+UserSchema.index(
+  { normalizedFullname: "text" },
+  { weights: { normalizedFullname: 5 } },
+);
+
 UserSchema.pre("validate", function () {
   if (this.email) {
     this.email = this.email.toLocaleLowerCase().trim();
+  }
+
+  this.normalizedFullname = normalize(
+    [this.firstName, this.lastName].filter((e) => e).join(" "),
+  );
+});
+
+UserSchema.pre("updateOne", function () {
+  const update = this.getUpdate() as mongoose.UpdateQuery<UserDocument>;
+
+  if (update?.data) {
+    update.normalizedFullname = normalize(
+      [update.firstName, update.lastName].filter((e) => e).join(" "),
+    );
   }
 });
 

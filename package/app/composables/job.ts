@@ -23,13 +23,15 @@ type JobApplyStatusInstance = {
   remove(key: string): Promise<void>;
 };
 
+type JobMenuInstance = { items: ComputedRef<DropdownMenuItem[]> };
+
 export type JobInstance = {
   ready: ShallowRef<boolean>;
   job: ShallowRef<Job>;
   jobUser: ShallowRef<JobUser>;
   loading: ShallowRef<boolean>;
   status: ShallowRef<JobInstanceStatus>;
-  menu: ShallowRef<{ items: ComputedRef<DropdownMenuItem[]> }>;
+  menu: ShallowRef<JobMenuInstance>;
   applyStatus: ShallowRef<JobApplyStatusInstance>;
 };
 
@@ -37,98 +39,102 @@ const instances = new Map<string, JobInstance>();
 
 export const useJob = (
   id: string,
-  { onReady, force }: { onReady?: () => void; force?: boolean } = {},
+  {
+    onReady,
+    force = false,
+    notInit = false,
+  }: { onReady?: () => void; force?: boolean; notInit?: boolean } = {},
 ) => {
-  if (force || !instances.has(id)) {
-    const ready = shallowRef(false);
-    const loading = shallowRef(false);
-    const job = shallowRef<Job>(null as any);
-    const jobUser = shallowRef<JobUser>(null as any);
-    const status = shallowRef<JobInstanceStatus>(null as any);
-    const applyStatus = shallowRef<JobApplyStatusInstance>(null as any);
-    const menu = shallowRef<{ items: ComputedRef<DropdownMenuItem[]> }>(
-      {} as any,
-    );
+  const isSet = instances.get(id);
 
-    async function init() {
-      loading.value = true;
+  const ready = shallowRef(false);
+  const loading = shallowRef(false);
+  const job = shallowRef<Job>(null as any);
+  const jobUser = shallowRef<JobUser>(null as any);
+  const status = shallowRef<JobInstanceStatus>(null as any);
+  const applyStatus = shallowRef<JobApplyStatusInstance>(null as any);
+  const menu = shallowRef(null as any);
 
-      try {
-        job.value = await Api.$fetch<Job>(`/api/job/${id}`);
-        jobUser.value = await Api.$fetch<JobUser>(
-          `/api/admin/job/${id}/user-job`,
-        );
+  async function init() {
+    loading.value = true;
 
-        status.value = {
-          loading: false,
+    try {
+      job.value = await Api.$fetch<Job>(`/api/job/${id}`);
+      jobUser.value = await Api.$fetch<JobUser>(
+        `/api/admin/job/${id}/user-job`,
+      );
 
-          async submit(value: string | null) {
-            status.value.loading = true;
+      status.value = {
+        loading: false,
 
-            try {
-              job.value = await Api.$fetch<Job>(
-                `/api/admin/job/${job.value.id}/status`,
-                { method: "post", body: { status: value } },
-              );
+        async submit(value: string | null) {
+          status.value.loading = true;
 
-              setTimeout(() => {
-                dispatchEvent(
-                  new CustomEvent(`${job.value.id}:update`, {
-                    detail: job.value,
-                  }),
-                );
-              }, 0);
-            } catch (error) {
-              console.log(error);
-            } finally {
-              status.value.loading = false;
-            }
-          },
-
-          menuItems: computed(() => {
-            const items: DropdownMenuItem[] = ["open", "close", "pause"].map(
-              (status) => {
-                return {
-                  label: Use.i18n.t(`job.items.status.items.${status}.label`),
-                  value: status,
-                  // icon: status.icon || applyStatusIcons[status.key],
-                  class: "cursor-pointer",
-                };
-              },
+          try {
+            job.value = await Api.$fetch<Job>(
+              `/api/admin/job/${job.value.id}/status`,
+              { method: "post", body: { status: value } },
             );
 
-            return items
-              .filter((status) => status.value !== job.value.status)
-              .map((item) => {
-                const i: DropdownMenuItem = {
-                  ...item,
-                  onSelect: (e) => {
-                    e.preventDefault();
-                    status.value.submit(item.value);
-                  },
-                };
+            setTimeout(() => {
+              dispatchEvent(
+                new CustomEvent(`${job.value.id}:update`, {
+                  detail: job.value,
+                }),
+              );
+            }, 0);
+          } catch (error) {
+            console.log(error);
+          } finally {
+            status.value.loading = false;
+          }
+        },
 
-                return i;
-              });
-          }),
+        menuItems: computed(() => {
+          const items: DropdownMenuItem[] = ["open", "close", "pause"].map(
+            (status) => {
+              return {
+                label: Use.i18n.t(`job.items.status.items.${status}.label`),
+                value: status,
+                // icon: status.icon || applyStatusIcons[status.key],
+                class: "cursor-pointer",
+              };
+            },
+          );
 
-          dropdown: computed(() => {
-            const item: DropdownMenuItem = {
-              loading: status.value.loading,
-              label: Use.i18n.t(
-                `job.items.status.items.${job.value.status}.label`,
-              ),
-              // icon: ApplyUtils.getStatusIcon(job.value, apply.value.status),
-              children: status.value.menuItems.value,
-              class: "cursor-pointer",
-              disabled: Store.session.user?.role !== "admin",
-            };
+          return items
+            .filter((status) => status.value !== job.value.status)
+            .map((item) => {
+              const i: DropdownMenuItem = {
+                ...item,
+                onSelect: (e) => {
+                  e.preventDefault();
+                  status.value.submit(item.value);
+                },
+              };
 
-            return item;
-          }),
-        };
+              return i;
+            });
+        }),
 
-        menu.value.items = computed(() => {
+        dropdown: computed(() => {
+          const item: DropdownMenuItem = {
+            loading: status.value.loading,
+            label: Use.i18n.t(
+              `job.items.status.items.${job.value.status}.label`,
+            ),
+            // icon: ApplyUtils.getStatusIcon(job.value, apply.value.status),
+            children: status.value.menuItems.value,
+            class: "cursor-pointer",
+            disabled: Store.session.user?.role !== "admin",
+          };
+
+          return item;
+        }),
+      };
+
+      menu.value = {
+        items: computed(() => {
           const statusItems = status.value.dropdown.value;
           statusItems.variant = "soft";
           statusItems.color = "neutral";
@@ -147,6 +153,10 @@ export const useJob = (
               {
                 label: Use.i18n.t("job_user.labels.users"),
                 icon: "i-lucide-text-quote",
+                to: Use.localePath({
+                  name: "admin-job-id-users",
+                  params: { id: job.value.id },
+                }),
               },
             ];
 
@@ -210,103 +220,103 @@ export const useJob = (
           }
 
           return items;
-        });
+        }),
+      };
 
-        applyStatus.value = {
-          values: computed(() => {
-            return job.value.applyStatus;
-          }),
+      applyStatus.value = {
+        values: computed(() => {
+          return job.value.applyStatus;
+        }),
 
-          filterBy: shallowRef(null),
-          filterItems: computed(() => {
-            const _items = [
-              {
-                value: null,
-                label: Use.i18n.t(`apply.status.labels.all`),
-                icon: "i-lucide-text",
-              },
-              ...job.value.applyStatus.map((status) => {
-                return {
-                  value: `status:${status.key}`,
-                  label:
-                    status.label ||
-                    Use.i18n.t(`apply.status.${status.key}.label`),
-                  icon: status.icon || applyStatusIcons[status.key],
-                };
-              }),
-              {
-                value: "status:null",
-                label: Use.i18n.t(`apply.status.labels.null`),
-                icon: applyStatusIcons.null,
-              },
-            ];
-
-            const items = _items.map((status) => {
+        filterBy: shallowRef(null),
+        filterItems: computed(() => {
+          const _items = [
+            {
+              value: null,
+              label: Use.i18n.t(`apply.status.labels.all`),
+              icon: "i-lucide-text",
+            },
+            ...job.value.applyStatus.map((status) => {
               return {
-                ...status,
-                class: "cursor-pointer",
-                onSelect() {
-                  applyStatus.value.filterBy.value = status.value;
-                },
+                value: `status:${status.key}`,
+                label:
+                  status.label ||
+                  Use.i18n.t(`apply.status.${status.key}.label`),
+                icon: status.icon || applyStatusIcons[status.key],
               };
-            });
+            }),
+            {
+              value: "status:null",
+              label: Use.i18n.t(`apply.status.labels.null`),
+              icon: applyStatusIcons.null,
+            },
+          ];
 
+          const items = _items.map((status) => {
             return {
-              children: items,
-              label: _items.find(
-                (status) => status.value === applyStatus.value.filterBy.value,
-              )?.label,
-              icon: _items.find(
-                (status) => status.value === applyStatus.value.filterBy.value,
-              )?.icon,
-              variant: "ghost",
-            } as DropdownMenuItem;
-          }),
+              ...status,
+              class: "cursor-pointer",
+              onSelect() {
+                applyStatus.value.filterBy.value = status.value;
+              },
+            };
+          });
 
-          async update(value) {
-            try {
-              const all = _.cloneDeep(job.value.applyStatus);
-              const i = all.findIndex((a) => a.key === value.key);
+          return {
+            children: items,
+            label: _items.find(
+              (status) => status.value === applyStatus.value.filterBy.value,
+            )?.label,
+            icon: _items.find(
+              (status) => status.value === applyStatus.value.filterBy.value,
+            )?.icon,
+            variant: "ghost",
+          } as DropdownMenuItem;
+        }),
 
-              if (i === -1) all.push(value);
-              else all[i] = value;
+        async update(value) {
+          try {
+            const all = _.cloneDeep(job.value.applyStatus);
+            const i = all.findIndex((a) => a.key === value.key);
 
-              job.value = await Api.$fetch<Job>(
-                `/api/admin/job/${job.value.id}/apply-status`,
-                { method: "post", body: { applyStatus: all } },
-              );
-            } catch (error) {
-              console.log(error);
-            }
-          },
+            if (i === -1) all.push(value);
+            else all[i] = value;
 
-          async remove(key) {
-            try {
-              let all = _.cloneDeep(job.value.applyStatus);
-              const i = all.findIndex((a) => a.key === key);
-              all.splice(i, 1);
+            job.value = await Api.$fetch<Job>(
+              `/api/admin/job/${job.value.id}/apply-status`,
+              { method: "post", body: { applyStatus: all } },
+            );
+          } catch (error) {
+            console.log(error);
+          }
+        },
 
-              job.value = await Api.$fetch<Job>(
-                `/api/admin/job/${job.value.id}/apply-status`,
-                { method: "post", body: { applyStatus: all } },
-              );
-            } catch (error) {
-              console.log(error);
-            }
-          },
-        };
-      } catch (error) {
-        console.log(error);
-      } finally {
-        loading.value = false;
-        ready.value = true;
+        async remove(key) {
+          try {
+            let all = _.cloneDeep(job.value.applyStatus);
+            const i = all.findIndex((a) => a.key === key);
+            all.splice(i, 1);
 
-        onReady?.();
-      }
+            job.value = await Api.$fetch<Job>(
+              `/api/admin/job/${job.value.id}/apply-status`,
+              { method: "post", body: { applyStatus: all } },
+            );
+          } catch (error) {
+            console.log(error);
+          }
+        },
+      };
+    } catch (error) {
+      console.log(error);
+    } finally {
+      loading.value = false;
+      ready.value = true;
+
+      onReady?.();
     }
+  }
 
-    init();
-
+  if (!isSet || force) {
     instances.set(id, {
       job,
       jobUser,
@@ -317,6 +327,11 @@ export const useJob = (
       ready,
     });
   }
+
+  if ((!notInit && !isSet) || force) init();
+  else onReady?.();
+
+  // if (!notInit && (force || !instances.has(id)))
 
   return instances.get(id) as JobInstance;
 };

@@ -1,28 +1,32 @@
 <script lang="ts" setup>
 import type { DropdownMenuItem } from "@nuxt/ui";
-import { useRouteQuery } from "@vueuse/router";
 import { getThemeItems } from "~/tools/theme";
-
-const isInviteUserOpen = useRouteQuery("invite-user");
 
 const teamsItem = computed(() => {
   const children: DropdownMenuItem[] = [];
 
+  children.push({
+    label: Use.i18n.t("user.labels.your_team"),
+    icon: "i-lucide-users-round",
+    to: Use.localePath({ name: "admin-users" }),
+  });
+
   if (Store.session.user?.role === "admin") {
     children.push({
       label: Use.i18n.t("user.labels.invite"),
-      icon: "i-lucide-user-plus",
+      icon: "i-lucide-user-round-plus",
       onSelect(e) {
-        isInviteUserOpen.value = "true";
+        const { open } = useModal({ uid: "invite-user" });
+        open.value = true;
       },
     });
-  }
 
-  //     {
-  //       label: Use.i18n.t("config.actions.update"),
-  //       icon: "i-lucide-folder-pen",
-  //       to: Use.localePath({ name: "admin-config" }),
-  //     },
+    children.push({
+      label: Use.i18n.t("config.actions.update"),
+      icon: "i-lucide-folder-pen",
+      to: Use.localePath({ name: "admin-config" }),
+    });
+  }
 
   const item: DropdownMenuItem = {
     label: "Team",

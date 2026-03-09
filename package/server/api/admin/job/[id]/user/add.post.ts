@@ -6,7 +6,6 @@ export default defineEventHandler(async (event) => {
   const $t = await useTranslation(event);
   const body = await readBody(event);
   const id = getRouterParam(event, "id") as string;
-  console.log(body);
 
   await checkJobUserRole({
     $t,
@@ -41,10 +40,10 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  // const jobUser = await collections.$JobUser.create({
-  //   ...bodyParse,
-  //   jobID: id,
-  // });
+  const jobUser = await collections.$JobUser.create({
+    ...bodyParse,
+    jobID: id,
+  });
 
-  // return jobUser;
+  return jobUser;
 });

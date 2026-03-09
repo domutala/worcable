@@ -60,7 +60,7 @@ onMounted(async () => {
       <u-icon name="i-lucide-loader-circle" class="animate-spin size-10" />
     </div>
 
-    <NuxtLayout v-else-if="Store.config.config">
+    <NuxtLayout v-else-if="Store.config.config" :aa="true">
       <NuxtPage />
 
       <ui-apply-create-modal />
