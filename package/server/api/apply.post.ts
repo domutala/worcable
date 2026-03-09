@@ -67,9 +67,9 @@ export default defineEventHandler(async (event) => {
   }
 
   const apply = await collections.$Apply.create({
-    jobID,
     data: dataParsed.data,
+    jobID: job._id,
   });
 
-  return apply;
+  return { id: apply.id };
 });

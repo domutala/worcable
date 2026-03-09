@@ -7,12 +7,12 @@ import type { FormSubmitEvent } from "@nuxt/ui";
 
 const emit = defineEmits<(e: "submit", comment: ApplyComment) => void>();
 
-const job = defineModel<Job>("job", { required: true });
-const apply = defineModel<Apply>("apply", { required: true });
+const { applyId: applyID } = defineProps<{ applyId: string }>();
+const { apply } = useApply(applyID);
 
 const { schema } = getApplyCommentSchema(Use.i18n.t);
 type Schema = z.output<typeof schema>;
-let state = ref<Partial<Schema>>({});
+const state = ref<Partial<Schema>>({});
 
 const submitting = ref(false);
 
@@ -36,6 +36,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
 <template>
   <UForm
+    v-if="apply"
     :schema="schema"
     :state="state"
     class="space-y-1 bg-default border-default rounded-default ring ring-default"

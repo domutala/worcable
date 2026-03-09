@@ -19,7 +19,10 @@
     "last_update": "Dernier modifier",
     "to_save": "Enregistrer",
     "to_remove": "Supprimer",
+    "to_active": "Activer",
+    "to_deactive": "Désactiver",
     "to_update": "Modifier",
+    "to_cancel": "Annuler",
     "on": "sur",
     "playground": "Playgfound"
   },
@@ -521,6 +524,163 @@
     }
   },
 
+  "job_user": {
+    "labels": {
+      "users": "Collaborateurs",
+      "add_user": "Ajouter un collaborateur"
+    },
+
+    "create": {
+      "items": {
+        "user": {
+          "label": "Utilisateur",
+          "placeholder": "Sélectionner un utilisateur",
+
+          "errors": {
+            "invalid": "Veuillez sélectioner un utilisateur"
+          }
+        },
+        "role": {
+          "label": "Rôle sur l'offre",
+          "placeholder": "Choisir un rôle",
+          "help": "Le rôle définit les actions possibles sur cette offre spécifique."
+        }
+      },
+
+      "submit": "Ajouter à l'offre",
+      "cancel": "Annuler",
+      "success": "Le collaborateur a été ajouté à l'offre avec succès."
+    },
+
+    "remove": {
+      "confirm": "Êtes-vous sûr de vouloir retirer {name} de cette offre ?",
+      "success": "Le collaborateur a été retiré de l'offre.",
+      "submit": "Retirer de l'offre",
+      "cancel": "Annuler"
+    },
+
+    "errors": {
+      "job_user_not_found": "Le collaborateur n'a pas été trouvé pour cette offre ou l'association n'existe plus.",
+      "already_assigned": "Cet utilisateur collabore déjà sur cette offre"
+    }
+  },
+
+  "user": {
+    "items": {
+      "role": {
+        "label": "Rôle de l'utilisateur",
+        "placeholder": "Sélectionnez un rôle",
+        "hint": "Choisissez le rôle approprié pour cet utilisateur",
+        "help": "Le rôle détermine les permissions et l'accès aux fonctionnalités de la plateforme",
+        "items": {
+          "admin": "Admin",
+          "recruiter": "Recruteur",
+          "guest": "Invité"
+        },
+        "errors": {
+          "required": "Le rôle est obligatoire",
+          "invalid": "Le rôle sélectionné n'est pas valide"
+        }
+      },
+      "active": {
+        "label": "Statut du compte",
+        "hint": "Activer ou désactiver l'accès de l'utilisateur",
+        "help": "Un utilisateur désactivé ne pourra plus se connecter mais ses actions passées seront conservées",
+        "items": {
+          "true": "Actif",
+          "false": "Inactif"
+        },
+        "errors": {
+          "invalid": "Le statut est invalide"
+        }
+      },
+      "firstName": {
+        "label": "Prénom",
+        "placeholder": "Jean",
+        "hint": "Indiquez le prénom de l'utilisateur",
+        "help": "Le prénom sera affiché dans l'annuaire interne",
+        "errors": {
+          "required": "Le prénom est obligatoire",
+          "min": "Le prénom doit contenir au moins 2 caractères",
+          "max": "Le prénom ne doit pas dépasser 50 caractères"
+        }
+      },
+      "lastName": {
+        "label": "Nom de famille",
+        "placeholder": "Dupont",
+        "hint": "Indiquez le nom de famille de l'utilisateur",
+        "help": "Le nom de famille sera affiché dans l'annuaire interne",
+        "errors": {
+          "required": "Le nom de famille est obligatoire",
+          "min": "Le nom doit contenir au moins 2 caractères",
+          "max": "Le nom ne doit pas dépasser 50 caractères"
+        }
+      },
+      "email": {
+        "label": "Adresse e-mail",
+        "placeholder": "exemple{'@'}domaine.com",
+        "hint": "Utilisez une adresse e-mail valide",
+        "help": "L'e-mail servira pour la connexion et les notifications",
+        "errors": {
+          "required": "L'adresse e-mail est obligatoire",
+          "invalid": "L'adresse e-mail n'est pas valide"
+        }
+      }
+    },
+
+    "labels": {
+      "your_team": "Votre équie",
+      "users": "Collaborateurs",
+      "invite": "Inviter un collaborateur",
+      "to_invite": "Inviter",
+      "search_users": "Rechercher un collaborateur",
+      "empty_search": "Aucun collaborateur ne correspond à votre recherche.",
+      "role_update_success": "Le rôle de l'utilisateur a été mis à jour avec succès.",
+      "update_role": "Mettre à jour le rôle",
+      "user_deactived": "Utilisateur désactivé"
+    },
+
+    "invite": {
+      "submit": "Inviter",
+      "success": "L'utilisateur a été invité avec succès. Il recevra un e-mail pour créer son compte.",
+
+      "errors": {
+        "user_already_exists": "Un utilisateur avec cet adrese email existe déjà."
+      }
+    },
+
+    "remove": {
+      "title": "Supprimer un collaborateur",
+      "confirm_message": "Êtes-vous sûr de vouloir supprimer {name} ? Cette action est irréversible.",
+      "submit": "Supprimer",
+      "cancel": "Annuler",
+      "success": "L'utilisateur a été supprimé avec succès.",
+
+      "errors": {
+        "unauthorized": "Vous n'avez pas les droits nécessaires pour supprimer cet utilisateur."
+      }
+    },
+
+    "active": {
+      "active": {
+        "title": "Activer l'accès de {name} ?",
+        "confirm": "Voulez-vous rétablir l'accès de cet utilisateur à la plateforme ?",
+        "submit": "Activer",
+        "success": "L'accès de {name} a été activé avec succès."
+      },
+      "deactive": {
+        "title": "Désactiver l'accès de {name} ?",
+        "confirm": "Attention, {name} ne pourra plus se connecter. Ses actions passées restent intactes.",
+        "submit": "Désactiver",
+        "success": "L'accès de {name} a été désactivé."
+      }
+    },
+
+    "errors": {
+      "user_not_found": "Utilisateur inconnu."
+    }
+  },
+
   "uploads": {
     "errors": {
       "invalid_file": "Le fichier est invalide ou manquant"
@@ -630,6 +790,12 @@
       "remember": {
         "label": "Se souvenir de moi"
       }
+    }
+  },
+
+  "session": {
+    "errors": {
+      "not_authorized": "Vous n'êtes pas autorisé à accéder à ce service"
     }
   }
 }

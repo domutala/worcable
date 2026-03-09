@@ -2,7 +2,7 @@
 import type { Job } from "~~/server/database/collections";
 
 definePageMeta({ layout: false });
-const job = defineModel<Job>({ required: true });
+defineProps<{ job: Job }>();
 </script>
 
 <template>

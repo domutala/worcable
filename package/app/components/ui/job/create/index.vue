@@ -6,7 +6,6 @@ import _ from "lodash";
 import type { Job } from "~~/server/database/collections";
 
 const { job } = defineProps<{ job?: Job }>();
-console.log(job);
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const slimStepper = breakpoints.smallerOrEqual("2xl");
@@ -72,16 +71,21 @@ async function onSubmit() {
   submitting.value = true;
 
   try {
-    const result = await $fetch("/api/admin/job", {
-      method: "post",
-      body: data.value,
-    });
+    const result = await Api.$fetch<Job>(
+      job?.id ? `/api/admin/job/${job.id}` : "/api/admin/job",
+      {
+        method: job?.id ? "patch" : "post",
+        body: data.value,
+      },
+    );
 
-    Use.router.push(
-      Use.localePath({ name: "admin-job-id", params: { id: result?.id } }),
+    useJob(result.id);
+
+    Use.router.replace(
+      Use.localePath({ name: "admin-job-id", params: { id: result.id } }),
     );
   } catch (error) {
-    onFetchError(error);
+    console.log(error);
   } finally {
     submitting.value = false;
   }
