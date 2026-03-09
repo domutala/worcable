@@ -2,6 +2,8 @@
 const { jobId: jobID } = defineProps<{ jobId: string }>();
 const { job, menu, ready } = useJob(jobID);
 const side = useCookie<string>(`job-side`, { default: () => "kanban" });
+
+const { value } = useModal({ uid: "job-user-add" });
 </script>
 
 <template>
@@ -14,7 +16,7 @@ const side = useCookie<string>(`job-side`, { default: () => "kanban" });
         variant="ghost"
         icon="i-lucide-arrow-left"
         square
-        @click="$router.back()"
+        :to="Use.localePath({ name: 'admin' })"
       >
       </u-button>
 
@@ -26,6 +28,11 @@ const side = useCookie<string>(`job-side`, { default: () => "kanban" });
           {{ Utils.getDateStatus(job.createdAt) }}
         </div>
       </div>
+
+      {{ value }}
+      <u-button size="xs" icon="i-lucide-arrow-left" @click="value = 'open'"
+        >add user
+      </u-button>
 
       <ui-menu-horizontal-items
         :items="menu.items.value"

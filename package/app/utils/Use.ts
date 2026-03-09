@@ -14,6 +14,11 @@ class Use {
     return route;
   }
 
+  get dayjs() {
+    const dayjs = useDayjs();
+    return dayjs;
+  }
+
   get i18n() {
     const { $i18n } = useNuxtApp();
     return $i18n;

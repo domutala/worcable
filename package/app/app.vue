@@ -57,10 +57,7 @@ onMounted(async () => {
       v-if="initing"
       class="w-screen h-screen flex items-center justify-center"
     >
-      <u-icon
-        name="i-lucide-loader-circle"
-        class="text-primary animate-spin size-10"
-      />
+      <u-icon name="i-lucide-loader-circle" class="animate-spin size-10" />
     </div>
 
     <NuxtLayout v-else-if="Store.config.config">

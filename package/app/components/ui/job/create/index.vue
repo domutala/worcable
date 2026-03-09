@@ -71,10 +71,13 @@ async function onSubmit() {
   submitting.value = true;
 
   try {
-    const result = await Api.$fetch<Job>("/api/admin/job", {
-      method: "post",
-      body: data.value,
-    });
+    const result = await Api.$fetch<Job>(
+      job?.id ? `/api/admin/job/${job.id}` : "/api/admin/job",
+      {
+        method: job?.id ? "patch" : "post",
+        body: data.value,
+      },
+    );
 
     useJob(result.id);
 

@@ -72,15 +72,21 @@ async function fetchJob() {
           </div>
         </template>
 
-        <u-container class="py-15">
+        <u-container class="max-w-4xl">
           <div v-if="success" class="text-center py-15">
             <u-icon name="i-lucide-check-check" class="size-25 text-success" />
             <p
               v-html="md.render($t('apply.success'))"
-              class="max-w-120 mx-auto mt-5"
+              class="max-w-120 mx-auto mt-5 px-5"
             ></p>
           </div>
-          <ui-apply-create v-else :job @success="success = true" />
+
+          <ui-apply-create
+            v-else
+            :job
+            @success="success = true"
+            class="pb-25 pt-10 md:pt-15 lg:pt-25"
+          />
         </u-container>
       </ui-layout-inset>
     </template>

@@ -13,21 +13,9 @@ export default defineEventHandler(async (event) => {
   });
 
   const { applyStatus: schema } = getJobShema($t);
-  const status = schema.safeParse(body.applyStatus);
+  const status = parseZod(schema, body);
 
-  if (status.error) {
-    throw createError({
-      statusCode: 400,
-      data: {
-        messages: status.error.issues.map((issue) => ({
-          message: issue.message,
-          path: issue.path[0],
-        })),
-      },
-    });
-  }
-
-  await collections.$Job.updateOne({ _id: id }, { applyStatus: status.data });
+  await collections.$Job.updateOne({ _id: id }, { applyStatus: status });
 
   return await getJob({ id, $t });
 });

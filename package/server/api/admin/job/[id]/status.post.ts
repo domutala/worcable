@@ -1,4 +1,4 @@
-import { getJob } from "~~/server/services/job_get";
+import { checkJobUserRole, getJob } from "~~/server/services/job_get";
 import { getJobShema } from "~~/server/services/job_schema";
 
 export default defineEventHandler(async (event) => {
@@ -6,10 +6,11 @@ export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, "id") as string;
   const body = await readBody(event);
 
-  await getJob({
-    id,
+  await checkJobUserRole({
     $t,
     userID: event.context.session.user.id,
+    jobID: id,
+    role: ["admin"],
   });
 
   const { status: schema } = getJobShema($t);

@@ -48,3 +48,28 @@ export async function getUserJobIDs({
   const jobUsers = await collections.$JobUser.distinct("jobID", { userID });
   return jobUsers.map((id) => id.toString());
 }
+
+export async function checkJobUserRole({
+  $t,
+  userID,
+  jobID,
+  role,
+}: {
+  $t: (str: string) => string;
+  userID: string;
+  jobID: string;
+  role: string[];
+}) {
+  const exists = await collections.$JobUser.exists({
+    userID,
+    jobID,
+    role: { $in: role },
+  });
+
+  if (!exists) {
+    throw createError({
+      statusCode: 404,
+      data: { message: $t("session.errors.not_authorized") },
+    });
+  }
+}

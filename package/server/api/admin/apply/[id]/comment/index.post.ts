@@ -1,12 +1,20 @@
 import { getApplyCommentSchema } from "~~/server/services/apply_comment_schema";
 import { getApply } from "~~/server/services/apply_get";
+import { checkJobUserRole } from "~~/server/services/job_get";
 
 export default defineEventHandler(async (event) => {
   const $t = await useTranslation(event);
   const body = await readBody(event);
   const applyID = getRouterParam(event, "id") as string;
 
-  await getApply({ id: applyID, $t });
+  const { jobID } = await getApply({ id: applyID, $t });
+  await checkJobUserRole({
+    $t,
+    userID: event.context.session.user.id,
+    jobID: jobID.toString(),
+    role: ["admin", "recruiter"],
+  });
+
   const { schema } = getApplyCommentSchema($t);
   const dataParsed = schema.safeParse(body);
 
