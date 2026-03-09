@@ -521,6 +521,13 @@
     }
   },
 
+  "job_user": {
+    "labels": {
+      "users": "Collaborateurs",
+      "add_user": "Ajouter un collaborateur"
+    }
+  },
+
   "user": {
     "items": {
       "role": {

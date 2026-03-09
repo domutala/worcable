@@ -5,20 +5,17 @@ import { getUserShema, USER_ROLES } from "~~/server/services/user_shema";
 import type { User } from "~~/server/database/collections";
 import UiUserSelect from "~/components/ui/user/select.vue";
 import * as z from "zod";
+import type { IModalOptions } from "~/interfaces";
 
-const {
-  jobId: jobID,
-  uid,
-  alias,
-} = defineProps<{
+const { jobId: jobID, modal } = defineProps<{
   jobId: string;
-  uid?: string;
-  alias?: string;
+  modal?: IModalOptions;
 }>();
-const { job } = useJob(jobID);
 
-const { open } = useModal({ uid, alias });
+const { open, uid } = useModal(modal);
 const { uid: sUid, open: sOpen, value: sValue } = useModal();
+
+const { job } = useJob(jobID);
 
 const user = ref<User>();
 const { role } = getUserShema(Use.i18n.t);
@@ -64,9 +61,10 @@ function onUserSelect(u: User) {
 </script>
 
 <template>
-  <ui-modal
+  <ui-modal-2
     v-if="open && job"
-    v-model:open="open"
+    v-bind="modal"
+    v-bind:uid="uid"
     :ui="{ content: 'max-w-3xl' }"
   >
     <template #content>
@@ -133,7 +131,7 @@ function onUserSelect(u: User) {
         </div>
       </ui-layout-inset>
 
-      <ui-user-select :uid="sUid" @select="onUserSelect" />
+      <ui-user-select :modal="{ uid: sUid }" @select="onUserSelect" />
     </template>
-  </ui-modal>
+  </ui-modal-2>
 </template>

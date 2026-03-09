@@ -1,9 +1,7 @@
 <script lang="ts" setup>
-import { useRouteQuery } from "@vueuse/router";
-
 const { applyId: applyID } = defineProps<{ applyId: string }>();
 const { apply, status, ready } = useApply(applyID);
-const applyModalID = useRouteQuery("modal-apply-id");
+const { value: applyModalID } = useModal({ uid: "modal-apply-id" });
 </script>
 
 <template>

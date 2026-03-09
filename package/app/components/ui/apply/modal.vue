@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import { watchImmediate } from "@vueuse/core";
-import { useRouteQuery } from "@vueuse/router";
 
-const applyID = useRouteQuery<string | undefined>("modal-apply-id");
-const isOpen = ref(false);
+const {
+  uid,
+  value: applyID,
+  open,
+} = useModal({ alias: "modal-apply-id", force: true });
 
 const { refresh, apply, loading } = useApply("_MODAL_", {
   onReady() {
@@ -15,23 +17,17 @@ watchImmediate(
   () => applyID.value,
   () => {
     if (!applyID.value) return;
-
-    isOpen.value = true;
     refresh(applyID.value);
   },
 );
 </script>
 
 <template>
-  <ui-modal
+  <ui-modal-2
+    ref="modal"
     v-if="applyID"
-    v-model:open="isOpen"
+    v-bind:uid="uid"
     :ui="{ content: [loading ? 'max-w-14' : 'max-w-360', 'rounded-2xl'] }"
-    @update:open="
-      () => {
-        applyID = undefined;
-      }
-    "
   >
     <template #content>
       <div v-if="loading" class="flex items-center justify-center py-2">
@@ -95,5 +91,5 @@ watchImmediate(
         </u-container>
       </ui-layout-inset>
     </template>
-  </ui-modal>
+  </ui-modal-2>
 </template>

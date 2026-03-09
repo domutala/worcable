@@ -3,14 +3,15 @@ import type { DropdownMenuItem } from "@nuxt/ui";
 
 const { applyId: applyID } = defineProps<{ applyId: string }>();
 const { status, note } = useApply(applyID);
-const isDetailsOpen = ref(false);
+
+const modal = useTemplateRef("modal");
 
 const items = computed(() => {
   const items: DropdownMenuItem[] = [
     {
       label: Use.i18n.t("apply.labels.show_details"),
       onSelect(e) {
-        isDetailsOpen.value = true;
+        if (modal.value) modal.value.open = true;
       },
     },
   ];
@@ -136,12 +137,7 @@ const items = computed(() => {
     </template>
   </ui-menu-horizontal> -->
 
-  <ui-modal
-    v-model:open="isDetailsOpen"
-    :ui="{
-      content: ['max-w-210', 'rounded-2xl'],
-    }"
-  >
+  <ui-modal-2 ref="modal" :ui="{ content: ['max-w-210', 'rounded-2xl'] }">
     <template #content>
       <ui-layout-inset>
         <div class="sm:p-10 p-2 py-3">
@@ -149,5 +145,5 @@ const items = computed(() => {
         </div>
       </ui-layout-inset>
     </template>
-  </ui-modal>
+  </ui-modal-2>
 </template>

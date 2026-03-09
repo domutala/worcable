@@ -37,9 +37,9 @@ const instances = new Map<string, JobInstance>();
 
 export const useJob = (
   id: string,
-  { onReady }: { onReady?: () => void } = {},
+  { onReady, force }: { onReady?: () => void; force?: boolean } = {},
 ) => {
-  if (!instances.has(id)) {
+  if (force || !instances.has(id)) {
     const ready = shallowRef(false);
     const loading = shallowRef(false);
     const job = shallowRef<Job>(null as any);
@@ -135,6 +135,36 @@ export const useJob = (
           // statusItems.notHide = true;
 
           const items: DropdownMenuItem[] = [statusItems];
+
+          setJobUserItems();
+          function setJobUserItems() {
+            const item: DropdownMenuItem = {
+              label: Use.i18n.t("job_user.labels.users"),
+              icon: "i-lucide-users-round",
+            };
+
+            const children: DropdownMenuItem[] = [
+              {
+                label: Use.i18n.t("job_user.labels.users"),
+                icon: "i-lucide-text-quote",
+              },
+            ];
+
+            if (["admin"].includes(jobUser.value.role)) {
+              children.push({
+                label: Use.i18n.t("job_user.labels.add_user"),
+                icon: "i-lucide-user-round-plus",
+                onSelect(e) {
+                  const { open } = useModal({ uid: "job-user-add" });
+                  open.value = true;
+                },
+              });
+            }
+
+            item.children = children;
+
+            items.push(item);
+          }
 
           if (["admin", "recruiter"].includes(jobUser.value.role)) {
             items.push(

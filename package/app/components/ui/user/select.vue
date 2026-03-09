@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import type { IModalOptions } from "~/interfaces";
 import type { User } from "~~/server/database/collections";
 import type { IDataResult } from "~~/server/interfaces";
 
 const emit = defineEmits<(e: "select", user: User) => void>();
-const { uid } = defineProps<{ uid?: string }>();
-const { open } = useModal({ uid });
+
+const { modal } = defineProps<{ modal?: IModalOptions }>();
+const { open, uid } = useModal(modal);
 
 const result = ref<IDataResult<User>>();
 const users = ref<User[]>([]);
@@ -36,7 +38,7 @@ function select(user: User) {
 </script>
 
 <template>
-  <ui-modal v-model:open="open" :ui="{ content: 'max-w-3xl' }">
+  <ui-modal-2 v-bind="modal" v-bind:uid="uid" :ui="{ content: 'max-w-3xl' }">
     <template #content>
       <ui-layout-inset>
         <div class="space-y-1.5 p-5">
@@ -66,5 +68,5 @@ function select(user: User) {
         </div>
       </ui-layout-inset>
     </template>
-  </ui-modal>
+  </ui-modal-2>
 </template>

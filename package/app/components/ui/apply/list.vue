@@ -2,7 +2,6 @@
 import { type Apply } from "~~/server/database/collections";
 import type { IDataResult } from "~~/server/interfaces";
 import { watchImmediate } from "@vueuse/core";
-import { useRouteQuery } from "@vueuse/router";
 
 const {
   sortBy,
@@ -18,8 +17,7 @@ const {
 
 const { jobId: jobID } = defineProps<{ jobId: string }>();
 const { applyStatus } = useJob(jobID);
-
-const applyModalID = useRouteQuery("modal-apply-id");
+const { value: applyModalID } = useModal({ uid: "modal-apply-id" });
 const searchTerm = ref("");
 const page = ref(1);
 const pageSize = ref(8);
