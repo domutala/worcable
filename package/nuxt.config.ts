@@ -2,8 +2,6 @@
 export default defineNuxtConfig({
   runtimeConfig: {
     databaseUrl: "",
-    mongoUri: "",
-
     uploadsKey: "",
     secretKey: "",
 
@@ -39,21 +37,6 @@ export default defineNuxtConfig({
   colorMode: {
     classSuffix: "",
     storageKey: "nuxt-color-mode",
-  },
-
-  ui: {
-    theme: {
-      colors: [
-        "primary",
-        "secondary",
-        "info",
-        "success",
-        "warning",
-        "error",
-
-        "light",
-      ],
-    },
   },
 
   icon: {

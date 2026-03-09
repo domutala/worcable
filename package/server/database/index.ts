@@ -11,7 +11,7 @@ export async function useMongo() {
 
   if (!connectionPromise) {
     const runtime = useRuntimeConfig();
-    const uri = runtime.mongoUri;
+    const uri = runtime.databaseUrl;
 
     if (!uri) {
       throw new Error("Mongo URI missing");
