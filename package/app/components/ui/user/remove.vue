@@ -2,7 +2,9 @@
 import type { User } from "~~/server/database/collections";
 
 const emit = defineEmits<(e: "remove") => void>();
-const user = defineModel<User>("user", { required: true });
+
+const { userId: userID } = defineProps<{ userId: string }>();
+const { user } = useUser(userID);
 
 const loading = ref(false);
 const toast = useToast();

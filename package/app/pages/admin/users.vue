@@ -124,12 +124,13 @@ async function loadData() {
               </div>
 
               <ui-user-role :user-id="user.id" />
+
               <ui-user-active :user-id="user.id">
                 <template #default />
               </ui-user-active>
 
               <ui-user-remove
-                v-model:user="data.items[i]!"
+                :user-id="user.id"
                 @remove="data.items.splice(i, 1)"
               >
                 <template #default />

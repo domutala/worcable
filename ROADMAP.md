@@ -6,7 +6,7 @@ Worcable is evolving! Below is our vision for the future. Contributions are welc
 
 ### 🚀 Phase 1: Foundations & UX
 - [x] Customizable recruitment pipelines.
-- [ ] Advanced RBAC (Role-Based Access Control).
+- [x] Advanced RBAC (Role-Based Access Control).
 - [ ] CV Parsing & Management.
 - [ ] Accessibility & Responsive UI overhaul.
 

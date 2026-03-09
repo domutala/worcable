@@ -118,7 +118,7 @@ async function loadData() {
           <div
             v-for="(user, i) in data.items"
             :key="user.id"
-            class="w-full bg-default overflow-hidden group hover:bg-surface/10 flex items-center gap-4 p-3"
+            class="w-full bg-default overflow-hidden group hover:bg-surface/10 flex items-center gap-2 p-3"
           >
             <UAvatar
               :src="Utils.getFileUrl(user.avatar)"
@@ -127,7 +127,7 @@ async function loadData() {
               size="3xl"
             />
 
-            <div class="leading-[1.1] flex-1 min-w-0 w-0">
+            <div class="leading-[1.1] flex-1 min-w-0 w-0 ml-2">
               <div class="font-bold truncate">
                 {{ user.firstName }}
                 {{ user.lastName }}
