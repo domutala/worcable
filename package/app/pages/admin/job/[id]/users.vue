@@ -72,7 +72,7 @@ async function loadData() {
                 base: 'h-full ring-0! bg-transparent pl-13',
                 trailing: 'pr-5',
               }"
-              :placeholder="$t('apply.actions.search_candidate')"
+              :placeholder="$t('user.labels.search_users')"
               icon="i-lucide-search"
               type="search"
               class="h-17 w-full outline-none"
@@ -111,42 +111,39 @@ async function loadData() {
           >
             <u-icon name="i-lucide-users-round" class="size-10" />
             <p>
-              {{ $t("apply.labels.no_apply") }}
+              {{ $t("user.labels.empty_search") }}
             </p>
           </div>
 
           <div
             v-for="(user, i) in data.items"
             :key="user.id"
-            class="w-full bg-default overflow-hidden group hover:bg-surface/10"
+            class="w-full bg-default overflow-hidden group hover:bg-surface/10 flex items-center gap-4 p-3"
           >
-            <div
-              class="flex items-center gap-4 p-5 relative border-default w-full text-left"
-            >
-              <UAvatar
-                :src="Utils.getFileUrl(user.avatar)"
-                :alt="[user.firstName, user.lastName].join(' ')"
-                class="border border-accented rounded-2xl text-md"
-                size="3xl"
-              />
+            <UAvatar
+              :src="Utils.getFileUrl(user.avatar)"
+              :alt="[user.firstName, user.lastName].join(' ')"
+              class="border border-accented rounded-2xl text-md"
+              size="3xl"
+            />
 
-              <div class="leading-[1.1] flex-1 min-w-0 w-0">
-                <div class="font-bold truncate">
-                  {{ user.firstName }}
-                  {{ user.lastName }}
-                </div>
-
-                <div class="text-sm opacity-50">
-                  {{ user.email }}
-                </div>
+            <div class="leading-[1.1] flex-1 min-w-0 w-0">
+              <div class="font-bold truncate">
+                {{ user.firstName }}
+                {{ user.lastName }}
               </div>
 
-              <ui-job-user-status v-model:job-user="user.jobUser" />
-              <ui-job-user-remove
-                v-model:job-user="user.jobUser"
-                @remove="data.items.splice(i, 1)"
-              />
+              <div class="text-sm opacity-50">
+                {{ user.email }}
+              </div>
             </div>
+
+            <ui-job-user-status v-model:job-user="user.jobUser" />
+            <ui-job-user-remove
+              v-model:job-user="user.jobUser"
+              :user
+              @remove="data.items.splice(i, 1)"
+            />
           </div>
 
           <div v-if="data.items.length" class="sticky bottom-0 z-20 bg-default">

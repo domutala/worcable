@@ -1,4 +1,6 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+defineProps<{ ui?: Partial<{ content: string }> }>();
+</script>
 
 <template>
   <div class="absolute inset-0 bg-linear-to-r from-primary to-default"></div>
@@ -6,7 +8,10 @@
 
   <slot name="header" />
 
-  <div class="flex-1 flex flex-col overflow-hidden relative lg:m-2">
+  <div
+    class="flex-1 flex flex-col overflow-hidden relative lg:m-2"
+    :class="ui?.content"
+  >
     <div class="flex-1 overflow-hidden flex flex-col relative lg:rounded">
       <div
         class="absolute inset-0 bg-surface/25 border-default rounded-[inherit]"

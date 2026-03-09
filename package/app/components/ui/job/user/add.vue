@@ -20,7 +20,7 @@ const { job } = useJob(jobID);
 const user = ref<User>();
 const { role } = getUserShema(Use.i18n.t);
 const schema = z.object({
-  userID: z.string("job_user.items.userID.errors.invalid"),
+  userID: z.string(Use.i18n.t("job_user.create.items.user.errors.invalid")),
   role,
 });
 type Schema = z.output<typeof schema>;
@@ -29,6 +29,12 @@ const state = ref<Partial<Schema>>({});
 const toast = useToast();
 const submitting = ref(false);
 
+watch(open, () => {
+  if (!open.value) {
+    state.value = {};
+    user.value = undefined;
+  }
+});
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   submitting.value = true;
 
@@ -40,7 +46,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
     toast.add({
       color: "success",
-      description: Use.i18n.t("user.invite.success"),
+      description: Use.i18n.t("job_user.create.success"),
     });
 
     open.value = false;
@@ -78,8 +84,7 @@ function onUserSelect(u: User) {
           >
             <UFormField
               name="userID"
-              :label="$t('user.items.email.label')"
-              :help="$t('user.items.email.hint')"
+              :label="$t('job_user.create.items.user.label')"
             >
               <u-button
                 class="bg-default border border-default rounded-min h-17 justify-start px-4"
@@ -99,15 +104,19 @@ function onUserSelect(u: User) {
                 </template>
 
                 <span v-else class="opacity-30 text-sm">
-                  {{ $t(`user.items.email.placeholder`) }}
+                  {{ $t(`job_user.create.items.user.placeholder`) }}
                 </span>
               </u-button>
             </UFormField>
 
-            <UFormField name="role" :label="$t('user.items.role.label')">
+            <UFormField
+              name="role"
+              :label="$t('job_user.create.items.role.label')"
+              :help="$t('job_user.create.items.role.help')"
+            >
               <USelect
                 v-model="state.role"
-                :placeholder="$t('user.items.role.placeholder')"
+                :placeholder="$t('job_user.create.items.role.placeholder')"
                 :items="
                   USER_ROLES.map((c) => ({
                     label: $t(`user.items.role.items.${c}`),
@@ -124,7 +133,7 @@ function onUserSelect(u: User) {
                 variant="solid"
                 :loading="submitting"
               >
-                {{ $t("user.invite.submit") }}
+                {{ $t("job_user.create.submit") }}
               </u-button>
             </div>
           </u-form>

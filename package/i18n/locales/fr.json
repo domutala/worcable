@@ -525,6 +525,40 @@
     "labels": {
       "users": "Collaborateurs",
       "add_user": "Ajouter un collaborateur"
+    },
+
+    "create": {
+      "items": {
+        "user": {
+          "label": "Utilisateur",
+          "placeholder": "Sélectionner un utilisateur",
+
+          "errors": {
+            "invalid": "Veuillez sélectioner un utilisateur"
+          }
+        },
+        "role": {
+          "label": "Rôle sur l'offre",
+          "placeholder": "Choisir un rôle",
+          "help": "Le rôle définit les actions possibles sur cette offre spécifique."
+        }
+      },
+
+      "submit": "Ajouter à l'offre",
+      "cancel": "Annuler",
+      "success": "Le collaborateur a été ajouté à l'offre avec succès."
+    },
+
+    "remove": {
+      "confirm": "Êtes-vous sûr de vouloir retirer {name} de cette offre ?",
+      "success": "Le collaborateur a été retiré de l'offre.",
+      "submit": "Retirer de l'offre",
+      "cancel": "Annuler"
+    },
+
+    "errors": {
+      "job_user_not_found": "Le collaborateur n'a pas été trouvé pour cette offre ou l'association n'existe plus.",
+      "already_assigned": "Cet utilisateur collabore déjà sur cette offre"
     }
   },
 
@@ -581,7 +615,11 @@
 
     "labels": {
       "your_team": "Votre équie",
-      "invite": "Inviter un collaborateur"
+      "users": "Collaborateurs",
+      "invite": "Inviter un collaborateur",
+      "to_invite": "Inviter",
+      "search_users": "Rechercher un collaborateur",
+      "empty_search": "Aucun collaborateur ne correspond à votre recherche."
     },
 
     "invite": {
@@ -589,8 +627,24 @@
       "success": "L'utilisateur a été invité avec succès. Il recevra un e-mail pour créer son compte.",
 
       "errors": {
-        "user_already_exists": "Un utilisateur avec cet adrese email existe déjà"
+        "user_already_exists": "Un utilisateur avec cet adrese email existe déjà."
       }
+    },
+
+    "remove": {
+      "title": "Supprimer un collaborateur",
+      "confirm_message": "Êtes-vous sûr de vouloir supprimer {name} ? Cette action est irréversible.",
+      "submit": "Supprimer",
+      "cancel": "Annuler",
+      "success": "L'utilisateur a été supprimé avec succès.",
+
+      "errors": {
+        "unauthorized": "Vous n'avez pas les droits nécessaires pour supprimer cet utilisateur."
+      }
+    },
+
+    "errors": {
+      "user_not_found": "Utilisateur inconnu."
     }
   },
 

@@ -18,7 +18,7 @@ async function submit() {
 
     toast.add({
       color: "success",
-      description: Use.i18n.t("user.invite.success"),
+      description: Use.i18n.t("user.remove.success"),
     });
 
     if (modal.value) modal.value.open = false;
@@ -50,12 +50,13 @@ async function submit() {
       <template #content>
         <ui-layout-inset>
           <div class="p-10">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque
-            inventore ad suscipit magni incidunt fuga consectetur sint sunt
-            repellendus vitae omnis nemo officiis, unde eveniet cumque
-            laudantium, eius sed. Nam?
+            {{
+              $t("user.remove.confirm_message", {
+                name: `${user.firstName} ${user.lastName}`,
+              })
+            }}
 
-            <div class="flex justify- mt-5">
+            <div class="flex items-center gap-2 mt-5">
               <u-button
                 :loading
                 type="submit"
@@ -64,7 +65,11 @@ async function submit() {
                 icon="i-lucide-trash-2"
                 @click="submit"
               >
-                {{ $t("user.invite.submit") }}
+                {{ $t("user.remove.submit") }}
+              </u-button>
+
+              <u-button :loading type="submit" @click="modal!.open = false">
+                {{ $t("user.remove.cancel") }}
               </u-button>
             </div>
           </div>

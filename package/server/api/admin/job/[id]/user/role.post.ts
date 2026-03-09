@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
   if (!jobUser) {
     throw createError({
       statusCode: 404,
-      data: { message: $t("job.errors.job_user_not_found") },
+      data: { message: $t("job_user.errors.job_user_not_found") },
     });
   }
 

@@ -152,7 +152,7 @@ export const useJob = (
             const children: DropdownMenuItem[] = [
               {
                 label: Use.i18n.t("job_user.labels.users"),
-                icon: "i-lucide-text-quote",
+                icon: "i-lucide-users-round",
                 to: Use.localePath({
                   name: "admin-job-id-users",
                   params: { id: job.value.id },

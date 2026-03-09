@@ -6,7 +6,7 @@ const teamsItem = computed(() => {
   const children: DropdownMenuItem[] = [];
 
   children.push({
-    label: Use.i18n.t("user.labels.your_team"),
+    label: Use.i18n.t("user.labels.users"),
     icon: "i-lucide-users-round",
     to: Use.localePath({ name: "admin-users" }),
   });
@@ -29,7 +29,7 @@ const teamsItem = computed(() => {
   }
 
   const item: DropdownMenuItem = {
-    label: "Team",
+    label: Use.i18n.t("user.labels.your_team"),
     icon: "i-lucide-users",
     children,
   };

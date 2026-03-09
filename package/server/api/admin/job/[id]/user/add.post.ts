@@ -18,10 +18,10 @@ export default defineEventHandler(async (event) => {
   const bodyParse = parseZod(
     z.object({
       userID: z
-        .string($t("job_user.items.userID.errors.invalid"))
+        .string($t("job_user.create.items.role.errors.invalid"))
         .refine(
           (val) => isValidObjectId(val),
-          $t("job_user.items.userID.errors.invalid"),
+          $t("job_user.create.items.role.errors.invalid"),
         ),
       role,
     }),
@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
   if (exists) {
     throw createError({
       statusCode: 404,
-      data: { message: $t("job_user.errors.user_already_added_to_job") },
+      data: { message: $t("job_user.errors.already_assigned") },
     });
   }
 
