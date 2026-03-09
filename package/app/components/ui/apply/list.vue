@@ -1,16 +1,11 @@
 <script lang="ts" setup>
-import { type Apply, type Job } from "~~/server/database/collections";
+import { type Apply } from "~~/server/database/collections";
 import type { IDataResult } from "~~/server/interfaces";
 import { watchImmediate } from "@vueuse/core";
-import type { DropdownMenuItem } from "@nuxt/ui";
-import { applyStatusIcons } from "~/tools/apply";
-import { useRouteQuery } from "@vueuse/router";
 
 const {
   sortBy,
   sortOrder,
-  icon,
-  label,
   itemsDropdown: sortItems,
 } = useSort({
   orderBy: {
@@ -20,26 +15,40 @@ const {
   },
 });
 
-const { job } = defineProps<{ job: Job }>();
-const applyModalID = useRouteQuery("modal-apply-id");
+const { jobId: jobID } = defineProps<{ jobId: string }>();
+const { applyStatus } = useJob(jobID);
+const { value: applyModalID } = useModal({ uid: "modal-apply-id" });
 const searchTerm = ref("");
 const page = ref(1);
 const pageSize = ref(8);
-const filterBy = ref<string | null>(null);
 
-const { data, status, refresh } = await useFetch<IDataResult<Apply>>(
-  `/api/admin/job/${job.id}/applys`,
+const { data, status } = await useFetch<IDataResult<Apply>>(
+  `/api/admin/job/${jobID}/applys`,
   {
     method: "get",
-    query: { sortBy, sortOrder, page, pageSize, filterBy, q: searchTerm },
-    watch: [sortBy, sortOrder, page, pageSize, filterBy, searchTerm],
+    query: {
+      sortBy,
+      sortOrder,
+      page,
+      pageSize,
+      filterBy: applyStatus.value.filterBy,
+      q: searchTerm,
+    },
+    watch: [
+      sortBy,
+      sortOrder,
+      page,
+      pageSize,
+      applyStatus.value.filterBy,
+      searchTerm,
+    ],
   },
 );
 
 const applys = ref<Apply[]>([]);
 
 watch(
-  () => filterBy.value,
+  () => applyStatus.value.filterBy,
   () => {
     applys.value = [];
   },
@@ -52,47 +61,11 @@ watchImmediate(
   { deep: true },
 );
 
-const _items = ref([
-  {
-    value: null,
-    label: Use.i18n.t(`apply.status.labels.all`),
-    icon: "i-lucide-text",
-  },
-  ...job.applyStatus.map((status) => {
-    return {
-      value: `status:${status.key}`,
-      label: status.label || $t(`apply.status.${status.key}.label`),
-      icon: status.icon || applyStatusIcons[status.key],
-    };
-  }),
-  {
-    value: "status:null",
-    label: Use.i18n.t(`apply.status.labels.null`),
-    icon: applyStatusIcons.null,
-  },
-]);
-const statusItems = computed(() => {
-  const items = _items.value.map((status) => {
-    return {
-      ...status,
-      class: "cursor-pointer",
-      onSelect() {
-        filterBy.value = status.value;
-      },
-    };
-  });
-
-  return {
-    children: items,
-    label: _items.value.find((status) => status.value === filterBy.value)
-      ?.label,
-    icon: _items.value.find((status) => status.value === filterBy.value)?.icon,
-    variant: "ghost",
-  } as DropdownMenuItem;
-});
-
 const sorts = computed(() => {
-  return [statusItems.value, { ...sortItems.value, variant: "ghost" }];
+  return [
+    applyStatus.value.filterItems.value,
+    { ...sortItems.value, variant: "ghost" },
+  ];
 });
 </script>
 
@@ -107,7 +80,7 @@ const sorts = computed(() => {
           <u-input
             v-model="searchTerm"
             :ui="{
-              base: 'h-full  ring-0! bg-transparent pl-13',
+              base: 'h-full ring-0! bg-transparent pl-13',
               trailing: 'pr-5',
             }"
             :placeholder="$t('apply.actions.search_candidate')"
@@ -139,98 +112,87 @@ const sorts = computed(() => {
             :key="apply.id"
             class="w-full bg-default overflow-hidden group hover:bg-surface/10"
           >
-            <ui-apply-one
-              v-slot="{ apply, job }"
-              v-model:apply="applys[i]!"
-              :job
+            <div
+              class="flex items-center gap-4 p-5 relative border-default w-full text-left group-hover:border-b cursor-pointer"
+              @click="applyModalID = apply.id"
             >
-              <div
-                class="flex items-center gap-4 p-5 relative border-default w-full text-left group-hover:border-b cursor-pointer"
-                @click="applyModalID = apply.id"
-              >
-                <UAvatar
-                  :src="Utils.getFileUrl(apply.data.avatar)"
-                  :alt="[apply.data.firstName, apply.data.lastName].join(' ')"
-                  class="border border-accented rounded-2xl text-md"
-                  size="3xl"
-                />
+              <UAvatar
+                :src="Utils.getFileUrl(apply.data.avatar)"
+                :alt="[apply.data.firstName, apply.data.lastName].join(' ')"
+                class="border border-accented rounded-2xl text-md"
+                size="3xl"
+              />
 
-                <div class="select-none leading-[1.1] flex-1 min-w-0 w-0">
-                  <div class="font-bold truncate">
-                    {{ apply.data.firstName }}
-                    {{ apply.data.lastName }}
-                  </div>
-
-                  <div class="text-sm opacity-50">
-                    {{ Utils.getDateStatus(apply.createdAt) }}
-                  </div>
+              <div class="select-none leading-[1.1] flex-1 min-w-0 w-0">
+                <div class="font-bold truncate">
+                  {{ apply.data.firstName }}
+                  {{ apply.data.lastName }}
                 </div>
 
-                <ui-apply-note
-                  v-model:apply="applys[i]!"
-                  class="pointer-events-auto group-hover:hidden"
-                  size="14px"
-                  :job
-                />
-
-                <div class="hidden md:block" @click.stop>
-                  <ui-apply-status-button v-model:apply="applys[i]!" :job />
+                <div class="text-sm opacity-50">
+                  {{ Utils.getDateStatus(apply.createdAt) }}
                 </div>
               </div>
 
-              <div
-                class="px-5 gap-5 flex items-center h-0 group-hover:h-10 transition-all overflow-hidden"
-              >
-                <ui-apply-note
-                  v-model:apply="applys[i]!"
+              <ui-apply-note
+                :apply-id="apply.id"
+                class="pointer-events-auto group-hover:hidden"
+                size="14px"
+              />
+
+              <div class="hidden md:block" @click.stop>
+                <ui-apply-status-button :apply-id="apply.id" />
+              </div>
+            </div>
+
+            <div
+              class="px-5 gap-5 flex items-center h-0 group-hover:h-10 transition-all overflow-hidden"
+            >
+              <ui-apply-note :apply-id="apply.id" class="pointer-events-auto" />
+
+              <div class="mx-auto"></div>
+
+              <div class="flex flex-wrap gap-1 relative">
+                <UButton
+                  color="neutral"
+                  variant="ghost"
+                  icon="i-lucide-file-text"
+                  target="_blank"
+                  size="sm"
+                  :href="Utils.getFileUrl(apply.data.cv)"
+                >
+                </UButton>
+
+                <UButton
+                  color="neutral"
+                  variant="ghost"
+                  icon="i-lucide-at-sign"
+                  target="_blank"
+                  size="sm"
+                  :href="`mailto:${apply.data.email}`"
+                >
+                </UButton>
+
+                <UButton
+                  color="neutral"
+                  variant="ghost"
+                  icon="i-lucide-phone"
+                  target="_blank"
+                  size="sm"
+                  :href="`tel:${apply.data.phone}`"
+                >
+                </UButton>
+
+                <UButton
+                  color="neutral"
+                  variant="ghost"
+                  icon="i-lucide-message-square-text"
                   class="pointer-events-auto"
-                  :job
-                />
-
-                <div class="mx-auto"></div>
-
-                <div class="flex flex-wrap gap-1 relative">
-                  <UButton
-                    color="neutral"
-                    variant="ghost"
-                    icon="i-lucide-file-text"
-                    target="_blank"
-                    size="sm"
-                    :href="Utils.getFileUrl(apply.data.cv)"
-                  >
-                  </UButton>
-
-                  <UButton
-                    color="neutral"
-                    variant="ghost"
-                    icon="i-lucide-at-sign"
-                    target="_blank"
-                    size="sm"
-                    :href="`mailto:${apply.data.email}`"
-                  >
-                  </UButton>
-
-                  <UButton
-                    color="neutral"
-                    variant="ghost"
-                    icon="i-lucide-phone"
-                    target="_blank"
-                    size="sm"
-                    :href="`tel:${apply.data.phone}`"
-                  >
-                  </UButton>
-
-                  <UButton
-                    color="neutral"
-                    variant="ghost"
-                    icon="i-lucide-message-square-text"
-                    class="pointer-events-auto"
-                    size="sm"
-                  >
-                  </UButton>
-                </div>
+                  size="sm"
+                >
+                </UButton>
               </div>
-            </ui-apply-one>
+            </div>
           </div>
 
           <div

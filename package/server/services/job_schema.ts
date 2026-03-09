@@ -100,12 +100,16 @@ export function getJobShema($t: (str: string) => string = (str) => str) {
     { key: "HIRED" },
   ];
 
-  const singleApplyStatus = z.object({
-    key: z.string(),
-    label: z.string().max(180).optional(),
-    color: z.string().optional(),
-    icon: z.string().optional(),
-  });
+  const singleApplyStatus = z
+    .object({
+      key: z.string(),
+      label: z.string().max(180).optional(),
+      color: z.string().optional(),
+      icon: z.string().optional(),
+    })
+    .transform((v) => {
+      return v;
+    });
 
   const applyStatus = singleApplyStatus
     .array()

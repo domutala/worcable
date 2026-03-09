@@ -1,23 +1,13 @@
 <script lang="ts" setup>
-import { getServerErrorData } from "~/tools/onFetchError";
+definePageMeta({ layout: "job" });
+const { uid } = useModal({ alias: "job-user-add" });
+const jobID = Use.route.params.id as string;
 
-const {
-  data: job,
-  status,
-  refresh,
-  error,
-} = await useFetch(`/api/admin/job/${Use.route.params.id}`);
-
-if (error.value) throw createError(getServerErrorData(error.value));
-if (!job.value) {
-  throw createError({
-    status: 404,
-    statusText: Use.i18n.t("job.errors.job_not_found"),
-  });
-}
+const { job } = useJob(jobID);
 </script>
 
 <template>
-  <template v-if="status === 'pending'"></template>
-  <nuxt-page v-else-if="job" v-model="job" />
+  <ui-job-user-add :job-id="jobID" :modal="{ uid }" />
+
+  <nuxt-page v-model:id="jobID" :job />
 </template>

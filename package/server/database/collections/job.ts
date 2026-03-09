@@ -1,21 +1,23 @@
 import mongoose from "mongoose";
 import { getJobShema } from "~~/server/services/job_schema";
 import { InferSchemaType } from "../types";
+import * as z from "zod";
 
-const { contractType, jobNature, defaultApplyStatus, statusEnum } =
-  getJobShema();
+const {
+  contractType,
+  jobNature,
+  defaultApplyStatus,
+  statusEnum,
+  applyStatus,
+  schema,
+} = getJobShema();
 
-const ApplyStatusSchema = new mongoose.Schema(
-  {
-    key: { type: String, required: true },
-    label: { type: String, maxlength: 180 },
-    color: { type: String },
-    icon: { type: String },
-  },
-  { _id: false }, // évite un _id pour chaque élément
-);
+type Job0 = z.output<typeof schema> & {
+  normalizedJobDescription: string;
+  normalizedTitle: string;
+};
 
-const JobSchema = new mongoose.Schema(
+const JobSchema = new mongoose.Schema<Job0>(
   {
     title: { type: String, required: true },
     normalizedTitle: { type: String, required: true },
@@ -37,47 +39,48 @@ const JobSchema = new mongoose.Schema(
     },
 
     applyStatus: {
-      type: [ApplyStatusSchema],
+      type: mongoose.Schema.Types.Mixed,
       required: true,
       default: defaultApplyStatus,
+      zod: applyStatus,
     },
   },
-  {
-    timestamps: true, // ✅ ajoute createdAt et updatedAt
-  },
+  { timestamps: true },
 );
 
 export type JobDocument = mongoose.HydratedDocumentFromSchema<typeof JobSchema>;
 export type Job = InferSchemaType<typeof JobSchema>;
 
-JobSchema.index(
-  { normalizedTitle: "text", normalizedJobDescription: "text" },
-  { weights: { normalizedTitle: 5, normalizedJobDescription: 1 } },
-);
+if (import.meta.server) {
+  JobSchema.index(
+    { normalizedTitle: "text", normalizedJobDescription: "text" },
+    { weights: { normalizedTitle: 5, normalizedJobDescription: 1 } },
+  );
 
-JobSchema.pre("validate", function () {
-  if (this.title) {
-    this.normalizedTitle = normalize(this.title);
-  }
+  JobSchema.pre("validate", function () {
+    if (this.title) {
+      this.normalizedTitle = normalize(this.title);
+    }
 
-  if (this.jobDescription) {
-    this.normalizedJobDescription = normalize(this.jobDescription);
-  }
-});
+    if (this.jobDescription) {
+      this.normalizedJobDescription = normalize(this.jobDescription);
+    }
+  });
 
-JobSchema.pre("updateOne", function () {
-  const update = this.getUpdate() as mongoose.UpdateQuery<Job>;
+  JobSchema.pre("updateOne", function () {
+    const update = this.getUpdate() as mongoose.UpdateQuery<Job>;
 
-  if (update?.title) update.normalizedTitle = normalize(update.title);
-  if (update?.jobDescription) {
-    update.normalizedJobDescription = normalize(update.jobDescription);
-  }
-});
+    if (update?.title) update.normalizedTitle = normalize(update.title);
+    if (update?.jobDescription) {
+      update.normalizedJobDescription = normalize(update.jobDescription);
+    }
+  });
 
-JobSchema.set("toJSON", {
-  transform: (_doc, ret) => {
-    (ret as any).id = ret._id.toString();
-  },
-});
+  JobSchema.set("toJSON", {
+    transform: (_doc, ret) => {
+      (ret as any).id = ret._id.toString();
+    },
+  });
+}
 
 export const $Job = mongoose.model("Job", JobSchema);

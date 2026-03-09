@@ -1,7 +1,7 @@
+import { UserDocument } from "./../database/collections/user";
 import { defineEventHandler, readBody, createError } from "h3";
-import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import { createSeassion } from "../services/session_create";
 
 export default defineEventHandler(async (event) => {
   const $t = await useTranslation(event);
@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
     .select("+password")
     .lean();
 
-  if (!user || !user.password) {
+  if (!user || !user.password || !user.active) {
     throw createError({
       statusCode: 401,
       statusMessage: $t("login.errors.invalid_credentials"),
@@ -44,10 +44,5 @@ export default defineEventHandler(async (event) => {
 
   delete user.password;
 
-  const session = await collections.$Session.create({
-    userID: user._id.toString(),
-  });
-
-  const token = jwt.sign({ sessionID: session.id }, runtime.secretKey);
-  return { token, user };
+  return await createSeassion(user as UserDocument);
 });

@@ -1,69 +1,22 @@
 <script lang="ts" setup>
-import type { Job } from "~~/server/database/collections";
-import type { DropdownMenuItem } from "@nuxt/ui";
-import _ from "lodash";
-
-const job = defineModel<Job>("job", { required: true });
-const uJob = useJob(job);
+const { jobId: jobID } = defineProps<{ jobId: string }>();
+const { job, menu, ready } = useJob(jobID);
 const side = useCookie<string>(`job-side`, { default: () => "kanban" });
-
-const items = computed(() => {
-  const statusItems = uJob.statusDropdown.value;
-  statusItems.variant = "soft";
-  statusItems.color = "neutral";
-  // statusItems.notHide = true;
-
-  const items: DropdownMenuItem[] = [
-    statusItems,
-
-    {
-      label: Use.i18n.t("job.actions.add_new_apply"),
-      icon: "i-lucide-user-round-plus",
-    },
-    {
-      label: Use.i18n.t("job.actions.broadcast"),
-      icon: "i-lucide-corner-up-right",
-      onSelect(e) {
-        alert("dsdfsf");
-      },
-    },
-    {
-      label: Use.i18n.t("job.actions.display"),
-      icon: "i-lucide-file-text",
-      target: "_blank",
-      to: Use.localePath({ name: "job-id", params: { id: job.value.id } }),
-    },
-    {
-      label: Use.i18n.t("job.actions.share_job"),
-      icon: "i-lucide-send",
-    },
-    {
-      label: Use.i18n.t("job.actions.update"),
-      icon: "i-lucide-pencil-line",
-      to: Use.localePath({
-        name: "admin-job-id-update",
-        params: { id: job.value.id },
-      }),
-    },
-  ];
-
-  return items;
-});
 </script>
 
 <template>
-  <div class="relative">
+  <div v-if="ready" class="relative">
     <div
       class="py-3 pl-3 pr-5 hidden lg:flex items-center gap-2 bg-inherit/10 backdrop-blur-lg sticky top-0 z-50"
     >
-      <u-button
+      <!-- <u-button
         size="xs"
         variant="ghost"
-        icon="i-lucide-arrow-left"
+        icon="i-lucide-house"
         square
-        @click="$router.back()"
+        :to="Use.localePath({ name: 'admin' })"
       >
-      </u-button>
+      </u-button> -->
 
       <div class="leading-none flex-1 min-w-0 w-0">
         <h1 class="text-lg font-semibold truncate leading-none">
@@ -75,7 +28,7 @@ const items = computed(() => {
       </div>
 
       <ui-menu-horizontal-items
-        :items
+        :items="menu.items.value"
         :gap="5"
         :min-to-show="3"
         :ui="{ base: 'justify-end' }"
@@ -137,7 +90,7 @@ const items = computed(() => {
         </u-button>
       </div>
 
-      <u-dropdown-menu :items>
+      <u-dropdown-menu :items="menu.items.value">
         <u-button
           icon="i-lucide-ellipsis-vertical"
           class="cursor-pointer"

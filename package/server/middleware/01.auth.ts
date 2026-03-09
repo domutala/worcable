@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import _ from "lodash";
 
 export default defineEventHandler(async (event) => {
   if (!event.path.startsWith("/api")) return;
@@ -29,9 +30,11 @@ export default defineEventHandler(async (event) => {
         });
       } else {
         const user = await collections.$User.findById(session.userID);
-        delete user?.password;
 
-        if (user) event.context.session = { ...session, user };
+        if (user?.active) {
+          _.unset(user, "password");
+          event.context.session = { ...session, user };
+        }
       }
     } catch (error) {
       console.log(error);

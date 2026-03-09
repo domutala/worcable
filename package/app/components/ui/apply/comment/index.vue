@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import type { Apply, ApplyComment, Job } from "~~/server/database/collections";
-import _ from "lodash";
+import type { ApplyComment } from "~~/server/database/collections";
 
-const job = defineModel<Job>("job", { required: true });
-const apply = defineModel<Apply>("apply", { required: true });
+const { applyId: applyID } = defineProps<{ applyId: string }>();
+const { apply } = useApply(applyID);
+
 const comments = ref<ApplyComment[]>([]);
 
 function pushComment(comment: ApplyComment) {
@@ -14,19 +14,11 @@ function pushComment(comment: ApplyComment) {
 </script>
 
 <template>
-  <div>
-    <ui-apply-comment-create
-      v-model:job="job"
-      v-model:apply="apply"
-      @submit="pushComment"
-    />
+  <div v-if="apply">
+    <ui-apply-comment-create :apply-id="applyID" @submit="pushComment" />
 
     <div class="mt-3"></div>
 
-    <ui-apply-comment-list
-      v-model:job="job"
-      v-model:apply="apply"
-      v-model:comments="comments"
-    />
+    <ui-apply-comment-list :apply-id="applyID" v-model:comments="comments" />
   </div>
 </template>

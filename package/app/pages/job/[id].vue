@@ -5,7 +5,7 @@ const {
   data: job,
   status,
   error,
-} = await useFetch(`/api/admin/job/${Use.route.params.id}`);
+} = await useFetch(`/api/job/${Use.route.params.id}`);
 
 if (error.value) throw createError(getServerErrorData(error.value));
 if (!job.value) {

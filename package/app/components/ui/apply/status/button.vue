@@ -1,67 +1,60 @@
 <script lang="ts" setup>
-import type { Apply, Job } from "~~/server/database/collections";
+const { applyId: applyID, readonly } = defineProps<{
+  applyId: string;
+  readonly?: boolean;
+}>();
 
-const { readonly } = defineProps<{ readonly?: boolean }>();
-const job = defineModel<Job>("job", { required: true });
-const apply = defineModel<Apply>("apply", { required: true });
-
-const { statusDropdownItems, statusSubmiting } = useApply(job, apply);
+const { status, ready } = useApply(applyID);
 </script>
 
 <template>
-  <ui-apply-status-display
-    v-slot="{ color, label, icon, borderColor, bgColor }"
-    v-model:job="job"
-    v-model:status="apply.status"
-  >
-    <template v-if="readonly">
-      <slot
-        :color
-        :label
-        :icon
-        :borderColor
-        :bgColor
-        :submiting="statusSubmiting"
-      />
+  <template v-if="ready">
+    <template v-if="!status.canUpdate.value || readonly">
+      <!-- <slot
+      :color
+      :label
+      :icon
+      :borderColor
+      :bgColor
+      :submiting="statusSubmiting"
+    /> -->
 
       <u-button
         v-if="!$slots.default"
-        :loading="statusSubmiting"
+        :loading="status.loading"
         :readonly
-        :style="{
-          backgroundColor: bgColor,
-        }"
-        :icon
+        :style="{ backgroundColor: status.bgColor.value }"
+        :icon="status.icon.value"
         color="neutral"
         variant="ghost"
         class="rounded-min relative px-4 text-highlighted py-3"
       >
-        {{ label }}
+        {{ status.label.value }}
       </u-button>
     </template>
 
-    <u-dropdown-menu v-else :items="statusDropdownItems">
-      <slot
+    <u-dropdown-menu v-else :items="status.menuItems.value">
+      <!-- <slot
         :color
         :label
         :icon
         :borderColor
         :bgColor
         :submiting="statusSubmiting"
-      />
+      /> -->
       <u-button
         v-if="!$slots.default"
-        :loading="statusSubmiting"
+        :loading="status.loading"
         :style="{
-          backgroundColor: bgColor,
+          backgroundColor: status.bgColor.value,
         }"
-        :icon
+        :icon="status.icon.value"
         color="neutral"
         variant="ghost"
         class="rounded-min relative px-4 text-highlighted py-3 cursor-pointer"
       >
-        {{ label }}
+        {{ status.label.value }}
       </u-button>
     </u-dropdown-menu>
-  </ui-apply-status-display>
+  </template>
 </template>

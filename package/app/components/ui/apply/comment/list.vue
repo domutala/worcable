@@ -4,8 +4,8 @@ import _ from "lodash";
 import type { IDataResult } from "~~/server/interfaces";
 import { watchImmediate } from "@vueuse/core";
 
-const job = defineModel<Job>("job", { required: true });
-const apply = defineModel<Apply>("apply", { required: true });
+const { applyId: applyID } = defineProps<{ applyId: string }>();
+const { apply } = useApply(applyID);
 
 const searchTerm = ref("");
 const sortBy = ref("updatedAt");
@@ -36,7 +36,7 @@ watchImmediate(
 </script>
 
 <template>
-  <div class="space-y-3">
+  <div v-if="apply" class="space-y-3">
     <template v-if="!data && status === 'pending'">
       <div v-for="i in 4" :key="i" class="p-5 relative">
         <ui-skeleton
@@ -67,12 +67,10 @@ watchImmediate(
 
     <ui-apply-comment-one
       v-for="comment in comments"
-      v-model:apply="apply"
-      v-model:job="job"
+      :apply-id="applyID"
       :key="comment.id"
       :comment
-    >
-    </ui-apply-comment-one>
+    />
 
     <div v-if="data && data.total" class="flex items-center gap-3 px-3">
       <template v-if="data?.items.length">

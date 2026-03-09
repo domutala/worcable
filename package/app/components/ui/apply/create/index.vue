@@ -1,17 +1,12 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from "@nuxt/ui";
-import MarkdownIt from "markdown-it";
 import * as z from "zod";
-import { watchImmediate } from "@vueuse/core";
 import { getApplyDataShema } from "~~/server/services/apply_get_shema";
 import type { Job } from "~~/server/database/collections";
-import onFetchError from "~/tools/onFetchError";
 import { CurrencyAvailaible } from "~~/server/interfaces";
 
+const emit = defineEmits<(e: "success", id: string) => void>();
 const { job } = defineProps<{ job: Job }>();
-
-const md = new MarkdownIt();
-const i18n = useI18n();
 
 const availability = ["immediately", "1month", "2mois", "3mois", "other"];
 const educationLevel = [
@@ -25,10 +20,8 @@ const educationLevel = [
   "doctorate",
 ];
 
-const successContainer = useTemplateRef("successContainer");
 const submitting = ref(false);
-const success = ref(false);
-const schema = getApplyDataShema(i18n.t);
+const schema = getApplyDataShema(Use.i18n.t);
 type Schema = z.output<typeof schema>;
 const state = reactive<Partial<Schema>>({});
 
@@ -49,12 +42,14 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     }
 
     formData.append("id", job.id);
-    await $fetch("/api/apply", { method: "post", body: formData });
+    const result = await Api.$fetch<{ id: string }>("/api/apply", {
+      method: "post",
+      body: formData,
+    });
 
-    success.value = true;
-    successContainer.value?.scrollIntoView({ behavior: "smooth" });
+    emit("success", result.id);
   } catch (error) {
-    onFetchError(error);
+    console.log(error);
   } finally {
     submitting.value = false;
   }
@@ -252,26 +247,15 @@ function onChange(key: "cv" | "avatar", file?: File | null | undefined) {
 
     <div class="flex items-center justify-center mt-10">
       <UButton
-        v-if="!success"
         type="submit"
         class="cursor-pointer p-3 px-5 mx-auto rounded-3xl"
         size="xl"
+        color="primary"
+        variant="solid"
         :loading="submitting"
       >
         {{ $t("apply.actions.submit") }}
       </UButton>
-
-      <div v-else class="text-center">
-        <u-icon
-          name="i-lucide-file-check-corner"
-          class="size-15 text-success"
-        />
-        <p
-          v-html="md.render($t('apply.success'))"
-          class="max-w-2xl mx-auto mt-5"
-        ></p>
-      </div>
-      <div ref="successContainer"></div>
     </div>
   </UForm>
 </template>

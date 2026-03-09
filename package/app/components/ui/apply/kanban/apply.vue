@@ -1,15 +1,12 @@
 <script lang="ts" setup>
-import { useRouteQuery } from "@vueuse/router";
-import type { Apply, Job } from "~~/server/database/collections";
-
-const job = defineModel<Job>("job", { required: true });
-const apply = defineModel<Apply>("apply", { required: true });
-const applyModalID = useRouteQuery("modal-apply-id");
-const { statusChanging } = defineProps<{ statusChanging?: boolean }>();
+const { applyId: applyID } = defineProps<{ applyId: string }>();
+const { apply, status, ready } = useApply(applyID);
+const { value: applyModalID } = useModal({ uid: "modal-apply-id" });
 </script>
 
 <template>
   <div
+    v-if="ready && apply"
     :class="[
       'content sortable-item rounded-min overflow-hidden relative bg-surface/25 ring ring-default/50',
       'group-[.chosen]:bg-default group-[.chosen]:border group-[.chosen]:border-default group-[.chosen]:shadow-none group-[.ghost]:opacity-0',
@@ -87,16 +84,12 @@ const { statusChanging } = defineProps<{ statusChanging?: boolean }>();
       <div class="mx-auto"></div>
 
       <div class="flex items-center">
-        <ui-apply-note
-          v-model:apply="apply"
-          v-model:job="job"
-          class="pointer-events-auto"
-        />
+        <ui-apply-note :apply-id="applyID" class="pointer-events-auto" />
       </div>
     </div>
 
     <u-progress
-      v-if="statusChanging"
+      v-if="status.loading"
       size="md"
       color="neutral"
       class="absolute bottom-0 w-full left-0"

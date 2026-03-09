@@ -37,10 +37,21 @@ const store = defineStore(
         body: data,
       });
 
-      setToken(result.token);
-      setUser(result.user);
+      return await afterLogin(result);
+    }
 
-      return result;
+    async function afterLogin(
+      data: { token: string; user: User },
+      redirect?: boolean,
+    ) {
+      setToken(data.token);
+      setUser(data.user);
+
+      if (redirect) {
+        await Use.router.push(Use.localePath({ name: "admin", replace: true }));
+      }
+
+      return data;
     }
 
     const logouting = ref(false);
@@ -68,6 +79,7 @@ const store = defineStore(
       token,
       setToken,
       login,
+      afterLogin,
 
       user,
       setUser,

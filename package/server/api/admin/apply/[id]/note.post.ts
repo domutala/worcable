@@ -1,15 +1,23 @@
 import * as z from "zod";
 import { getApply } from "~~/server/services/apply_get";
 import { getApplyShema } from "~~/server/services/apply_get_shema";
+import { checkJobUserRole } from "~~/server/services/job_get";
 
 export default defineEventHandler(async (event) => {
   const $t = await useTranslation(event);
   const id = getRouterParam(event, "id") as string;
   const body = await readBody(event);
-  const apply = await getApply({ id, $t });
 
-  const { status: schema } = getApplyShema($t);
-  const parsedBody = z.object({ to: schema }).safeParse(body);
+  const { jobID } = await getApply({ id, $t });
+  await checkJobUserRole({
+    $t,
+    userID: event.context.session.user.id,
+    jobID: jobID.toString(),
+    role: ["admin", "recruiter"],
+  });
+
+  const { note: schema } = getApplyShema($t);
+  const parsedBody = z.object({ note: schema }).safeParse(body);
 
   if (parsedBody.error) {
     throw createError({
@@ -23,15 +31,9 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const allStatus = apply.allStatus;
-  allStatus.push({
-    status: parsedBody.data.to,
-    date: new Date().toISOString(),
-  });
-
   await collections.$Apply.updateOne(
     { _id: id },
-    { status: parsedBody.data.to, allStatus },
+    { note: parsedBody.data.note },
   );
 
   return await getApply({ id, $t });

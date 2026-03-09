@@ -5,3 +5,4 @@ export * from "./file";
 export * from "./user";
 export * from "./session";
 export * from "./config";
+export * from "./job_user";

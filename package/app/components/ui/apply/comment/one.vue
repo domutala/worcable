@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import type { Apply, ApplyComment, Job } from "~~/server/database/collections";
+import type { ApplyComment } from "~~/server/database/collections";
 import _ from "lodash";
 import type { User } from "~~/server/database/collections";
 
-const job = defineModel<Job>("job", { required: true });
-const apply = defineModel<Apply>("apply", { required: true });
+const { applyId: applyID } = defineProps<{ applyId: string }>();
+const { apply } = useApply(applyID);
 const comment = defineModel<ApplyComment>("comment", { required: true });
 const user = ref<User>();
 
@@ -41,7 +41,7 @@ const author = computed(() => {
 </script>
 
 <template>
-  <div class="bg-default rounded-default ring ring-default">
+  <div v-if="apply" class="bg-default rounded-default ring ring-default">
     <div class="flex items-center gap-3 px-5 py-3 border-b border-default">
       <UAvatar
         :src="author.avatar"

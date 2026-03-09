@@ -60,17 +60,18 @@ export async function listApplys({
 
   if (query.q) {
     const tokens = normalize(query.q);
-    results.items = results.items.map((job) => {
+    results.items = results.items.map((apply) => {
       let score = 0;
 
       for (const token of tokens.split(" ")) {
-        const s1 = [...job.normalizedFullname.matchAll(new RegExp(token, "gi"))]
-          .length;
+        const s1 = [
+          ...apply.normalizedFullname.matchAll(new RegExp(token, "gi")),
+        ].length;
 
         score += s1 * 3;
       }
 
-      return { ...job, score };
+      return { ...apply, score };
     });
 
     results.items.sort((a, b) => b.score - a.score);

@@ -1,51 +1,32 @@
 <script lang="ts" setup>
 import type { DropdownMenuItem } from "@nuxt/ui";
-import type { Apply, Job } from "~~/server/database/collections";
 
-const job = defineModel<Job>("job", { required: true });
-const apply = defineModel<Apply>("apply", { required: true });
+const { applyId: applyID } = defineProps<{ applyId: string }>();
+const { status, note } = useApply(applyID);
 
-const itemStates = ref<Record<string, "show" | "hide">>({});
-const nShow = ref(0);
-const uApply = useApply(job, apply);
-const isDetailsOpen = ref(false);
-
-const items0 = computed(() => {
-  const items: DropdownMenuItem[][] = [];
-
-  if (!nShow.value || itemStates.value.details === "hide") {
-    items.push([
-      {
-        label: Use.i18n.t("apply.labels.show_details"),
-        onSelect(e) {
-          isDetailsOpen.value = true;
-        },
-      },
-    ]);
-  }
-
-  if (!nShow.value || itemStates.value.status === "hide") {
-    items.push([uApply.statusDropdown.value]);
-  }
-
-  if (!nShow.value || itemStates.value.note === "hide") {
-    items.push([{ slot: "note", type: "label" }]);
-  }
-
-  return items;
-});
+const modal = useTemplateRef("modal");
 
 const items = computed(() => {
   const items: DropdownMenuItem[] = [
     {
       label: Use.i18n.t("apply.labels.show_details"),
       onSelect(e) {
-        isDetailsOpen.value = true;
+        if (modal.value) modal.value.open = true;
       },
     },
-    { ...uApply.statusDropdown.value },
-    { slot: "item-dropdown-note", type: "label", itemIndex: "note" },
   ];
+
+  if (status.value.canUpdate.value) {
+    items.push({ ...status.value.dropdownMenuItems.value });
+  }
+
+  if (note.value.canUpdate.value) {
+    items.push({
+      slot: "item-dropdown-note",
+      type: "label",
+      itemIndex: "note",
+    });
+  }
 
   return items;
 });
@@ -60,7 +41,7 @@ const items = computed(() => {
         size="lg"
         class="rounded-lg relative px-4 text-highlighted cursor-pointer"
       >
-        <ui-apply-note v-model:apply="apply" v-model:job="job" />
+        <ui-apply-note :apply-id="applyID" />
       </u-button>
     </template>
 
@@ -71,7 +52,7 @@ const items = computed(() => {
         size="lg"
         class="rounded-lg relative px-4 text-highlighted cursor-pointer"
       >
-        <ui-apply-note v-model:apply="apply" v-model:job="job" />
+        <ui-apply-note :apply-id="applyID" />
       </u-button>
     </template>
   </ui-menu-horizontal-items>
@@ -156,18 +137,13 @@ const items = computed(() => {
     </template>
   </ui-menu-horizontal> -->
 
-  <ui-modal
-    v-model:open="isDetailsOpen"
-    :ui="{
-      content: ['max-w-210', 'rounded-2xl'],
-    }"
-  >
+  <ui-modal-2 ref="modal" :ui="{ content: ['max-w-210', 'rounded-2xl'] }">
     <template #content>
       <ui-layout-inset>
         <div class="sm:p-10 p-2 py-3">
-          <ui-apply-details v-model:apply="apply" v-model:job="job" />
+          <ui-apply-details :apply-id="applyID" />
         </div>
       </ui-layout-inset>
     </template>
-  </ui-modal>
+  </ui-modal-2>
 </template>
