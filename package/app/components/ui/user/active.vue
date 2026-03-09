@@ -2,26 +2,40 @@
 import type { User } from "~~/server/database/collections";
 
 const emit = defineEmits<(e: "remove") => void>();
-const user = defineModel<User>("user", { required: true });
+const { userId: userID } = defineProps<{ userId: string }>();
 
 const loading = ref(false);
 const toast = useToast();
-const { modal, canEdit } = useUser(user.value.id);
+const { modal, user, canEdit } = useUser(userID);
+
+const value = computed(() => {
+  if (!user.value) return;
+  return !user.value.active;
+});
+
+const key = computed(() => {
+  return value.value ? "active" : "deactive";
+});
 
 async function submit() {
   loading.value = true;
 
   try {
-    await Api.$fetch<undefined>(`/api/admin/user/${user.value.id}`, {
-      method: "delete",
+    const result = await Api.$fetch<User>(`/api/admin/user/${userID}/active`, {
+      method: "post",
+      body: { active: value.value },
     });
 
     toast.add({
       color: "success",
-      description: Use.i18n.t("user.remove.success"),
+      description: Use.i18n.t(`user.active.${key.value}.success`, {
+        name: `${user.value.firstName} ${user.value.lastName}`,
+      }),
     });
 
-    modal.remove.open.value = false;
+    user.value = result;
+
+    modal.active.open.value = false;
     emit("remove");
   } catch (error) {
   } finally {
@@ -32,14 +46,18 @@ async function submit() {
 
 <template>
   <template v-if="user && canEdit">
-    <ui-modal-2 :uid="modal.remove.uid" :ui="{ content: 'max-w-2xl' }">
+    <ui-modal-2 :uid="modal.active.uid" :ui="{ content: 'max-w-2xl' }">
       <u-button
         v-if="!$slots.default && modal"
         :loading
-        icon="i-lucide-trash-2"
+        :icon="
+          key === 'active'
+            ? 'i-lucide-user-round-check'
+            : 'i-lucide-user-round-minus  '
+        "
         color="error"
         square
-        @click="modal.remove.open.value = true"
+        @click="modal.active.open.value = true"
       />
       <slot :loading />
 
@@ -47,7 +65,7 @@ async function submit() {
         <ui-layout-inset>
           <div class="p-10">
             {{
-              $t("user.remove.confirm_message", {
+              $t(`user.active.${key}.confirm`, {
                 name: `${user.firstName} ${user.lastName}`,
               })
             }}
@@ -56,20 +74,23 @@ async function submit() {
               <u-button
                 :loading
                 type="submit"
-                color="error"
                 variant="solid"
-                icon="i-lucide-trash-2"
+                :icon="
+                  key === 'active'
+                    ? 'i-lucide-user-round-check'
+                    : 'i-lucide-user-round-minus  '
+                "
                 @click="submit"
               >
-                {{ $t("user.remove.submit") }}
+                {{ $t(`user.active.${key}.submit`) }}
               </u-button>
 
               <u-button
                 :loading
                 type="submit"
-                @click="modal.remove.open.value = false"
+                @click="modal.active.open.value = false"
               >
-                {{ $t("user.remove.cancel") }}
+                {{ $t("words.to_cancel") }}
               </u-button>
             </div>
           </div>

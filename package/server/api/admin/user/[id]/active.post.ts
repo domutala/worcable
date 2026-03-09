@@ -1,12 +1,18 @@
+import { getUserShema } from "~~/server/services/user_shema";
+
 export default defineEventHandler(async (event) => {
   const $t = await useTranslation(event);
+  const body = await readBody(event);
   const id = getRouterParam(event, "id") as string;
 
+  const { active: schema } = getUserShema($t);
+  const active = parseZod(schema, body.active);
   const user = await collections.$User.findOne({ _id: id });
+
   if (!user) {
     throw createError({
       statusCode: 404,
-      data: { message: $t("user.errors.user_not_found") },
+      data: { message: $t("job.errors.user_not_found") },
     });
   }
 
@@ -17,5 +23,6 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  await user.deleteOne();
+  await user.updateOne({ active });
+  return await collections.$User.findOne({ _id: id });
 });

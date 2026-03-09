@@ -59,7 +59,7 @@ export const useJob = (
     loading.value = true;
 
     try {
-      job.value = await Api.$fetch<Job>(`/api/job/${id}`);
+      job.value = await Api.$fetch<Job>(`/api/admin/job/${id}`);
       jobUser.value = await Api.$fetch<JobUser>(
         `/api/admin/job/${id}/user-job`,
       );

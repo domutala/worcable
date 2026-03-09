@@ -3,6 +3,7 @@ import * as z from "zod";
 export const USER_ROLES = ["admin", "recruiter", "guest"] as const;
 
 export function getUserShema($t: (string: string) => string) {
+  const active = z.boolean($t("user.items.active.errors.invalid")).optional();
   const role = z.enum(USER_ROLES, $t("user.items.role.errors.invalid"));
   const email = z.email($t("user.items.email.errors.invalid"));
 
@@ -45,7 +46,17 @@ export function getUserShema($t: (string: string) => string) {
     firstName,
     lastName,
     avatar: z.any().nullable().optional(),
+    active,
   });
 
-  return { role, email, firstName, lastName, password, passwordEdit, schema };
+  return {
+    role,
+    email,
+    firstName,
+    lastName,
+    password,
+    passwordEdit,
+    active,
+    schema,
+  };
 }

@@ -92,35 +92,62 @@ async function loadData() {
             </p>
           </div>
 
-          <div
+          <ui-user-one
             v-for="(user, i) in data.items"
+            v-slot="{ modal, canEdit, menu, ready }"
             :key="user.id"
-            class="w-full bg-default overflow-hidden group hover:bg-surface/10 flex items-center gap-4 p-3"
+            :user-id="user.id"
           >
-            <UAvatar
-              :src="Utils.getFileUrl(user.avatar)"
-              :alt="[user.firstName, user.lastName].join(' ')"
-              class="border border-accented rounded-2xl text-md"
-              size="3xl"
-            />
+            <div
+              v-if="ready && menu.value"
+              class="w-full bg-default overflow-hidden group hover:bg-surface/10 flex items-center gap-2 p-3"
+            >
+              <UAvatar
+                :src="Utils.getFileUrl(user.avatar)"
+                :alt="[user.firstName, user.lastName].join(' ')"
+                class="border-accented rounded-2xl text-md"
+                size="3xl"
+              />
 
-            <div class="leading-[1.1] flex-1 min-w-0 w-0">
-              <div class="font-bold truncate">
-                {{ user.firstName }}
-                {{ user.lastName }}
+              <div class="leading-[1.1] flex-1 min-w-0 w-0 ml-2">
+                <div class="font-bold truncate">
+                  {{ user.firstName }}
+                  {{ user.lastName }}
+                </div>
+
+                <div class="text-sm opacity-50">
+                  <span v-if="!user.active">
+                    {{ $t("user.labels.user_deactived") }}
+                  </span>
+                  <span v-else> {{ user.email }}</span>
+                </div>
               </div>
 
-              <div class="text-sm opacity-50">
-                {{ user.email }}
-              </div>
+              <ui-user-role :user-id="user.id" />
+              <ui-user-active :user-id="user.id">
+                <template #default />
+              </ui-user-active>
+
+              <ui-user-remove
+                v-model:user="data.items[i]!"
+                @remove="data.items.splice(i, 1)"
+              >
+                <template #default />
+              </ui-user-remove>
+
+              <u-dropdown-menu
+                v-if="menu.value.items.value.length"
+                :items="menu.value.items.value"
+              >
+                <u-button
+                  :loading
+                  icon="i-lucide-ellipsis-vertical"
+                  variant="ghost"
+                >
+                </u-button>
+              </u-dropdown-menu>
             </div>
-
-            <ui-user-status v-model:user="data.items[i]!" />
-            <ui-user-remove
-              v-model:user="data.items[i]!"
-              @remove="data.items.splice(i, 1)"
-            />
-          </div>
+          </ui-user-one>
 
           <div v-if="data.items.length" class="sticky bottom-0 z-20 bg-default">
             <div class="flex items-center gap-5 py-2 px-5">

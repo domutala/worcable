@@ -19,7 +19,10 @@
     "last_update": "Dernier modifier",
     "to_save": "Enregistrer",
     "to_remove": "Supprimer",
+    "to_active": "Activer",
+    "to_deactive": "Désactiver",
     "to_update": "Modifier",
+    "to_cancel": "Annuler",
     "on": "sur",
     "playground": "Playgfound"
   },
@@ -579,6 +582,18 @@
           "invalid": "Le rôle sélectionné n'est pas valide"
         }
       },
+      "active": {
+        "label": "Statut du compte",
+        "hint": "Activer ou désactiver l'accès de l'utilisateur",
+        "help": "Un utilisateur désactivé ne pourra plus se connecter mais ses actions passées seront conservées",
+        "items": {
+          "true": "Actif",
+          "false": "Inactif"
+        },
+        "errors": {
+          "invalid": "Le statut est invalide"
+        }
+      },
       "firstName": {
         "label": "Prénom",
         "placeholder": "Jean",
@@ -619,7 +634,10 @@
       "invite": "Inviter un collaborateur",
       "to_invite": "Inviter",
       "search_users": "Rechercher un collaborateur",
-      "empty_search": "Aucun collaborateur ne correspond à votre recherche."
+      "empty_search": "Aucun collaborateur ne correspond à votre recherche.",
+      "role_update_success": "Le rôle de l'utilisateur a été mis à jour avec succès.",
+      "update_role": "Mettre à jour le rôle",
+      "user_deactived": "Utilisateur désactivé"
     },
 
     "invite": {
@@ -640,6 +658,21 @@
 
       "errors": {
         "unauthorized": "Vous n'avez pas les droits nécessaires pour supprimer cet utilisateur."
+      }
+    },
+
+    "active": {
+      "active": {
+        "title": "Activer l'accès de {name} ?",
+        "confirm": "Voulez-vous rétablir l'accès de cet utilisateur à la plateforme ?",
+        "submit": "Activer",
+        "success": "L'accès de {name} a été activé avec succès."
+      },
+      "deactive": {
+        "title": "Désactiver l'accès de {name} ?",
+        "confirm": "Attention, {name} ne pourra plus se connecter. Ses actions passées restent intactes.",
+        "submit": "Désactiver",
+        "success": "L'accès de {name} a été désactivé."
       }
     },
 

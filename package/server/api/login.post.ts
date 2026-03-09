@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
     .select("+password")
     .lean();
 
-  if (!user || !user.password) {
+  if (!user || !user.password || !user.active) {
     throw createError({
       statusCode: 401,
       statusMessage: $t("login.errors.invalid_credentials"),

@@ -14,7 +14,7 @@ const UserSchema = new mongoose.Schema(
     role: { type: String, enum: USER_ROLES, default: "admin" },
 
     isValid: { type: Boolean, default: true },
-    isActive: { type: Boolean, default: true },
+    active: { type: Boolean, default: true },
 
     normalizedFullname: { type: String, required: true },
   },
@@ -38,16 +38,18 @@ UserSchema.pre("validate", function () {
   }
 
   this.normalizedFullname = normalize(
-    [this.firstName, this.lastName].filter((e) => e).join(" "),
+    [this.firstName, this.lastName, this.email].filter((e) => e).join(" "),
   );
 });
 
 UserSchema.pre("updateOne", function () {
   const update = this.getUpdate() as mongoose.UpdateQuery<UserDocument>;
 
-  if (update?.data) {
+  if (update) {
     update.normalizedFullname = normalize(
-      [update.firstName, update.lastName].filter((e) => e).join(" "),
+      [update.firstName, update.lastName, update.email]
+        .filter((e) => e)
+        .join(" "),
     );
   }
 });
