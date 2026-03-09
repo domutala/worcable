@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
       } else {
         const user = await collections.$User.findById(session.userID);
 
-        if (user && !user.active) {
+        if (user?.active) {
           _.unset(user, "password");
           event.context.session = { ...session, user };
         }
