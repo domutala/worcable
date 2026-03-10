@@ -15,8 +15,14 @@ const {
   },
 });
 
+const sortItems2 = ref({
+  updatedAt: { label: Use.i18n.t("words.last_update") },
+  status: { label: Use.i18n.t("apply.status.labels.label") },
+  note: { label: Use.i18n.t("apply.note.labels.label") },
+});
+
 const { jobId: jobID } = defineProps<{ jobId: string }>();
-const { applyStatus } = useJob(jobID);
+const { applyStatus, job, ready } = useJob(jobID);
 const { value: applyModalID } = useModal({ uid: "modal-apply-id" });
 const searchTerm = ref("");
 const page = ref(1);
@@ -62,42 +68,89 @@ watchImmediate(
 );
 
 const sorts = computed(() => {
-  return [
-    applyStatus.value.filterItems.value,
-    { ...sortItems.value, variant: "ghost" },
+  return [applyStatus.value.filterItems.value, { ...sortItems.value }];
+});
+
+const filterItems = computed(() => {
+  const _items = [
+    {
+      value: null,
+      label: Use.i18n.t(`apply.status.labels.all`),
+      icon: "i-lucide-text",
+    },
+    ...job.value.applyStatus.map((status) => {
+      return {
+        value: `status:${status.key}`,
+        label: status.label || Use.i18n.t(`apply.status.${status.key}.label`),
+        icon: status.icon || applyStatusIcons[status.key],
+      };
+    }),
+    {
+      value: "status:null",
+      label: Use.i18n.t(`apply.status.labels.null`),
+      icon: applyStatusIcons.null,
+    },
   ];
+
+  const label = _items.find(
+    (status) => status.value === applyStatus.value.filterBy.value,
+  )?.label;
+  const icon = _items.find(
+    (status) => status.value === applyStatus.value.filterBy.value,
+  )?.icon;
+
+  const items = applyStatus.value.filterItems.value.children;
+
+  return { label, icon, items };
 });
 </script>
 
 <template>
   <div
+    v-if="job && ready"
     ref="container"
-    class="overflow-hidden lg:rounded border border-default w-full lg:w-250 mx-auto flex-1 flex-col flex lg:mb-10"
+    class="overflow-hidden lg:rounded border border-default w-full lg:w-250 mx-auto max-h-full flex-col flex lg:mb-10"
   >
-    <div class="scroller flex-1 flex flex-col overflow-auto">
-      <div class="flex flex-col flex-1 divide-y divide-default">
+    <div class="scroller flex flex-col overflow-auto">
+      <div class="flex flex-col divide-y divide-default">
         <template v-if="data">
-          <u-input
-            v-model="searchTerm"
-            :ui="{
-              base: 'h-full ring-0! bg-transparent pl-13',
-              trailing: 'pr-5',
-            }"
-            :placeholder="$t('apply.actions.search_candidate')"
-            :loading="status === 'pending'"
-            icon="i-lucide-search"
-            type="search"
-            class="h-17 w-full outline-none"
-            size="xl"
-          >
-          </u-input>
+          <div class="relative group flex items-center">
+            <u-input
+              v-model="searchTerm"
+              :ui="{
+                base: 'h-full ring-0! bg-transparent pl-13 rounded-none!',
+                trailing: 'pr-5',
+              }"
+              :placeholder="$t('apply.actions.search_candidate')"
+              :loading="status === 'pending'"
+              icon="i-lucide-search"
+              class="h-17 w-full outline-none"
+              size="xl"
+            >
+            </u-input>
 
-          <div class="flex items-center px-3 py-1 bg-">
-            <ui-menu-horizontal-items :items="sorts" :gap="5" :min-to-show="2">
-              <template #activator>
-                <u-button size="md" icon="i-lucide-list-filter" square />
-              </template>
-            </ui-menu-horizontal-items>
+            <!-- absolute right-0 top-1/2 -translate-y-1/2  -->
+
+            <div
+              class="flex items-center justify-end gap-2 group-focus-within:hidden pr-5 w-"
+            >
+              <u-dropdown-menu :items="filterItems.items">
+                <u-button
+                  size="md"
+                  class="whitespace-nowrap"
+                  :icon="filterItems.icon"
+                >
+                  {{ filterItems.label }}
+                </u-button>
+              </u-dropdown-menu>
+
+              <ui-sort
+                :orderBy="sortItems2"
+                :btn-props="{ size: 'md', variant: 'soft' }"
+                v-model:sort-by="sortBy"
+                v-model:sort-order="sortOrder"
+              />
+            </div>
           </div>
 
           <div v-if="!applys.length" class="max-w-lg mx-auto text-center py-30">
@@ -109,7 +162,7 @@ const sorts = computed(() => {
 
           <div
             v-for="(apply, i) in applys"
-            :key="apply.id"
+            :key="apply.id + i"
             class="w-full bg-default overflow-hidden group hover:bg-surface/10"
           >
             <div
@@ -197,7 +250,7 @@ const sorts = computed(() => {
 
           <div
             v-if="applys.length"
-            class="sticky flex items-center gap-5 bottom-0 z-20 bg-default backdrop-blur-2xl py-2 px-5 mt-auto"
+            class="sticky flex items-center gap-5 bottom-0 z-20 bg-default py-2 px-5"
           >
             <template v-if="applys.length">
               {{ (data.page - 1) * data.pageSize + data.items.length }} sur

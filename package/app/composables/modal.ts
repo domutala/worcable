@@ -29,9 +29,6 @@ export const useModal = ({
 
     const value = useRouteQuery<string | undefined>(uid, undefined, {
       mode: "push",
-      transform(val) {
-        return val;
-      },
     });
 
     watchImmediate(

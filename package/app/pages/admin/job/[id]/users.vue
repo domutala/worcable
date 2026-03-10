@@ -17,7 +17,7 @@ const {} = useJob(jobID, {
     }, 10);
   },
 });
-const { open: addUserOpen } = useModal({ uid: "job-user-add" });
+const { open: addUserOpen } = useModal({ uid: jobID });
 
 const data = ref<IDataResult<User>>();
 const loading = ref(false);

@@ -165,7 +165,7 @@ export const useJob = (
                 label: Use.i18n.t("job_user.labels.add_user"),
                 icon: "i-lucide-user-round-plus",
                 onSelect(e) {
-                  const { open } = useModal({ uid: "job-user-add" });
+                  const { open } = useModal({ uid: job.value.id });
                   open.value = true;
                 },
               });
