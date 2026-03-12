@@ -5,22 +5,3 @@ export interface IDataResult<T = any> {
   total: number;
   totalPages: number;
 }
-
-export type UploadedFile = {
-  filename: string;
-  type?: string;
-  data: any;
-  // data: Buffer;
-  size: number;
-  url?: string;
-};
-
-export class UpFile {
-  constructor(
-    public readonly filename: string,
-    public readonly data: Buffer,
-    public readonly size: number,
-    public readonly type: string,
-    public readonly url?: string,
-  ) {}
-}

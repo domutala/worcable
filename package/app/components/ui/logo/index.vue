@@ -15,7 +15,7 @@ defineProps<{ shortable?: boolean }>();
       >
         <img
           v-if="Store.config.config.logo"
-          :src="Utils.getFileUrl(Store.config.config.logo)"
+          :src="Doc.getUrl(Store.config.config.logo)"
           class="size-full object-cover object-center"
         />
         <u-icon v-else name="i-lucide-building-2" class="size-6 text-" />

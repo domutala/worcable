@@ -93,7 +93,7 @@ function onUserSelect(u: User) {
               >
                 <template v-if="user">
                   <UAvatar
-                    :src="Utils.getFileUrl(user.avatar)"
+                    :src="Doc.getUrl(user.avatar)"
                     :alt="[user.firstName, user.lastName].join(' ')"
                     class="rounded-2xl text-md"
                     size="2xl"

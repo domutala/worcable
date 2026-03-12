@@ -170,7 +170,7 @@ const filterItems = computed(() => {
               @click="applyModalID = apply.id"
             >
               <UAvatar
-                :src="Utils.getFileUrl(apply.data.avatar)"
+                :src="Doc.getUrl(apply.data.avatar)"
                 :alt="[apply.data.firstName, apply.data.lastName].join(' ')"
                 class="border border-accented rounded-2xl text-md"
                 size="3xl"
@@ -212,7 +212,7 @@ const filterItems = computed(() => {
                   icon="i-lucide-file-text"
                   target="_blank"
                   size="sm"
-                  :href="Utils.getFileUrl(apply.data.cv)"
+                  :href="Doc.getUrl(apply.data.cv)"
                 >
                 </UButton>
 

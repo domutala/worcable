@@ -1,17 +1,14 @@
 import * as z from "zod";
 import { ConfigCurrency } from "./config_types";
-import getFileShema from "./file_get_shema";
+import { getDocShema } from "../shared/doc/schema";
 
 export function getConfigSchema($t: (string: string) => string) {
-  const logo = getFileShema({
+  const logo = getDocShema({
     $t,
     types: ["image/jpeg", "image/png", "image/webp"],
     errorMaxSizeMessage: $t("config.items.errors.logo.max"),
     errorTypeMessage: $t("config.items.errors.logo.invalid"),
-  })
-    .optional()
-    .nullable()
-    .default(null);
+  }).optional();
 
   const name = z.string($t("config.items.orgName.errors.invalid")).optional();
 
@@ -42,7 +39,7 @@ export function getConfigSchema($t: (string: string) => string) {
     $t("config.items.colorMode.errors.invalid"),
   );
 
-  const colorMode = colorModeEnum.optional().nullable();
+  const colorMode = colorModeEnum.optional();
 
   const colorEnum = z.enum(
     [
@@ -66,7 +63,7 @@ export function getConfigSchema($t: (string: string) => string) {
     ],
     $t("config.items.primary.errors.invalid"),
   );
-  const primaryColor = colorEnum.optional().nullable();
+  const primaryColor = colorEnum.optional();
 
   const language = z
     .enum(["fr"], $t("config.items.primary.errors.invalid"))

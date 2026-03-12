@@ -56,7 +56,7 @@ const applyDataOptionsList = computed(() => {
           icon="i-lucide-arrow-up-right"
           target="_blank"
           variant="soft"
-          :href="Utils.getFileUrl(apply.data.cv)"
+          :href="Doc.getUrl(apply.data.cv)"
           square
         >
         </u-button>

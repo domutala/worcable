@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import type { FileDocument } from "~~/server/database/collections";
+import type { DocDocument } from "~~/server/database/collections";
 
-defineProps<{ cv: FileDocument }>();
+defineProps<{ cv: DocDocument }>();
 </script>
 
 <template>
   <template v-if="!$slots.default">
     <a
-      :href="Utils.getFileUrl(cv)"
+      :href="Doc.getUrl(cv)"
       target="_blank"
       class="underline hover:text-primary"
     >

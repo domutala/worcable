@@ -121,7 +121,7 @@ async function loadData() {
             class="w-full bg-default overflow-hidden group hover:bg-surface/10 flex items-center gap-2 p-3"
           >
             <UAvatar
-              :src="Utils.getFileUrl(user.avatar)"
+              :src="Doc.getUrl(user.avatar)"
               :alt="[user.firstName, user.lastName].join(' ')"
               class="border border-accented rounded-2xl text-md"
               size="3xl"

@@ -1,9 +1,11 @@
+import type { Doc } from "~~/server/database/collections";
+
 export default {
-  async upload(file: File) {
+  async upload(doc: File) {
     try {
       const runtime = useRuntimeConfig();
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("doc", doc);
       const result = await Api.$fetch("/api/doc/upload", {
         method: "post",
         body: formData,
@@ -15,16 +17,24 @@ export default {
     }
   },
 
-  async uploadBeforeSubmit(data: Record<string, any>) {
+  async uploadBeforeSubmit<T extends Record<string, any>>(data: T) {
     for (const key of Object.keys(data)) {
-      if (data[key] instanceof File) data[key] = await this.upload(data[key]);
+      if (data[key] instanceof File) {
+        data = _.set(data, key, await this.upload(data[key]));
+      }
     }
 
-    return data;
+    return data as T;
   },
 
-  createObjectUrl(file?: File) {
-    if (!file) return;
-    return URL.createObjectURL(file);
+  getUrl(doc?: File | Doc) {
+    return this.createObjectUrl(doc);
+  },
+
+  createObjectUrl(doc?: File | Doc) {
+    if (!doc) return;
+    return doc instanceof File
+      ? URL.createObjectURL(doc)
+      : doc.url || `/api/doc/${doc.id}`;
   },
 };

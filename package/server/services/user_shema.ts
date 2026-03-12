@@ -1,8 +1,11 @@
 import * as z from "zod";
+import { ACCEPTED_AVATAR_TYPES, getDocShema } from "../shared";
 
 export const USER_ROLES = ["admin", "recruiter", "guest"] as const;
 
 export function getUserShema($t: (string: string) => string) {
+  const avatar = getDocShema({ $t, types: ACCEPTED_AVATAR_TYPES }).optional();
+
   const active = z.boolean($t("user.items.active.errors.invalid")).optional();
   const role = z.enum(USER_ROLES, $t("user.items.role.errors.invalid"));
   const email = z.email($t("user.items.email.errors.invalid"));
@@ -45,11 +48,12 @@ export function getUserShema($t: (string: string) => string) {
     role,
     firstName,
     lastName,
-    avatar: z.any().nullable().optional(),
+    avatar,
     active,
   });
 
   return {
+    avatar,
     role,
     email,
     firstName,

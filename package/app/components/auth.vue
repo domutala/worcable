@@ -116,7 +116,7 @@ const items = computed(() => {
     <template #activator>
       <span class="cursor-pointer">
         <UAvatar
-          :src="Utils.getFileUrl(Store.session.user.avatar)"
+          :src="Doc.getUrl(Store.session.user.avatar)"
           :alt="`${Store.session.user.firstName} ${Store.session.user.lastName}`"
           size="xl"
           class="rounded-xl text-sm bg-surface"
@@ -129,7 +129,7 @@ const items = computed(() => {
         class="pb-3 px-1 flex items-center gap-3 text-left text-lg w-75 max-w-full border-b border-default"
       >
         <UAvatar
-          :src="Utils.getFileUrl(Store.session.user.avatar)"
+          :src="Doc.getUrl(Store.session.user.avatar)"
           :alt="`${Store.session.user.firstName} ${Store.session.user.lastName}`"
           size="3xl"
           class="rounded-2xl text-sm"

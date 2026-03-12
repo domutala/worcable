@@ -5,11 +5,6 @@ export default defineNuxtConfig({
     uploadsKey: "",
     secretKey: "",
 
-    supabaseProjetcId: "",
-    supabaseApiKey: "",
-    supabasePublishableKey: "",
-    supabaseEnpoint: "",
-
     public: {
       appUrl: "",
       areaCompletionUrl: "",

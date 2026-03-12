@@ -1,4 +1,4 @@
-import saveFile from "../../tools/save_file";
+import { saveDoc } from "~~/server/services/doc/save";
 
 export default defineEventHandler(async (event) => {
   const runtime = useRuntimeConfig(event);
@@ -13,6 +13,13 @@ export default defineEventHandler(async (event) => {
   const body = form.reduce(
     (acc, field) => {
       if (field.filename) {
+        const e = {
+          filename: field.filename,
+          data: field.data,
+          type: field.type,
+          size: field.data.length,
+        };
+
         acc[field.name!] = {
           filename: field.filename,
           data: field.data,
@@ -25,13 +32,13 @@ export default defineEventHandler(async (event) => {
     {} as Record<string, any>,
   );
 
-  if (!body.file) {
+  if (!body.doc) {
     throw createError({
       statusCode: 400,
       data: { message: $t("uploads.errors.invalid_file") },
     });
   }
 
-  const file = await saveFile(body.file);
-  return file;
+  const doc = await saveDoc({ $t, doc: body.doc });
+  return doc;
 });

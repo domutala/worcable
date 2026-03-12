@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   });
 
   const { applyStatus: schema } = getJobShema($t);
-  const status = parseZod(schema, body);
+  const status = await parseZod(schema, body);
 
   await collections.$Job.updateOne({ _id: id }, { applyStatus: status });
 

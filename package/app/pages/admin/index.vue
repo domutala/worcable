@@ -16,7 +16,7 @@ const jobs = ref<Job[]>([]);
         <div class="h-full border-r border-accented/60 w-100">
           <div class="p-5">
             <UAvatar
-              :src="Utils.getFileUrl(Store.session.user.avatar)"
+              :src="Doc.getUrl(Store.session.user.avatar)"
               :alt="`${Store.session.user.firstName} ${Store.session.user.lastName}`"
               class="rounded-2xl text-sm size-16 border border-default bg-default"
             />

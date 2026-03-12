@@ -1,4 +1,4 @@
-import { MAX_FILE_SIZE } from "../../file";
+import { MAX_FILE_SIZE } from "../../doc";
 import { ApplyDataOptions } from "../types";
 
 const options: ApplyDataOptions = {

@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, "id") as string;
 
   const { active: schema } = getUserShema($t);
-  const active = parseZod(schema, body.active);
+  const active = await parseZod(schema, body.active);
   const user = await collections.$User.findOne({ _id: id });
 
   if (!user) {

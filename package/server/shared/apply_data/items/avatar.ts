@@ -1,4 +1,4 @@
-import { ACCEPTED_AVATAR_TYPES, MAX_FILE_SIZE } from "../../file";
+import { ACCEPTED_AVATAR_TYPES, MAX_FILE_SIZE } from "../../doc";
 import { ApplyDataOptions } from "../types";
 
 const options: ApplyDataOptions = {

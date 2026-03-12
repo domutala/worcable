@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { ApplyComment } from "~~/server/database/collections";
-import _ from "lodash";
 import type { User } from "~~/server/database/collections";
 
 const { applyId: applyID } = defineProps<{ applyId: string }>();
@@ -9,7 +8,7 @@ const comment = defineModel<ApplyComment>("comment", { required: true });
 const user = ref<User>();
 
 onMounted(async () => {
-  if (comment.value.author.user) {
+  if ("user" in comment.value.author) {
     const url = `/api/admin/user/${comment.value.author.user}`;
     user.value = await $fetch<User>(url, { method: "get" });
   }
@@ -22,14 +21,14 @@ const author = computed(() => {
 
   if (user.value) {
     email = user.value.email;
-    avatar = Utils.getFileUrl(user.value.avatar);
+    avatar = Doc.getUrl(user.value.avatar);
     name = [user.value.firstName, user.value.lastName].join(" ");
-  } else if (comment.value.author.candidate) {
+  } else if ("candidate" in comment.value.author) {
     email = apply.value.data.email;
-    avatar = Utils.getFileUrl(apply.value.data.avatar);
+    avatar = Doc.getUrl(apply.value.data.avatar);
     name = `${apply.value.data.firstName} ${apply.value.data.lastName}`;
-  } else {
-    avatar = Utils.getFileUrl(comment.value.author.author?.avatar);
+  } else if ("author" in comment.value.author) {
+    avatar = Doc.getUrl(comment.value.author.author.avatar);
     email = comment.value.author.author?.email;
     name =
       comment.value.author.author?.name ??

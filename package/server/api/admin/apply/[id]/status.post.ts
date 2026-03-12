@@ -1,6 +1,6 @@
 import * as z from "zod";
 import { getApply } from "~~/server/services/apply_get";
-import { getApplyShema } from "~~/server/services/apply_get_shema";
+import { getApplyShema } from "~~/server/shared";
 import { checkJobUserRole } from "~~/server/services/job_get";
 
 export default defineEventHandler(async (event) => {
