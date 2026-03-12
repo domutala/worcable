@@ -1,11 +1,39 @@
 <script lang="ts" setup>
+import { getApplyDataOptionsList } from "~~/server/shared";
+
 const { applyId: applyID } = defineProps<{ applyId: string }>();
-const { apply } = useApply(applyID);
+const { apply, job } = useApply(applyID);
+
+const applyDataOptionsList = computed(() => {
+  if (!job.value?.job.value) return [];
+
+  return getApplyDataOptionsList({
+    $t: Use.i18n.t,
+    applyDataConfigs: job.value.job.value.applyDataConfigs!,
+  }).filter((a) => a.key !== "avatar");
+});
 </script>
 
 <template>
   <div v-if="apply" class="flex flex-col gap-1.5">
     <div
+      v-for="applyDataOptions in applyDataOptionsList"
+      :key="applyDataOptions.key"
+      class="px-5 py-4 text-sm bg-default rounded-min ring ring-default"
+    >
+      <h2 class="text- font-bold truncate">
+        {{ $t(`apply.items.${applyDataOptions.key}.labels.title`) }}
+      </h2>
+      <div>
+        <component
+          :is="`ui-apply-items-${applyDataOptions.key}-display`"
+          v-bind="{ [applyDataOptions.key]: apply.data[applyDataOptions.key] }"
+        />
+        <!-- {{ apply.data[applyDataOptions.key] }} -->
+      </div>
+    </div>
+
+    <!--  <div
       class="px-5 py-4 text-sm bg-default rounded-min ring ring-default flex items-center gap-3 w-full"
     >
       <div>
@@ -31,7 +59,6 @@ const { apply } = useApply(applyID);
           :href="Utils.getFileUrl(apply.data.cv)"
           square
         >
-          <!-- {{ $t("apply.actions.donwload_cv") }} -->
         </u-button>
       </div>
     </div>
@@ -149,6 +176,6 @@ const { apply } = useApply(applyID);
         :placeholder="$t('job.items.jobDescription.label')"
         class="max-h-100 overflow-y-auto w-full"
       />
-    </div>
+    </div> -->
   </div>
 </template>

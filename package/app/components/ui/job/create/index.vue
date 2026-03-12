@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
-import type { StepperItem } from "@nuxt/ui";
-import onFetchError from "~/tools/onFetchError";
-import _ from "lodash";
 import type { Job } from "~~/server/database/collections";
 
 const { job } = defineProps<{ job?: Job }>();
@@ -10,219 +7,100 @@ const { job } = defineProps<{ job?: Job }>();
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const slimStepper = breakpoints.smallerOrEqual("2xl");
 const onTop = breakpoints.smallerOrEqual("lg");
-
-const i18n = useI18n();
-const refs = {
-  title: useTemplateRef("title"),
-  jobDetails: useTemplateRef("jobDetails"),
-  jobDescription: useTemplateRef("jobDescription"),
-  candidateDetails: useTemplateRef("candidateDetails"),
-  companyDescription: useTemplateRef("companyDescription"),
-};
-
-const iStep = ref(0);
-const steps = [
-  "title",
-  "jobDetails",
-  "jobDescription",
-  // "candidateDetails",
-  "companyDescription",
-];
-const stepIcons = {
-  title: "i-lucide-equal",
-  jobDetails: "i-lucide-list-checks",
-  jobDescription: "i-lucide-text",
-  // "candidateDetails": "i-lucide-user-round",
-  companyDescription: "i-lucide-building-2",
-};
-const data = ref<Record<string, any>>(_.cloneDeep(job || {}));
-
-const items = computed(() => {
-  const items = steps.map((step) => {
-    return {
-      slot: step,
-      title: i18n.t(`job.create.steps.${step}.label`),
-      icon: stepIcons[step as "title"],
-    };
-  }) satisfies StepperItem[];
-
-  return items;
-});
-
-const isEndStep = computed(() => iStep.value === steps.length - 1);
-
-function gotoNext() {
-  const $el = refs[steps[iStep.value] as "title"];
-  $el.value?.form?.submit();
-}
-function gotoPrev() {
-  if (iStep.value > 0) iStep.value--;
-}
-
-function onNext(dt: Record<string, any>) {
-  data.value = { ...data.value, ...dt };
-
-  if (isEndStep.value) onSubmit();
-  else iStep.value++;
-}
-
-const submitting = ref(false);
-async function onSubmit() {
-  submitting.value = true;
-
-  try {
-    const result = await Api.$fetch<Job>(
-      job?.id ? `/api/admin/job/${job.id}` : "/api/admin/job",
-      {
-        method: job?.id ? "patch" : "post",
-        body: data.value,
-      },
-    );
-
-    useJob(result.id);
-
-    Use.router.replace(
-      Use.localePath({ name: "admin-job-id", params: { id: result.id } }),
-    );
-  } catch (error) {
-    console.log(error);
-  } finally {
-    submitting.value = false;
-  }
-}
+const comp = useTemplateRef("comp");
 </script>
 
 <template>
-  <ui-layout class="h-screen">
-    <div
-      class="fixed top-1/2 left-0 -translate-y-1/2 z-10"
-      :class="{
-        'relative top-[unset] left-[unset] translate-y-[unset] py-5': onTop,
-      }"
-    >
-      <!-- top-18 left-1/2 translate-y-0 -translate-x-1/2 -->
-      <u-container class="max-w-100">
-        <!-- <UStepper
-          :items="items"
-          :ui="{
-            wrapper: 'mt-0 flex flex-col items-center justify-center',
-            item: 'group/step',
-            title: [
-              `whitespace-nowrap opacity-50 transition-all group-aria-current:opacity-100 group-aria-current:font-normal group-aria-current:text-lg`,
-              slimStepper ? 'group-hover:flex hidden' : '',
-            ],
-          }"
-          v-model="iStep"
+  <ui-layout>
+    <template #header>
+      <div v-if="comp" class="relative h-17 flex items-center px-5 gap-2">
+        <u-icon v-if="!job" name="i-lucide-newspaper" class="size-7" />
+        <div class="leading-none flex-1 min-w-0 w-0">
+          <h1 class="text-lg font-semibold truncate leading-none">
+            <span v-if="job"> {{ job.title }} </span>
+            <span v-else>{{ $t("job.create.title") }} </span>
+          </h1>
+        </div>
+
+        <div class="mx-auto"></div>
+        <u-button
+          v-if="comp.step !== 0"
+          :disabled="comp.submitting"
           color="neutral"
-          orientation="vertical"
-          size="md"
-          disabled
+          variant="ghost"
+          @click="comp.prevent"
         >
-        
-        </UStepper> -->
-
-        <UStepper
-          v-model="iStep"
-          :items="items"
-          :ui="{
-            trigger:
-              'data-[state=completed]:bg-default! data-[state=active]:bg-default! data-[state=completed]:text-highlighted! data-[state=active]:text-highlighted!',
-            wrapper: [
-              'mt-0 flex flex-col items-center justify-center relative',
-              onTop
-                ? 'absolute mt-1.5 left-1/2 -translate-x-1/2 group-aria-current:flex hidden'
-                : slimStepper
-                  ? 'group-hover:flex hidden'
-                  : '',
-            ],
-            item: ['group/step rounded-default', onTop ? 'mx-2' : ''],
-            title: [
-              `whitespace-nowrap opacity-50 transition-all group-aria-current:opacity-100 group-aria-current:font-normal group-aria-current:text-lg`,
-              slimStepper ? 'text-sm!' : '',
-            ],
-          }"
-          :orientation="onTop ? 'horizontal' : 'vertical'"
-          color="neutral"
-          size="md"
-          disabled
-        >
-        </UStepper>
-      </u-container>
-    </div>
-
-    <div
-      class="min-h- flex-1 flex flex-col bg-"
-      :class="{ 'pointer-events-none': submitting }"
-    >
-      <template v-if="steps[iStep] === 'title'">
-        <ui-job-create-step-title
-          ref="title"
-          :data
-          @input="(dt) => (data = { ...data, ...dt })"
-          @submit="onNext"
-        />
-      </template>
-
-      <template v-else-if="steps[iStep] === 'jobDetails'">
-        <ui-job-create-step-job-details
-          ref="jobDetails"
-          :data
-          @input="(dt) => (data = { ...data, ...dt })"
-          @submit="onNext"
-        />
-      </template>
-
-      <template v-else-if="steps[iStep] === 'jobDescription'">
-        <ui-job-create-step-job-description
-          ref="jobDescription"
-          :data
-          @input="(dt) => (data = { ...data, ...dt })"
-          @submit="onNext"
-        />
-      </template>
-      <template v-else-if="steps[iStep] === 'candidateDetails'">
-        <ui-job-create-step-candidate-details
-          ref="candidateDetails"
-          key="candidateDetails"
-          :data
-          @input="(dt) => (data = { ...data, ...dt })"
-          @submit="onNext"
-        />
-      </template>
-      <template v-else-if="steps[iStep] === 'companyDescription'">
-        <ui-job-create-step-company-description
-          ref="companyDescription"
-          key="companyDescription"
-          :data
-          @input="(dt) => (data = { ...data, ...dt })"
-          @submit="onNext"
-        />
-      </template>
-
-      <div
-        class="sticky bottom-0 z-10 bg-default/10 backdrop-blur-2xl mt-auto py-3 shadow-2xl"
-      >
-        <u-container>
-          <div class="flex items-center gap-2">
-            <div class="mx-auto"></div>
-            <u-button
-              v-if="iStep !== 0"
-              :disabled="submitting"
-              size="xl"
-              color="neutral"
-              variant="soft"
-              class="p-3 px-4 cursor-pointer border border-default"
-              icon="i-lucide-arrow-left"
-              @click="gotoPrev"
-            >
-              {{ $t("job.create.prev") }}
-            </u-button>
-            <u-button :loading="submitting" class="p-3 px-4" @click="gotoNext">
-              {{ $t(isEndStep ? "job.create.save" : "job.create.next") }}
-            </u-button>
-          </div>
-        </u-container>
+          {{ $t("job.create.prev") }}
+        </u-button>
+        <u-button :loading="comp.submitting" @click="comp.next">
+          {{ $t(comp.isEndStep ? "job.create.save" : "job.create.next") }}
+        </u-button>
       </div>
-    </div>
+    </template>
+
+    <ui-job-create-step ref="comp" :job>
+      <template
+        #before="{ step, next, prevent, isEndStep, submitting, current, steps }"
+      >
+        <div
+          class="w-11/12 max-w-120 mx-auto flex justify-between items-start gap-1"
+        >
+          <div
+            v-for="_step in steps"
+            :key="_step.value"
+            :class="{
+              'bg-inverted!': _step.index <= step,
+              'bg-primary!': _step.current,
+            }"
+            class="bg-inverted/30 w-full h-0.5 transition-all"
+          ></div>
+        </div>
+      </template>
+
+      <template
+        #in-after="{
+          step,
+          next,
+          prevent,
+          isEndStep,
+          submitting,
+          current,
+          steps,
+        }"
+      >
+        <div
+          class="sticky bottom-0 z-10 backdrop-blur-2xl mt-auto py-0.5 px-2 shadow-2xl bg-default/50"
+        >
+          <div class="text-sm text-center sm:text-right">
+            {{ current.title }}
+          </div>
+          <u-container class="hidden">
+            <div class="flex items-center gap-2">
+              <div class="items-center gap-2 hidden sm:flex">
+                <u-icon :name="current.icon" class="size-5" />
+                {{ current.title }}
+              </div>
+
+              <div class="mx-auto"></div>
+              <u-button
+                v-if="step !== 0"
+                :disabled="submitting"
+                size="xl"
+                color="neutral"
+                variant="soft"
+                class="p-3 px-4 cursor-pointer border border-default"
+                icon="i-lucide-arrow-left"
+                @click="prevent"
+              >
+                {{ $t("job.create.prev") }}
+              </u-button>
+              <u-button :loading="submitting" class="p-3 px-4" @click="next">
+                {{ $t(isEndStep ? "job.create.save" : "job.create.next") }}
+              </u-button>
+            </div>
+          </u-container>
+        </div>
+      </template>
+    </ui-job-create-step>
   </ui-layout>
 </template>

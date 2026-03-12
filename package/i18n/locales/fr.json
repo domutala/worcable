@@ -153,7 +153,11 @@
           "add": "Ajouter une photo"
         },
         "remove": "Supprimer",
-        "info": "au format *.png ou *.jpeg max 10 mo"
+        "info": "au format *.png ou *.jpeg max 10 mo",
+
+        "labels": {
+          "title": "Photo de profil"
+        }
       },
 
       "availability": {
@@ -168,7 +172,10 @@
           "3mois": "Sous 3 mois",
           "other": "Autres"
         },
-        "errors": { "required": "Veuillez renseigner votre disponibilité" }
+        "errors": { "required": "Veuillez renseigner votre disponibilité" },
+        "labels": {
+          "title": "Disponibilité"
+        }
       },
 
       "desiredGrossSalary": {
@@ -179,6 +186,9 @@
         "errors": {
           "required": "Le salaire brut souhaité est requis.",
           "invalid": "Veuillez renseigner un montant valide."
+        },
+        "labels": {
+          "title": "Prétention salariale"
         }
       },
 
@@ -197,7 +207,11 @@
           "bacPlus5": "Master, diplôme d’ingénieur ou équivalent (bac +5)",
           "doctorate": "Doctorat ou équivalent (bac +8 et plus)"
         },
-        "errors": { "required": "Veuillez sélectionner votre niveau d’étude." }
+        "errors": { "required": "Veuillez sélectionner votre niveau d’étude." },
+
+        "labels": {
+          "title": "Niveau d'étude"
+        }
       },
 
       "motivation": {
@@ -207,6 +221,10 @@
         "helper": "Un message clair et personnalisé augmente vos chances",
         "errors": {
           "invalid": "La motivation doit être un texte"
+        },
+
+        "labels": {
+          "title": "Texte de motivation"
         }
       },
 
@@ -219,6 +237,10 @@
           "size": "Le fichier ne doit pas dépasser 10 Mo",
           "type": "Le fichier doit être un PDF",
           "required": "Un fichier est requis"
+        },
+
+        "labels": {
+          "title": "CV"
         }
       },
 
@@ -231,6 +253,10 @@
           "required": "Le prénom est obligatoire",
           "invalid": "Le prénom doit être une chaîne de caractères",
           "min": "Le prénom doit contenir au moins 2 caractères"
+        },
+
+        "labels": {
+          "title": "Prénom"
         }
       },
 
@@ -243,6 +269,10 @@
           "required": "Le nom est obligatoire",
           "invalid": "Le nom doit être une chaîne de caractères",
           "min": "Le nom doit contenir au moins 2 caractères"
+        },
+
+        "labels": {
+          "title": "Nom"
         }
       },
 
@@ -254,6 +284,10 @@
         "errors": {
           "required": "L’adresse email est obligatoire",
           "invalid": "Veuillez saisir une adresse email valide"
+        },
+
+        "labels": {
+          "title": "Adresse email"
         }
       },
 
@@ -265,6 +299,10 @@
         "errors": {
           "required": "Le numéro de téléphone est obligatoire",
           "invalid": "Veuillez saisir un numéro de téléphone valide"
+        },
+
+        "labels": {
+          "title": "Numéro de téléphobe"
         }
       },
 
@@ -318,7 +356,9 @@
 
     "labels": {
       "no_apply": "Aucune candidature trouvé",
-      "show_details": "Details"
+      "show_details": "Details",
+      "use": "Optionnel",
+      "require": "Requis"
     },
 
     "success": "Merci pour votre candidature. Nous avons bien reçu vos informations et notre équipe va les analyser avec attention. Si votre profil correspond à nos opportunités actuelles ou futures, nous vous contacterons pour la suite du processus."
@@ -494,12 +534,16 @@
 
         "companyDescription": {
           "label": "À propos de l’entreprise"
+        },
+        "applyDataConfigs": {
+          "label": "Données candidats"
         }
       },
 
       "next": "Suivant",
       "prev": "Précédent",
-      "save": "Enregistrer"
+      "save": "Enregistrer",
+      "title": "Nouvel offre d'emploi"
     },
 
     "actions": {

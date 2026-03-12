@@ -24,9 +24,3 @@ export class UpFile {
     public readonly url?: string,
   ) {}
 }
-
-export enum CurrencyAvailaible {
-  XOF = "XOF",
-  EUR = "EUR",
-  USD = "USD",
-}

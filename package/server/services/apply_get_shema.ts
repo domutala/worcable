@@ -103,7 +103,9 @@ export function getApplyShema($t: (string: string) => string) {
     .string($t("apply.errors.invalid_status"))
     .optional()
     .nullable();
-  const data = getApplyDataShema($t);
+
+  // const data = getApplyDataShema($t);
+  const data = z.record(z.string(), z.any());
 
   const schema = z.object({ note, status, data });
 

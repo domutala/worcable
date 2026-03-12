@@ -11,8 +11,8 @@ watch(
 );
 
 async function upload() {
-  if (!file.value) return value.value;
-  return await Utils.uploadFile(file.value);
+  if (file.value) return await Doc.upload(file.value);
+  return value.value;
 }
 
 function remove() {

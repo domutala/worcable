@@ -29,6 +29,7 @@ export async function createJob({
   }
 
   const jobData = { ...dataParsed.data };
+  console.log(jobData.applyDataConfigs);
 
   if (body.id) {
     const _id = body.id;

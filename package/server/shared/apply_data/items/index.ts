@@ -1,0 +1,10 @@
+export { default as avatar } from "./avatar";
+export { default as availability } from "./availability";
+export { default as cv } from "./cv";
+export { default as desiredGrossSalary } from "./desiredGrossSalary";
+export { default as educationLevel } from "./educationLevel";
+export { default as email } from "./email";
+export { default as firstName } from "./firstName";
+export { default as lastName } from "./lastName";
+export { default as motivation } from "./motivation";
+export { default as phone } from "./phone";

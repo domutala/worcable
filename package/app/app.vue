@@ -1,5 +1,13 @@
 <script lang="ts" setup>
 import onFetchError from "./tools/onFetchError";
+import { initApplyData } from "~~/server/shared";
+
+// const schema = z
+//   .record(
+//     z.string().refine((key) => Object.keys(applyDataKeyOptions).includes(key)),
+//     z.enum(["use", "require"]).optional(),
+//   )
+//   .optional();
 
 const initing = ref(true);
 const appConfig = useAppConfig();
@@ -23,6 +31,7 @@ onMounted(async () => {
   try {
     await Store.config.init();
     await Store.session.init();
+    initApplyData();
   } catch (error) {
     onFetchError(error);
   } finally {
