@@ -32,6 +32,7 @@ onMounted(async () => {
     await Store.config.init();
     await Store.session.init();
     initApplyData();
+    cleanModalQueries();
   } catch (error) {
     onFetchError(error);
   } finally {
