@@ -71,7 +71,7 @@ const {} = useSortable(sContainer, items, {
 });
 
 onMounted(async () => {
-  window.addEventListener(`${status.value}:actions`, (e: any) =>
+  window.addEventListener(`apply:status:${status.value}`, (e: any) =>
     onEventActions(e),
   );
   initFetching.value = true;
@@ -134,14 +134,17 @@ function onEventActions(e: CustomEvent) {
   } else if (e.detail.action === "apply:update") {
     const i = getIndex(e.detail.apply.id);
     if (i !== null) items.value[i] = e.detail.apply;
+    else items.value.push(e.detail.apply);
   }
 }
 
-onBeforeUnmount(() => {
-  window.removeEventListener(`${status}:actions`, (e: any) =>
+onDeactivated(destroy);
+onBeforeUnmount(destroy);
+function destroy() {
+  window.removeEventListener(`apply:status:${status.value}`, (e: any) =>
     onEventActions(e),
   );
-});
+}
 </script>
 
 <template>

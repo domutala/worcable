@@ -38,7 +38,7 @@ onMounted(setState);
 function setState() {
   state.value = _.cloneDeep(
     job.value.applyStatus.find((a) => a.key === applyStatusKey) ?? {
-      key: Math.random().toString().substring(2, 8),
+      key: Random({ length: 24 }),
     },
   );
 }

@@ -1,13 +1,22 @@
 <script lang="ts" setup>
 import type { Apply, Job } from "~~/server/database/collections";
 import { useSortable } from "@vueuse/integrations/useSortable";
+import { watchImmediate } from "@vueuse/core";
 
 const { jobId: jobID } = defineProps<{ jobId: string }>();
-const { job } = useJob(jobID);
+const { job, applyStatus: as0 } = useJob(jobID);
 const applyStatus = ref(job.value.applyStatus);
 
 const emit = defineEmits<(e: "update", apply: Apply) => void>();
 const container = useTemplateRef("container");
+
+watchImmediate(
+  as0.value.values,
+  () => {
+    applyStatus.value = as0.value.values.value;
+  },
+  { deep: true },
+);
 
 const {} = useSortable(container, applyStatus, {
   handle: ".grid-handler",
@@ -56,22 +65,22 @@ const {} = useSortable(container, applyStatus, {
       <template v-for="status in applyStatus" :key="status.key">
         <ui-apply-kanban-grid v-model:status="status.key" :job-id="jobID" />
       </template>
+    </div>
 
-      <div v-if="Store.session.user?.role === 'admin'">
-        <ui-job-apply-status-edit :job-id="jobID">
-          <u-button
-            size="xl"
-            class="py-4 px-5 flex-col cursor-pointer rounded ring ring-default"
-            icon="i-lucide-plus"
-            variant="outline"
-            color="neutral"
-          >
-            <div style="writing-mode: sideways-rl">
-              {{ $t("job.items.applyStatus.labels.new_btn") }}
-            </div>
-          </u-button>
-        </ui-job-apply-status-edit>
-      </div>
+    <div v-if="Store.session.user?.role === 'admin'">
+      <ui-job-apply-status-edit :job-id="jobID">
+        <u-button
+          size="xl"
+          class="py-4 px-5 flex-col cursor-pointer rounded ring ring-default"
+          icon="i-lucide-plus"
+          variant="outline"
+          color="neutral"
+        >
+          <div style="writing-mode: sideways-rl">
+            {{ $t("job.items.applyStatus.labels.new_btn") }}
+          </div>
+        </u-button>
+      </ui-job-apply-status-edit>
     </div>
   </div>
 </template>

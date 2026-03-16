@@ -221,6 +221,12 @@ export const useApply = (
                 { method: "post", body: { to: value } },
               );
 
+              dispatchEvent(
+                new CustomEvent(`apply:status:${apply.value.status}`, {
+                  detail: { apply: apply.value, action: "apply:update" },
+                }),
+              );
+
               dispatch();
             } catch (error) {
               console.log(error);
