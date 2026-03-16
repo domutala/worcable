@@ -118,6 +118,48 @@ export const useApply = (
         status.value = {
           loading: false,
 
+          // ---
+          color: computed(() => {
+            return !apply.value.status
+              ? "var(--color-surface)"
+              : (job.value.applyStatus.value.values.value.find(
+                  (s) => s.key === apply.value.status,
+                )?.color ?? applyStatusColors[apply.value.status]);
+          }),
+
+          bgColor: computed(() => {
+            return !apply.value.status
+              ? "var(--color-surface)"
+              : `color-mix(in srgb, ${status.value.color.value} 10%, #000 0%)`;
+          }),
+
+          label: computed(() => {
+            const applyStatus = job.value.applyStatus.value.values.value.find(
+              (s) => s.key === apply.value.status,
+            );
+
+            if (!applyStatus)
+              return Use.i18n.t("apply.status.NULL_STATUS.label");
+            if (applyStatus?.label) return applyStatus.label;
+
+            let label = Use.i18n.t(`apply.status.${apply.value.status}.label`);
+            if (label === `apply.status.${apply.value.status}.label`) {
+              label = Use.i18n.t(`job.items.applyStatus.labels.without_name`);
+            }
+
+            return label;
+          }),
+
+          icon: computed(() => {
+            const applyStatus = job.value.applyStatus.value.values.value.find(
+              (s) => s.key === apply.value.status,
+            );
+
+            if (!applyStatus) return applyStatusIcons.null;
+            return applyStatus?.icon ?? applyStatusIcons[applyStatus.key];
+          }),
+          // ---
+
           canUpdate: computed(() => {
             return ["admin", "recruiter"].includes(
               job.value.jobUser.value.role,
@@ -162,55 +204,13 @@ export const useApply = (
           dropdownMenuItems: computed(() => {
             const item: DropdownMenuItem = {
               loading: status.value.loading,
-              label: getStatusLabel(apply.value.status),
-              icon: getStatusIcon(apply.value.status),
+              label: status.value.label.value, // getStatusLabel(apply.value.status),
+              icon: status.value.icon.value, //getStatusIcon(apply.value.status),
               children: status.value.menuItems.value,
             };
 
             return item;
           }),
-
-          // ---
-          color: computed(() => {
-            return !apply.value.status
-              ? "var(--color-surface)"
-              : (job.value.applyStatus.value.values.value.find(
-                  (s) => s.key === apply.value.status,
-                )?.color ?? applyStatusColors[apply.value.status]);
-          }),
-
-          bgColor: computed(() => {
-            return !apply.value.status
-              ? "var(--color-surface)"
-              : `color-mix(in srgb, ${status.value.color.value} 10%, #000 0%)`;
-          }),
-
-          label: computed(() => {
-            const applyStatus = job.value.applyStatus.value.values.value.find(
-              (s) => s.key === apply.value.status,
-            );
-
-            if (!applyStatus)
-              return Use.i18n.t("apply.status.NULL_STATUS.label");
-            if (applyStatus?.label) return applyStatus.label;
-
-            let label = Use.i18n.t(`apply.status.${apply.value.status}.label`);
-            if (label === `apply.status.${apply.value.status}.label`) {
-              label = Use.i18n.t(`job.items.applyStatus.labels.without_name`);
-            }
-
-            return label;
-          }),
-
-          icon: computed(() => {
-            const applyStatus = job.value.applyStatus.value.values.value.find(
-              (s) => s.key === apply.value.status,
-            );
-
-            if (!applyStatus) return applyStatusIcons.null;
-            return applyStatus?.icon ?? applyStatusIcons[applyStatus.key];
-          }),
-          // ---
 
           async submit(value) {
             status.value.loading = true;

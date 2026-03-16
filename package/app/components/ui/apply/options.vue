@@ -33,6 +33,7 @@ const items = computed(() => {
 </script>
 
 <template>
+  {{ status.label }}
   <ui-menu-horizontal-items :items :gap="5" :ui="{ base: 'justify-end' }">
     <template #item-note>
       <u-button
