@@ -123,7 +123,6 @@ export const useJob = (
             label: Use.i18n.t(
               `job.items.status.items.${job.value.status}.label`,
             ),
-            // icon: ApplyUtils.getStatusIcon(job.value, apply.value.status),
             children: status.value.menuItems.value,
             class: "cursor-pointer",
             disabled: Store.session.user?.role !== "admin",
