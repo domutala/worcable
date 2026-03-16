@@ -1,4 +1,4 @@
-import { getJob } from "~~/server/services/job_get";
+import { getJob } from "~~/server/services/job/get";
 import { getJobShema } from "~~/server/services/job_schema";
 
 export default defineEventHandler(async (event) => {

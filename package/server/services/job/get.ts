@@ -1,4 +1,5 @@
 import { isValidObjectId } from "mongoose";
+import { jobPipeline } from "./pipeline";
 
 export async function getJob({
   id,
@@ -15,24 +16,16 @@ export async function getJob({
       data: { message: $t("job.errors.invalid_id") },
     });
   }
+  const query: Record<string, any> = { ids: [id] };
 
-  const job = await collections.$Job.findById(id);
+  if (userID) query.userID = userID;
 
+  const job = (await jobPipeline({ $t, query })).items[0];
   if (!job) {
     throw createError({
       statusCode: 404,
       data: { message: $t("job.errors.job_not_found") },
     });
-  }
-
-  if (userID) {
-    const jobIDs = await getUserJobIDs({ $t, userID });
-    if (!jobIDs.includes(job._id.toString())) {
-      throw createError({
-        statusCode: 404,
-        data: { message: $t("job.errors.job_not_found") },
-      });
-    }
   }
 
   return job;

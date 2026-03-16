@@ -1,4 +1,4 @@
-import { checkJobUserRole } from "~~/server/services/job_get";
+import { checkJobUserRole } from "~~/server/services/job/get";
 import { getUserShema } from "~~/server/services/user_shema";
 import { isValidObjectId } from "mongoose";
 

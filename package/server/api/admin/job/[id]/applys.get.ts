@@ -1,5 +1,5 @@
 import { listApplys } from "~~/server/services/apply_list";
-import { getJob } from "~~/server/services/job_get";
+import { getJob } from "~~/server/services/job/get";
 
 export default defineEventHandler(async (event) => {
   const query = getQuery<{

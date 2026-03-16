@@ -1,6 +1,6 @@
 import { getJobShema } from "~~/server/services/job_schema";
 import { isValidObjectId } from "mongoose";
-import { getJob } from "~~/server/services/job_get";
+import { getJob } from "~~/server/services/job/get";
 
 export async function createJob({
   $t,

@@ -1,10 +1,10 @@
-import { IDataResult } from "../interfaces";
-import { Job } from "../database/collections";
-import { paginationBuilder } from "../tools/pagination_builder_from_query";
+import { IDataResult } from "../../interfaces";
+import { Job } from "../../database/collections";
+import { paginationBuilder } from "../../tools/pagination_builder_from_query";
 import { PipelineStage, QueryFilter, Types } from "mongoose";
-import { getUserJobIDs } from "./job/get";
+import { getUserJobIDs } from "./get";
 
-export async function listJobs({
+export async function jobPipeline({
   query,
   $t,
 }: {

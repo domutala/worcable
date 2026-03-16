@@ -1,5 +1,5 @@
 import { getApplyDataSchema } from "~~/server/shared";
-import { getJob } from "../job_get";
+import { getJob } from "../job/get";
 
 export async function createApply({
   $t,

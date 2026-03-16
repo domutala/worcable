@@ -1,5 +1,5 @@
 import { createApply } from "~~/server/services/apply/create";
-import { checkJobUserRole } from "~~/server/services/job_get";
+import { checkJobUserRole } from "~~/server/services/job/get";
 
 export default defineEventHandler(async (event) => {
   const $t = await useTranslation(event);

@@ -1,4 +1,4 @@
-import { checkJobUserRole } from "~~/server/services/job_get";
+import { checkJobUserRole } from "~~/server/services/job/get";
 import { listUsers } from "~~/server/services/user_list";
 
 export default defineEventHandler(async (event) => {
