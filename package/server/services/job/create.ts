@@ -14,22 +14,7 @@ export async function createJob({
   if (body.phone) body.phone = body.phone.toString();
 
   const { schema } = getJobShema($t);
-  const dataParsed = schema.safeParse(body);
-
-  if (dataParsed.error) {
-    throw createError({
-      statusCode: 400,
-      data: {
-        messages: dataParsed.error.issues.map((issue) => ({
-          message: issue.message,
-          path: issue.path[0],
-        })),
-      },
-    });
-  }
-
-  const jobData = { ...dataParsed.data };
-  console.log(jobData.applyDataConfigs);
+  const jobData = await parseZod(schema, body);
 
   if (body.id) {
     const _id = body.id;

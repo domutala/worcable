@@ -361,7 +361,10 @@
       "require": "Requis"
     },
 
-    "success": "Merci pour votre candidature. Nous avons bien reçu vos informations et notre équipe va les analyser avec attention. Si votre profil correspond à nos opportunités actuelles ou futures, nous vous contacterons pour la suite du processus."
+    "create": {
+      "success": "Merci pour votre candidature. Nous avons bien reçu vos informations et notre équipe va les analyser avec attention. Si votre profil correspond à nos opportunités actuelles ou futures, nous vous contacterons pour la suite du processus.",
+      "success_admin": "La candidature a été ajoyté avec succés."
+    }
   },
 
   "apply_comment": {

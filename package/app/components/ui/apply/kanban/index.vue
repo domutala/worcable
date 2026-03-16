@@ -13,7 +13,7 @@ const container = useTemplateRef("container");
 watchImmediate(
   as0.value.values,
   () => {
-    applyStatus.value = as0.value.values.value;
+    applyStatus.value = _.cloneDeep(as0.value.values.value);
   },
   { deep: true },
 );
@@ -36,8 +36,9 @@ const {} = useSortable(container, applyStatus, {
     evt.dragged.setAttribute("data-grid-dragging", "");
   },
 
-  async onEnd(evt) {
+  async onUpdate(evt) {
     evt.item.removeAttribute("data-grid-dragging");
+
     if (evt.oldIndex !== evt.newIndex) {
       try {
         const result = await Api.$fetch<Job>("/api/admin/job", {

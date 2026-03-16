@@ -9,15 +9,6 @@ const side = useCookie<string>(`job-side`, { default: () => "kanban" });
     <div
       class="py-3 pl-3 pr-5 hidden lg:flex items-center gap-2 bg-inherit/10 backdrop-blur-lg sticky top-0 z-50"
     >
-      <!-- <u-button
-        size="xs"
-        variant="ghost"
-        icon="i-lucide-house"
-        square
-        :to="Use.localePath({ name: 'admin' })"
-      >
-      </u-button> -->
-
       <div class="leading-none flex-1 min-w-0 w-0">
         <h1 class="text-lg font-semibold truncate leading-none">
           {{ job.title }}
@@ -48,15 +39,6 @@ const side = useCookie<string>(`job-side`, { default: () => "kanban" });
     </div>
 
     <div class="flex items-center gap-2 lg:hidden r py-1.5 px-3">
-      <u-button
-        size="xs"
-        variant="ghost"
-        icon="i-lucide-arrow-left"
-        square
-        @click="$router.back()"
-      >
-      </u-button>
-
       <div class="leading-none flex-1 min-w-0 w-0">
         <h1 class="truncate text-sm">
           {{ job.title }}

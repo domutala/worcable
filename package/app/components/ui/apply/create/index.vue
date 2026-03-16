@@ -5,7 +5,7 @@ import type { Job } from "~~/server/database/collections";
 import { getApplyDataOptionsList, getApplyDataSchema } from "~~/server/shared";
 
 const emit = defineEmits<(e: "success", id: string) => void>();
-const { job } = defineProps<{ job: Job }>();
+const { job, isAdmin } = defineProps<{ job: Job; isAdmin?: boolean }>();
 
 const schema = getApplyDataSchema({
   $t: Use.i18n.t,
@@ -35,12 +35,34 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   submitting.value = true;
   try {
     const data = await Doc.uploadBeforeSubmit(event.data);
-    const result = await Api.$fetch<{ id: string }>("/api/apply", {
-      method: "post",
-      body: { ...data, id: job.id },
-    });
 
-    emit("success", result.id);
+    let rID;
+
+    if (isAdmin) {
+      const result = await Api.$fetch<Job>(
+        `/api/admin/job/${job.id}/add-apply`,
+        { method: "post", body: data },
+      );
+
+      useApply(result.id);
+
+      dispatchEvent(
+        new CustomEvent(`apply:status:null`, {
+          detail: { apply: result, action: "apply:add" },
+        }),
+      );
+
+      rID = result.id;
+    } else {
+      const result = await Api.$fetch<{ id: string }>(
+        `/api/job/${job.id}/apply`,
+        { method: "post", body: data },
+      );
+
+      rID = result.id;
+    }
+
+    emit("success", rID);
   } catch (error) {
     console.error(error);
   } finally {
