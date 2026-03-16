@@ -181,7 +181,7 @@ export const useJob = (
                 label: Use.i18n.t("job.actions.add_new_apply"),
                 icon: "i-lucide-user-round-plus",
                 onSelect(e) {
-                  const { value } = useModal({ uid: "modal-apply-create" });
+                  const { value } = useModal({ uid: "appy-for" });
                   value.value = `${job.value.id}:admin`;
                 },
               },

@@ -1,17 +1,10 @@
 <script lang="ts" setup>
-import { useRouteQuery } from "@vueuse/router";
 import type { Job } from "~~/server/database/collections";
 
 definePageMeta({ layout: false });
 
 const { job } = defineProps<{ job: Job }>();
-const apply = useTemplateRef("apply");
-
-const isCreateOpen = useRouteQuery<string | undefined>(
-  "modal-apply-create",
-  undefined,
-  { mode: "push" },
-);
+const { value: isCreateOpen } = useModal({ uid: "appy-for" });
 </script>
 
 <template>

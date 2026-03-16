@@ -7,12 +7,15 @@ const side = useCookie<string>(`job-side`, { default: () => "kanban" });
 <template>
   <div v-if="ready" class="relative">
     <div
-      class="py-3 pl-3 pr-5 hidden lg:flex items-center gap-2 bg-inherit/10 backdrop-blur-lg sticky top-0 z-50"
+      class="h-15 pr-5 hidden lg:flex items-center gap-2 backdrop-blur-lg sticky top-0 z-50"
     >
+      <ui-menu />
       <div class="leading-none flex-1 min-w-0 w-0">
-        <h1 class="text-lg font-semibold truncate leading-none">
-          {{ job.title }}
-        </h1>
+        <nuxt-link :to="$localePath({ name: 'admin-job-id', replace: true })">
+          <h1 class="text-lg font-semibold truncate leading-none">
+            {{ job.title }}
+          </h1>
+        </nuxt-link>
         <div class="truncate opacity-50 text-sm leading-none">
           {{ Utils.getDateStatus(job.createdAt) }}
         </div>
@@ -38,7 +41,9 @@ const side = useCookie<string>(`job-side`, { default: () => "kanban" });
       </ui-menu-horizontal-items>
     </div>
 
-    <div class="flex items-center gap-2 lg:hidden r py-1.5 px-3">
+    <div class="flex items-center gap-2 lg:hidden h-8 pr-3">
+      <ui-menu slim />
+
       <div class="leading-none flex-1 min-w-0 w-0">
         <h1 class="truncate text-sm">
           {{ job.title }}

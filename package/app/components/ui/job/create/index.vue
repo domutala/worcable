@@ -13,8 +13,8 @@ const comp = useTemplateRef("comp");
 <template>
   <ui-layout>
     <template #header>
-      <div v-if="comp" class="relative h-17 flex items-center px-5 gap-2">
-        <u-icon v-if="!job" name="i-lucide-newspaper" class="size-7" />
+      <div v-if="comp" class="relative h-15 flex items-center pr-5 gap-2">
+        <ui-menu />
         <div class="leading-none flex-1 min-w-0 w-0">
           <h1 class="text-lg font-semibold truncate leading-none">
             <span v-if="job"> {{ job.title }} </span>

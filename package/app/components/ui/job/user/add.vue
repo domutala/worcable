@@ -74,7 +74,7 @@ function onUserSelect(u: User) {
     :ui="{ content: 'max-w-3xl' }"
   >
     <template #content>
-      <ui-layout-inset>
+      <ui-layout-inset :ui="{ border: 'h-1 to-success-500' }">
         <div class="flex-1 flex flex-col items-center justify-center py-10">
           <u-form
             :schema="schema"
@@ -129,7 +129,7 @@ function onUserSelect(u: User) {
             <div class="flex justify-end">
               <u-button
                 type="submit"
-                color="primary"
+                color="success"
                 variant="solid"
                 :loading="submitting"
               >

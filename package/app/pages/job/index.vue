@@ -8,12 +8,13 @@ import {
 import _ from "lodash";
 import { useRouteQuery } from "@vueuse/router";
 
-definePageMeta({ layout: "admin" });
+definePageMeta({ layout: false });
 
 const content = useTemplateRef("content");
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const hideJobContent = breakpoints.smallerOrEqual("lg");
 const currentJobQuery = useRouteQuery("job");
+const search = useTemplateRef("search");
 
 const jobs = ref<Job[]>([]);
 const currentJob = ref<Job>();
@@ -53,42 +54,70 @@ function openJobNewTab(e: Event, job: Job) {
 
 <template>
   <ui-job-search
-    v-slot="{ jobs, refresh, status, results, page, paginate }"
+    ref="search"
+    v-slot="{ jobs, refresh, status, results, page, paginate, form }"
     v-model:jobs="jobs"
   >
-    <div class="bg-default flex-1 flex flex-col overflow-hidden">
-      <div
-        class="flex-1 flex flex-col mx-auto max-w-380 w-full px-2 sm:px-6 h-full rounded-2xl"
-      >
-        <div class="pt-5">
-          <ui-job-search-form />
+    <ui-layout v-if="search">
+      <template #header>
+        <div class="relative">
+          <div class="h-12 flex items-center">
+            <input
+              v-model="form.searchTerm.value"
+              type="search"
+              autocorrect="off"
+              autocapitalize="off"
+              aria-autocomplete="both"
+              enterkeyhint="search"
+              class="outline-none w-full h-full px-5"
+              placeholder="Rechercher un emploi"
+              style="appearance: none"
+              @keypress.enter="form.submit"
+            />
+
+            <div class="h-full">
+              <u-button
+                variant="ghost"
+                class="h-full border-default aspect-square rounded-none p-0 justify-center cursor-pointer"
+                square
+                @click="form.submit"
+              >
+                <u-icon name="i-lucide-search" class="size-6 opacity-30" />
+              </u-button>
+            </div>
+          </div>
+
+          <!-- <ui-job-search-form /> -->
+        </div>
+      </template>
+
+      <div class="flex-1 flex flex-col h-full">
+        <div v-if="results" class="py-2 px-4 flex sticky top-0 z-5">
+          <p class="text-sm">
+            {{ results.total }} {{ $t("words.result", results.total) }}
+          </p>
+          <div class="mx-auto"></div>
+
+          <div></div>
         </div>
 
-        <div class="flex-1 overflow-hidden flex gap-2 w-full mx-auto">
+        <!-- -->
+        <div
+          class="flex-1 overflow-hidden flex gap-1 mx-auto w-full max-w-450 lg:mt-5 lg:mb-3 lg:w-[calc(100%-20px)]"
+        >
           <div
-            class="w-1/2 h-full flex flex-col"
+            class="w-120 h-full flex flex-col"
             :class="{ 'mx-auto w-full': hideJobContent }"
           >
             <div
-              class="w-150 max-w-full my-5 flex-1 rounded-2xl overflow-hidden"
+              class="w-150 max-w-full lg:mt-5 flex-1 lg:rounded-min lg:border border-default overflow-hidden bg-default"
               :class="{ 'w-full': hideJobContent }"
             >
+              <!-- border-b border-accented/80 dark:border-accented/30 -->
               <div
-                class="max-h-full overflow-auto content bg-surface rounded-[inherit]"
+                class="max-h-full scroller overflow-auto content divide-y divide-default"
               >
-                <div
-                  v-if="results"
-                  class="py-2 px-4 flex sticky top-0 border-b border-accented/80 dark:border-accented/30 mb-2 z-50 bg-inherit"
-                >
-                  <p class="text-sm">
-                    {{ results.total }} {{ $t("words.result", results.total) }}
-                  </p>
-                  <div class="mx-auto"></div>
-
-                  <div></div>
-                </div>
-
-                <div v-if="jobs.length" class="space-y-1 px-1">
+                <template v-if="jobs.length">
                   <u-button
                     v-for="job in jobs"
                     :key="job.id"
@@ -97,12 +126,13 @@ function openJobNewTab(e: Event, job: Job) {
                     "
                     color="neutral"
                     variant="ghost"
-                    class="p-0 border-none bg-default rounded-xl text-left"
+                    class="p-0 border-x-0 rounded-none text-left"
                     block
                     @click="(e) => gotoJob(e, job)"
                   >
                     <div
-                      class="group flex items-center w-full min-h-20 px-7 py-4 rounded-xl border border-transparent hover:border hover:border-primary/12 relative overflow-hidden"
+                      class="group flex items-center w-full min-h-20 px-5 py-4 relative overflow-hidden hover:bg-default"
+                      :class="{ 'bg-default': currentJob?.id === job.id }"
                     >
                       <div class="leading-[1.1]">
                         <div class="text-md md:text-xl">
@@ -119,7 +149,7 @@ function openJobNewTab(e: Event, job: Job) {
                       <div class="mx-auto"></div>
 
                       <div
-                        class="absolute h-full w-1.5 left-0 top-0 bg-primary"
+                        class="absolute h-full w-1 left-0 top-0 bg-primary"
                         v-if="currentJob?.id === job.id"
                       ></div>
 
@@ -132,7 +162,7 @@ function openJobNewTab(e: Event, job: Job) {
                       ></u-button>
                     </div>
                   </u-button>
-                </div>
+                </template>
 
                 <div v-else-if="status === 'pending'" class="text-center py-30">
                   <u-icon
@@ -157,40 +187,47 @@ function openJobNewTab(e: Event, job: Job) {
                 </div>
 
                 <div
-                  v-if="
-                    results &&
-                    results.total &&
-                    results.page !== results.totalPages
-                  "
-                  class="flex items-center gap-3 p-3 px-3"
+                  v-if="results && results.totalItems"
+                  class="flex items-center gap-3 py-1 px-3 mt-auto border-b border-default"
                 >
-                  <u-button
-                    class="cursor-pointer rounded-4xl"
-                    color="neutral"
-                    variant="ghost"
-                    icon="i-lucide-arrow-down-wide-narrow"
-                    :loading="status === 'pending'"
-                    @click="paginate(page + 1)"
-                  >
-                    {{ $t("words.show_more") }}
-                  </u-button>
+                  <template v-if="jobs.length">
+                    {{
+                      (results.page - 1) * results.pageSize +
+                      results.items.length
+                    }}
+                    sur
+                    {{ results.totalItems }}
+                  </template>
 
                   <div class="mx-auto"></div>
-                </div>
 
-                <div class="h-1"></div>
+                  <UPagination
+                    show-edges
+                    variant="ghost"
+                    color="neutral"
+                    active-color="neutral"
+                    active-variant="soft"
+                    size="sm"
+                    :sibling-count="1"
+                    :page="results.page"
+                    :items-per-page="results.pageSize"
+                    :total="results.totalItems"
+                    :ui="{ item: 'cursor-pointer' }"
+                    @update:page="(p) => paginate(p)"
+                  />
+                </div>
               </div>
             </div>
           </div>
 
           <div v-if="!hideJobContent" class="h-full flex flex-col w-full">
             <div
-              class="w-full border border-default my-5 flex-1 rounded-2xl overflow-hidden"
+              class="w-full border border-default lg:mt-5 flex-1 rounded-min overflow-hidden bg-default"
             >
-              <div ref="content" class="h-full overflow-auto content">
+              <div ref="content" class="h-full overflow-auto scroller always">
                 <template v-if="currentJob">
                   <div
-                    class="py-4 px-5 flex gap-5 bg-default border-b border-default sticky top-0 z-50"
+                    class="py-4 px-5 flex gap-5 border-b border-default sticky top-0 z-50 rounded-t-min backdrop-blur-2xl bg-default/20"
                   >
                     <div class="leading-none flex-1 min-w-0 w-0">
                       <h1 class="text-lg font-bold truncate">
@@ -211,60 +248,24 @@ function openJobNewTab(e: Event, job: Job) {
                         square
                       >
                       </u-button>
-
-                      <ui-modal
-                        :ui="{
-                          content: 'max-w-250 rounded-2xl',
-                        }"
+                      <u-button
+                        size="lg"
+                        class="cursor-pointer"
+                        color="primary"
+                        variant="solid"
+                        @click="
+                          () => {
+                            const { value } = useModal({ uid: 'appy-for' });
+                            value.value = currentJob?.id;
+                          }
+                        "
                       >
-                        <u-button size="lg" class="cursor-pointer">
-                          {{ $t("apply.actions.apply") }}
-                        </u-button>
-
-                        <template #content="{ close }">
-                          <ui-layout-inset>
-                            <template #header>
-                              <div
-                                class="py-4 px-5 flex gap-5 bg-inherit/10 backdrop-blur-lg border-b border-default sticky top-0 z-50 h-max"
-                              >
-                                <div class="leading-none flex-1 min-w-0 w-0">
-                                  <h1 class="text-lg font-bold truncate">
-                                    {{ currentJob.title }}
-                                  </h1>
-                                  <div class="truncate opacity-50">
-                                    {{
-                                      Utils.getDateStatus(currentJob.createdAt)
-                                    }}
-                                  </div>
-                                </div>
-
-                                <div>
-                                  <u-button
-                                    size="lg"
-                                    icon="i-lucide-x"
-                                    variant="soft"
-                                    color="neutral"
-                                    class="rounded-2xl cursor-pointer"
-                                    square
-                                    @click="close"
-                                  >
-                                  </u-button>
-                                </div>
-                              </div>
-                            </template>
-
-                            <div class="p-10">
-                              <u-container>
-                                <ui-apply-create :job="currentJob" />
-                              </u-container>
-                            </div>
-                          </ui-layout-inset>
-                        </template>
-                      </ui-modal>
+                        {{ $t("apply.actions.apply") }}
+                      </u-button>
                     </div>
                   </div>
 
-                  <u-container class="py-5">
+                  <u-container class="py-20">
                     <ui-job-page :job="currentJob" />
                   </u-container>
                 </template>
@@ -281,6 +282,6 @@ function openJobNewTab(e: Event, job: Job) {
           </div>
         </div>
       </div>
-    </div>
+    </ui-layout>
   </ui-job-search>
 </template>

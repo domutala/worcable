@@ -5,7 +5,7 @@ import type { Job } from "~~/server/database/collections";
 const success = ref(false);
 const loading = ref(false);
 const job = ref<Job>();
-const { uid, value: jobID } = useModal({ alias: "modal-apply-create" });
+const { uid, value: jobID } = useModal({ alias: "appy-for" });
 const isAdmin = ref(false);
 
 watchImmediate(
@@ -50,13 +50,17 @@ async function fetchJob() {
 
       <ui-layout-inset v-else-if="job" class="flex-1">
         <template #header>
-          <div class="py-4 px-5 flex gap-5 top-0 z-50 border-b-0">
-            <div class="leading-none flex-1 min-w-0 w-0">
-              <h1 class="text-lg font-bold truncate">
-                {{ job.title }}
-              </h1>
-              <div class="truncate opacity-50">
+          <div>
+            <div
+              class="h-12 px-5 flex items-center gap-5 top-0 z-50 border-b-0"
+            >
+              <div class="leading-none flex-1 min-w-0 w-0">
+                <h1 class="text-lg font-bold truncate">
+                  {{ job.title }}
+                </h1>
+                <!-- <div class="truncate opacity-50">
                 {{ job.location }}
+              </div> -->
               </div>
             </div>
           </div>

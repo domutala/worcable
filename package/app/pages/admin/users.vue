@@ -153,7 +153,7 @@ async function loadData() {
           <div v-if="data.items.length" class="sticky bottom-0 z-20 bg-default">
             <div class="flex items-center gap-5 py-2 px-5">
               {{ (data.page - 1) * data.pageSize + data.items.length }} sur
-              {{ data.total }}
+              {{ data.totalItems }}
 
               <div class="mx-auto"></div>
 
@@ -167,7 +167,7 @@ async function loadData() {
                 size="sm"
                 :page="data.page"
                 :items-per-page="data.pageSize"
-                :total="data.total"
+                :total="data.totalItems"
                 :ui="{ item: 'cursor-pointer' }"
                 @update:page="(p) => (page = p)"
               />

@@ -58,7 +58,7 @@ const {} = useSortable(container, applyStatus, {
 <template>
   <div
     v-if="job"
-    class="flex gap-2 flex-1 overflow-auto mb-10 mt-5 max-w-full w-450 mx-auto px-2 sm:px-5"
+    class="flex gap-2 flex-1 overflow-auto max-w-full w-full mx-auto px-2 sm:px-5"
   >
     <ui-apply-kanban-grid :status="null" :job-id="jobID" />
 

@@ -51,8 +51,20 @@ watchImmediate(
 function paginate(p: number) {
   page.value = p;
 }
+
+const searchTerm = ref(searchQuery.value);
+
+const form = computed(() => {
+  return {
+    searchTerm,
+
+    submit() {
+      searchQuery.value = searchTerm.value;
+    },
+  };
+});
 </script>
 
 <template>
-  <slot :results :status :refresh :jobs :page :paginate />
+  <slot :results :status :refresh :jobs :page :paginate :form />
 </template>
