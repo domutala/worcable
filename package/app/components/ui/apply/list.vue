@@ -254,7 +254,7 @@ const filterItems = computed(() => {
           >
             <template v-if="applys.length">
               {{ (data.page - 1) * data.pageSize + data.items.length }} sur
-              {{ data.total }}
+              {{ data.totalItems }}
             </template>
 
             <div class="mx-auto"></div>
@@ -269,7 +269,7 @@ const filterItems = computed(() => {
               size="sm"
               :page="data.page"
               :items-per-page="data.pageSize"
-              :total="data.total"
+              :total="data.totalItems"
               :ui="{ item: 'cursor-pointer' }"
               @update:page="(p) => (page = p)"
             />

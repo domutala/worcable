@@ -122,7 +122,7 @@ const jobs = ref<Job[]>([]);
           <template v-if="results?.items.length">
             {{ (results.page - 1) * results.pageSize + results.items.length }}
             sur
-            {{ results.total }}
+            {{ results.totalItems }}
           </template>
 
           <div class="mx-auto"></div>
@@ -137,7 +137,7 @@ const jobs = ref<Job[]>([]);
             size="sm"
             :page="results.page"
             :items-per-page="results.pageSize"
-            :total="results.total"
+            :total="results.totalItems"
             :ui="{ item: 'cursor-pointer' }"
             @update:page="(p) => paginate(p)"
           />
