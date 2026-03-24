@@ -2,7 +2,7 @@ import { IDataResult } from "../interfaces";
 import { Job } from "../database/collections";
 import { paginationBuilder } from "../tools/pagination_builder_from_query";
 import { PipelineStage, QueryFilter, Types } from "mongoose";
-import { getUserJobIDs } from "./job_get";
+import { getUserJobIDs } from "./job/get";
 
 export async function listJobs({
   query,

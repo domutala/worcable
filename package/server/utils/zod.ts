@@ -1,8 +1,10 @@
 export * as z from "zod";
+export type { output as ZodOutput } from "zod";
+
 import * as z from "zod";
 
-export function parseZod<T>(schema: z.ZodSchema<T>, body: any) {
-  const parsed = schema.safeParse(body);
+export async function parseZod<T>(schema: z.ZodSchema<T>, body: any) {
+  const parsed = await schema.safeParseAsync(body);
 
   if (parsed.error) {
     throw createError({

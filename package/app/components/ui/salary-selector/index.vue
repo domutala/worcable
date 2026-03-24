@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CurrencyAvailaible } from "~~/server/interfaces";
+import { CurrencyAvailaible } from "~~/server/shared";
 
 const { timeInterval, forceCurrency, display } = defineProps<{
   timeInterval?: "month" | "year";

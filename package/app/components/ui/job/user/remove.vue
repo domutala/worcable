@@ -48,7 +48,7 @@ async function submit() {
 
     <ui-modal-2 ref="modal" :ui="{ content: 'max-w-2xl' }">
       <template #content>
-        <ui-layout-inset>
+        <ui-layout-inset :ui="{ border: 'h-1 to-red-500' }">
           <div class="p-10">
             {{
               $t("job_user.remove.confirm", {

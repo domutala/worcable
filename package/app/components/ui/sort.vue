@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import type { DropdownMenuItem } from "@nuxt/ui";
+import type { ButtonProps, DropdownMenuItem } from "@nuxt/ui";
 
 const { orderBy, onSort, onlyIcon } = defineProps<{
   orderBy: Record<string, { label: string }>;
   onSort?: () => void;
   onlyIcon?: boolean;
+  btnProps?: ButtonProps;
 }>();
 
 const i18n = useI18n();
@@ -84,6 +85,7 @@ function _onSort() {
       variant="subtle"
       class="cursor-pointer"
       aria-label="Actions dropdown"
+      v-bind="btnProps"
     />
 
     <slot :icon="icon" :label :onlyIcon />

@@ -1,4 +1,4 @@
-import { checkJobUserRole } from "~~/server/services/job_get";
+import { checkJobUserRole } from "~~/server/services/job/get";
 import { getUserShema } from "~~/server/services/user_shema";
 
 export default defineEventHandler(async (event) => {
@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
   });
 
   const { role: schema } = getUserShema($t);
-  const role = parseZod(schema, body.role);
+  const role = await parseZod(schema, body.role);
 
   const jobUser = await collections.$JobUser.findOne({ _id: jobUserID });
 

@@ -1,9 +1,7 @@
 <script lang="ts" setup>
 import { type Apply } from "~~/server/database/collections";
 import type { IDataResult } from "~~/server/interfaces";
-import Sortable from "sortablejs";
-import _ from "lodash";
-import onFetchError from "~/tools/onFetchError";
+import { useSortable } from "@vueuse/integrations/useSortable";
 
 const { jobId: jobID } = defineProps<{ jobId: string }>();
 const status = defineModel<string | null>("status", { required: true });
@@ -22,9 +20,8 @@ const isFlip = useCookie<boolean>(`${job.value.id}_${status.value}`, {
 });
 
 const dayjs = useDayjs();
-const statusChanging = ref<Record<string, string>>({});
 const fetching = ref(false);
-const container = useTemplateRef("container");
+const sContainer = useTemplateRef("sortableContainer");
 
 const initFetching = ref(false);
 const openSearch = ref(false);
@@ -36,15 +33,51 @@ const result = ref<IDataResult<Apply>>();
 const items = ref<Apply[]>([]);
 const applys = useApplys();
 
+const {} = useSortable(sContainer, items, {
+  handle: ".handler",
+  group: "shared",
+  sort: false,
+  disabled: Store.session.user?.role === "guest",
+
+  chosenClass: "chosen",
+  dragClass: "drag",
+  ghostClass: "ghost",
+  swapClass: "swap",
+  selectedClass: "selected",
+  fallbackClass: "fallback",
+
+  async onAdd(event) {
+    const id = event.item.getAttribute("data-id");
+    if (!id) return;
+    if (typeof event.newIndex !== "number") return;
+
+    try {
+      const a0 = applys.get(id);
+      if (!a0) return;
+
+      items.value.splice(event.newIndex, 0, a0.apply.value);
+      await a0.status.value.submit(status.value ?? null);
+    } catch (error) {
+      console.error(error);
+    }
+  },
+
+  onRemove(event) {
+    const id = event.item.getAttribute("data-id");
+    if (!id) return;
+
+    items.value = items.value.filter((a) => a.id !== id);
+  },
+});
+
 onMounted(async () => {
-  window.addEventListener(`${status.value}:actions`, (e: any) =>
+  window.addEventListener(`apply:status:${status.value}`, (e: any) =>
     onEventActions(e),
   );
   initFetching.value = true;
 
   try {
     await getApplys();
-    setSortable();
   } catch (error) {
     console.log(error);
   } finally {
@@ -52,35 +85,11 @@ onMounted(async () => {
   }
 });
 
-onBeforeUnmount(() => {
-  window.removeEventListener(`${status}:actions`, (e: any) =>
-    onEventActions(e),
-  );
-});
-
-watch(
-  () => items.value,
-  () => {
-    const _applys = items.value.filter(
-      (apply) => apply.status !== status.value,
-    );
-
-    for (const apply of _applys) {
-      dispatchEvent(
-        new CustomEvent(`${apply.status}:actions`, {
-          detail: { action: "apply:add", apply },
-        }),
-      );
-
-      dispatchEvent(
-        new CustomEvent(`${status.value}:actions`, {
-          detail: { action: "apply:remove", apply },
-        }),
-      );
-    }
-  },
-  { deep: true },
-);
+function getIndex(id: string) {
+  const i = items.value.findIndex((a) => a.id === id);
+  if (i === -1) return null;
+  return i;
+}
 
 watch(() => page.value, getApplys);
 watch(() => searchTerm.value, getApplys);
@@ -96,7 +105,7 @@ async function getApplys() {
       q: searchTerm.value,
     };
 
-    result.value = await $fetch<IDataResult<Apply>>("/api/admin/apply", {
+    result.value = await Api.$fetch<IDataResult<Apply>>("/api/admin/apply", {
       query,
     });
 
@@ -115,75 +124,26 @@ async function getApplys() {
   }
 }
 
-function setSortable() {
-  if (!container.value) return;
-  const ul = container.value.querySelector("ul");
-
-  new Sortable(ul!, {
-    handle: ".handler",
-    group: "shared",
-    invertSwap: true,
-    sort: false,
-    disabled: Store.session.user?.role === "guest",
-    chosenClass: "chosen",
-    dragClass: "drag",
-    ghostClass: "ghost",
-    swapClass: "swap",
-    selectedClass: "selected",
-    fallbackClass: "fallback",
-
-    async onAdd(event) {
-      const id = event.item.getAttribute("data-id");
-      const to = event.to.getAttribute("data-status");
-      const from = event.from.getAttribute("data-status");
-
-      if (!id) return;
-
-      const loadID = Math.random().toString().substring(3, 20);
-      statusChanging.value[loadID] = id;
-
-      try {
-        const a0 = applys.get(id);
-        if (!a0) return;
-
-        await a0.status.value.submit(to ?? null);
-
-        const lis = ul!.querySelectorAll("li[data-id]");
-        lis.forEach((li, index) => {
-          if (li.getAttribute("data-id") === a0.apply.value.id) {
-            const is = items.value.findIndex(
-              (a) => a.id === li.getAttribute("data-id"),
-            );
-
-            if (is === -1) items.value.splice(index, 0, a0.apply.value);
-
-            dispatchEvent(
-              new CustomEvent(`${from}:actions`, {
-                detail: { action: "apply:remove", apply: result },
-              }),
-            );
-          }
-        });
-      } catch (error) {
-        onFetchError(error);
-      } finally {
-        delete statusChanging.value[loadID];
-      }
-    },
-  });
-}
-
 function onEventActions(e: CustomEvent) {
   if (e.detail.action === "apply:remove") {
-    const i = items.value.findIndex((a) => a.id === e.detail.apply.id);
-    if (i !== -1) items.value.splice(i, 1);
+    const i = getIndex(e.detail.apply.id);
+    if (i !== null) items.value.splice(i, 1);
   } else if (e.detail.action === "apply:add") {
-    const i = items.value.findIndex((a) => a.id === e.detail.apply.id);
-    if (i === -1) items.value.push(e.detail.apply);
+    const i = getIndex(e.detail.apply.id);
+    if (i === null) items.value.push(e.detail.apply);
   } else if (e.detail.action === "apply:update") {
-    const i = items.value.findIndex((a) => a.id === e.detail.apply.id);
-    if (i !== -1) items.value[i] = e.detail.apply;
+    const i = getIndex(e.detail.apply.id);
+    if (i !== null) items.value[i] = e.detail.apply;
+    else items.value.push(e.detail.apply);
   }
+}
+
+onDeactivated(destroy);
+onBeforeUnmount(destroy);
+function destroy() {
+  window.removeEventListener(`apply:status:${status.value}`, (e: any) =>
+    onEventActions(e),
+  );
 }
 </script>
 
@@ -194,8 +154,8 @@ function onEventActions(e: CustomEvent) {
     v-model:status="status"
   >
     <div
-      class="overflow-hidden relative group rounded mb-3"
       ref="container"
+      class="overflow-hidden relative group rounded mb-3"
       :data-grid="status"
       :data-group="status"
       :data-status="status"
@@ -397,6 +357,7 @@ function onEventActions(e: CustomEvent) {
         </div>
 
         <ul
+          ref="sortableContainer"
           class="flex flex-col gap-2 flex-1 pt-3 pb-2 relative"
           :data-status="status"
         >

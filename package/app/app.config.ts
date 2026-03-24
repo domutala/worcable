@@ -49,7 +49,7 @@ export default defineAppConfig({
     },
 
     modal: {
-      slots: { content: "rounded-max" },
+      slots: { content: "rounded-min" },
     },
 
     drawer: {

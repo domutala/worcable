@@ -123,6 +123,15 @@ export function getJobShema($t: (str: string) => string = (str) => str) {
   const statusEnum = z.enum(["open", "close", "pause"]);
   const status = statusEnum.default("open");
 
+  const applyDataConfigs = z
+    .record(
+      z
+        .string()
+        .refine((key) => applyDataOptionsList.map((a) => a.key).includes(key)),
+      z.enum(["use", "require"]),
+    )
+    .default({});
+
   const schema = z.object({
     title,
     companyDescription,
@@ -135,6 +144,7 @@ export function getJobShema($t: (str: string) => string = (str) => str) {
     candidateProfile,
     applyStatus,
     status,
+    applyDataConfigs,
   });
 
   return {
@@ -157,6 +167,8 @@ export function getJobShema($t: (str: string) => string = (str) => str) {
     applyStatus,
     singleApplyStatus,
     defaultApplyStatus,
+
+    applyDataConfigs,
 
     statusEnum,
     status,

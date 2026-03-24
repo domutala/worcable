@@ -74,7 +74,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         </u-button>
 
         <template #content>
-          <ui-layout-inset>
+          <ui-layout-inset :ui="{ border: 'h-1' }">
             <div class="flex-1 flex flex-col items-center justify-center py-10">
               <u-form
                 ref="form"

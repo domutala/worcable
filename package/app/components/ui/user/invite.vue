@@ -40,7 +40,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 <template>
   <ui-modal-2 ref="modal" alias="invite-user" :ui="{ content: 'max-w-3xl' }">
     <template #content>
-      <ui-layout-inset>
+      <ui-layout-inset :ui="{ border: 'h-1' }">
         <div class="flex-1 flex flex-col items-center justify-center py-10">
           <u-form
             ref="form"

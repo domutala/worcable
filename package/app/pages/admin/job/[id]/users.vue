@@ -17,7 +17,7 @@ const {} = useJob(jobID, {
     }, 10);
   },
 });
-const { open: addUserOpen } = useModal({ uid: "job-user-add" });
+const { open: addUserOpen } = useModal({ uid: jobID });
 
 const data = ref<IDataResult<User>>();
 const loading = ref(false);
@@ -121,7 +121,7 @@ async function loadData() {
             class="w-full bg-default overflow-hidden group hover:bg-surface/10 flex items-center gap-2 p-3"
           >
             <UAvatar
-              :src="Utils.getFileUrl(user.avatar)"
+              :src="Doc.getUrl(user.avatar)"
               :alt="[user.firstName, user.lastName].join(' ')"
               class="border border-accented rounded-2xl text-md"
               size="3xl"
@@ -149,7 +149,7 @@ async function loadData() {
           <div v-if="data.items.length" class="sticky bottom-0 z-20 bg-default">
             <div class="flex items-center gap-5 py-2 px-5">
               {{ (data.page - 1) * data.pageSize + data.items.length }} sur
-              {{ data.total }}
+              {{ data.totalItems }}
 
               <div class="mx-auto"></div>
 
@@ -163,7 +163,7 @@ async function loadData() {
                 size="sm"
                 :page="data.page"
                 :items-per-page="data.pageSize"
-                :total="data.total"
+                :total="data.totalItems"
                 :ui="{ item: 'cursor-pointer' }"
                 @update:page="(p) => (page = p)"
               />

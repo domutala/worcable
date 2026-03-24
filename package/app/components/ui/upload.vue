@@ -1,33 +1,53 @@
 <script lang="ts" setup>
-import type { UploadedFile } from "~~/server/interfaces";
+import { useFileDialog } from "@vueuse/core";
+import type { Doc } from "~~/server/database/collections";
 
-const value = defineModel<UploadedFile>();
-const file = ref<File>();
-watch(
-  () => file.value,
-  () => {
-    value.value = file.value as any;
-  },
-);
+const { accept, multiple } = defineProps<{
+  accept?: string[];
+  multiple?: boolean;
+}>();
 
-async function upload() {
-  if (!file.value) return value.value;
-  return await Utils.uploadFile(file.value);
-}
+const {
+  open,
+  reset: _reset,
+  onCancel,
+  onChange,
+} = useFileDialog({
+  accept: accept?.join(", "),
+  multiple,
+});
 
-function remove() {
+const value = defineModel<Doc | Doc[]>();
+
+const objectUrls = computed(() => {
+  const urls = [];
+  const values =
+    (Array.isArray(value.value) ? value.value : [value.value]) || [];
+
+  for (const file of values) {
+    urls.push(Doc.createObjectUrl(file));
+  }
+
+  return urls;
+});
+
+onChange((files) => {
+  if (files?.length) {
+    if (multiple) value.value = (files as any) || [];
+    else value.value = files?.item(0) as any;
+  }
+});
+
+onCancel(() => {
+  /** do something on cancel */
+});
+
+function reset() {
   value.value = undefined;
-  file.value = undefined;
+  _reset();
 }
-defineExpose({ upload });
 </script>
 
 <template>
-  <UFileUpload v-slot="props" v-model="file">
-    <slot
-      v-bind="props"
-      :object-url="Utils.createObjectUrl(file) || Utils.getFileUrl(value)"
-      :remove
-    />
-  </UFileUpload>
+  <slot :reset :open :value :object-urls :on-cancel :on-change />
 </template>

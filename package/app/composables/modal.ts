@@ -29,9 +29,6 @@ export const useModal = ({
 
     const value = useRouteQuery<string | undefined>(uid, undefined, {
       mode: "push",
-      transform(val) {
-        return val;
-      },
     });
 
     watchImmediate(
@@ -53,3 +50,20 @@ export const useModal = ({
 
   return instances.get(uid)!;
 };
+
+export function cleanModalQueries() {
+  watchImmediate(Use.route.query, onModalQuery, { deep: true });
+
+  function onModalQuery() {
+    let query = _.cloneDeep(Use.route.query);
+
+    const keys = Object.keys(query);
+    const modalKeys = instances.keys().toArray();
+    const toRemove = _.difference(keys, modalKeys);
+
+    if (toRemove.length) {
+      _.unset(query, toRemove);
+      Use.router.replace({ query });
+    }
+  }
+}

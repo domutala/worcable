@@ -3,7 +3,7 @@ import { breakpointsTailwind, useBreakpoints } from "@vueuse/core";
 import type { IModalOptions } from "~/interfaces";
 const props = defineProps<IModalOptions>();
 
-const { open, alias, uid } = useModal(props);
+const { open, alias, uid, value } = useModal(props);
 const slots = useSlots();
 const UDrawer = resolveComponent("UDrawer");
 const UModal = resolveComponent("UModal");
@@ -15,7 +15,7 @@ const usedOverlay = computed(() => {
   return "modal";
 });
 
-defineExpose({ open, uid, alias });
+defineExpose({ uid, open, alias, value });
 </script>
 
 <template>

@@ -1,4 +1,4 @@
-import { createJob } from "~~/server/services/job_create";
+import { createJob } from "~~/server/services/job/create";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);

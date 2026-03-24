@@ -16,7 +16,7 @@ const jobs = ref<Job[]>([]);
         <div class="h-full border-r border-accented/60 w-100">
           <div class="p-5">
             <UAvatar
-              :src="Utils.getFileUrl(Store.session.user.avatar)"
+              :src="Doc.getUrl(Store.session.user.avatar)"
               :alt="`${Store.session.user.firstName} ${Store.session.user.lastName}`"
               class="rounded-2xl text-sm size-16 border border-default bg-default"
             />
@@ -122,7 +122,7 @@ const jobs = ref<Job[]>([]);
           <template v-if="results?.items.length">
             {{ (results.page - 1) * results.pageSize + results.items.length }}
             sur
-            {{ results.total }}
+            {{ results.totalItems }}
           </template>
 
           <div class="mx-auto"></div>
@@ -137,7 +137,7 @@ const jobs = ref<Job[]>([]);
             size="sm"
             :page="results.page"
             :items-per-page="results.pageSize"
-            :total="results.total"
+            :total="results.totalItems"
             :ui="{ item: 'cursor-pointer' }"
             @update:page="(p) => paginate(p)"
           />

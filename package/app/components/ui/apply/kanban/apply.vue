@@ -19,7 +19,7 @@ const { value: applyModalID } = useModal({ uid: "modal-apply-id" });
 
     <div class="flex items-center gap-2 p-5 relative pointer-events-none">
       <UAvatar
-        :src="Utils.getFileUrl(apply.data.avatar)"
+        :src="Doc.getUrl(apply.data.avatar)"
         :alt="[apply.data.firstName, apply.data.lastName].join(' ')"
         class="border-accented rounded text-md"
         size="3xl"
@@ -55,7 +55,7 @@ const { value: applyModalID } = useModal({ uid: "modal-apply-id" });
         target="_blank"
         class="pointer-events-auto"
         size="md"
-        :href="Utils.getFileUrl(apply.data.cv)"
+        :href="Doc.getUrl(apply.data.cv)"
       >
       </UButton>
 

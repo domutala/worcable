@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { getApplyShema } from "~~/server/services/apply_get_shema";
+import { getApplyShema } from "~~/server/shared";
 import { InferSchemaType } from "~~/server/database/types";
 import * as z from "zod";
 

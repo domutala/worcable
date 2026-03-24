@@ -1,6 +1,6 @@
 import { getApplyCommentSchema } from "~~/server/services/apply_comment_schema";
 import { getApply } from "~~/server/services/apply_get";
-import { checkJobUserRole } from "~~/server/services/job_get";
+import { checkJobUserRole } from "~~/server/services/job/get";
 
 export default defineEventHandler(async (event) => {
   const $t = await useTranslation(event);
