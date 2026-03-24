@@ -42,7 +42,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <NuxtLoadingIndicator color="var(--ui-primary)" :height="5" />
+  <NuxtLoadingIndicator color="var(--ui-primary)" :height="2" />
 
   <span class="bg-red-500"></span>
   <span class="bg-orange-500"></span>

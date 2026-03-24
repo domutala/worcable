@@ -48,12 +48,10 @@ async function fetchJob() {
         <u-icon name="i-lucide-loader-circle" class="animate-spin size-10" />
       </div>
 
-      <ui-layout-inset v-else-if="job" class="flex-1">
+      <ui-layout-inset v-else-if="job" :ui="{ border: 'h-1' }">
         <template #header>
           <div>
-            <div
-              class="h-12 px-5 flex items-center gap-5 top-0 z-50 border-b-0"
-            >
+            <div class="h-12 px-5 flex items-center gap-5 top-0 z-50 relative">
               <div class="leading-none flex-1 min-w-0 w-0">
                 <h1 class="text-lg font-bold truncate">
                   {{ job.title }}

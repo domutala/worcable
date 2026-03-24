@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { Job } from "~~/server/database/collections";
+import UiAuth from "~/components/auth.vue";
 
 definePageMeta({ layout: false });
 
@@ -8,48 +9,37 @@ const { value: isCreateOpen } = useModal({ uid: "appy-for" });
 </script>
 
 <template>
-  <div class="max-w-5xl mx-auto">
-    <div
-      class="py-4 px-5 flex gap-5 bg-inherit/10 backdrop-blur-lg sticky w-full top-0 z-50"
-    >
-      <div class="leading-none flex-1 min-w-0 w-0">
-        <h1 class="text-lg font-bold truncate">
-          {{ job.title }}
-        </h1>
-        <div class="truncate opacity-50">
-          {{ Utils.getDateStatus(job.createdAt) }}
+  <ui-layout>
+    <template #header>
+      <div
+        class="h-17 px-5 flex items-center gap-5 bg-inherit/10 backdrop-blur-lg sticky w-full top-0 z-50"
+      >
+        <div class="leading-[1.1] flex-1 min-w-0 w-0">
+          <h1 class="leading-[1.1] text-lg font-bold truncate">
+            {{ job.title }}
+          </h1>
+          <div class="truncate opacity-50 text-sm">
+            {{ Utils.getDateStatus(job.createdAt) }}
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 ml-auto">
+          <ui-auth />
+
+          <u-button
+            size="lg"
+            variant="solid"
+            color="primary"
+            @click="isCreateOpen = job.id"
+          >
+            {{ $t("apply.actions.apply") }}
+          </u-button>
         </div>
       </div>
+    </template>
 
-      <div class="flex items-center ml-auto">
-        <u-button
-          size="xl"
-          class="cursor-pointer"
-          @click="isCreateOpen = job.id"
-        >
-          {{ $t("apply.actions.apply") }}
-        </u-button>
-      </div>
-    </div>
-
-    <u-container class="py-15">
+    <u-container class="py-5 lg:py-25 max-w-4xl">
       <ui-job-page :job />
-
-      <div class="flex items-center justify-center mt-10">
-        <u-button
-          size="xl"
-          class="cursor-pointer px-5 py-3"
-          variant="solid"
-          color="primary"
-          @click="isCreateOpen = job.id"
-        >
-          {{ $t("apply.actions.apply") }}
-        </u-button>
-      </div>
     </u-container>
-
-    <!-- <u-container class="py-15 max-w-6xl">
-      <ui-apply-create :job />
-    </u-container> -->
-  </div>
+  </ui-layout>
 </template>
