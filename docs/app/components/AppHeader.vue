@@ -1,23 +1,20 @@
 <script setup lang="ts">
 import type { ContentNavigationItem } from "@nuxt/content";
 
-const navigation = inject<Ref<ContentNavigationItem[]>>("navigation");
-
 const { header } = useAppConfig();
+
+const navigation = inject<Ref<ContentNavigationItem[]>>("navigation");
+const filteredNavigation = computed(() => {
+  return navigation?.value.filter((n) => !n.path.startsWith("/docs"));
+});
 </script>
 
 <template>
   <UHeader
-    class="border-b-0"
-    :ui="{ center: 'flex-1' }"
-    :to="header?.to || '/'"
+    class="border-b-0 bg-transparent"
+    :ui="{ center: 'flex-1', container: 'max-w-full' }"
+    :to="$localePath(header.to)"
   >
-    <!-- <UContentSearchButton
-      v-if="header?.search"
-      :collapsed="false"
-      class="w-full"
-    /> -->
-
     <template
       v-if="header?.logo?.dark || header?.logo?.light || header?.title"
       #title
@@ -36,15 +33,13 @@ const { header } = useAppConfig();
     </template>
 
     <template v-else #left>
-      <NuxtLink :to="header?.to || '/'">
+      <NuxtLink :to="$localePath(header.to)">
         <AppLogo class="w-auto h-6 shrink-0" />
       </NuxtLink>
     </template>
 
     <template #right>
       <UContentSearchButton v-if="header?.search" class="lg:hidden" />
-
-      <UColorModeButton v-if="header?.colorMode" />
 
       <template v-if="header?.links">
         <UButton
@@ -56,7 +51,7 @@ const { header } = useAppConfig();
     </template>
 
     <template #body>
-      <UContentNavigation highlight :navigation="navigation" />
+      <UContentNavigation highlight :navigation="filteredNavigation" />
     </template>
   </UHeader>
 </template>

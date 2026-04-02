@@ -1,0 +1,12 @@
+{
+  "pages": {
+    "index": {
+      "hero": {
+        "title": "Plateforme **open source** moderne pour simplifier et structurer le recrutement.",
+        "subtitle": "Open source. Flexible. Évolutive.",
+        "cta": "Documentation",
+        "cta_2": "Open source"
+      }
+    }
+  }
+}

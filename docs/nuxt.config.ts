@@ -1,87 +1,104 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: [
-    '@nuxt/eslint',
-    '@nuxt/image',
-    '@nuxt/ui',
-    '@nuxt/content',
-    'nuxt-og-image',
-    'nuxt-llms',
-    '@nuxtjs/mcp-toolkit'
+    "@nuxt/eslint",
+    "@nuxt/image",
+    "@nuxt/ui",
+    "@nuxtjs/i18n",
+    "@nuxt/content",
+    "nuxt-og-image",
+    "nuxt-llms",
+    "@nuxtjs/mcp-toolkit",
   ],
 
   devtools: {
-    enabled: true
+    enabled: true,
   },
 
-  css: ['~/assets/css/main.css'],
+  css: ["~/assets/css/main.css"],
 
   content: {
     build: {
       markdown: {
         toc: {
-          searchDepth: 1
-        }
-      }
-    }
+          searchDepth: 1,
+        },
+      },
+    },
   },
 
   experimental: {
-    asyncContext: true
+    asyncContext: true,
   },
 
-  compatibilityDate: '2024-07-11',
+  compatibilityDate: "2024-07-11",
 
   nitro: {
     prerender: {
-      routes: [
-        '/'
-      ],
+      routes: ["/"],
       crawlLinks: true,
-      autoSubfolderIndex: false
-    }
+      autoSubfolderIndex: false,
+    },
   },
 
   eslint: {
     config: {
       stylistic: {
-        commaDangle: 'never',
-        braceStyle: '1tbs'
-      }
-    }
+        commaDangle: "never",
+        braceStyle: "1tbs",
+      },
+    },
   },
 
-  icon: {
-    provider: 'iconify'
-  },
+  // icon: {
+  //   provider: 'iconify'
+  // },
 
   llms: {
-    domain: 'https://docs-template.nuxt.dev/',
-    title: 'Nuxt Docs Template',
-    description: 'A template for building documentation with Nuxt UI and Nuxt Content.',
+    domain: "https://docs-template.nuxt.dev/",
+    title: "Nuxt Docs Template",
+    description:
+      "A template for building documentation with Nuxt UI and Nuxt Content.",
     full: {
-      title: 'Nuxt Docs Template - Full Documentation',
-      description: 'This is the full documentation for the Nuxt Docs Template.'
+      title: "Nuxt Docs Template - Full Documentation",
+      description: "This is the full documentation for the Nuxt Docs Template.",
     },
     sections: [
       {
-        title: 'Getting Started',
-        contentCollection: 'docs',
+        title: "Getting Started",
+        contentCollection: "docs",
         contentFilters: [
-          { field: 'path', operator: 'LIKE', value: '/getting-started%' }
-        ]
+          { field: "path", operator: "LIKE", value: "/getting-started%" },
+        ],
       },
       {
-        title: 'Essentials',
-        contentCollection: 'docs',
+        title: "Essentials",
+        contentCollection: "docs",
         contentFilters: [
-          { field: 'path', operator: 'LIKE', value: '/essentials%' }
-        ]
-      }
-    ]
+          { field: "path", operator: "LIKE", value: "/essentials%" },
+        ],
+      },
+    ],
   },
 
   mcp: {
-    name: 'Docs template'
-  }
-})
+    name: "Docs template",
+  },
+
+  i18n: {
+    defaultLocale: "en",
+    strategy: "prefix_and_default",
+    experimental: { localeDetector: "localeDetector.ts" },
+
+    locales: [
+      { code: "en", name: "English", file: "en.json", dir: "ltr" },
+      { code: "fr", name: "Français", file: "fr.json", dir: "ltr" },
+    ],
+  },
+
+  vite: {
+    optimizeDeps: {
+      include: ["@vueuse/core"],
+    },
+  },
+});

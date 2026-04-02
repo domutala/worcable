@@ -4,70 +4,30 @@ seo:
   description: Create stunning, fast and SEO-optimized documentation sites with Nuxt UI.
 ---
 
-::u-page-hero{class="dark:bg-gradient-to-b from-neutral-900 to-neutral-950"}
----
-orientation: horizontal
----
-<!-- #top
-:hero-background -->
 
+::hero
 #title
-Ship Beautiful [Documentation]{.text-primary}.
-
-#description
-Build professional documentation with Nuxt UI's powerful components, enhanced typography, and seamless Nuxt Content integration. The same system trusted by the entire [Nuxt ecosystem](https://nuxt.com).
+Plateforme [**open source**](https://github.com/domutala/worcable){.text-primary target="_blank"} moderne pour simplifier et structurer le recrutement.
 
 #links
-  :::u-button
+  :::u-button{class="rounded-2xl"}
   ---
-  to: /getting-started
+  to: /docs/getting-started/installation
   size: xl
-  trailing-icon: i-lucide-arrow-right
+  icon: i-lucide-rocket
   ---
   Get started
   :::
 
-  :::u-button
+  :::u-button{class="rounded-2xl"}
   ---
-  icon: i-simple-icons-github
+  icon: i-lucide-newspaper
+  size: xl
   color: neutral
   variant: outline
-  size: xl
-  to: https://github.com/nuxt-ui-templates/docs
-  target: _blank
+  to: /docs/getting-started
   ---
-  Use this template
-  :::
-
-#default
-  :::prose-pre
-  ---
-  code: |
-    export default defineNuxtConfig({
-      modules: [
-        '@nuxt/ui',
-        '@nuxt/content',
-        'nuxt-og-image',
-        'nuxt-llms'
-      ],
-
-      css: ['~/assets/css/main.css']
-    })
-  filename: nuxt.config.ts
-  ---
-
-  ```ts [nuxt.config.ts]
-  export default defineNuxtConfig({
-    modules: [
-      '@nuxt/ui',
-      '@nuxt/content',
-      'nuxt-og-image',
-      'nuxt-llms'
-    ],
-
-    css: ['~/assets/css/main.css']
-  })
-  ```
+  Docs
   :::
 ::
 
@@ -246,7 +206,7 @@ Enhanced with Nuxt Content
   ---
   links:
     - label: Start building
-      to: '/getting-started'
+      to: '/docs/getting-started'
       trailingIcon: i-lucide-arrow-right
     - label: View on GitHub
       to: 'https://github.com/nuxt-ui-templates/docs'

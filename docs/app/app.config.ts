@@ -1,59 +1,67 @@
 export default defineAppConfig({
   ui: {
     colors: {
-      primary: "orange",
-      neutral: "mauve",
+      primary: "lime",
+      neutral: "neutral",
     },
+
     footer: {
       slots: {
         root: "border-t border-default",
         left: "text-sm text-muted",
       },
     },
+
+    button: {},
+
+    prose: {
+      code: {
+        slots: { base: "bg-primary! border-0!" },
+      },
+    },
   },
+
   seo: {
     siteName: "Nuxt Docs Template",
   },
+
+  repository: "https://github.com/domutala/worcable",
+
   header: {
     title: "",
-    to: "/",
+    to: { name: "docs-slug", params: { slug: ["getting-started"] } },
     logo: {
       alt: "",
       light: "",
       dark: "",
     },
     search: true,
-    colorMode: true,
+
     links: [
       {
         icon: "i-simple-icons-github",
-        to: "https://github.com/nuxt-ui-templates/docs",
+        to: "https://github.com/domutala/worcable",
         target: "_blank",
         "aria-label": "GitHub",
       },
     ],
   },
   footer: {
-    credits: `Built with Nuxt UI • © ${new Date().getFullYear()}`,
-    colorMode: false,
+    credits: `© ${new Date().getFullYear()} - by [domutala](https://github.com/domutala)`,
+    colorMode: true,
     links: [
       {
-        icon: "i-simple-icons-discord",
-        to: "https://go.nuxt.com/discord",
+        icon: "i-simple-icons-linkedin",
+        to: "https://www.linkedin.com/in/domutala",
         target: "_blank",
-        "aria-label": "Nuxt on Discord",
+        "aria-label": "Worcable on LinkedIN",
       },
-      {
-        icon: "i-simple-icons-x",
-        to: "https://go.nuxt.com/x",
-        target: "_blank",
-        "aria-label": "Nuxt on X",
-      },
+
       {
         icon: "i-simple-icons-github",
-        to: "https://github.com/nuxt/ui",
+        to: "https://github.com/domutala/worcable",
         target: "_blank",
-        "aria-label": "Nuxt UI on GitHub",
+        "aria-label": "Worcable on GitHub",
       },
     ],
   },
@@ -61,18 +69,18 @@ export default defineAppConfig({
     title: "Table of Contents",
     bottom: {
       title: "Community",
-      edit: "https://github.com/nuxt-ui-templates/docs/edit/main/content",
+      edit: "https://github.com/domutala/worcable/docs/main/content",
       links: [
         {
           icon: "i-lucide-star",
           label: "Star on GitHub",
-          to: "https://github.com/nuxt/ui",
+          to: "https://github.com/domutala/worcable",
           target: "_blank",
         },
         {
-          icon: "i-lucide-book-open",
-          label: "Nuxt UI docs",
-          to: "https://ui.nuxt.com/docs/getting-started/installation/nuxt",
+          icon: "i-lucide-play",
+          label: "Playground",
+          to: "https://playground.worcable.app",
           target: "_blank",
         },
       ],
