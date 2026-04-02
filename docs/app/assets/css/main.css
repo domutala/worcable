@@ -9,6 +9,7 @@
   --font-sans: 'Public Sans', sans-serif;
 
   --color-surface: #d7ded4;
+  --color-body: #cdd4cb;
 
   --color-lime-50: #faffe5;
   --color-lime-100: #f5ffcc;
@@ -28,6 +29,7 @@
 }
 
 .dark {
+  --color-body: var(--ui-bg);
   --color-surface: #000000;
   --ui-primary: var(--ui-color-primary-500);
 }

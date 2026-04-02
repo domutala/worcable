@@ -14,20 +14,27 @@
             topHeader: 'px-0 mx-0',
             topFooter: 'px-0 mx-0',
           }"
-          class="ui-scroll-hover w-full max-w-80 px-0 py-0 ms-0 h-screen lg:max-h-[unset] lg:top-0 relative lg:pe-0 bg-linear-to-tl from-surface/50 dark:from-surface/35 to-default"
+          class="ui-scroll-hover w-full max-w-80 px-0 py-0 ms-0 h-screen lg:max-h-[unset] lg:top-0 relative lg:pe-0"
         >
-          <template #top>
+          <div class="sticky top-0 z-10">
+            <div
+              class="h-(--ui-header-height) flex items-center px-5 bg-linear-to-b from-body to-transparent"
+            ></div>
+          </div>
+
+          <!-- bg-linear-to-tl from-surface/50 dark:from-surface/35 to-default -->
+          <!-- <template #top>
             <div class="h-(--ui-header-height) flex items-center px-5"></div>
-          </template>
+          </template> -->
 
           <!-- h-[calc(100vh-var(--ui-header-height))] top-(--ui-header-height) -->
-          <DocNavigation class="pt-0" />
+          <DocNavigation class="pt-0 mt-5" />
         </UPageAside>
       </template>
 
       <Container
         :ui="{
-          content: 'bg-default',
+          content: 'bg-body',
           root: 'sticky top-0 z-51',
         }"
       >

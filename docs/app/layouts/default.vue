@@ -10,6 +10,23 @@
   <slot />
 
   <Container class="relative" :ui="{ content: 'relative' }">
+    <template #top>
+      <div class="absolute left-0 w-full top-0 bottom-0 bg-">
+        <div class="absolute inset-0 object-cover object-center">
+          <img
+            src="/images/bloom.png"
+            class="size-full object-cover object-center"
+          />
+
+          <div class="absolute backdrop-blur-2xl inset-0 bg-default/80"></div>
+        </div>
+
+        <div
+          class="absolute h-100 w-full bg-linear-to-b from-body to-transparent"
+        ></div>
+      </div>
+    </template>
+
     <div
       class="relative w-full border-b border-b-default py-5 bg-primary-200 backdrop-blur-xl"
     >
@@ -36,19 +53,6 @@
         </u-button>
       </div>
     </div>
-
-    <template #top>
-      <div class="absolute left-0 w-full top-0 bottom-0 bg-">
-        <div class="absolute inset-0 object-cover object-center">
-          <img
-            src="/images/bloom.png"
-            class="size-full object-cover object-center"
-          />
-
-          <div class="absolute backdrop-blur-2xl inset-0 bg-default/80"></div>
-        </div>
-      </div>
-    </template>
 
     <div class="bg-">
       <AppFooter />
