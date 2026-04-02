@@ -41,17 +41,31 @@ const { header, repository } = useAppConfig();
     </u-container>
   </Container>
 
-  <Container :ui="{ content: 'bg-surface' }">
-    <UContainer class="py-30">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed quae voluptas
-      repudiandae, suscipit quidem laborum temporibus eum pariatur aperiam enim
-      aliquid illo id itaque libero aliquam hic cumque beatae nemo. Lorem ipsum
-      dolor sit amet consectetur adipisicing elit. Sed quae voluptas
-      repudiandae, suscipit quidem laborum temporibus eum pariatur aperiam enim
-      aliquid illo id itaque libero aliquam hic cumque beatae nemo. Lorem ipsum
-      dolor sit amet consectetur adipisicing elit. Sed quae voluptas
-      repudiandae, suscipit quidem laborum temporibus eum pariatur aperiam enim
-      aliquid illo id itaque libero aliquam hic cumque beatae nemo.
-    </UContainer>
+  <Container
+    :ui="{
+      content: 'bg-surface relative overflow-hidden',
+    }"
+  >
+    <div class="absolute inset-0 object-cover object-center bg-amber-500">
+      <img
+        src="/images/bloom.png"
+        class="size-full object-cover object-center"
+      />
+    </div>
+
+    <div
+      class="mt-35 mx-auto max-w-220 w-11/12 ring- ring-primary-200 rounded-t-2xl overflow-auto bg-default relative"
+    >
+      <div class="py-2 hidden items-center gap-2 px-5 border-b border-default">
+        <div class="size-3 rounded-full bg-green-500"></div>
+        <div class="size-3 rounded-full bg-yellow-500"></div>
+        <div class="size-3 rounded-full bg-red-500"></div>
+      </div>
+
+      <img
+        src="/images/screenshot_desktop_light.jpeg"
+        class="mt-auto object-cover object-top border-default block"
+      />
+    </div>
   </Container>
 </template>

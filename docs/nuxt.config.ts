@@ -49,10 +49,6 @@ export default defineNuxtConfig({
     },
   },
 
-  // icon: {
-  //   provider: 'iconify'
-  // },
-
   llms: {
     domain: "https://docs-template.nuxt.dev/",
     title: "Nuxt Docs Template",

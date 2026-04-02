@@ -6,23 +6,23 @@ const locales = computed(() => {
     return {
       label: lo.name,
       value: lo.code,
+      onSelect() {
+        setLocale(lo.code);
+      },
     };
   });
-});
-
-watch(locale, () => {
-  setLocale(locale.value);
 });
 </script>
 
 <template>
   <USelect
-    v-model="locale"
     variant="ghost"
     icon="i-lucide-globe"
     size="lg"
     class="cursor-pointer"
     trailing-icon=""
     :items="locales"
+    :model-value="locale"
+    :ui="{ item: 'cursor-pointer' }"
   />
 </template>
