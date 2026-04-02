@@ -12,29 +12,11 @@ const { header } = useAppConfig();
       content: 'max-w-80 ui-scroll overflow-auto',
     }"
     :menu="{ side: 'left', ui: {} }"
+    :to="$localePath(header.to)"
     mode="slideover"
   >
-    <template
-      v-if="header?.logo?.dark || header?.logo?.light || header?.title"
-      #title
-    >
-      <UColorModeImage
-        v-if="header?.logo?.dark || header?.logo?.light"
-        :light="header?.logo?.light!"
-        :dark="header?.logo?.dark!"
-        :alt="header?.logo?.alt"
-        class="h-6 w-auto shrink-0"
-      />
-
-      <span v-else-if="header?.title">
-        {{ header.title }}
-      </span>
-    </template>
-
-    <template v-else #left>
-      <NuxtLink to="/docs/getting-started">
-        <AppLogo class="w-auto h-6 shrink-0" />
-      </NuxtLink>
+    <template #title>
+      <AppLogo class="w-auto h-6 shrink-0" />
     </template>
 
     <template #right>

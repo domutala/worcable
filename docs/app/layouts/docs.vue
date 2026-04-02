@@ -35,6 +35,7 @@
       </Container>
 
       <slot />
+
       <AppFooter />
 
       <template #right>

@@ -1,0 +1,51 @@
+body {
+  ::selection {
+    background: var(--ui-color-primary-500);
+    color: #000; /* Black text */
+  }
+
+  /* Required for older versions of Firefox */
+  ::-moz-selection {
+    background: var(--ui-color-primary-500);
+    color: #000;
+  }
+
+  &::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -5;
+    background-color: #cdd4cb;
+  }
+}
+
+.dark body {
+  &::before {
+    background-color: var(--ui-bg);
+  }
+}
+
+.testimonial {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        155deg,
+        color-mix(in srgb, var(--ui-bg-inverted) 12%, transparent) -57.71%,
+        transparent 100.25%
+      ),
+      rgba(0, 0, 0, 0);
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  &:hover {
+    &::before {
+      opacity: 1;
+    }
+  }
+}

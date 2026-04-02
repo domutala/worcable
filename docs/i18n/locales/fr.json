@@ -1,12 +1,76 @@
 {
   "pages": {
-    "index": {
+    "index0": {
       "hero": {
         "title": "Plateforme **open source** moderne pour simplifier et structurer le recrutement.",
         "subtitle": "Open source. Flexible. Évolutive.",
         "cta": "Documentation",
         "cta_2": "Open source"
       }
+    },
+
+    "index": {
+      "hero": {
+        "badge": "🚀 **Open Source** & Libre",
+        "title": "Le recrutement **Open Source**, sans compromis",
+        "subtitle": "Gérez vos offres, centralisez vos candidatures et automatisez votre recrutement avec une plateforme **moderne**, **performante** et **transparente**.",
+        "cta_primary": "Documentation",
+        "cta_primary0": "Déployer gratuitement",
+        "cta_secondary": "Open source"
+      },
+      "features": {
+        "badge": "Fonctionnalités",
+        "title": "Tout ce dont vous avez besoin pour **recruter**",
+        "items": {
+          "management": {
+            "title": "Gestion des Offres",
+            "description": "Créez des fiches de poste détaillées avec un éditeur **optimisé pour le SEO** et Google Jobs."
+          },
+          "pipeline": {
+            "title": "Suivi Candidat",
+            "description": "Visualisez votre pipeline en un coup d'œil. Gérez chaque étape, du **premier contact** à l'**embauche**."
+          },
+          "forms": {
+            "title": "Formulaires Dynamiques",
+            "description": "Adaptez vos questionnaires pour collecter les données qui **comptent vraiment** pour chaque rôle."
+          },
+          "performance": {
+            "title": "Performance Native",
+            "description": "Score **Lighthouse 100**. Vos offres chargent instantanément, même sur les réseaux mobiles lents."
+          }
+        }
+      },
+      "advantages": {
+        "badge": "Pourquoi nous ?",
+        "title": "La puissance de l'architecture **moderne**",
+
+        "items": {
+          "control": {
+            "title": "Contrôle Total",
+            "description": "Hébergez vos données sur **votre infrastructure**. Confidentialité totale garantie."
+          },
+          "dx": {
+            "title": "Expérience Dev",
+            "description": "Stack moderne : **Nuxt 3**, **Tailwind CSS** et **MongoDB** pour une agilité maximale."
+          },
+          "simplicity": {
+            "title": "Simplicité",
+            "description": "Une interface épurée pour se concentrer sur l'essentiel : **vos futurs talents**."
+          }
+        }
+      },
+      "open_source": {
+        "badge": "Open Source",
+        "title": "Plus qu'un logiciel, un **standard ouvert**",
+        "content": "Worcable n'est pas une boîte noire. C'est un projet communautaire où chaque ligne de code est **auditable**. Évitez le *vendor lock-in* et faites évoluer l'outil selon **vos besoins réels**.",
+        "contribute": "Devenir contributeur"
+      }
     }
+  },
+
+  "book_demo": {
+    "title": "La plateforme de recrutement **open source** nouvelle génération.",
+    "description": "Vous préférez une démonstration personnalisée ou une solution clé en main ? Discutons de vos besoins de recrutement.",
+    "cta": "Réserver une démo"
   }
 }

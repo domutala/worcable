@@ -2,11 +2,65 @@
   "pages": {
     "index": {
       "hero": {
-        "title": "Modern **open source** platform to simplify and structure recruitment.",
-        "subtitle": "Open source. Flexible. Scalable.",
-        "cta": "Documentation",
-        "cta_2": "Open source"
+        "badge": "🚀 **Open Source** & Free",
+        "title": "Open Source recruitment, without compromise",
+        "subtitle": "Manage your job listings, centralize applications, and automate your hiring process with a **modern**, **high-performance**, and **transparent** platform.",
+        "cta_primary": "Documentation",
+        "cta_primary_0": "Deploy for free",
+        "cta_secondary": "Open source"
+      },
+      "features": {
+        "badge": "Features",
+        "title": "Everything you need to **hire**",
+        "items": {
+          "management": {
+            "title": "Job Management",
+            "description": "Create detailed job descriptions with an editor **optimized for SEO** and Google Jobs."
+          },
+          "pipeline": {
+            "title": "Candidate Tracking",
+            "description": "View your pipeline at a glance. Manage every step, from **first contact** to **hiring**."
+          },
+          "forms": {
+            "title": "Dynamic Forms",
+            "description": "Customize your questionnaires to collect the data that **really matters** for each role."
+          },
+          "performance": {
+            "title": "Native Performance",
+            "description": "**Lighthouse score 100**. Your job listings load instantly, even on slow mobile networks."
+          }
+        }
+      },
+      "advantages": {
+        "badge": "Why us?",
+        "title": "The power of **modern** architecture",
+        "items": {
+          "control": {
+            "title": "Full Control",
+            "description": "Host your data on **your own infrastructure**. Total privacy guaranteed."
+          },
+          "dx": {
+            "title": "Developer Experience",
+            "description": "Modern stack: **Nuxt 3**, **Tailwind CSS**, and **MongoDB** for maximum agility."
+          },
+          "simplicity": {
+            "title": "Simplicity",
+            "description": "A clean interface to focus on what matters most: **your future talent**."
+          }
+        }
+      },
+      "open_source": {
+        "badge": "Open Source",
+        "title": "More than software, an **open standard**",
+        "content": "Worcable is not a black box. It's a community-driven project where every line of code is **auditable**. Avoid vendor lock-in and evolve the tool according to **your real needs**.",
+        "contribute": "Become a contributor"
       }
     }
+  },
+
+  "book_demo": {
+    "title": "The next-generation **open source** recruitment platform.",
+    "description": "Prefer a personalized demo or a turnkey solution? Let’s discuss your hiring needs.",
+    "cta": "Book a demo"
   }
 }
