@@ -13,12 +13,6 @@ export default defineAppConfig({
     },
 
     button: {},
-
-    prose: {
-      code: {
-        slots: { base: "bg-primary! border-0!" },
-      },
-    },
   },
 
   seo: {

@@ -1,5 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  devtools: { enabled: true },
+  experimental: { asyncContext: true },
+  compatibilityDate: "2024-07-11",
+
   modules: [
     "@nuxt/eslint",
     "@nuxt/image",
@@ -11,8 +15,9 @@ export default defineNuxtConfig({
     "@nuxtjs/mcp-toolkit",
   ],
 
-  devtools: {
-    enabled: true,
+  routeRules: {
+    "/llms.txt": { prerender: false },
+    "/llms-full.txt": { prerender: false },
   },
 
   css: ["~/assets/css/main.css"],
@@ -26,12 +31,6 @@ export default defineNuxtConfig({
       },
     },
   },
-
-  experimental: {
-    asyncContext: true,
-  },
-
-  compatibilityDate: "2024-07-11",
 
   nitro: {
     prerender: {
