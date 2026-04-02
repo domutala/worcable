@@ -1,4 +1,4 @@
-import { checkJobUserRole } from "~~/server/services/job_get";
+import { checkJobUserRole } from "~~/server/services/job/get";
 import { getUserShema } from "~~/server/services/user_shema";
 import { isValidObjectId } from "mongoose";
 
@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
   });
 
   const { role } = getUserShema($t);
-  const bodyParse = parseZod(
+  const bodyParse = await parseZod(
     z.object({
       userID: z
         .string($t("job_user.create.items.role.errors.invalid"))

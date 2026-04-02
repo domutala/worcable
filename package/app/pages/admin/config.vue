@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import onFetchError from "~/tools/onFetchError";
 import { getConfigSchema } from "~~/server/services/config_get_shema";
 import * as z from "zod";
 import type { FormSubmitEvent } from "@nuxt/ui";
@@ -8,7 +7,7 @@ import _ from "lodash";
 const { schema, colorEnum } = getConfigSchema(Use.i18n.t);
 type Schema = z.output<typeof schema>;
 const state = reactive<Partial<Schema>>(_.cloneDeep(Store.config.config));
-// const logoUpload = useTemplateRef("logoUpload");
+
 const submiting = ref(false);
 const colors = [
   "red",
@@ -32,13 +31,14 @@ const colors = [
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   submiting.value = true;
-  const data = event.data;
 
   try {
-    // data.logo = await logoUpload.value?.upload();
+    let data = event.data;
+    data = await Doc.uploadBeforeSubmit(data);
+
     await Store.config.update(data);
   } catch (error) {
-    onFetchError(error);
+    console.error(error);
   } finally {
     submiting.value = false;
   }
@@ -63,43 +63,44 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         class="space-y-4 relative"
         @submit="onSubmit"
       >
-        <!-- -->
-        <!-- <UFormField name="logo">
-          <ui-upload
-            ref="logoUpload"
-            class="relative w-max"
-            accept="image/png, image/jpeg, image/webp"
-            v-slot="{ open, remove, objectUrl }"
-            v-model="state.logo"
-          >
-            <UAvatar
-              class="size-32 border border-default rounded-3xl cursor-pointer"
-              size="xl"
-              :src="objectUrl"
-              :alt="Store.config.config.orgName || undefined"
-              @click="open()"
+        <UFormField name="logo">
+          <div class="relative w-max">
+            <ui-upload
+              v-slot="{ open, reset, objectUrls }"
+              v-model="state.logo"
+              ref="logoUpload"
+              class="relative w-max"
+              :accept="['image/png', ' image/jpeg', 'image/webp']"
             >
-              <UIcon
-                v-if="!state.logo"
-                name="i-lucide-building-2"
-                class="opacity-50 size-18"
-              />
-            </UAvatar>
+              <UAvatar
+                class="size-32 border border-default rounded-3xl cursor-pointer"
+                size="xl"
+                :src="objectUrls[0]"
+                :alt="Store.config.config.name"
+                @click="open()"
+              >
+                <UIcon
+                  v-if="!state.logo"
+                  name="i-lucide-building-2"
+                  class="opacity-50 size-18"
+                />
+              </UAvatar>
 
-            <div
-              v-if="state.logo"
-              class="absolute bottom-5 right-0 translate-x-1/2"
-            >
-              <u-button
-                color="error"
-                icon="i-lucide-trash-2"
-                class="cursor-pointer rounded-4xl"
-                square
-                @click="remove"
-              ></u-button>
-            </div>
-          </ui-upload>
-        </UFormField> -->
+              <div
+                v-if="state.logo"
+                class="absolute bottom-5 right-0 translate-x-1/2"
+              >
+                <u-button
+                  color="error"
+                  icon="i-lucide-trash-2"
+                  class="cursor-pointer rounded-4xl"
+                  square
+                  @click="reset"
+                ></u-button>
+              </div>
+            </ui-upload>
+          </div>
+        </UFormField>
 
         <UFormField
           :help="$t(`config.items.orgName.hint`)"

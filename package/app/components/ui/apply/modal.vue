@@ -40,12 +40,12 @@ watchImmediate(
       <ui-layout-inset v-else-if="apply" class="flex-1">
         <template #header>
           <div
-            class="flex items-center gap-2 px-5 pt-3 pb-1 border-b-0 relative"
+            class="flex items-center gap-2 px-5 pt-3 pb-1 border-b-0 relative h-17"
           >
             <UAvatar
-              :src="Utils.getFileUrl(apply.data.avatar)"
+              :src="Doc.getUrl(apply.data.avatar)"
               :alt="[apply.data.firstName, apply.data.lastName].join(' ')"
-              class="border border-accented rounded-2xl text-md"
+              class="border-accented rounded-2xl text-md"
               size="3xl"
             />
 

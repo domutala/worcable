@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { CurrencyAvailaible } from "~~/server/interfaces";
+import { CurrencyAvailaible } from "~~/server/shared";
 
 const { timeInterval, forceCurrency, display } = defineProps<{
   timeInterval?: "month" | "year";
   forceCurrency?: CurrencyAvailaible;
   display?: boolean;
 }>();
-const value = defineModel<number>({ default: 45 });
+const value = defineModel<number>({});
 const currency = ref(forceCurrency ?? CurrencyAvailaible.EUR);
 
 const min = computed(() => {

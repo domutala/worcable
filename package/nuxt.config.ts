@@ -2,15 +2,8 @@
 export default defineNuxtConfig({
   runtimeConfig: {
     databaseUrl: "",
-    mongoUri: "",
-
     uploadsKey: "",
     secretKey: "",
-
-    supabaseProjetcId: "",
-    supabaseApiKey: "",
-    supabasePublishableKey: "",
-    supabaseEnpoint: "",
 
     public: {
       appUrl: "",
@@ -39,21 +32,6 @@ export default defineNuxtConfig({
   colorMode: {
     classSuffix: "",
     storageKey: "nuxt-color-mode",
-  },
-
-  ui: {
-    theme: {
-      colors: [
-        "primary",
-        "secondary",
-        "info",
-        "success",
-        "warning",
-        "error",
-
-        "light",
-      ],
-    },
   },
 
   icon: {

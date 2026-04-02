@@ -1,238 +1,93 @@
 <script lang="ts" setup>
-import type { FormSubmitEvent } from "@nuxt/ui";
 import * as z from "zod";
-import { getApplyDataShema } from "~~/server/services/apply_get_shema";
+import type { FormSubmitEvent } from "@nuxt/ui";
 import type { Job } from "~~/server/database/collections";
-import { CurrencyAvailaible } from "~~/server/interfaces";
+import { getApplyDataOptionsList, getApplyDataSchema } from "~~/server/shared";
 
 const emit = defineEmits<(e: "success", id: string) => void>();
-const { job } = defineProps<{ job: Job }>();
+const { job, isAdmin } = defineProps<{ job: Job; isAdmin?: boolean }>();
 
-const availability = ["immediately", "1month", "2mois", "3mois", "other"];
-const educationLevel = [
-  "none",
-  "bepCap",
-  "baccalaureate",
-  "bacPlus2",
-  "bacPlus3",
-  "bacPlus4",
-  "bacPlus5",
-  "doctorate",
-];
+const schema = getApplyDataSchema({
+  $t: Use.i18n.t,
+  applyDataConfigs: job.applyDataConfigs,
+}).extend({
+  acceptCondition: z
+    .boolean($t("apply.items.acceptCondition.errors.required"))
+    .refine(
+      (e) => e === true,
+      $t("apply.items.acceptCondition.errors.required"),
+    ),
+});
+
+type Schema = z.output<typeof schema>;
+const state = ref<Partial<Schema>>({});
 
 const submitting = ref(false);
-const schema = getApplyDataShema(Use.i18n.t);
-type Schema = z.output<typeof schema>;
-const state = reactive<Partial<Schema>>({});
+
+const _applyDataOptionsList = computed(() => {
+  return getApplyDataOptionsList({
+    $t: Use.i18n.t,
+    applyDataConfigs: job.applyDataConfigs,
+  });
+});
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   submitting.value = true;
   try {
-    const data = event.data;
-    const formData = new FormData();
+    const data = await Doc.uploadBeforeSubmit(event.data);
 
-    for (const key of Object.keys(data)) {
-      const value = data[key as "cv"];
+    let rID;
 
-      if (value instanceof File) {
-        formData.append(key, value);
-      } else if (value !== undefined && value !== null) {
-        formData.append(key, String(value));
-      }
+    if (isAdmin) {
+      const result = await Api.$fetch<Job>(
+        `/api/admin/job/${job.id}/add-apply`,
+        { method: "post", body: data },
+      );
+
+      useApply(result.id);
+
+      dispatchEvent(
+        new CustomEvent(`apply:status:null`, {
+          detail: { apply: result, action: "apply:add" },
+        }),
+      );
+
+      rID = result.id;
+    } else {
+      const result = await Api.$fetch<{ id: string }>(
+        `/api/job/${job.id}/apply`,
+        { method: "post", body: data },
+      );
+
+      rID = result.id;
     }
 
-    formData.append("id", job.id);
-    const result = await Api.$fetch<{ id: string }>("/api/apply", {
-      method: "post",
-      body: formData,
-    });
-
-    emit("success", result.id);
+    emit("success", rID);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   } finally {
     submitting.value = false;
   }
 }
-
-function createObjectUrl(file?: File) {
-  if (!file) return;
-  return URL.createObjectURL(file);
-}
-
-function onChange(key: "cv" | "avatar", file?: File | null | undefined) {
-  state[key] = file ?? undefined;
-}
 </script>
 
 <template>
-  <UForm :schema="schema" :state="state" class="space-y-7" @submit="onSubmit">
-    <UFormField name="avatar">
-      <UFileUpload
-        v-slot="{ open, removeFile }"
-        accept="image/png, image/jpeg, image/webp"
-        @update:model-value="(f) => onChange('avatar', f)"
-      >
-        <div class="flex items-center gap-8">
-          <UAvatar
-            class="size-32 border border-default"
-            size="xl"
-            :src="createObjectUrl(state.avatar)"
-            :alt="[state.firstName, state.lastName].filter((e) => e).join(' ')"
-          >
-            <UIcon
-              v-if="!state.avatar && !state.firstName && !state.lastName"
-              name="i-lucide-user-round"
-              class="opacity-50 size-18"
-            />
-          </UAvatar>
-
-          <div>
-            <div class="flex gap-1.5">
-              <UButton
-                size="lg"
-                variant="outline"
-                color="neutral"
-                class="cursor-pointer"
-                icon="i-lucide-upload"
-                @click="open()"
-              >
-                {{
-                  $t(
-                    state.avatar
-                      ? "apply.items.avatar.create_btn.update"
-                      : "apply.items.avatar.create_btn.add",
-                  )
-                }}
-              </UButton>
-
-              <UButton
-                v-if="state.avatar"
-                size="lg"
-                variant="outline"
-                color="neutral"
-                class="cursor-pointer"
-                @click="removeFile()"
-              >
-                {{ $t("apply.items.avatar.remove") }}
-              </UButton>
-            </div>
-
-            <div class="mt-0.5 opacity-70">
-              {{ $t("apply.items.avatar.info") }}
-            </div>
-          </div>
-        </div>
-      </UFileUpload>
-    </UFormField>
-
-    <UFormField
-      :label="$t('apply.items.firstName.label')"
-      name="firstName"
-      required
+  <UForm
+    :schema
+    :state
+    class="space-y-7"
+    @submit="onSubmit"
+    @error="(e) => console.log(e)"
+  >
+    <template
+      v-for="applyDataOptions in _applyDataOptionsList"
+      :key="applyDataOptions.key"
     >
-      <UInput
-        v-model="state.firstName"
-        :placeholder="$t('apply.items.firstName.placeholder')"
-        required
+      <component
+        :is="`ui-apply-items-${applyDataOptions.key}-input`"
+        v-model="state"
       />
-    </UFormField>
-
-    <UFormField
-      :label="$t('apply.items.lastName.label')"
-      name="lastName"
-      required
-    >
-      <UInput
-        v-model="state.lastName"
-        :placeholder="$t('apply.items.lastName.placeholder')"
-      />
-    </UFormField>
-
-    <UFormField :label="$t('apply.items.email.label')" name="email" required>
-      <UInput
-        v-model="state.email"
-        :placeholder="$t('apply.items.email.placeholder')"
-      />
-    </UFormField>
-
-    <UFormField :label="$t('apply.items.phone.label')" name="phone" required>
-      <UInput
-        v-model="state.phone"
-        :placeholder="$t('apply.items.phone.placeholder')"
-        type="tel"
-      />
-    </UFormField>
-
-    <UFormField :label="$t('apply.items.cv.label')" name="cv" required>
-      <UFileUpload
-        :label="$t('apply.items.cv.placeholder')"
-        :ui="{
-          base: 'bg-default rounded-xl border border-primary/35 cursor-pointer',
-        }"
-        highlight
-        color="neutral"
-        :description="$t('apply.items.cv.helper')"
-        class="w-full min-h-48"
-        accept="application/pdf"
-        layout="list"
-        v-model="state.cv"
-      />
-    </UFormField>
-
-    <UFormField
-      :label="$t('apply.items.availability.label')"
-      name="availability"
-      required
-    >
-      <URadioGroup
-        v-model="state.availability"
-        variant="card"
-        :ui="{ item: 'bg-default', fieldset: 'flex-row flex-wrap gap-1' }"
-        :items="
-          availability.map((c) => ({
-            label: $t(`apply.items.availability.items.${c}`),
-            value: c,
-          }))
-        "
-      />
-    </UFormField>
-
-    <UFormField
-      :label="$t('apply.items.educationLevel.label')"
-      name="educationLevel"
-      required
-    >
-      <USelect
-        v-model="state.educationLevel"
-        :placeholder="$t('apply.items.educationLevel.placeholder')"
-        :items="
-          educationLevel.map((c) => ({
-            label: $t(`apply.items.educationLevel.items.${c}`),
-            value: c,
-          }))
-        "
-      />
-    </UFormField>
-
-    <UFormField
-      :label="$t('pages.apply.items.desiredGrossSalary')"
-      name="desiredGrossSalary"
-      required
-    >
-      <ui-salary-selector-select
-        v-model="state.desiredGrossSalary"
-        :force-currency="CurrencyAvailaible.EUR"
-      />
-    </UFormField>
-
-    <UFormField :label="$t('apply.items.motivation.label')" name="motivation">
-      <ui-editor
-        v-model="state.motivation"
-        :placeholder="$t('apply.items.motivation.placeholder')"
-        class="max-h-100 bg-default border border-default rounded-2xl overflow-auto"
-      />
-    </UFormField>
+    </template>
 
     <UFormField name="acceptCondition" class="mt-">
       <UCheckbox

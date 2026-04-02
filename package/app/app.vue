@@ -1,5 +1,13 @@
 <script lang="ts" setup>
 import onFetchError from "./tools/onFetchError";
+import { initApplyData } from "~~/server/shared";
+
+// const schema = z
+//   .record(
+//     z.string().refine((key) => Object.keys(applyDataKeyOptions).includes(key)),
+//     z.enum(["use", "require"]).optional(),
+//   )
+//   .optional();
 
 const initing = ref(true);
 const appConfig = useAppConfig();
@@ -23,6 +31,8 @@ onMounted(async () => {
   try {
     await Store.config.init();
     await Store.session.init();
+    initApplyData();
+    cleanModalQueries();
   } catch (error) {
     onFetchError(error);
   } finally {
@@ -32,7 +42,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <NuxtLoadingIndicator color="var(--ui-primary)" :height="5" />
+  <NuxtLoadingIndicator color="var(--ui-primary)" :height="2" />
 
   <span class="bg-red-500"></span>
   <span class="bg-orange-500"></span>

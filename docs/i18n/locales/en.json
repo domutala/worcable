@@ -1,0 +1,12 @@
+{
+  "pages": {
+    "index": {
+      "hero": {
+        "title": "Modern **open source** platform to simplify and structure recruitment.",
+        "subtitle": "Open source. Flexible. Scalable.",
+        "cta": "Documentation",
+        "cta_2": "Open source"
+      }
+    }
+  }
+}

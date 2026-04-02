@@ -1,32 +1,20 @@
 import mongoose from "mongoose";
 import { InferSchemaType } from "../types";
-import { FileSchema } from "./file";
 
-const AuthorSchemaAuthor = new mongoose.Schema(
-  {
-    email: { type: String },
-    name: { type: String },
-    avatar: { type: FileSchema },
-  },
-  { _id: false },
-);
+import { getApplyCommentSchema } from "~~/server/services/apply_comment_schema";
+import { ZodOutput } from "~~/server/utils/zod";
 
-const AuthorSchema = new mongoose.Schema(
-  {
-    candidate: { type: Boolean },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
-    author: { type: AuthorSchemaAuthor },
-  },
-  { _id: false },
-);
+const { schema: _schema, author } = getApplyCommentSchema((str: string) => str);
+const schema = _schema.extend({ author });
 
-const ApplyCommentSchema = new mongoose.Schema(
+type ApplyCommentO = ZodOutput<typeof schema> & {
+  applyID: mongoose.Schema.Types.ObjectId;
+};
+
+const ApplyCommentSchema = new mongoose.Schema<ApplyCommentO>(
   {
     comment: { type: String, required: true },
-    author: { type: AuthorSchema, default: {} },
+    author: { type: mongoose.Schema.Types.Mixed, default: {} },
     applyID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Apply",

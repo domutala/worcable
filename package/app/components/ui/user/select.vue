@@ -84,7 +84,7 @@ function select(user: User) {
             @click="select(user)"
           >
             <UAvatar
-              :src="Utils.getFileUrl(user.avatar)"
+              :src="Doc.getUrl(user.avatar)"
               :alt="[user.firstName, user.lastName].join(' ')"
               class="border border-accented rounded-2xl text-md"
               size="3xl"

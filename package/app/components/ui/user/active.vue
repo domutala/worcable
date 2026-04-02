@@ -62,7 +62,7 @@ async function submit() {
       <slot :loading />
 
       <template #content>
-        <ui-layout-inset>
+        <ui-layout-inset :ui="{ border: 'h-1' }">
           <div class="p-10">
             {{
               $t(`user.active.${key}.confirm`, {

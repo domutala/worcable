@@ -8,7 +8,7 @@ import {
 } from "~~/server/services/job_schema";
 import * as z from "zod";
 import _ from "lodash";
-import { CurrencyAvailaible } from "~~/server/interfaces";
+import { CurrencyAvailaible } from "~~/server/shared";
 
 const i18n = useI18n();
 const items = ["location", "jobNature", "contractType", "salary"] as [

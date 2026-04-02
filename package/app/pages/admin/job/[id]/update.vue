@@ -6,5 +6,5 @@ defineProps<{ job: Job }>();
 </script>
 
 <template>
-  <ui-job-create :job />
+  <ui-job-create v-if="job" :job />
 </template>

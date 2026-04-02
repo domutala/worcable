@@ -1,0 +1,32 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@source "../../../content/**/*";
+
+@theme static {
+  --container-8xl: 90rem;
+  --font-sans: 'Public Sans', sans-serif;
+
+  --color-surface: #d7ded4;
+
+  --color-lime-50: #faffe5;
+  --color-lime-100: #f5ffcc;
+  --color-lime-200: #ebff99;
+  --color-lime-300: #e0ff66;
+  --color-lime-400: #d6ff33;
+  --color-lime-500: #ccff00;
+  --color-lime-600: #a3cc00;
+  --color-lime-700: #7a9900;
+  --color-lime-800: #526600;
+  --color-lime-900: #293300;
+  --color-lime-950: #1d2400;
+}
+
+:root {
+  --ui-container: var(--container-8xl);
+}
+
+.dark {
+  --color-surface: #000000;
+  --ui-primary: var(--ui-color-primary-500);
+}

@@ -123,7 +123,6 @@ export const useJob = (
             label: Use.i18n.t(
               `job.items.status.items.${job.value.status}.label`,
             ),
-            // icon: ApplyUtils.getStatusIcon(job.value, apply.value.status),
             children: status.value.menuItems.value,
             class: "cursor-pointer",
             disabled: Store.session.user?.role !== "admin",
@@ -165,7 +164,7 @@ export const useJob = (
                 label: Use.i18n.t("job_user.labels.add_user"),
                 icon: "i-lucide-user-round-plus",
                 onSelect(e) {
-                  const { open } = useModal({ uid: "job-user-add" });
+                  const { open } = useModal({ uid: job.value.id });
                   open.value = true;
                 },
               });
@@ -181,6 +180,10 @@ export const useJob = (
               {
                 label: Use.i18n.t("job.actions.add_new_apply"),
                 icon: "i-lucide-user-round-plus",
+                onSelect(e) {
+                  const { value } = useModal({ uid: "appy-for" });
+                  value.value = `${job.value.id}:admin`;
+                },
               },
               {
                 label: Use.i18n.t("job.actions.broadcast"),

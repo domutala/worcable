@@ -14,9 +14,7 @@ const candidates = computed(() => {
   return data.value.items
     .map((apply) => {
       return {
-        src: apply.data.avatar
-          ? `/api/file/${apply.data.avatar?.data}`
-          : undefined,
+        src: Doc.getUrl(apply.data.avatar),
         alt: `${apply.data.firstName} ${apply.data.lastName}`,
       };
     })

@@ -1,16 +1,18 @@
 import mongoose from "mongoose";
-import { FileSchema } from "./file";
 import { getConfigSchema } from "~~/server/services/config_get_shema";
 import { InferSchemaType } from "~~/server/database/types";
+import * as z from "zod";
 
-const { colorEnum, colorModeEnum, language } = getConfigSchema((v) => v);
+const { schema } = getConfigSchema((v) => v);
 
-const ConfigSchema = new mongoose.Schema(
+type Config0 = z.output<typeof schema>;
+
+const ConfigSchema = new mongoose.Schema<Config0>(
   {
     name: { type: String, required: true },
-    logo: { type: FileSchema },
-    primaryColor: { type: String, enum: colorEnum.options },
-    colorMode: { type: String, enum: colorModeEnum.options },
+    logo: { type: mongoose.Schema.Types.Mixed },
+    primaryColor: { type: String },
+    colorMode: { type: String },
   },
   {
     timestamps: true,

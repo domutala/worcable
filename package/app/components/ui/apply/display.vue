@@ -62,7 +62,7 @@ const apply = defineModel<Apply>("apply", { required: true });
           icon="i-lucide-arrow-down"
           target="_blank"
           variant="soft"
-          :href="Utils.getFileUrl(apply.data.cv)"
+          :href="Doc.getUrl(apply.data.cv)"
           square
         >
           <!-- {{ $t("apply.actions.donwload_cv") }} -->

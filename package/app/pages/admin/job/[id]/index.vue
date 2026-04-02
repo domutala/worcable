@@ -13,10 +13,10 @@ const side = useCookie<string>(`job-side`, { default: () => "kanban" });
       }"
     >
       <div
-        class="bg-surface rounded-min border border-default flex items-center overflow-hidden w-max"
+        class="bg-default rounded-min border border-default flex items-center overflow-hidden w-max"
       >
         <u-button
-          :class="{ 'bg-default': side === 'kanban' }"
+          :class="{ 'bg-primary/10': side === 'kanban' }"
           icon="i-lucide-kanban"
           class="cursor-pointer rounded-none"
           color="neutral"
@@ -27,7 +27,7 @@ const side = useCookie<string>(`job-side`, { default: () => "kanban" });
         >
         </u-button>
         <u-button
-          :class="{ 'bg-default': side === 'list' }"
+          :class="{ 'bg-primary/10': side === 'list' }"
           icon="i-lucide-text"
           class="cursor-pointer rounded-none"
           color="neutral"

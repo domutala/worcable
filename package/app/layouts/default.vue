@@ -12,7 +12,7 @@ const items = computed(() => {
     {
       label: $t("words.playground"),
       variant: "ghost",
-      to: Use.localePath({ name: "jobs" }),
+      to: Use.localePath({ name: "job" }),
     },
 
     {
@@ -32,18 +32,24 @@ const items = computed(() => {
 </script>
 
 <template>
-  <header
-    class="sticky top-0 z-50 backdrop-blur-2xl flex items-center gap-2 md:px-10 px-3 py-3"
-  >
-    <ui-logo shortable />
+  <ui-layout>
+    <template #header>
+      <header
+        class="sticky top-0 z-50 backdrop-blur-2xl flex items-center gap-2 md:px-10 px-3 py-3"
+      >
+        <ui-logo shortable />
 
-    <div class="w-10 mr-auto"></div>
+        <div class="w-10 mr-auto"></div>
 
-    <ui-menu-horizontal-items :items :gap="5" :ui="{ base: 'justify-center' }">
-      <template #before>
-        <ui-auth />
+        <ui-menu-horizontal-items
+          :items
+          :gap="5"
+          :ui="{ base: 'justify-center' }"
+        >
+          <template #before>
+            <ui-auth />
 
-        <!-- <u-button
+            <!-- <u-button
           href="https://github.com/domutala/worcable"
           target="_blank"
           size="lg"
@@ -52,67 +58,69 @@ const items = computed(() => {
           icon="i-simple-icons-github"
         >
         </u-button> -->
-      </template>
-    </ui-menu-horizontal-items>
-  </header>
+          </template>
+        </ui-menu-horizontal-items>
+      </header>
+    </template>
 
-  <slot />
+    <slot />
 
-  <footer class="border-t border-default">
-    <u-container class="flex justify-center">
-      <div class="py-30 flex mx-auto gap-20 flex-wrap">
-        <div class="flex flex-col gap-4 mr-15">
-          <ui-logo-app />
-          <p class="text-muted text-sm">© {{ new Date().getFullYear() }}</p>
-        </div>
-
-        <div class="flex flex-col gap-4">
-          <div class="text-sm opacity-50 mb-1">
-            {{ $t("foot.about.title") }}
-          </div>
-          <nuxt-link href="https://domutala.netlify.app" target="_blank">
-            @domutala
-          </nuxt-link>
-          <nuxt-link :to="$localePath({ name: 'contact' })">
-            {{ $t("foot.about.why_open_source") }}
-          </nuxt-link>
-        </div>
-
-        <div class="flex flex-col gap-4">
-          <div class="text-sm opacity-50 mb-1">
-            {{ $t("foot.ressources.title") }}
+    <footer class="border-t border-default">
+      <u-container class="flex justify-center">
+        <div class="py-30 flex mx-auto gap-20 flex-wrap">
+          <div class="flex flex-col gap-4 mr-15">
+            <ui-logo-app />
+            <p class="text-muted text-sm">© {{ new Date().getFullYear() }}</p>
           </div>
 
-          <nuxt-link
-            v-for="item in [
-              'Roadmap',
-              'Pricing',
-              'Contact support',
-              'Feature Requests',
-            ]"
-            :key="item"
-          >
-            {{ item }}
-          </nuxt-link>
-        </div>
-
-        <div class="flex flex-col gap-4">
-          <div class="text-sm opacity-50 mb-1">
-            {{ $t("foot.legal.title") }}
+          <div class="flex flex-col gap-4">
+            <div class="text-sm opacity-50 mb-1">
+              {{ $t("foot.about.title") }}
+            </div>
+            <nuxt-link href="https://domutala.netlify.app" target="_blank">
+              @domutala
+            </nuxt-link>
+            <nuxt-link :to="$localePath({ name: 'contact' })">
+              {{ $t("foot.about.why_open_source") }}
+            </nuxt-link>
           </div>
-          <nuxt-link>
-            {{ $t("foot.legal.licence") }}
-          </nuxt-link>
 
-          <nuxt-link>
-            {{ $t("foot.legal.sscurity") }}
-          </nuxt-link>
+          <div class="flex flex-col gap-4">
+            <div class="text-sm opacity-50 mb-1">
+              {{ $t("foot.ressources.title") }}
+            </div>
 
-          <nuxt-link>
-            {{ $t("foot.legal.terms_of_service") }}
-          </nuxt-link>
+            <nuxt-link
+              v-for="item in [
+                'Roadmap',
+                'Pricing',
+                'Contact support',
+                'Feature Requests',
+              ]"
+              :key="item"
+            >
+              {{ item }}
+            </nuxt-link>
+          </div>
+
+          <div class="flex flex-col gap-4">
+            <div class="text-sm opacity-50 mb-1">
+              {{ $t("foot.legal.title") }}
+            </div>
+            <nuxt-link>
+              {{ $t("foot.legal.licence") }}
+            </nuxt-link>
+
+            <nuxt-link>
+              {{ $t("foot.legal.sscurity") }}
+            </nuxt-link>
+
+            <nuxt-link>
+              {{ $t("foot.legal.terms_of_service") }}
+            </nuxt-link>
+          </div>
         </div>
-      </div>
-    </u-container>
-  </footer>
+      </u-container>
+    </footer>
+  </ui-layout>
 </template>

@@ -1,21 +1,23 @@
 import mongoose from "mongoose";
-import { FileSchema } from "./file";
 import { InferSchemaType } from "~~/server/database/types";
-import { USER_ROLES } from "~~/server/services/user_shema";
+import { getUserShema, USER_ROLES } from "~~/server/services/user_shema";
+import { ZodOutput } from "~~/server/utils/zod";
 
-const UserSchema = new mongoose.Schema(
+const { schema } = getUserShema((str) => str);
+type User0 = ZodOutput<typeof schema> & {
+  password?: string;
+  normalizedFullname: string;
+};
+
+const UserSchema = new mongoose.Schema<User0>(
   {
     email: { type: String, required: true, unique: true },
     firstName: { type: String, required: true, minlength: 1 },
     lastName: { type: String, required: true, minlength: 1 },
     password: { type: String, select: false },
-    avatar: { type: FileSchema },
-
-    role: { type: String, enum: USER_ROLES, default: "admin" },
-
-    isValid: { type: Boolean, default: true },
+    avatar: { type: mongoose.Schema.Types.Mixed },
+    role: { type: String, enum: USER_ROLES, default: "recruiter" },
     active: { type: Boolean, default: true },
-
     normalizedFullname: { type: String, required: true },
   },
   { timestamps: true },

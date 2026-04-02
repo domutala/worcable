@@ -38,11 +38,12 @@ const JobSchema = new mongoose.Schema<Job0>(
       default: "open",
     },
 
+    applyDataConfigs: { type: mongoose.Schema.Types.Mixed, default: {} },
+
     applyStatus: {
       type: mongoose.Schema.Types.Mixed,
       required: true,
       default: defaultApplyStatus,
-      zod: applyStatus,
     },
   },
   { timestamps: true },
