@@ -6,7 +6,8 @@ defineProps<{
 </script>
 
 <template>
-  <div
+  <component
+    :is="tag || 'section'"
     :class="ui?.root"
     class="ui-section group not-last:[&_.ui-section--content]:border-b"
   >
@@ -19,18 +20,17 @@ defineProps<{
     >
       <slot name="left" />
 
-      <component
+      <div
         data-slot="content"
-        :is="tag || 'section'"
         :class="ui?.content"
         class="ui-section--content border-default border-x max-w-340 w-full relative"
       >
         <slot />
-      </component>
+      </div>
 
       <slot name="right" />
     </div>
 
     <slot name="bottom" />
-  </div>
+  </component>
 </template>

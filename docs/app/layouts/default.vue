@@ -1,7 +1,13 @@
 <script setup lang="ts"></script>
 
 <template>
-  <!-- <Container :ui="{ content: 'min-h-8' }"> </Container> -->
+  <!-- <Container class="hidden" :ui="{ content: 'min-h-8' }">
+    <div class="bg-primary text-black p-5 relative">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae placeat
+      iste fuga nihil consectetur ducimus quisquam, error rem illum eaque
+      incidunt est quas in reiciendis alias officia illo aut. Libero.
+    </div>
+  </Container> -->
 
   <Container :ui="{ root: 'sticky top-0 z-50', content: 'bg-surface/40' }">
     <AppHeader />

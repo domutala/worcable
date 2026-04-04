@@ -11,7 +11,7 @@ const advantages = {
 <template>
   <Container :ui="{ content: 'min-h-[75vh]' }">
     <template #top>
-      <div class="absolute left-0 w-full top-0 bottom-0 bg-">
+      <div class="absolute left-0 w-full top-0 bottom-0 bg- -z-1">
         <div class="absolute inset-0 object-cover object-center">
           <img
             src="/images/bloom.png"
@@ -26,6 +26,36 @@ const advantages = {
         ></div>
       </div>
     </template>
+
+    <div
+      class="flex not-lg:hidden divide-x divide-y divide-default bg-surface/40 border-b border-default"
+    >
+      <div
+        v-for="(advantage, code) in advantages"
+        :key="code"
+        class="border-default w-1/3"
+      >
+        <div class="px-10 py-5 flex gap-3">
+          <u-icon :name="advantage.icon" class="size-8 mb- opacity-50" />
+
+          <div>
+            <h3 class="text-xl">
+              <MDC
+                unwrap="p"
+                :value="$t(`pages.index.advantages.items.${code}.title`)"
+              />
+            </h3>
+
+            <p class="opacity-50 max-w-180">
+              <MDC
+                unwrap="p"
+                :value="$t(`pages.index.advantages.items.${code}.description`)"
+              />
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <u-container class="py-36 text-center">
       <h1 class="text-4xl md:text-6xl font-bold max-w-200 mx-auto">
