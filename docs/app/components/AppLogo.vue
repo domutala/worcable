@@ -1,10 +1,16 @@
 <template>
-  <div class="flex items-center gap-1.5 group">
-    <u-icon name="i-simple-icons-okta" class="text-primary size-8" />
+  <div class="flex items-center gap-2 group select-none">
+    <div
+      class="h-8.5 aspect-square flex items-center justify-center bg-primary rounded- border border-primary-600/30 text-black"
+    >
+      <u-icon name="i-lucide-bookmark-check" class="size-8/12" />
+    </div>
 
-    <div class="font-black text-[20px] select-none">
-      <span class="opacity-50 uppercase">Wor</span>
-      <span class="uppercase">cable</span>
+    <!-- <u-icon name="i-simple-icons-okta" class="text-primary size-8" /> -->
+
+    <div class="font-bold text-[24px]">
+      <span class="opacity-50 uppercase">Worc</span>
+      <span class="uppercase">able</span>
     </div>
   </div>
 </template>

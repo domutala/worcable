@@ -9,7 +9,24 @@ const advantages = {
 </script>
 
 <template>
-  <Container>
+  <Container :ui="{ content: 'min-h-[75vh]' }">
+    <template #top>
+      <div class="absolute left-0 w-full top-0 bottom-0 bg-">
+        <div class="absolute inset-0 object-cover object-center">
+          <img
+            src="/images/bloom.png"
+            class="size-full object-cover object-center"
+          />
+
+          <div class="absolute backdrop-blur-2xl inset-0 bg-default/90"></div>
+        </div>
+
+        <div
+          class="absolute bottom-0 h-100 w-full bg-linear-to-b from-transparent to-body"
+        ></div>
+      </div>
+    </template>
+
     <u-container class="py-36 text-center">
       <h1 class="text-4xl md:text-6xl font-bold max-w-200 mx-auto">
         <MDC :value="$t('pages.index.hero.title')" unwrap="p" />
@@ -145,7 +162,7 @@ const advantages = {
                   class="size-full flex items-center justify-center bg-primary absolute top-0 right-0 rounded-full group-hover/opensource:hidden"
                 >
                   <u-icon
-                    name="i-lucide-arrow-right"
+                    name="i-lucide-arrow-up-right"
                     class="size-10 text-black"
                   />
                 </div>

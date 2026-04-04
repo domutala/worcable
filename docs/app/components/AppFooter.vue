@@ -64,20 +64,22 @@ const { footer } = useAppConfig();
     </template>
 
     <template #left>
-      <MDC :value="footer.credits" unwrap="p" />
+      <div class="flex items-center gap-2">
+        © {{ new Date().getFullYear() }}
+
+        <u-link
+          to="https://domutala.netlify.app"
+          target="_blank"
+          class="font-bold text-highlighted underline"
+        >
+          domutala
+        </u-link>
+      </div>
     </template>
 
     <template #right>
       <AppLocale />
       <AppTheme v-if="footer?.colorMode" />
-
-      <!-- <template v-if="footer?.links">
-          <UButton
-            v-for="(link, index) of footer?.links"
-            :key="index"
-            v-bind="{ color: 'neutral', variant: 'ghost', ...link }"
-          />
-        </template> -->
     </template>
   </UFooter>
 </template>

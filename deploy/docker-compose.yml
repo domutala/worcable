@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  worcable-app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.base
+    container_name: worcable_nuxt
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL:-mongodb://mongodb:27017/worcable}
+      - ENABLED_SERVICES=${ENABLED_SERVICES}
+    restart: always
+
+  cvparser:
+    profiles: ["parser"]
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.cvparser
+    container_name: worcable_cvparser
+    ports:
+      - "${CV_PARSER_PORT:-5000}:5000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-mongodb://mongodb:27017/worcable}
+      - ENABLED_SERVICES=${ENABLED_SERVICES}
+    depends_on:
+      - mongodb
+    restart: always
+
+  mongodb:
+    profiles: ["db"]
+    image: mongo:latest
+    container_name: worcable_db
+    ports:
+      - "${DATABASE_PORT:-27017}:27017"
+    volumes:
+      - mongodb_data:/data/db
+    restart: always
+
+volumes:
+  mongodb_data:

@@ -4,7 +4,10 @@
   <!-- <UContainer class="max-w-full px-0 sm:px-0 lg:px-0 min-h-screen relative">
   </UContainer> -->
 
-  <UPage class="ui-docs-page min-h-screen" :ui="{ left: 'max-w-75' }">
+  <UPage
+    class="ui-docs-page min-h-screen bg-default"
+    :ui="{ left: 'max-w-75' }"
+  >
     <Container :ui="{ container: 'min-h-screen' }">
       <template #left>
         <UPageAside
@@ -18,7 +21,7 @@
         >
           <div class="sticky top-0 z-10">
             <div
-              class="h-(--ui-header-height) flex items-center px-5 bg-linear-to-b from-body to-transparent"
+              class="h-(--ui-header-height) flex items-center px-5 bg-linear-to-b from-default to-transparent"
             ></div>
           </div>
 
@@ -34,7 +37,7 @@
 
       <Container
         :ui="{
-          content: 'bg-body',
+          content: 'bg-default',
           root: 'sticky top-0 z-51',
         }"
       >

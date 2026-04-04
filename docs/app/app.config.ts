@@ -41,7 +41,6 @@ export default defineAppConfig({
     ],
   },
   footer: {
-    credits: `© ${new Date().getFullYear()} - by [domutala](https://github.com/domutala)`,
     colorMode: true,
     links: [
       {

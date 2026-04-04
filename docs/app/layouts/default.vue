@@ -46,7 +46,7 @@
           variant="soft"
           color="primary"
           size="xl"
-          class="button mt-5 px-5 py-3 cursor-pointer bg-black text-white hover:bg-primary-950"
+          class="button mt-5 px-7 py-4 rounded-xl cursor-pointer bg-black text-white hover:bg-primary-950"
           icon="i-lucide-video"
         >
           {{ $t("book_demo.cta") }}
