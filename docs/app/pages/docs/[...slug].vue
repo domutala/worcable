@@ -95,7 +95,11 @@ const links = computed(() => {
 
     <Container>
       <u-container>
-        <UPageHeader class="py-5" :title="page.title">
+        <UPageHeader
+          class="py-5"
+          :title="page.title"
+          :ui="{ title: 'text-2xl sm:text-2xl' }"
+        >
           <template #links>
             <UButton
               v-for="(link, index) in page.links"

@@ -23,7 +23,7 @@ export default defineAppConfig({
 
   header: {
     title: "",
-    to: { name: "docs-slug", params: { slug: ["getting-started"] } },
+    to: { name: "docs-slug", params: { slug: ["what-is-worcable"] } },
     logo: {
       alt: "",
       light: "",

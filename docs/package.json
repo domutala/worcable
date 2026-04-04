@@ -2,6 +2,7 @@
   "name": "docs",
   "private": false,
   "type": "module",
+  "version":"0.28.0",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",

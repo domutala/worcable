@@ -10,8 +10,8 @@ services:
       - "${PORT:-3000}:3000"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=${DATABASE_URL:-mongodb://mongodb:27017/worcable}
-      - ENABLED_SERVICES=${ENABLED_SERVICES}
+      - NUXT_DATABASE_URL=${DATABASE_URL:-mongodb://mongodb:27017/worcable}
+      - NUXT_ENABLED_SERVICES=${ENABLED_SERVICES}
     restart: always
 
   cvparser:

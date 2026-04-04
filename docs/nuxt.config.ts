@@ -82,12 +82,12 @@ export default defineNuxtConfig({
 
   i18n: {
     defaultLocale: "en",
-    strategy: "prefix_and_default",
+    strategy: "prefix",
     experimental: { localeDetector: "localeDetector.ts" },
 
     locales: [
       { code: "en", name: "English", file: "en.json", dir: "ltr" },
-      { code: "fr", name: "Français", file: "fr.json", dir: "ltr" },
+      // { code: "fr", name: "Français", file: "fr.json", dir: "ltr" },
     ],
   },
 

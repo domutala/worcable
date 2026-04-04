@@ -2,6 +2,7 @@
   "name": "personal-brand-website-design",
   "private": true,
   "type": "module",
+  "version":"0.28.0",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
