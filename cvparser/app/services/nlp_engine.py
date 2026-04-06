@@ -5,6 +5,9 @@ from app.services.normalizer import SkillNormalizer
 import re
 
 
+from app.services.normalizer import SkillNormalizer
+
+
 class NLPEngine:
     def __init__(self):
         self.nlp = spacy.load("fr_core_news_sm")
@@ -32,7 +35,7 @@ class NLPEngine:
         ]
         ruler.add_patterns(patterns)
 
-    def extract_entities(self, text: str):
+    def extract_entities4(self, text: str):
         doc = self.nlp(text)
         results = {
             "name": None,
@@ -57,6 +60,22 @@ class NLPEngine:
 
         results["skills"] = list(results["skills"])
         return results
+
+    def extract_entities(self, text: str):
+        # ... (extraction spaCy classique)
+
+        raw_skills = self._get_skills_from_spacy(doc)  # Ta logique actuelle
+
+        # Normalisation
+        normalized_skills = list(
+            set([self.normalizer.normalize_skill(s) for s in raw_skills])
+        )
+
+        return {
+            "name": name,
+            "skills": normalized_skills,
+            # ...
+        }
 
     def _extract_email(self, text: str):
         email_pattern = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"

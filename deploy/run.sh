@@ -1,68 +1,55 @@
 #!/bin/bash
 
+# Path configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-COMPOSE_FILE="$SCRIPT_DIR/docker-compose.yml"
-ROOT_DIR="$(dirname "$SCRIPT_DIR")"
+DOCKER_RUN="$SCRIPT_DIR/docker/run.sh"
+NATIVE_RUN="$SCRIPT_DIR/native/run.sh"
 
-PROJECT="all"
+# Default settings
+MODE="docker"
+ARGS=()
+
+# Colors
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+NC='\033[0m'
 
 while [[ $# -gt 0 ]]; do
   case $1 in
-    --project)
-      PROJECT="$2"
-      shift 2
-      ;;
-    --stop)
-      ACTION="stop"
+    --native)
+      MODE="native"
       shift
       ;;
-    --logs)
-      ACTION="logs"
+    --docker)
+      MODE="docker"
       shift
       ;;
     *)
+      ARGS+=("$1")
       shift
       ;;
   esac
 done
 
-# Define profiles and the list of enabled services
-case $PROJECT in
-  all)
-    export ENABLED_SERVICES="base,db,parser"
-    PROFILES="--profile db --profile parser"
-    MSG="All services (Nuxt, DB, Parser)"
-    ;;
-  db)
-    export ENABLED_SERVICES="base,db"
-    PROFILES="--profile db"
-    MSG="Nuxt + MongoDB"
-    ;;
-  parser)
-    export ENABLED_SERVICES="base,parser"
-    PROFILES="--profile parser"
-    MSG="Nuxt + CV Parser"
-    ;;
-  base)
-    export ENABLED_SERVICES="base"
-    PROFILES=""
-    MSG="Nuxt only"
-    ;;
-  *)
-    echo "Unknown project: $PROJECT"
-    exit 1
-    ;;
-esac
+echo -e "${BLUE}--- Worcable Orchestrator ---${NC}"
 
-cd "$ROOT_DIR"
-
-if [ "$ACTION" == "stop" ]; then
-    echo "Stopping: $MSG..."
-    docker compose -f "$COMPOSE_FILE" $PROFILES stop
-elif [ "$ACTION" == "logs" ]; then
-    docker compose -f "$COMPOSE_FILE" $PROFILES logs -f
+if [ "$MODE" == "docker" ]; then
+    if [ -f "$DOCKER_RUN" ]; then
+        echo -e "${BLUE}🐳 Selected Mode: Docker${NC}"
+        chmod +x "$DOCKER_RUN"
+        bash "$DOCKER_RUN" "${ARGS[@]}"
+    else
+        echo -e "${RED}❌ Error: Docker script not found ($DOCKER_RUN)${NC}"
+        exit 1
+    fi
 else
-    echo "Starting: $MSG (Enabled: $ENABLED_SERVICES)..."
-    # Exporting the variable so Docker Compose can read it
-    docker compose -f "$COMPOSE_FILE" $PROFILES up -d --build
+    if [ -f "$NATIVE_RUN" ]; then
+        echo -e "${BLUE}🚀 Selected Mode: Native${NC}"
+        chmod +x "$NATIVE_RUN"
+        bash "$NATIVE_RUN" "${ARGS[@]}"
+    else
+        echo -e "${RED}❌ Error: Native script not found ($NATIVE_RUN)${NC}"
+        exit 1
+    fi
 fi

@@ -3,8 +3,8 @@ version: '3.8'
 services:
   worcable-app:
     build:
-      context: ..
-      dockerfile: docker/Dockerfile.base
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.base
     container_name: worcable_nuxt
     ports:
       - "${PORT:-3000}:3000"
@@ -12,13 +12,19 @@ services:
       - NODE_ENV=production
       - NUXT_DATABASE_URL=${DATABASE_URL:-mongodb://mongodb:27017/worcable}
       - NUXT_ENABLED_SERVICES=${ENABLED_SERVICES}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+        required: false # Permet de démarrer même si le profil "db" n'est pas activé
+    networks:
+      - worcable-network
     restart: always
 
   cvparser:
-    profiles: ["parser"]
+    profiles: ["cvparser"]
     build:
-      context: ..
-      dockerfile: docker/Dockerfile.cvparser
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.cvparser
     container_name: worcable_cvparser
     ports:
       - "${CV_PARSER_PORT:-5000}:5000"
@@ -26,7 +32,10 @@ services:
       - DATABASE_URL=${DATABASE_URL:-mongodb://mongodb:27017/worcable}
       - ENABLED_SERVICES=${ENABLED_SERVICES}
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
+    networks:
+      - worcable-network
     restart: always
 
   mongodb:
@@ -37,7 +46,19 @@ services:
       - "${DATABASE_PORT:-27017}:27017"
     volumes:
       - mongodb_data:/data/db
+    networks:
+      - worcable-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     restart: always
+
+networks:
+  worcable-network:
+    driver: bridge
 
 volumes:
   mongodb_data:
