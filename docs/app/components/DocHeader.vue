@@ -6,6 +6,7 @@ const { header } = useAppConfig();
   <UHeader
     class="border-b-0 bg-transparent"
     toggle-side="left"
+    mode="slideover"
     :ui="{
       center: 'flex-1',
       container: 'max-w-full',
@@ -13,7 +14,6 @@ const { header } = useAppConfig();
     }"
     :menu="{ side: 'left', ui: {} }"
     :to="$localePath(header.to)"
-    mode="slideover"
   >
     <template #title>
       <AppLogo class="w-auto h-6 shrink-0" />

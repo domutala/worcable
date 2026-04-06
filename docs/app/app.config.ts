@@ -64,6 +64,8 @@ export default defineAppConfig({
     ],
   },
 
+  docHomePage: { name: "docs-slug", params: { slug: ["what-is-worcable"] } },
+
   footer: {
     to: { name: "index" },
 

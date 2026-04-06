@@ -67,26 +67,24 @@ const advantages = {
       </p>
 
       <div
-        class="flex items-center gap-2 sm:flex-row flex-col justify-center mt-10"
+        class="flex items-center gap-2 sm:flex-row flex-col justify-center pt-10"
       >
         <u-button
-          :to="$localePath(header.to)"
           size="xl"
           color="primary"
           variant="solid"
-          class="p-3 px-4"
-          icon="i-lucide-newspaper"
+          class="p-3 px-4 rounded-4xl"
+          icon="i-lucide-rocket"
         >
+          <!-- icon="i-lucide-newspaper" -->
           {{ $t("pages.index.hero.cta_primary") }}
         </u-button>
         <u-button
-          :href="repository"
-          target="_blank"
+          :to="$localePath(header.to)"
           size="xl"
           variant="soft"
           color="neutral"
-          icon="i-simple-icons-github"
-          class="border-default p-3 px-4"
+          class="border-default p-3 px-4 rounded-4xl"
         >
           {{ $t("pages.index.hero.cta_secondary") }}
         </u-button>

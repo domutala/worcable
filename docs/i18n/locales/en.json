@@ -5,9 +5,8 @@
         "badge": "🚀 **Open Source** & Free",
         "title": "Open Source recruitment, without compromise",
         "subtitle": "Manage your job listings, centralize applications, and automate your hiring process with a **modern**, **high-performance**, and **transparent** platform.",
-        "cta_primary": "Documentation",
-        "cta_primary_0": "Deploy for free",
-        "cta_secondary": "Open source"
+        "cta_primary": "Get started",
+        "cta_secondary": "Documentation"
       },
       "features": {
         "badge": "Features",
@@ -56,6 +55,15 @@
         "contribute": "Become a contributor"
       }
     }
+  },
+
+  "header": {
+    "why_worcable": { "title": "Why Worcable" },
+    "documentation": { "title": "Documentation" },
+    "api": { "title": "Api" },
+
+    "book_demo": "Book Demo",
+    "get_started": "Get Started"
   },
 
   "footer": {
