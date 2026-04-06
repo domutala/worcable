@@ -31,16 +31,16 @@ const filteredNavigation = computed(() => {
         size="xl"
         variant="solid"
         color="primary"
-        class="rounded-4xl border-2 border-primary cursor-pointer"
+        class="rounded-4xl cursor-pointer"
       >
         {{ $t("header.book_demo") }}
       </UButton>
 
       <UButton
         size="xl"
-        variant="ghost"
+        variant="soft"
         color="neutral"
-        class="rounded-4xl border-2 border-primary cursor-pointer"
+        class="rounded-4xl cursor-pointer"
       >
         {{ $t("header.get_started") }}
       </UButton>

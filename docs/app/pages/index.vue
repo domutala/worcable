@@ -28,7 +28,7 @@ const advantages = {
     </template>
 
     <div
-      class="flex not-lg:hidden divide-x divide-y divide-default bg-surface/40 border-b border-default"
+      class="flex not-lg:hidden divide-x divide-y divide-default bg-surface/70 border-b border-default"
     >
       <div
         v-for="(advantage, code) in advantages"

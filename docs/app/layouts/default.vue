@@ -9,7 +9,7 @@
     </div>
   </Container> -->
 
-  <Container :ui="{ root: 'sticky top-0 z-50', content: 'bg-surface/40' }">
+  <Container :ui="{ root: 'sticky top-0 z-50', content: 'bg-surface/70' }">
     <AppHeader />
   </Container>
 
