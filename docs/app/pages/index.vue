@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import OgImageDocs from "~/components/OgImage/OgImageDocs.vue";
+
 const { header, repository } = useAppConfig();
 
 const advantages = {

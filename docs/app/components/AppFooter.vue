@@ -60,6 +60,7 @@ const { footer, links } = useAppConfig();
 
           <div class="mt-3">
             © {{ new Date().getFullYear() }}
+
             <u-link
               to="https://domutala.netlify.app"
               target="_blank"
