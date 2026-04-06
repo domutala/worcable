@@ -59,6 +59,10 @@
   },
 
   "content": {
+    "soon": {
+      "text": "We are actively working on this section to provide you with the best possible resources. Do you have expertise in this area? We’d love your help! You can contribute directly to improving this guide by submitting a Pull Request or sharing your suggestions."
+    },
+
     "toc": {
       "title": "Table of Contents",
 
