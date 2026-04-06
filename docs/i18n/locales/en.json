@@ -58,6 +58,37 @@
     }
   },
 
+  "footer": {
+    "group": {
+      "about": {
+        "title": "About",
+        "why_open_source": "Why Open Source",
+        "contact": "Contact"
+      },
+      "resources": {
+        "title": "Resources",
+        "dcos": "Documentation",
+        "roadmap": "Roadmap",
+        "pricing": "Pricing",
+        "support": "Support",
+        "security": "Security"
+      },
+      "services": {
+        "title": "Services",
+        "core_app": "Core Application",
+        "cvarser": "CVParser",
+        "notifications": "Notifications",
+        "all": "All Services"
+      },
+      "legal": {
+        "title": "Legal",
+        "licence": "License",
+        "cug": "Terms of Use",
+        "privacy": "Privacy Policy"
+      }
+    }
+  },
+
   "content": {
     "soon": {
       "text": "We are actively working on this section to provide you with the best possible resources. Do you have expertise in this area? We’d love your help! You can contribute directly to improving this guide by submitting a Pull Request or sharing your suggestions."
