@@ -69,16 +69,24 @@ defineOgImageComponent("Docs", {
 
 const links = computed(() => {
   const links = [];
+
   if (toc?.bottom?.edit) {
     links.push({
       icon: "i-lucide-external-link",
-      label: "Edit this page",
+      label: "content.toc.bottom.edit_this_page",
       to: `${toc.bottom.edit}/${page?.value?.stem}.${page?.value?.extension}`,
       target: "_blank",
     });
   }
 
-  return [...links, ...(toc?.bottom?.links || [])].filter(Boolean);
+  links.push(...(toc?.bottom?.links || []));
+
+  return links
+    .map((link) => {
+      link.label = i18n.t(link.label);
+      return link;
+    })
+    .filter(Boolean);
 });
 </script>
 
@@ -140,7 +148,7 @@ const links = computed(() => {
 
         <template #right>
           <UContentToc
-            :title="toc?.title"
+            :title="$t(toc?.title)"
             :links="page.body?.toc?.links"
             :ui="{
               indicator: 'ms-1 light:bg-primary-950',
@@ -163,7 +171,7 @@ const links = computed(() => {
                   type="dashed"
                 />
 
-                <UPageLinks :title="toc.bottom.title" :links="links" />
+                <UPageLinks :title="$t(toc.bottom.title)" :links="links" />
               </div>
             </template>
           </UContentToc>

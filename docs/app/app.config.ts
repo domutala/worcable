@@ -59,20 +59,20 @@ export default defineAppConfig({
     ],
   },
   toc: {
-    title: "Table of Contents",
+    title: "content.toc.title",
     bottom: {
-      title: "Community",
+      title: "content.toc.bottom.title",
       edit: "https://github.com/domutala/worcable/docs/main/content",
       links: [
         {
           icon: "i-lucide-star",
-          label: "Star on GitHub",
+          label: "content.toc.bottom.star_on_github",
           to: "https://github.com/domutala/worcable",
           target: "_blank",
         },
         {
           icon: "i-lucide-play",
-          label: "Playground",
+          label: "content.toc.bottom.playground",
           to: "https://playground.worcable.app",
           target: "_blank",
         },

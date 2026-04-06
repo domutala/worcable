@@ -58,6 +58,19 @@
     }
   },
 
+  "content": {
+    "toc": {
+      "title": "Table of Contents",
+
+      "bottom": {
+        "title": "Community",
+        "star_on_github": "Star on GitHub",
+        "playground": "Playground",
+        "edit_this_page": "Edit this page"
+      }
+    }
+  },
+
   "book_demo": {
     "title": "The next-generation **open source** recruitment platform.",
     "description": "Prefer a personalized demo or a turnkey solution? Let’s discuss your hiring needs.",
