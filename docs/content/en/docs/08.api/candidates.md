@@ -1,0 +1,4 @@
+---
+navigation:
+    soon: true
+---
