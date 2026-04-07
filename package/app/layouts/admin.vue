@@ -10,9 +10,9 @@ import UiAuth from "~/components/auth.vue";
       >
         <ui-menu />
 
-        <div :to="$localePath({ name: 'admin' })">
+        <u-link :to="$localePath({ name: 'admin' })">
           <ui-logo-app shortable />
-        </div>
+        </u-link>
 
         <div class="w-15 mr-auto"></div>
 

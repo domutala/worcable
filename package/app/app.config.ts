@@ -4,13 +4,12 @@ const inputClass = [
   "has-focus-visible:ring-1 has-focus-visible:ring-accented/60",
 ].join(" ");
 
-//
 export default defineAppConfig({
   site: { name: "Worcable" },
 
   ui: {
     colors: {
-      primary: "orange",
+      primary: "lime",
       neutral: "neutral",
     },
 

@@ -42,10 +42,9 @@ const store = defineStore(
         $colorMode.preference = config.value.colorMode;
       }
 
-      if (config.value.primaryColor) {
-        appConfig.ui.colors.primary = config.value.primaryColor;
-      }
-      //  else appConfig.ui.colors.primary = "orange";
+      let color = "lime";
+      if (config.value.primaryColor) color = config.value.primaryColor;
+      appConfig.ui.colors.primary = color;
 
       // $i18n.setLocale(
       //   Object.keys($i18n.locales.value).includes(config.value.language)

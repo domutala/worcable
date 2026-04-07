@@ -2,9 +2,10 @@
 import { useFileDialog } from "@vueuse/core";
 import type { Doc } from "~~/server/database/collections";
 
-const { accept, multiple } = defineProps<{
+const { accept, multiple, nullable } = defineProps<{
   accept?: string[];
   multiple?: boolean;
+  nullable?: boolean;
 }>();
 
 const {
@@ -17,7 +18,7 @@ const {
   multiple,
 });
 
-const value = defineModel<Doc | Doc[]>();
+const value = defineModel<Doc | Doc[] | null>();
 
 const objectUrls = computed(() => {
   const urls = [];
@@ -43,7 +44,7 @@ onCancel(() => {
 });
 
 function reset() {
-  value.value = undefined;
+  value.value = nullable ? null : undefined;
   _reset();
 }
 </script>

@@ -2,6 +2,8 @@
 import type { DropdownMenuItem } from "@nuxt/ui";
 import { getThemeItems } from "~/tools/theme";
 
+const { locale } = useI18n();
+
 const teamsItem = computed(() => {
   const children: DropdownMenuItem[] = [];
 
@@ -108,7 +110,7 @@ const items = computed(() => {
   </u-button>
 
   <ui-menu-horizontal-items
-    v-else-if="$route.path.startsWith('/admin')"
+    v-else-if="$route.path.startsWith(`/${locale}/admin`)"
     :items
     :gap="5"
     :ui="{ base: 'justify-end' }"

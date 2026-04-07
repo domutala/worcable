@@ -3,9 +3,15 @@ defineProps<{ shortable?: boolean }>();
 </script>
 
 <template>
-  <nuxt-link :to="$localePath({ name: 'index' })">
-    <ui-logo-app v-if="!Store.config.config.orgName" :shortable />
-    <div
+  <div class="flex items-center gap-2 group/logo select-none">
+    <ui-logo-icon class="size-8.5" :logo="Store.config.config.logo" />
+
+    <ui-logo-text
+      :text="Store.config.config.name"
+      class="text-[24px] text-default"
+    />
+
+    <!-- <div
       v-else
       class="flex items-center gap-1 group"
       :class="{ shortable: shortable }"
@@ -25,6 +31,6 @@ defineProps<{ shortable?: boolean }>();
       >
         {{ Store.config.config.orgName }}
       </div>
-    </div>
-  </nuxt-link>
+    </div> -->
+  </div>
 </template>

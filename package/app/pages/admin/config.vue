@@ -70,6 +70,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
               v-model="state.logo"
               ref="logoUpload"
               class="relative w-max"
+              nullable
               :accept="['image/png', ' image/jpeg', 'image/webp']"
             >
               <UAvatar
@@ -85,7 +86,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
                   class="opacity-50 size-18"
                 />
               </UAvatar>
-
               <div
                 v-if="state.logo"
                 class="absolute bottom-5 right-0 translate-x-1/2"
@@ -94,6 +94,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
                   color="error"
                   icon="i-lucide-trash-2"
                   class="cursor-pointer rounded-4xl"
+                  variant="solid"
                   square
                   @click="reset"
                 ></u-button>

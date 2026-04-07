@@ -16,7 +16,7 @@ export default defineAppConfig({
   },
 
   seo: {
-    siteName: "Worcacle",
+    siteName: "Worcable",
   },
 
   repository: "https://github.com/domutala/worcable",

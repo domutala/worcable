@@ -4,27 +4,26 @@ import UiAuth from "~/components/auth.vue";
 
 const items = computed(() => {
   const items: DropdownMenuItem[] = [
-    {
-      label: Use.i18n.t("job.actions.add_new_apply"),
-      icon: "i-lucide-user-round-plus",
-      variant: "ghost",
-    },
-    {
-      label: $t("words.playground"),
-      variant: "ghost",
-      to: Use.localePath({ name: "job" }),
-    },
-
-    {
-      label: Use.i18n.t("job.actions.share_job"),
-      icon: "i-lucide-send",
-      variant: "ghost",
-    },
-    {
-      label: Use.i18n.t("job.actions.update"),
-      icon: "i-lucide-pencil-line",
-      variant: "ghost",
-    },
+    // {
+    //   label: Use.i18n.t("job.actions.add_new_apply"),
+    //   icon: "i-lucide-user-round-plus",
+    //   variant: "ghost",
+    // },
+    // {
+    //   label: $t("words.playground"),
+    //   variant: "ghost",
+    //   to: Use.localePath({ name: "job" }),
+    // },
+    // {
+    //   label: Use.i18n.t("job.actions.share_job"),
+    //   icon: "i-lucide-send",
+    //   variant: "ghost",
+    // },
+    // {
+    //   label: Use.i18n.t("job.actions.update"),
+    //   icon: "i-lucide-pencil-line",
+    //   variant: "ghost",
+    // },
   ];
 
   return items;
@@ -37,7 +36,9 @@ const items = computed(() => {
       <header
         class="sticky top-0 z-50 backdrop-blur-2xl flex items-center gap-2 md:px-10 px-3 py-3"
       >
-        <ui-logo shortable />
+        <u-link :to="$localePath({ name: 'index' })">
+          <ui-logo shortable />
+        </u-link>
 
         <div class="w-10 mr-auto"></div>
 
@@ -46,7 +47,7 @@ const items = computed(() => {
           :gap="5"
           :ui="{ base: 'justify-center' }"
         >
-          <template #before>
+          <template #after>
             <ui-auth />
 
             <!-- <u-button
@@ -65,62 +66,30 @@ const items = computed(() => {
 
     <slot />
 
-    <footer class="border-t border-default">
-      <u-container class="flex justify-center">
-        <div class="py-30 flex mx-auto gap-20 flex-wrap">
-          <div class="flex flex-col gap-4 mr-15">
-            <ui-logo-app />
-            <p class="text-muted text-sm">© {{ new Date().getFullYear() }}</p>
-          </div>
+    <u-footer>
+      <template #left>
+        <ThemePicker />
 
-          <div class="flex flex-col gap-4">
-            <div class="text-sm opacity-50 mb-1">
-              {{ $t("foot.about.title") }}
-            </div>
-            <nuxt-link href="https://domutala.netlify.app" target="_blank">
-              @domutala
-            </nuxt-link>
-            <nuxt-link :to="$localePath({ name: 'contact' })">
-              {{ $t("foot.about.why_open_source") }}
-            </nuxt-link>
-          </div>
+        <div class="flex flex-col gap-1">
+          <u-link :to="$localePath({ name: 'index' })">
+            <ui-logo shortable />
+          </u-link>
 
-          <div class="flex flex-col gap-4">
-            <div class="text-sm opacity-50 mb-1">
-              {{ $t("foot.ressources.title") }}
-            </div>
+          <p class="text-sm mt-2">
+            <span class="text-muted"> powered by </span>
 
-            <nuxt-link
-              v-for="item in [
-                'Roadmap',
-                'Pricing',
-                'Contact support',
-                'Feature Requests',
-              ]"
-              :key="item"
+            <u-link
+              to="https://worcable.netlify.app"
+              target="_blank"
+              class="underline text-default"
             >
-              {{ item }}
-            </nuxt-link>
-          </div>
+              Worcable
+            </u-link>
+          </p>
 
-          <div class="flex flex-col gap-4">
-            <div class="text-sm opacity-50 mb-1">
-              {{ $t("foot.legal.title") }}
-            </div>
-            <nuxt-link>
-              {{ $t("foot.legal.licence") }}
-            </nuxt-link>
-
-            <nuxt-link>
-              {{ $t("foot.legal.sscurity") }}
-            </nuxt-link>
-
-            <nuxt-link>
-              {{ $t("foot.legal.terms_of_service") }}
-            </nuxt-link>
-          </div>
+          <p class="text-muted text-sm">© {{ new Date().getFullYear() }}</p>
         </div>
-      </u-container>
-    </footer>
+      </template>
+    </u-footer>
   </ui-layout>
 </template>

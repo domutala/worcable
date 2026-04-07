@@ -69,12 +69,12 @@ export default defineNuxtConfig({
       "calendar",
       "localizedFormat",
     ],
-    defaultLocale: "fr",
+    defaultLocale: "en",
   },
 
   i18n: {
-    defaultLocale: "fr",
-    strategy: "prefix_and_default",
+    defaultLocale: "en",
+    strategy: "prefix",
     experimental: { localeDetector: "localeDetector.ts" },
 
     locales: [

@@ -8,7 +8,9 @@ export function getConfigSchema($t: (string: string) => string) {
     types: ["image/jpeg", "image/png", "image/webp"],
     errorMaxSizeMessage: $t("config.items.errors.logo.max"),
     errorTypeMessage: $t("config.items.errors.logo.invalid"),
-  }).optional();
+  })
+    .nullable()
+    .optional();
 
   const name = z.string($t("config.items.orgName.errors.invalid")).optional();
 

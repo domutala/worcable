@@ -27,11 +27,11 @@ export default {
     return data as T;
   },
 
-  getUrl(doc?: File | Doc) {
+  getUrl(doc?: File | Doc | null) {
     return this.createObjectUrl(doc);
   },
 
-  createObjectUrl(doc?: File | Doc) {
+  createObjectUrl(doc?: File | Doc | null) {
     if (!doc) return;
     return doc instanceof File
       ? URL.createObjectURL(doc)
