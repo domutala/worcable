@@ -1,35 +1,27 @@
 <script lang="ts" setup>
-defineProps<{ ui?: Partial<{ content: string; border?: string }> }>();
+import { omit } from "@nuxt/ui/utils";
+
+const props = defineProps<{
+  ui?: Partial<{ content: string; border?: string }>;
+}>();
+const slots = defineSlots();
+const getProxySlots = () => omit(slots, ["default"]);
 </script>
 
 <template>
-  <slot name="header" />
+  <ui-layout-content v-bind="props">
+    <template v-for="(_, name) in getProxySlots()" #[name]="slotData">
+      <slot :name="name" v-bind="slotData" />
+    </template>
 
-  <div
-    class="relative h-0.5 w-full bg-linear-to-l from-transparent to-primary/30 border-b-0!"
-    :class="ui?.border"
-  ></div>
-
-  <div
-    class="flex-1 flex flex-col overflow-hidden relative border-primary/15"
-    :class="ui?.content"
-  >
-    <div class="flex-1 overflow-hidden flex flex-col relative">
-      <div
-        class="absolute inset-0 bg-surface rounded-[inherit] opacity-37 dark:opacity-35"
-      ></div>
-
-      <!-- <div
-        class="absolute inset-0 bg-primary rounded-[inherit] opacity-3 light:opacity-20"
-      ></div>
+    <div class="sticky top-0 z-100 backdrop-blur-3xl">
+      <slot name="header" />
 
       <div
-        class="absolute inset-0 bg-linear-to-br from-default to-transparent rounded-[inherit]"
-      ></div> -->
-
-      <div class="relative flex-1 flex flex-col overflow-auto scroller bg-">
-        <slot />
-      </div>
+        class="relative h-0.5 w-full bg-linear-to-l from-transparent to-primary/30 border-b-0!"
+        :class="ui?.border"
+      ></div>
     </div>
-  </div>
+    <slot />
+  </ui-layout-content>
 </template>

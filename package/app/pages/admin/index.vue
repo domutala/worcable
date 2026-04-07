@@ -11,62 +11,15 @@ const jobs = ref<Job[]>([]);
     v-model:jobs="jobs"
     admin
   >
-    <div class="flex-1 flex flex-col">
-      <div class="hidden xl:hidden">
-        <div class="h-full border-r border-accented/60 w-100">
-          <div class="p-5">
-            <UAvatar
-              :src="Doc.getUrl(Store.session.user.avatar)"
-              :alt="`${Store.session.user.firstName} ${Store.session.user.lastName}`"
-              class="rounded-2xl text-sm size-16 border border-default bg-default"
-            />
-
-            <div class="leading-none mt-3">
-              <div>
-                {{ Store.session.user.firstName }}
-                {{ Store.session.user.lastName }}
-              </div>
-
-              <div class="text-sm opacity-50">
-                {{ Store.session.user.email }}
-              </div>
-            </div>
-
-            <p class="mt-5">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-              Veritatis, voluptatibus pariatur praesentium, sed accusantium
-              suscipit aliquid id cumque perspiciatis quia exercitationem.
-              Tempora, quia. Amet, exercitationem commodi pariatur iusto optio
-              facilis!
-            </p>
-          </div>
+    <div
+      class="overflow-hidden lg:rounded border border-default w-full lg:w-220 mx-auto max-h-full flex-col flex lg:my-10"
+    >
+      <div class="scroller flex flex-col overflow-auto divide-y divide-default">
+        <div class="sticky top-0 z-100 backdrop-blur-3xl">
+          <ui-job-search-form
+            class="h-12 lg:h-17 bg-inherit rounded-t-[inherit]"
+          />
         </div>
-      </div>
-
-      <!-- <div class="hidden max-w-full w-4xl mx-auto mb-2">
-          <div class="mx-auto"></div>
-          <nuxt-link
-            :to="$localePath({ name: 'admin-job-new' })"
-            class="relative rounded-4xl p-2 bg-yellow-200 text-black flex w-max"
-          >
-            <div class="text-sm ml-5 mr-3 h-max my-auto">
-              {{ $t("job.actions.new") }}
-            </div>
-
-            <div
-              class="aspect-square bg-black h-12 rounded-full flex items-center justify-center"
-            >
-              <u-icon name="i-lucide-plus" class="size-7 text-white" />
-            </div>
-          </nuxt-link>
-        </div> -->
-
-      <div
-        class="divide-y divide-default ring ring-default lg:rounded w-full lg:w-220 mx-auto lg:my-15 overflow-hidden flex-1 lg:flex-none flex flex-col"
-      >
-        <ui-job-search-form
-          class="h-12 lg:h-17 bg-inherit rounded-t-[inherit]"
-        />
 
         <template v-if="results?.items.length">
           <u-button

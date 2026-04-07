@@ -12,8 +12,8 @@ const comp = useTemplateRef("comp");
 
 <template>
   <ui-layout>
-    <template #header>
-      <div v-if="comp" class="relative h-15 flex items-center pr-5 gap-2">
+    <div v-if="comp" class="sticky top-0 z-100 bg-default/50">
+      <div class="relative h-15 flex items-center pr-5 gap-2">
         <ui-menu />
         <div class="leading-none flex-1 min-w-0 w-0">
           <h1 class="text-lg font-semibold truncate leading-none">
@@ -36,7 +36,7 @@ const comp = useTemplateRef("comp");
           {{ $t(comp.isEndStep ? "job.create.save" : "job.create.next") }}
         </u-button>
       </div>
-    </template>
+    </div>
 
     <ui-job-create-step ref="comp" :job>
       <template

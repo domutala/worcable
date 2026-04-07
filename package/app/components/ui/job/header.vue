@@ -89,5 +89,9 @@ const side = useCookie<string>(`job-side`, { default: () => "kanban" });
         </u-button>
       </u-dropdown-menu>
     </div>
+
+    <div
+      class="relative h-0.5 w-full bg-linear-to-l from-transparent to-primary/30"
+    ></div>
   </div>
 </template>
