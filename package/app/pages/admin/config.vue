@@ -4,7 +4,7 @@ import * as z from "zod";
 import type { FormSubmitEvent } from "@nuxt/ui";
 import _ from "lodash";
 
-const { schema, colorEnum } = getConfigSchema(Use.i18n.t);
+const { schema } = getConfigSchema(Use.i18n.t);
 type Schema = z.output<typeof schema>;
 const state = reactive<Partial<Schema>>(_.cloneDeep(Store.config.config));
 
@@ -49,14 +49,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <UiBreadcrumb
-    :breads="[
-      '$home',
-      '$admin',
-      { label: Use.i18n.t('config.labels.page_title') },
-    ]"
-  />
-
   <u-container class="py-20">
     <div class="bg-default rounded-2xl p-7 py-10 mx-auto max-w-3xl">
       <u-form

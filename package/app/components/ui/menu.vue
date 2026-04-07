@@ -1,43 +1,221 @@
-<script lang="ts" setup>
+<script setup lang="ts">
+import type { NavigationMenuItem, DropdownMenuItem } from "@nuxt/ui";
+import { getThemeItems } from "~/tools/theme";
+
 defineProps<{ slim?: boolean }>();
+
+const isOpen = ref(false);
+
+const teamsItem = computed(() => {
+  const items: NavigationMenuItem[] = [];
+
+  items.push(
+    {
+      label: Use.i18n.t("user.labels.your_team"),
+      type: "label",
+      slot: "teams-label" as const,
+    },
+    {
+      label: Use.i18n.t("user.labels.users"),
+      icon: "i-lucide-users-round",
+      to: Use.localePath({ name: "admin-users" }),
+    },
+  );
+
+  if (Store.session.user?.role === "admin") {
+    items.push({
+      label: Use.i18n.t("user.labels.invite"),
+      icon: "i-lucide-user-round-plus",
+      onSelect(e) {
+        const { open } = useModal({ uid: "invite-user" });
+        open.value = true;
+      },
+    });
+  }
+
+  return items;
+});
+
+const items = computed(() => {
+  const items: NavigationMenuItem[][] = [];
+
+  items.push(
+    buildItems([
+      {
+        label: Use.i18n.t("words.home"),
+        icon: "i-lucide-home",
+        to: Use.localePath({ name: "admin" }),
+      },
+
+      {
+        label: "CVThèque",
+        icon: "i-lucide-newspaper",
+      },
+
+      {
+        icon: "i-lucide-bell-dot",
+        label: "Notification",
+      },
+    ]),
+  );
+
+  items.push(buildItems(teamsItem.value));
+
+  if (Store.session.user?.role === "admin") {
+    items.push(
+      buildItems([
+        {
+          label: Use.i18n.t("config.actions.update"),
+          icon: "i-lucide-settings",
+          to: Use.localePath({ name: "admin-config" }),
+        },
+      ]),
+    );
+  }
+
+  return items;
+});
+
+const itemsUser = computed(() => {
+  const items: DropdownMenuItem[] = [
+    {
+      slot: "item-dropdown-auth",
+      type: "label",
+      class: "cursor-default",
+      alwaysHide: true,
+    },
+  ];
+
+  if (!Store.config.config.colorMode) {
+    items.push({
+      ...getThemeItems(),
+      alwaysHide: true,
+      variant: "soft",
+      color: "neutral",
+      size: "lg",
+    });
+  }
+
+  items.push({
+    label: "Logout",
+    icon: "i-lucide-log-out",
+    loading: Store.session.logouting,
+    alwaysHide: true,
+    onSelect(e) {
+      e.preventDefault();
+      Store.session.logout();
+    },
+  });
+
+  return items;
+});
+
+function buildItems(items: NavigationMenuItem[]) {
+  return items.map((item) => {
+    item.exact = true;
+
+    item.onSelect = (e) => {
+      isOpen.value = false;
+      item.onSelect?.(e);
+    };
+
+    return item;
+  });
+}
 </script>
 
 <template>
-  <!-- fixed top-0 left-0 z-150  -->
-  <!-- :to="$localePath({ name: 'admin' })" -->
-
-  <u-slideover v-if="Store.session.user" side="left">
+  <u-slideover
+    v-if="Store.session.user"
+    v-model:open="isOpen"
+    side="left"
+    :ui="{
+      content: 'max-w-72',
+      header: 'border-b-0 min-h-[unset] p-0 sm:px-0',
+      body: 'border-b-0! p-0 sm:px-0',
+      footer: 'p-0 sm:px-0',
+    }"
+  >
     <u-button
       variant="ghost"
       class="rounded-none size-15 border-default/50 flex items-center justify-center p-0"
       :class="{ 'size-8': slim }"
     >
-      <u-icon name="i-lucide-menu" class="size-6" :class="{ 'size-5': slim }" />
+      <u-icon
+        name="i-lucide-sidebar"
+        class="size-6"
+        :class="{ 'size-5': slim }"
+      />
     </u-button>
 
-    <template #content>
-      <div
-        class="p-2 flex items-center gap-3 text-left text-lg max-w-full border-b border-default"
-      >
-        <UAvatar
-          :src="Doc.getUrl(Store.session.user.avatar)"
-          :alt="`${Store.session.user.firstName} ${Store.session.user.lastName}`"
-          size="3xl"
-          class="rounded-2xl text-sm"
+    <template #header>
+      <div></div>
+    </template>
+
+    <template #body>
+      <div class="p-5">
+        <UNavigationMenu
+          :items
+          :ui="{ separator: 'py-1 bg-transparent' }"
+          orientation="vertical"
         />
-
-        <div class="font-normal leading-none">
-          <div class="leading-none">
-            {{ Store.session.user.firstName }}
-            {{ Store.session.user.lastName }}
-          </div>
-
-          <div class="text-sm text-primary leading-none">
-            {{ $t(`user.items.role.items.${Store.session.user.role}`) }}
-            <!-- {{ Store.session.user.email }} -->
-          </div>
-        </div>
       </div>
+    </template>
+
+    <template #footer>
+      <u-dropdown-menu :items="itemsUser">
+        <template #item-dropdown-auth>
+          <div
+            class="pb-3 px-1 flex items-center gap-3 text-left text-lg w-75 max-w-full border-b border-default"
+          >
+            <UAvatar
+              :src="Doc.getUrl(Store.session.user.avatar)"
+              :alt="`${Store.session.user.firstName} ${Store.session.user.lastName}`"
+              size="3xl"
+              class="rounded-2xl text-sm"
+            />
+
+            <div class="font-normal leading-none">
+              <div class="leading-none">
+                {{ Store.session.user.firstName }}
+                {{ Store.session.user.lastName }}
+              </div>
+
+              <div class="text-sm text-muted leading-none">
+                {{ Store.session.user.email }}
+              </div>
+            </div>
+          </div>
+        </template>
+
+        <div class="p-2 w-full">
+          <UButton
+            :avatar="{
+              src: Doc.getUrl(Store.session.user.avatar),
+              alt: `${Store.session.user.firstName} ${Store.session.user.lastName}`,
+              loading: 'lazy',
+              size: 'xl',
+              class: 'rounded-xl',
+            }"
+            size="xl"
+            color="neutral"
+            variant="ghost"
+            class="justify-start text-left w-full px-4 py-3 rounded-lg"
+          >
+            <div class="font-normal leading-none">
+              <div class="leading-none">
+                {{ Store.session.user.firstName }}
+                {{ Store.session.user.lastName }}
+              </div>
+
+              <div class="text-sm text-primary leading-none">
+                {{ $t(`user.items.role.items.${Store.session.user.role}`) }}
+                <!-- {{ Store.session.user.email }} -->
+              </div>
+            </div>
+          </UButton>
+        </div>
+      </u-dropdown-menu>
     </template>
   </u-slideover>
 </template>
