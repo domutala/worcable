@@ -154,10 +154,10 @@ function openJobNewTab(e: Event, job: Job) {
                       ></div>
 
                       <u-button
-                        icon="i-lucide-external-link"
+                        icon="i-lucide-arrow-up-right"
                         size="md"
-                        variant="ghost"
-                        class="absolute top-2 right-3 hidden group-hover:flex cursor-pointer"
+                        variant="soft"
+                        class="absolute top-2 right-3 hidden group-hover:flex cursor-pointer rounded-full border border-default"
                         @click="(e) => openJobNewTab(e, job)"
                       ></u-button>
                     </div>

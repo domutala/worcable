@@ -4,26 +4,10 @@ import UiAuth from "~/components/auth.vue";
 
 const items = computed(() => {
   const items: DropdownMenuItem[] = [
-    // {
-    //   label: Use.i18n.t("job.actions.add_new_apply"),
-    //   icon: "i-lucide-user-round-plus",
-    //   variant: "ghost",
-    // },
-    // {
-    //   label: $t("words.playground"),
-    //   variant: "ghost",
-    //   to: Use.localePath({ name: "job" }),
-    // },
-    // {
-    //   label: Use.i18n.t("job.actions.share_job"),
-    //   icon: "i-lucide-send",
-    //   variant: "ghost",
-    // },
-    // {
-    //   label: Use.i18n.t("job.actions.update"),
-    //   icon: "i-lucide-pencil-line",
-    //   variant: "ghost",
-    // },
+    {
+      label: $t("job.labels.title"),
+      to: Use.localePath({ name: "job" }),
+    },
   ];
 
   return items;
@@ -42,11 +26,7 @@ const items = computed(() => {
 
         <div class="w-10 mr-auto"></div>
 
-        <ui-menu-horizontal-items
-          :items
-          :gap="5"
-          :ui="{ base: 'justify-center' }"
-        >
+        <ui-menu-horizontal-items :items :gap="5" :ui="{ base: 'justify-end' }">
           <template #after>
             <ui-auth />
 
@@ -64,7 +44,9 @@ const items = computed(() => {
       </header>
     </template>
 
-    <slot />
+    <UMain>
+      <slot />
+    </UMain>
 
     <u-footer>
       <template #left>
