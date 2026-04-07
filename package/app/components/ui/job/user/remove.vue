@@ -41,6 +41,7 @@ async function submit() {
       :loading
       icon="i-lucide-user-round-x"
       color="error"
+      size="md"
       square
       @click="modal.open = true"
     />

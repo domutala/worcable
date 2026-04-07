@@ -144,6 +144,7 @@ async function loadData() {
                   :loading
                   icon="i-lucide-ellipsis-vertical"
                   variant="ghost"
+                  size="md"
                 >
                 </u-button>
               </u-dropdown-menu>

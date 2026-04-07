@@ -68,7 +68,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           :ui="{ leadingIcon: 'size-4' }"
           :loading
           size="md"
-          icon="i-lucide-pencil"
+          icon="i-lucide-user-round-pen"
         >
           {{ $t(`user.items.role.items.${user.role}`) }}
         </u-button>

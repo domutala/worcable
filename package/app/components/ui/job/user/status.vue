@@ -46,7 +46,8 @@ async function submit(role: string) {
       v-if="!$slots.default"
       :ui="{ leadingIcon: 'size-4' }"
       :loading
-      icon="i-lucide-pencil"
+      icon="i-lucide-user-round-pen"
+      size="md"
     >
       {{ $t(`user.items.role.items.${jobUser.role}`) }}
     </u-button>
