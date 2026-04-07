@@ -6,3 +6,4 @@ export * from "./user";
 export * from "./session";
 export * from "./config";
 export * from "./job_user";
+export * from "./event_details";

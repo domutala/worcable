@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import _ from "lodash";
+import services from "~~/services.json";
 
 export default defineEventHandler(async (event) => {
   if (!event.path.startsWith("/api")) return;
@@ -29,11 +30,21 @@ export default defineEventHandler(async (event) => {
           path: "/",
         });
       } else {
-        const user = await collections.$User.findById(session.userID);
+        if (session.userID) {
+          const user = await collections.$User.findById(session.userID);
 
-        if (user?.active) {
-          _.unset(user, "password");
-          event.context.session = { ...session, user };
+          if (user?.active) {
+            _.unset(user, "password");
+            event.context.session = { ...session, user } as any;
+          }
+        } else if (session.serviceID) {
+          const service = Object.values(services).find(
+            (s) => s.id === session.serviceID,
+          );
+
+          if (service) {
+            event.context.session = { ...session, service } as any;
+          }
         }
       }
     } catch (error) {

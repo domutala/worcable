@@ -9,7 +9,8 @@ export default defineEventHandler(async (event) => {
   await getJob({
     id,
     $t,
-    userID: event.context.session.user.id,
+    userID: event.context.session.user?.id,
+    serviceID: event.context.session.user?.id,
   });
 
   const { applyStatus: schema } = getJobShema($t);

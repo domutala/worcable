@@ -8,13 +8,13 @@ const SessionSchema = new mongoose.Schema(
     userID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
       index: true,
     },
+
+    serviceID: { type: String, index: true },
   },
-  {
-    timestamps: true,
-  },
+
+  { timestamps: true },
 );
 
 export type SessionDocument = mongoose.HydratedDocumentFromSchema<

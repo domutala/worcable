@@ -2,10 +2,11 @@ import { H3EventContext } from "h3";
 import { Session, User } from "../database/collections";
 
 import { Schema, Types } from "mongoose";
+import { ServiceTier } from "./service_tier";
 
 declare module "h3" {
   interface H3EventContext {
-    session: Session & { user: User };
+    session: Session & { user: User; service: ServiceTier };
   }
 }
 

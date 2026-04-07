@@ -5,10 +5,12 @@ import { getJob } from "~~/server/services/job/get";
 export async function createJob({
   $t,
   userID,
+  serviceID,
   body,
 }: {
   $t: (str: string) => string;
-  userID: string;
+  userID?: string;
+  serviceID?: string;
   body: any;
 }) {
   if (body.phone) body.phone = body.phone.toString();
@@ -27,7 +29,6 @@ export async function createJob({
     }
 
     const exists = await getJob({ $t, id: _id, userID });
-
     if (!exists) {
       throw createError({
         statusCode: 404,
@@ -39,7 +40,10 @@ export async function createJob({
     return await getJob({ id: _id, $t });
   } else {
     const job = await collections.$Job.create(jobData);
-    await collections.$JobUser.create({ userID, jobID: job._id });
+
+    if (userID) {
+      await collections.$JobUser.create({ userID, jobID: job._id });
+    }
 
     return job;
   }

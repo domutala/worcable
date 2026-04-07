@@ -80,6 +80,9 @@ importers:
       marked:
         specifier: ^17.0.1
         version: 17.0.1
+      mitt:
+        specifier: ^3.0.1
+        version: 3.0.1
       mongoose:
         specifier: ^9.2.0
         version: 9.2.0(socks@2.8.7)

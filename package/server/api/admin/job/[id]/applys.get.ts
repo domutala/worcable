@@ -15,7 +15,8 @@ export default defineEventHandler(async (event) => {
   await getJob({
     $t,
     id: jobID,
-    userID: event.context.session.user.id,
+    userID: event.context.session.user?.id,
+    serviceID: event.context.session.user?.id,
   });
 
   return await listApplys({ $t, query: { ...query, jobID } });

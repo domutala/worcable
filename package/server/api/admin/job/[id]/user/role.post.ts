@@ -9,9 +9,10 @@ export default defineEventHandler(async (event) => {
 
   await checkJobUserRole({
     $t,
-    userID: event.context.session.user.id,
+    user: event.context.session.user,
+    service: event.context.session.service,
     jobID: id,
-    role: ["admin"],
+    roles: ["admin", "service"],
   });
 
   const { role: schema } = getUserShema($t);

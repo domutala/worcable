@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  if (user._id.toString() === event.context.session.user.id) {
+  if (user._id.toString() === event.context.session.user?.id) {
     throw createError({
       statusCode: 404,
       data: { message: $t("session.errors.not_authorized") },

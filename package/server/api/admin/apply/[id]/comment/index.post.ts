@@ -10,9 +10,10 @@ export default defineEventHandler(async (event) => {
   const { jobID } = await getApply({ id: applyID, $t });
   await checkJobUserRole({
     $t,
-    userID: event.context.session.user.id,
+    user: event.context.session.user,
+    service: event.context.session.service,
     jobID: jobID.toString(),
-    role: ["admin", "recruiter"],
+    roles: ["admin", "recruiter", "service"],
   });
 
   const { schema } = getApplyCommentSchema($t);

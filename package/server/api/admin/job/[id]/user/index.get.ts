@@ -8,9 +8,10 @@ export default defineEventHandler(async (event) => {
 
   await checkJobUserRole({
     $t,
-    userID: event.context.session.user.id,
+    user: event.context.session.user,
+    service: event.context.session.service,
     jobID: id,
-    role: ["admin", "recruiter", "guest"],
+    roles: ["admin", "recruiter", "guest", "service"],
   });
 
   const ids = await collections.$JobUser.distinct("userID", { jobID: id });

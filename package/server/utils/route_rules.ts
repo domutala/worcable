@@ -1,14 +1,17 @@
-import type { USER_ROLES } from "~~/server/services/user_shema";
+import { USER_ROLES } from "~~/server/services/user_shema";
 import { HTTPMethod } from "h3";
+
+const roles = [...USER_ROLES, "service"] as const;
+export type RouteRuleRole = (typeof roles)[number];
 
 type RouteRule = {
   pattern: string | RegExp;
   methods: HTTPMethod[];
-  roles: (typeof USER_ROLES)[number][];
+  roles: RouteRuleRole[];
 };
 
 export const routeRules: RouteRule[] = [
-  { pattern: "/api/admin/job", methods: ["POST"], roles: ["admin"] },
+  { pattern: "/api/admin/job", methods: ["POST"], roles: ["admin", "service"] },
 
   { pattern: "/api/admin/user/invite", methods: ["POST"], roles: ["admin"] },
   {

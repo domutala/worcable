@@ -7,6 +7,7 @@ export async function createSeassion(
   user: UserDocument,
 ): Promise<{ token: string; user: User }> {
   const runtime = useRuntimeConfig();
+
   const session = await collections.$Session.create({
     userID: user._id.toString(),
   });
@@ -15,4 +16,20 @@ export async function createSeassion(
 
   const token = jwt.sign({ sessionID: session.id }, runtime.secretKey);
   return { token, user: user as any as User };
+}
+
+export async function newSeassion(
+  params: { userID: string } | { serviceID: string },
+) {
+  const runtime = useRuntimeConfig();
+
+  const _sessionValues: { userID?: string; serviceID?: string } = {};
+
+  if ("userID" in params) _sessionValues.userID = params.userID;
+  else _sessionValues.serviceID = params.serviceID;
+
+  const session = await collections.$Session.create(_sessionValues);
+  const token = jwt.sign({ sessionID: session.id }, runtime.secretKey);
+
+  return token;
 }

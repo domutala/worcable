@@ -2,7 +2,7 @@
   "name": "personal-brand-website-design",
   "private": true,
   "type": "module",
-  "version":"0.28.0",
+  "version": "0.28.0",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -36,6 +36,7 @@
     "file-type": "^21.3.0",
     "lowlight": "^3.3.0",
     "marked": "^17.0.1",
+    "mitt": "^3.0.1",
     "mongoose": "^9.2.0",
     "nuxt": "^4.2.1",
     "nuxt-swiper": "2.0.1",
