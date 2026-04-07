@@ -11,7 +11,7 @@ export function getThemeItems() {
         label: "Light",
         icon: "i-lucide-sun",
         type: "checkbox",
-        checked: colorMode.value === "light",
+        checked: colorMode.preference === "light",
         onSelect(e: Event) {
           e.preventDefault();
           colorMode = useColorMode();
@@ -22,13 +22,26 @@ export function getThemeItems() {
         label: "Dark",
         icon: "i-lucide-moon",
         type: "checkbox",
-        checked: colorMode.value === "dark",
+        checked: colorMode.preference === "dark",
         onUpdateChecked(checked: boolean) {
           colorMode.preference = "dark";
         },
         onSelect(e: Event) {
           e.preventDefault();
           colorMode.preference = "dark";
+        },
+      },
+      {
+        label: "System",
+        icon: "i-tabler-device-desktop",
+        type: "checkbox",
+        checked: colorMode.preference === "system",
+        onUpdateChecked(checked: boolean) {
+          colorMode.preference = "system";
+        },
+        onSelect(e: Event) {
+          e.preventDefault();
+          colorMode.preference = "system";
         },
       },
     ],

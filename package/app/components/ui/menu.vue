@@ -6,36 +6,6 @@ defineProps<{ slim?: boolean }>();
 
 const isOpen = ref(false);
 
-const teamsItem = computed(() => {
-  const items: NavigationMenuItem[] = [];
-
-  items.push(
-    {
-      label: Use.i18n.t("user.labels.your_team"),
-      type: "label",
-      slot: "teams-label" as const,
-    },
-    {
-      label: Use.i18n.t("user.labels.users"),
-      icon: "i-lucide-users-round",
-      to: Use.localePath({ name: "admin-users" }),
-    },
-  );
-
-  if (Store.session.user?.role === "admin") {
-    items.push({
-      label: Use.i18n.t("user.labels.invite"),
-      icon: "i-lucide-user-round-plus",
-      onSelect(e) {
-        const { open } = useModal({ uid: "invite-user" });
-        open.value = true;
-      },
-    });
-  }
-
-  return items;
-});
-
 const items = computed(() => {
   const items: NavigationMenuItem[][] = [];
 
@@ -59,19 +29,23 @@ const items = computed(() => {
     ]),
   );
 
-  items.push(buildItems(teamsItem.value));
+  const g2: NavigationMenuItem[] = [
+    {
+      label: Use.i18n.t("user.labels.users"),
+      icon: "i-lucide-users-round",
+      to: Use.localePath({ name: "admin-users" }),
+    },
+  ];
 
   if (Store.session.user?.role === "admin") {
-    items.push(
-      buildItems([
-        {
-          label: Use.i18n.t("config.actions.update"),
-          icon: "i-lucide-settings",
-          to: Use.localePath({ name: "admin-config" }),
-        },
-      ]),
-    );
+    g2.push({
+      label: Use.i18n.t("config.actions.update"),
+      icon: "i-lucide-settings",
+      to: Use.localePath({ name: "admin-config" }),
+    });
   }
+
+  items.push(buildItems(g2));
 
   return items;
 });
@@ -138,13 +112,13 @@ function buildItems(items: NavigationMenuItem[]) {
   >
     <u-button
       variant="ghost"
-      class="rounded-none size-15 border-default/50 flex items-center justify-center p-0"
+      class="rounded-none size-15 flex items-center justify-center p-0 group/toggle"
       :class="{ 'size-8': slim }"
     >
       <u-icon
-        name="i-lucide-sidebar"
-        class="size-6"
-        :class="{ 'size-5': slim }"
+        name="i-lucide-sidebar-open"
+        class="size-6 opacity-35 group-hover/toggle:opacity-100"
+        :class="{ 'size-3': slim }"
       />
     </u-button>
 
