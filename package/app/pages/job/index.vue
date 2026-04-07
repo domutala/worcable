@@ -63,6 +63,10 @@ function openJobNewTab(e: Event, job: Job) {
         class="sticky top-0 z-150 bg- backdrop-blur-3xl border-b border-default"
       >
         <div class="h-12 flex items-center">
+          <u-link :to="$localePath({ name: 'index' })" class="ml-3">
+            <ui-logo-icon class="size-8.5" :logo="Store.config.config.logo" />
+          </u-link>
+
           <input
             v-model="form.searchTerm.value"
             type="search"

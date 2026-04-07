@@ -16,12 +16,16 @@ const items = computed(() => {
         icon: "i-lucide-home",
         to: Use.localePath({ name: "admin" }),
       },
-
+      {
+        label: $t("job.labels.title"),
+        to: Use.localePath({ name: "job" }),
+        icon: "i-lucide-newspaper",
+        target: "_blank",
+      },
       {
         label: "CVThèque",
-        icon: "i-lucide-newspaper",
+        icon: "i-lucide-library-big",
       },
-
       {
         icon: "i-lucide-bell-dot",
         label: "Notification",

@@ -16,7 +16,7 @@ const items = computed(() => {
 
 <template>
   <ui-layout>
-    <template #header>
+    <UMain>
       <header
         class="sticky top-0 z-50 backdrop-blur-2xl flex items-center gap-2 md:px-10 px-3 py-3"
       >
@@ -29,22 +29,10 @@ const items = computed(() => {
         <ui-menu-horizontal-items :items :gap="5" :ui="{ base: 'justify-end' }">
           <template #after>
             <ui-auth />
-
-            <!-- <u-button
-          href="https://github.com/domutala/worcable"
-          target="_blank"
-          size="lg"
-          color="neutral"
-          variant="ghost"
-          icon="i-simple-icons-github"
-        >
-        </u-button> -->
           </template>
         </ui-menu-horizontal-items>
       </header>
-    </template>
 
-    <UMain>
       <slot />
     </UMain>
 
