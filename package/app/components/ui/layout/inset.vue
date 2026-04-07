@@ -16,14 +16,18 @@ defineProps<{ ui?: Partial<{ content: string; border?: string }> }>();
   >
     <div class="flex-1 overflow-hidden flex flex-col relative">
       <div
+        class="absolute inset-0 bg-surface rounded-[inherit] opacity-37 dark:opacity-35"
+      ></div>
+
+      <!-- <div
         class="absolute inset-0 bg-primary rounded-[inherit] opacity-3 light:opacity-20"
       ></div>
 
       <div
         class="absolute inset-0 bg-linear-to-br from-default to-transparent rounded-[inherit]"
-      ></div>
+      ></div> -->
 
-      <div class="relative flex-1 flex flex-col overflow-auto scroller">
+      <div class="relative flex-1 flex flex-col overflow-auto scroller bg-">
         <slot />
       </div>
     </div>

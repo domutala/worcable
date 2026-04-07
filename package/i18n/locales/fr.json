@@ -9,6 +9,28 @@
     "btn": "OK, compris"
   },
 
+  "colors": {
+    "null": "Par défault",
+    "default": "Par défault",
+    "red": "rouge",
+    "orange": "orange",
+    "amber": "ambre",
+    "yellow": "jaune",
+    "lime": "citron",
+    "green": "vert",
+    "emerald": "émeraude",
+    "teal": "bleu sarcelle",
+    "cyan": "cyan",
+    "sky": "bleu ciel",
+    "blue": "bleu",
+    "indigo": "indigo",
+    "violet": "violet",
+    "purple": "violet foncé",
+    "fuchsia": "fuchsia",
+    "pink": "rose",
+    "rose": "rose clair"
+  },
+
   "words": {
     "on_this_page": "Sur cette page",
     "hire_me": "Engagez-moi",

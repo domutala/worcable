@@ -10,24 +10,27 @@ const state = reactive<Partial<Schema>>(_.cloneDeep(Store.config.config));
 
 const submiting = ref(false);
 const colors = [
-  "red",
-  "orange",
-  "amber",
-  "yellow",
-  "lime",
-  "green",
-  "emerald",
-  "teal",
-  "cyan",
-  "sky",
-  "blue",
-  "indigo",
-  "violet",
-  "purple",
-  "fuchsia",
-  "pink",
-  "rose",
-] as typeof colorEnum.options;
+  { value: null, label: Use.i18n.t("colors.default") },
+  { value: "red", label: Use.i18n.t("colors.red") },
+  { value: "orange", label: Use.i18n.t("colors.orange") },
+  { value: "amber", label: Use.i18n.t("colors.amber") },
+  { value: "yellow", label: Use.i18n.t("colors.yellow") },
+  { value: "lime", label: Use.i18n.t("colors.lime") },
+  { value: "green", label: Use.i18n.t("colors.green") },
+  { value: "emerald", label: Use.i18n.t("colors.emerald") },
+  { value: "teal", label: Use.i18n.t("colors.teal") },
+  { value: "cyan", label: Use.i18n.t("colors.cyan") },
+  { value: "sky", label: Use.i18n.t("colors.sky") },
+  { value: "blue", label: Use.i18n.t("colors.blue") },
+  { value: "indigo", label: Use.i18n.t("colors.indigo") },
+  { value: "violet", label: Use.i18n.t("colors.violet") },
+  { value: "purple", label: Use.i18n.t("colors.purple") },
+  { value: "fuchsia", label: Use.i18n.t("colors.fuchsia") },
+  { value: "pink", label: Use.i18n.t("colors.pink") },
+  { value: "rose", label: Use.i18n.t("colors.rose") },
+];
+
+// as typeof colorEnum.options;
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   submiting.value = true;
@@ -129,21 +132,22 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           >
             <!-- --color-cyan-500 -->
             <template #default="{ modelValue }">
-              <template v-if="modelValue">
-                <div
-                  class="w-7 h-3 rounded-2xl border border-default mr-3 my-auto"
-                  :class="[`bg-${modelValue}-500`]"
-                  :style="{ backgroundColor: `var(--color-${modelValue}-500)` }"
-                ></div>
+              <div
+                class="w-7 h-3 rounded-2xl border border-default mr-3 my-auto"
+                :style="{
+                  backgroundColor: `var(--color-${modelValue ?? 'lime'}-500)`,
+                }"
+              ></div>
 
-                {{ modelValue }}
-              </template>
+              {{ $t(`colors.${modelValue}`) }}
             </template>
 
             <template #item-leading="{ item }">
               <div
                 class="w-7 h-3 rounded-2xl border border-default mr-3 my-auto"
-                :style="{ backgroundColor: `var(--color-${item}-500)` }"
+                :style="{
+                  backgroundColor: `var(--color-${item.value ?? 'lime'}-500)`,
+                }"
               ></div>
             </template>
 

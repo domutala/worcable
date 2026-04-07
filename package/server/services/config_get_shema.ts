@@ -65,7 +65,7 @@ export function getConfigSchema($t: (string: string) => string) {
     ],
     $t("config.items.primary.errors.invalid"),
   );
-  const primaryColor = colorEnum.optional();
+  const primaryColor = colorEnum.nullable().optional();
 
   const language = z
     .enum(["fr"], $t("config.items.primary.errors.invalid"))
