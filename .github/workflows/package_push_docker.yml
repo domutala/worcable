@@ -67,11 +67,10 @@ jobs:
           readme-filepath: ./package/docker/README.md
           short-description: Official Docker image for the main service of Worcable
 
-  equential-second-job:
+  deploy:
     runs-on: ubuntu-latest
-    needs:
-      - push-docker-image
+    needs: push-docker-image
+    if: needs.push-docker-image.result == 'success'
 
-    if: always()
     steps:
-      - run: echo '${{ toJSON(needs) }}'
+      - run: echo '${{ toJSON(needs.push-docker-image.outputs) }}'
