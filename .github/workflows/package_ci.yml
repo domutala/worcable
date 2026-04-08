@@ -3,7 +3,8 @@ name: Build and Publish Docker Image
 on:
   push:
     branches:
-      - dev
+      - main
+      - "release/*"
 
 env:
   # On utilise Docker Hub
@@ -33,7 +34,19 @@ jobs:
         with:
           images: ${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=latest
+            # type=raw,value=latest
+            # type=sha,format=short
+
+            # If the push is on 'main', tag as 'latest'
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+
+            # If the push is on 'dev', tag as 'dev'
+            type=raw,value=dev,enable=${{ github.ref == 'refs/heads/dev' }}
+
+            # If it's a release branch (release/v1.0), extract 'v1.0'
+            type=ref,event=branch,suffix=,enable=${{ startsWith(github.ref, 'refs/heads/release/') }}
+
+            # Always include the short SHA for traceability
             type=sha,format=short
 
       - name: Build and push Docker image
@@ -41,6 +54,9 @@ jobs:
         with:
           context: ./package
           file: ./package/docker/Dockerfile
+          build-args: |
+            APP_VERSION=${{ github.ref_name }}
+
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
