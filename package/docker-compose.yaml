@@ -3,8 +3,11 @@ services:
     image: domutala/worcable-package:${IMAGE_TAG:-latest}
     container_name: worcable-${BRANCH_NAME:-main}
     restart: always
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
     ports:
-      - "${PORT:-3000}:3000"
+      - "${HOST_PORT:-3000}:3000"
     env_file:
       - package.env
     environment:
