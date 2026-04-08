@@ -97,6 +97,9 @@ NUXT_DATABASE_URL=$DATABASE_URL
 NUXT_SECRET_KEY=$SECRET_KEY
 EOF
 
+docker network inspect traefik-public >/dev/null 2>&1 || \
+docker network create traefik-public
+
 # --- 5. Deployment Execution ---
 echo "📥 Pulling latest images..."
 docker compose pull
@@ -108,3 +111,4 @@ echo "🧹 Cleaning up unused Docker images..."
 docker image prune -f
 
 echo "✨ Deployment completed successfully on port $FINAL_PORT!"
+
