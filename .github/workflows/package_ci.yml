@@ -114,16 +114,22 @@ jobs:
           target: "/home/${{ secrets.SSH_USER }}/worcable/package-${{ needs.push-docker-image.outputs.safe_branch }}"
           strip_components: 1
 
-      - name: Execute Docker Compose on VPS
+      - name: Execute Docker Compose
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/${{ secrets.SSH_USER }}/worcable/package-${{ needs.push-docker-image.outputs.safe_branch }}
+            # On définit le chemin absolu pour éviter toute confusion
+            TARGET_DIR="/home/${{ secrets.SSH_USER }}/worcable/package-${{ needs.push-docker-image.outputs.safe_branch }}"
 
-            # Injection des variables dans le .env
+            cd $TARGET_DIR || exit 1
+
+            # Vérification de présence du fichier (debug)
+            ls -la docker-compose.yaml
+
+            # Création du .env
             cat <<EOF > .env
             IMAGE_TAG=${{ needs.push-docker-image.outputs.docker_tag }}
             BRANCH_NAME=${{ needs.push-docker-image.outputs.safe_branch }}
@@ -131,6 +137,7 @@ jobs:
             EOF
 
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+            # Utilisation explicite du fichier si nécessaire
             docker compose pull
             docker compose up -d --remove-orphans
-            docker image prune -f
