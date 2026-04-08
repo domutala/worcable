@@ -110,8 +110,9 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "./package/docker-compose.yaml"
+          source: "package/docker-compose.yaml"
           target: "/home/${{ secrets.SSH_USER }}/worcable/package-${{ needs.push-docker-image.outputs.safe_branch }}"
+
           strip_components: 1
 
       - name: Execute Docker Compose
