@@ -126,7 +126,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "package/docker-compose.yaml"
-          target: "${{ env.BASE_DIR }}/package-${{ needs.push-docker-image.outputs.safe_branch }}/"
+          target: "${{ env.BASE_DIR }}/package-${{ needs.push-docker-image.outputs.safe_branch }}"
 
       - name: Copy docker/deploy.sh
         uses: appleboy/scp-action@v0.1.7
@@ -135,7 +135,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "package/docker/deploy.sh"
-          target: "${{ env.BASE_DIR }}/package-${{ needs.push-docker-image.outputs.safe_branch }}/"
+          target: "${{ env.BASE_DIR }}/package-${{ needs.push-docker-image.outputs.safe_branch }}"
 
           strip_components: 1
 

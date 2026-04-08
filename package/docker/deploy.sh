@@ -29,7 +29,7 @@ else
     SUGGESTED_PORT=3002 
 fi
 
-# Function to check if a specific port is available
+# Function to check if a specific port is available on the host
 is_port_free() {
   ! ss -tuln | grep -q ":$1 "
 }
@@ -48,26 +48,40 @@ fi
 echo "✅ Using Port: $FINAL_PORT"
 
 # --- 2. URL and Database Formatting Logic ---
-if [ "$BRANCH" == "main" ]; then
-  DOMAIN="$BASE_URL"
-  APP_URL="https://$BASE_URL"
-  DB_NAME="worcable_prod"
+# Logic: If package.env exists and contains the URL, reuse it. Otherwise, generate based on branch.
+if [ -f "package.env" ] && grep -q "NUXT_PUBLIC_APP_URL=" package.env; then
+  APP_URL=$(grep "NUXT_PUBLIC_APP_URL=" package.env | cut -d'=' -f2-)
+  # Extract domain from URL (removes protocol and trailing slashes)
+  DOMAIN=$(echo "$APP_URL" | sed -e 's|^[^/]*//||' -e 's|/.*$||')
 else
-  DOMAIN="$BRANCH.sandbox.$BASE_URL"
-  APP_URL="https://$BRANCH.sandbox.$BASE_URL"
-  DB_NAME="worcable_${BRANCH}_sandbox"
+  if [ "$BRANCH" == "main" ]; then
+    DOMAIN="$BASE_URL"
+    APP_URL="https://$BASE_URL"
+    DB_NAME="worcable_prod"
+  else
+    DOMAIN="$BRANCH.sandbox.$BASE_URL"
+    APP_URL="https://$BRANCH.sandbox.$BASE_URL"
+    DB_NAME="worcable_${BRANCH}_sandbox"
+  fi
 fi
 
-# --- 3. NUXT_SECRET_KEY Management ---
-# Reuse existing key if present, otherwise generate a new one
+# --- 3. Persistence Management (Secret Key & DB URL) ---
+# Reuse existing NUXT_SECRET_KEY if present, otherwise generate a new one
 if [ -f "package.env" ] && grep -q "NUXT_SECRET_KEY=" package.env; then
   SECRET_KEY=$(grep "NUXT_SECRET_KEY=" package.env | cut -d'=' -f2-)
 else
   SECRET_KEY=$(openssl rand -base64 48 | tr -d '\n')
 fi
 
+# Reuse existing DATABASE_URL if present, otherwise construct it
+if [ -f "package.env" ] && grep -q "NUXT_DATABASE_URL=" package.env; then
+  DATABASE_URL=$(grep "NUXT_DATABASE_URL=" package.env | cut -d'=' -f2-)
+else
+  DATABASE_URL="mongodb+srv://$MONGO_USER:$MONGO_PWD@cluster0.l1qnkbx.mongodb.net/$DB_NAME"
+fi
+
 # --- 4. Configuration File Generation ---
-# Create .env for Docker Compose
+# Create/Overwrite .env for Docker Compose
 cat <<EOF > .env
 IMAGE_TAG=$IMAGE_TAG
 BRANCH_NAME=$BRANCH
@@ -75,22 +89,22 @@ HOST_PORT=$FINAL_PORT
 DOMAIN=$DOMAIN
 EOF
 
-# Create package.env for the application container
+# Create/Overwrite package.env for the application container
 cat <<EOF > package.env
 PORT=$FINAL_PORT
 NUXT_PUBLIC_APP_URL=$APP_URL
-NUXT_DATABASE_URL="mongodb+srv://$MONGO_USER:$MONGO_PWD@cluster0.l1qnkbx.mongodb.net/$DB_NAME"
+NUXT_DATABASE_URL="$DATABASE_URL"
 NUXT_SECRET_KEY=$SECRET_KEY
 EOF
 
 # --- 5. Deployment Execution ---
-echo "📥 Pulling images..."
+echo "📥 Pulling latest images..."
 docker compose pull
 
 echo "🆙 Starting containers..."
 docker compose up -d --remove-orphans
 
-echo "🧹 Cleaning up old images..."
+echo "🧹 Cleaning up unused Docker images..."
 docker image prune -f
 
 echo "✨ Deployment completed successfully on port $FINAL_PORT!"
