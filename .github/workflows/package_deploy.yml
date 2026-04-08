@@ -1,4 +1,4 @@
-name: package_push_docker
+name: package_deploy
 
 on:
   workflow_run:
