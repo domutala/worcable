@@ -46,16 +46,6 @@ jobs:
             # Always include the short SHA for traceability
             type=sha,format=short
 
-      - name: Replace README with Docker-specific version
-        run: |
-          # Move the docker-specific README to the package root
-          if [ -f "./package/docker/README.md" ]; then
-              cp ./package/docker/README.md ./package/README.md
-              echo "✅ README replaced with /package/docker/README.md"
-          else
-              echo "⚠️  Warning: /package/docker/README.md not found!"
-          fi
-
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -69,3 +59,11 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=${{ env.IMAGE_NAME }}:buildcache
           cache-to: type=registry,ref=${{ env.IMAGE_NAME }}:buildcache,mode=max
+
+      - name: Update Docker Hub Description
+        uses: peter-evans/dockerhub-description@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: ${{ env.IMAGE_NAME }}
+          readme-filepath: ./package/docker/README.md
