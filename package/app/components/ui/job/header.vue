@@ -7,7 +7,7 @@ const side = useCookie<string>(`job-side`, { default: () => "kanban" });
 <template>
   <div v-if="ready" class="relative">
     <div
-      class="h-15 pr-5 hidden lg:flex items-center gap-2 backdrop-blur-lg sticky top-0 z-50"
+      class="h-15 pr-5 hidden lg:flex items-center gap-2 backdrop-blur-lg sticky top-0 z-50 border-b border-default"
     >
       <ui-menu />
       <div class="leading-none flex-1 min-w-0 w-0">
@@ -89,9 +89,5 @@ const side = useCookie<string>(`job-side`, { default: () => "kanban" });
         </u-button>
       </u-dropdown-menu>
     </div>
-
-    <div
-      class="relative h-0.5 w-full bg-linear-to-l from-transparent to-primary/30"
-    ></div>
   </div>
 </template>

@@ -74,7 +74,7 @@ function onUserSelect(u: User) {
     :ui="{ content: 'max-w-3xl' }"
   >
     <template #content>
-      <ui-layout-inset :ui="{ border: 'h-1 to-success-500' }">
+      <ui-layout-inset :ui="{ border: 'h-1 bg-linear-to-r from-success-500' }">
         <div class="flex-1 flex flex-col items-center justify-center py-10">
           <u-form
             :schema="schema"

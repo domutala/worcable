@@ -101,9 +101,6 @@ function openJobNewTab(e: Event, job: Job) {
           <div></div>
         </div>
 
-        <div
-          class="relative h-1 w-full bg-linear-to-l from-transparent to-primary/30"
-        ></div>
         <!-- <ui-job-search-form /> -->
       </div>
 

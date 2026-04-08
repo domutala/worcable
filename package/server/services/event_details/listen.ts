@@ -1,13 +1,19 @@
 import { EventDetailsDocument } from "~~/server/database/collections";
 
 export function listenEvent(details: EventDetailsDocument) {
-  if (eventListeners.includes(details.id)) return;
+  if (!eventListeners.includes(details.uid)) {
+    emitter.on(details.event, (data: any) => {
+      $fetch(details.cbURL, {
+        method: "post",
+        body: data,
+        headers: details.cbHeaders,
+      }).catch((error) => {
+        console.log(error);
+      });
+    });
 
-  emitter.on(details.event, (data: any) => {
-    $fetch(details.cbURL, { method: "post", body: data, headers: {} }).catch(
-      () => {},
-    );
-  });
+    eventListeners.push(details.uid);
+  }
 
-  eventListeners.push(details.id);
+  emitter.emit(details.event, { test: true });
 }

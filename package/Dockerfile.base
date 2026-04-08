@@ -1,0 +1,36 @@
+# Stage 1: Build
+FROM node:20-slim AS builder
+
+# Installation de pnpm
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
+WORKDIR /app
+
+# Copie des fichiers de définition des dépendances
+# On copie aussi pnpm-workspace.yaml si tu en as un à la racine
+COPY package.json pnpm-lock.yaml* ./
+COPY packages/package.json ./packages/
+
+# Installation des dépendances avec pnpm
+RUN pnpm install --frozen-lockfile
+
+# Copie du reste du code
+COPY . .
+
+# Build de l'application Nuxt
+RUN pnpm run build --filter ./packages
+
+# Stage 2: Production
+FROM node:20-slim AS runner
+
+WORKDIR /app
+
+# Récupération de l'output
+COPY --from=builder /app/packages/.output ./output
+
+ENV NODE_ENV=production
+EXPOSE 3000
+
+CMD ["node", "output/server/index.mjs"]

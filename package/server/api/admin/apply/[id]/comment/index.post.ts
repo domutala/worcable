@@ -37,5 +37,7 @@ export default defineEventHandler(async (event) => {
     author: { user: event.context.session.user.id.toString() },
   });
 
+  emitter.emit("comment:new", comment);
+
   return comment;
 });

@@ -3,8 +3,10 @@ import { InferSchemaType } from "~~/server/database/types";
 
 const EventDetailsSchema = new mongoose.Schema(
   {
+    uid: { type: String, required: true },
     event: { type: String, required: true },
     cbURL: { type: String, required: true },
+    cbHeaders: { type: mongoose.Schema.Types.Mixed, default: {} },
   },
   { timestamps: true },
 );

@@ -1,3 +1,5 @@
+import pkg from "./package.json";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   runtimeConfig: {
@@ -8,6 +10,7 @@ export default defineNuxtConfig({
     public: {
       appUrl: "",
       areaCompletionUrl: "",
+      version: pkg.version,
     },
   },
 

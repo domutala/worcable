@@ -17,10 +17,7 @@ const getProxySlots = () => omit(slots, ["default"]);
     <div class="sticky top-0 z-100 backdrop-blur-3xl">
       <slot name="header" />
 
-      <div
-        class="relative h-0.5 w-full bg-linear-to-l from-transparent to-primary/30 border-b-0!"
-        :class="ui?.border"
-      ></div>
+      <div class="relative h-0.5 w-full bg-surface" :class="ui?.border"></div>
     </div>
     <slot />
   </ui-layout-content>

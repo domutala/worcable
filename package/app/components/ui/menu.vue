@@ -127,11 +127,15 @@ function buildItems(items: NavigationMenuItem[]) {
     </u-button>
 
     <template #header>
-      <div></div>
+      <div class="p-4">
+        <u-link :to="$localePath({ name: 'admin' })" @click="isOpen = false">
+          <ui-logo-app shortable />
+        </u-link>
+      </div>
     </template>
 
     <template #body>
-      <div class="p-5">
+      <div class="px-5">
         <UNavigationMenu
           :items
           :ui="{ separator: 'py-1 bg-transparent' }"
