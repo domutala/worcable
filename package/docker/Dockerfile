@@ -1,12 +1,21 @@
 # --- Étape 1 : Build ---
 FROM node:20-slim AS builder
 
+# Installation des dépendances système nécessaires pour la compilation de modules natifs (SQLite)
+RUN apt-get update && apt-get install -y \
+    python3 \
+    make \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN npm install -g pnpm@10.23.0
 
 WORKDIR /app
 
-# On ne copie que les fichiers de dépendances pour optimiser le cache Docker
+# On copie les fichiers de lock
 COPY package.json pnpm-lock.yaml ./
+
+# pnpm install va maintenant pouvoir compiler better-sqlite3 sans erreur
 RUN pnpm install --frozen-lockfile
 
 # On copie le reste du code et on build
@@ -18,15 +27,10 @@ FROM node:20-slim
 
 WORKDIR /app
 
-# On installe pnpm juste pour d'éventuels scripts, mais l'app tournera via Node
-RUN npm install -g pnpm@10.23.0
-
-# On récupère UNIQUEMENT le dossier compilé du builder
+# On n'a pas besoin de python/g++ en production, l'image reste légère
 COPY --from=builder /app/.output ./.output
 
-# Nuxt 3 utilise le port 3000 par défaut en prod
 EXPOSE 3000
+ENV NODE_ENV=production
 
-# On lance directement le serveur compilé
-# C'est ultra rapide et ça ne nécessite aucune connexion internet au démarrage
 CMD ["node", ".output/server/index.mjs"]
