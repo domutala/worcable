@@ -1,4 +1,4 @@
-name: package_push_docker
+name: CI
 
 on:
   push:
@@ -14,7 +14,7 @@ env:
 jobs:
   push-docker-image:
     runs-on: ubuntu-latest
-    # On définit les outputs pour que le job 'deploy' puisse les lire
+    name: Build and Publish Docker Image
     outputs:
       docker_tag: ${{ steps.set-tag.outputs.tag }}
       safe_branch: ${{ steps.set-tag.outputs.branch }}
