@@ -1,27 +1,15 @@
-# Étape de build
-FROM node:20-slim AS builder
+FROM node:20-slim
+
+# Installation de pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
 
-# Installation des dépendances
-COPY package*.json ./
-RUN npm install
+# On copie tout le contenu de package/ dans /app
+COPY package/ .
 
-# Copie du code et build
-COPY . .
-RUN npm run build
+# On s'assure que le script a les droits d'exécution
+RUN chmod +x ./deploy.sh
 
-# Étape de production
-FROM node:20-slim AS runner
-
-WORKDIR /app
-
-# On ne récupère que le dossier de sortie de Nuxt (.output)
-COPY --from=builder /app/.output ./.output
-
-ENV PORT=3000
-ENV NODE_ENV=production
-
-EXPOSE 3000
-
-CMD ["node", ".output/server/index.mjs"]
+# Le point d'entrée unique
+ENTRYPOINT ["./entrypoint.sh"]
