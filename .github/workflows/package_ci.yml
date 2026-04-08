@@ -147,7 +147,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             # On définit le chemin cible
-            TARGET_DIR="${{ env.BASE_DIR }}package-${{ needs.push-docker-image.outputs.safe_branch }}"
+            TARGET_DIR="${{ env.BASE_DIR }}/package-${{ needs.push-docker-image.outputs.safe_branch }}"
 
             # Connexion Docker Hub (plus sécurisé de le faire ici)
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
