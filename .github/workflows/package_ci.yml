@@ -126,7 +126,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "package/docker-compose.yaml"
-          target: "${{ env.BASE_DIR }}/package-${{ needs.push-docker-image.outputs.safe_branch }}"
+          target: "${{ env.BASE_DIR }}/package-${{ needs.push-docker-image.outputs.safe_branch }}/"
 
       - name: Copy docker/deploy.sh
         uses: appleboy/scp-action@v0.1.7
@@ -135,7 +135,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "package/docker/deploy.sh"
-          target: "${{ env.BASE_DIR }}/package-${{ needs.push-docker-image.outputs.safe_branch }}"
+          target: "${{ env.BASE_DIR }}/package-${{ needs.push-docker-image.outputs.safe_branch }}/"
 
           strip_components: 1
 
@@ -146,15 +146,16 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            # On définit le chemin cible
+            # Define the target directory path
             TARGET_DIR="${{ env.BASE_DIR }}/package-${{ needs.push-docker-image.outputs.safe_branch }}"
 
-            # Connexion Docker Hub (plus sécurisé de le faire ici)
+            # Log in to Docker Hub (performing this here is more secure)
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
-            # Rendre exécutable le script (qui a été copié dans le dossier cible)
+            # Make the deployment script executable (copied previously to the target folder)
             chmod +x $TARGET_DIR/deploy.sh
 
+            # Execute the deployment script with the necessary arguments
             $TARGET_DIR/deploy.sh \
               "${{ needs.push-docker-image.outputs.docker_tag }}" \
               "${{ needs.push-docker-image.outputs.safe_branch }}" \
