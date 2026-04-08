@@ -67,3 +67,4 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: ${{ env.IMAGE_NAME }}
           readme-filepath: ./package/docker/README.md
+          short-description: Official Docker image for the main service of Worcable
