@@ -1,8 +1,6 @@
 # --- Étape 1 : Build ---
 FROM node:20-slim AS builder
 
-
-
 # Installation des dépendances système nécessaires pour la compilation de modules natifs (SQLite)
 RUN apt-get update && apt-get install -y \
     python3 \

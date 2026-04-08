@@ -110,5 +110,8 @@ onMounted(async () => {
       <NuxtPage />
       <ui-apply-create-modal />
     </NuxtLayout>
+    <div v-else class="w-screen h-screen flex items-center justify-center">
+      No config
+    </div>
   </UApp>
 </template>
