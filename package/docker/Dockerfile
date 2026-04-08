@@ -1,17 +1,32 @@
-FROM node:20-slim
+# --- Étape 1 : Build ---
+FROM node:20-slim AS builder
 
-# Enable corepack and prepare the latest version of pnpm
-# RUN corepack enable && corepack prepare pnpm@latest --activate
 RUN npm install -g pnpm@10.23.0
 
-# Set the working directory inside the container
 WORKDIR /app
 
-# Copy all project files to the working directory
+# On ne copie que les fichiers de dépendances pour optimiser le cache Docker
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+
+# On copie le reste du code et on build
 COPY . .
+RUN pnpm build
 
-# Ensure the entrypoint script has execution permissions
-RUN chmod +x ./entrypoint.sh
+# --- Étape 2 : Production ---
+FROM node:20-slim
 
-# Define the single entry point for the container
-ENTRYPOINT ["./entrypoint.sh"]
+WORKDIR /app
+
+# On installe pnpm juste pour d'éventuels scripts, mais l'app tournera via Node
+RUN npm install -g pnpm@10.23.0
+
+# On récupère UNIQUEMENT le dossier compilé du builder
+COPY --from=builder /app/.output ./.output
+
+# Nuxt 3 utilise le port 3000 par défaut en prod
+EXPOSE 3000
+
+# On lance directement le serveur compilé
+# C'est ultra rapide et ça ne nécessite aucune connexion internet au démarrage
+CMD ["node", ".output/server/index.mjs"]
