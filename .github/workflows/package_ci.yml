@@ -46,6 +46,16 @@ jobs:
             # Always include the short SHA for traceability
             type=sha,format=short
 
+      - name: Replace README with Docker-specific version
+        run: |
+          # Move the docker-specific README to the package root
+          if [ -f "./package/docker/README.md" ]; then
+              cp ./package/docker/README.md ./package/README.md
+              echo "✅ README replaced with /package/docker/README.md"
+          else
+              echo "⚠️  Warning: /package/docker/README.md not found!"
+          fi
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
