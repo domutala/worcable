@@ -3,85 +3,49 @@ name: Deploy
 on:
   workflow_run:
     workflows: ["Build and Publish Docker Image"]
-    types:
-      - completed
-    branches:
-      - dev
-      - main
-      - "release/*"
+    types: [completed]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-
     steps:
-      - name: Extract Branch Name
-        id: branch
+      - name: Get Tag from Build Workflow
+        id: get_vars
         run: |
-          # Extract branch name and replace '/' with '-' for Docker compatibility
-          SAFE_NAME=$(echo "${{ github.event.workflow_run.head_branch }}" | sed 's/\//-/g')
-          echo "name=$SAFE_NAME" >> $GITHUB_OUTPUT
+          # GitHub Actions stocke la branche source ici
+          RAW_BRANCH="${{ github.event.workflow_run.head_branch }}"
+          # Clean name pour le dossier (ex: release/v1 -> release-v1)
+          SAFE_NAME=$(echo "$RAW_BRANCH" | sed 's/\//-/g')
 
-      - name: Determine Port
-        id: port
-        run: |
-          # Assign ports based on branch
-          if [[ "${{ steps.branch.outputs.name }}" == "main" ]]; then
-            echo "number=3000" >> $GITHUB_OUTPUT
-          elif [[ "${{ steps.branch.outputs.name }}" == "dev" ]]; then
-            echo "number=3001" >> $GITHUB_OUTPUT
+          # On détermine le tag Docker : si main -> latest, sinon nom de la branche
+          if [ "$RAW_BRANCH" == "main" ]; then
+            DOCKER_TAG="latest"
           else
-            echo "number=3002" >> $GITHUB_OUTPUT
+            DOCKER_TAG="$SAFE_NAME"
           fi
 
-      - name: Create branch directory on VPS
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_USER }}
-          script: |
-            mkdir -p /home/${{ secrets.SSH_USER }}/worcable/package-${{ steps.branch.outputs.name }}
+          echo "branch_name=$SAFE_NAME" >> $GITHUB_OUTPUT
+          echo "docker_tag=$DOCKER_TAG" >> $GITHUB_OUTPUT
 
-      - name: Copy docker-compose.yaml to VPS
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "./package/docker-compose.yaml"
-          target: "/home/${{ secrets.SSH_USER }}/worcable/package-${{ steps.branch.outputs.name }}"
-          strip_components: 1 # Pour copier directement le contenu de /package
-
-      - name: Deploy via Docker Compose
+      - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            Variables locales
-            BRANCH="${{ steps.branch.outputs.name }}"
-            TARGET_DIR="/home/${{ secrets.SSH_USER }}/worcable/package-$BRANCH"
+            # On utilise les variables générées au dessus
+            TARGET_DIR="/home/${{ secrets.SSH_USER }}/worcable/package-${{ steps.get_vars.outputs.branch_name }}"
+            mkdir -p $TARGET_DIR
+            cd $TARGET_DIR
 
-            echo "$BRANCH"
+            # Création du .env dynamique
+            cat <<EOF > .env
+            IMAGE_TAG=${{ steps.get_vars.outputs.docker_tag }}
+            BRANCH_NAME=${{ steps.get_vars.outputs.branch_name }}
+            HOST_PORT=${{ steps.get_vars.outputs.docker_tag == 'latest' && '3000' || '3001' }}
+            EOF
 
-            # cd $TARGET_DIR
-
-            # # Create the .env file for Docker Compose
-            # cat <<EOF > .env
-            # IMAGE_TAG=$BRANCH
-            # BRANCH_NAME=$BRANCH
-            # HOST_PORT=${{ steps.port.outputs.number }}
-            # EOF
-
-            # # Login to Docker Hub
-            # echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-
-            # # Force pull and restart
-            # docker compose pull
-            # docker compose up -d --remove-orphans
-
-            # # Optional: Clean up unused images to save disk space
-            # docker image prune -f
+            docker compose pull
+            docker compose up -d --remove-orphans
