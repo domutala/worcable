@@ -2,6 +2,8 @@ import pkg from "./package.json";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  vue: { propsDestructure: true },
+
   runtimeConfig: {
     databaseUrl: "",
     uploadsKey: "",
