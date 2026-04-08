@@ -122,23 +122,69 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            # On définit le chemin absolu pour éviter toute confusion
             TARGET_DIR="/home/${{ secrets.SSH_USER }}/worcable/package-${{ needs.push-docker-image.outputs.safe_branch }}"
-
+            mkdir -p $TARGET_DIR
             cd $TARGET_DIR || exit 1
 
-            # Vérification de présence du fichier (debug)
-            ls -la docker-compose.yaml
+            # --- 1. Logique de Port Dynamique ---
+            BRANCH="${{ needs.push-docker-image.outputs.safe_branch }}"
 
-            # Création du .env
+            # Port suggéré par défaut
+            if [ "$BRANCH" == "main" ]; then SUGGESTED_PORT=3000;
+            elif [ "$BRANCH" == "dev" ]; then SUGGESTED_PORT=3001;
+            else SUGGESTED_PORT=3002; fi
+
+            # Fonction pour vérifier si un port est libre
+            is_port_free() {
+              # On vérifie si le port est écouté localement
+              ! ss -tuln | grep -q ":$1 "
+            }
+
+            FINAL_PORT=$SUGGESTED_PORT
+            if ! is_port_free $FINAL_PORT; then
+              echo "⚠️  Port $FINAL_PORT is busy. Searching for a free port..."
+              # On cherche un port libre entre 3005 et 3999
+              for port in {3005..3999}; do
+                if is_port_free $port; then
+                  FINAL_PORT=$port
+                  break
+                fi
+              done
+            fi
+            echo "✅ Using Port: $FINAL_PORT"
+
+            # --- 2. Logique de Formatage des URLs ---
+            if [ "$BRANCH" == "main" ]; then
+              APP_URL="https://${{ vars.DEPLOY_BASE_URL }}"
+              DB_NAME="worcable_prod"
+            else
+              APP_URL="https://$BRANCH.sandbox.${{ vars.DEPLOY_BASE_URL }}"
+              DB_NAME="worcable_${BRANCH}_sandbox"
+            fi
+
+            # --- 3. Gestion de la NUXT_SECRET_KEY ---
+            if [ -f "package.env" ] && grep -q "NUXT_SECRET_KEY=" package.env; then
+              SECRET_KEY=$(grep "NUXT_SECRET_KEY=" package.env | cut -d'=' -f2-)
+            else
+              SECRET_KEY=$(openssl rand -base64 48 | tr -d '\n')
+            fi
+
+            # --- 4. Création des fichiers ---
             cat <<EOF > .env
             IMAGE_TAG=${{ needs.push-docker-image.outputs.docker_tag }}
-            BRANCH_NAME=${{ needs.push-docker-image.outputs.safe_branch }}
-            HOST_PORT=${{ steps.port.outputs.number }}
+            BRANCH_NAME=$BRANCH
+            HOST_PORT=$FINAL_PORT
             EOF
 
-            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+            cat <<EOF > package.env
+            PORT=$FINAL_PORT
+            NUXT_PUBLIC_APP_URL=$APP_URL
+            NUXT_DATABASE_URL="mongodb+srv://${{ secrets.MONGO_DB_USER }}:${{ secrets.MONGO_DB_PWD }}@cluster0.l1qnkbx.mongodb.net/$DB_NAME"
+            NUXT_SECRET_KEY=$SECRET_KEY
+            EOF
 
-            # Utilisation explicite du fichier si nécessaire
+            # --- 5. Déploiement ---
+            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
             docker compose pull
             docker compose up -d --remove-orphans
+            docker image prune -f

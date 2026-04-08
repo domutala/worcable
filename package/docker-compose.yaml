@@ -4,13 +4,13 @@ services:
     container_name: worcable-${BRANCH_NAME:-main}
     restart: always
     ports:
-      - "${HOST_PORT:-3000}:3000"
+      - "${PORT:-3000}:3000"
+    env_file:
+      - package.env
     environment:
-      # Nuxt runtime variables
       - NODE_ENV=production
       - NUXT_PUBLIC_APP_VERSION=${IMAGE_TAG:-latest}
-      # Ajoutez vos autres variables ici
-      - DATABASE_URL=${DATABASE_URL}
+      
     logging:
       driver: "json-file"
       options:
