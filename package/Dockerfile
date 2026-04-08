@@ -1,14 +1,16 @@
 FROM node:20-slim
 
-# Installation de pnpm
+# Enable corepack and prepare the latest version of pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
+# Set the working directory inside the container
 WORKDIR /app
 
+# Copy all project files to the working directory
 COPY . .
 
-# On s'assure que le script a les droits d'exécution
+# Ensure the entrypoint script has execution permissions
 RUN chmod +x ./entrypoint.sh
 
-# Le point d'entrée unique
+# Define the single entry point for the container
 ENTRYPOINT ["./entrypoint.sh"]

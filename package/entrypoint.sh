@@ -1,42 +1,42 @@
 #!/bin/bash
 
-# Arrêter le script en cas d'erreur
+# Stop the script if any command fails
 set -e
 
 echo "-------------------------------------------------------"
-echo "🚀 Worcable : Démarrage du processus de déploiement..."
+echo "🚀 Worcable: Starting deployment process..."
 echo "-------------------------------------------------------"
 
-# 1. Vérification de l'environnement
-echo "🔍 Vérification de l'environnement Node..."
+# 1. Environment check
+echo "🔍 Checking Node environment..."
 node -v
 pnpm -v
 
-# 2. Installation des dépendances
-# On utilise --frozen-lockfile pour garantir l'intégrité du pnpm-lock.yaml
-echo "📦 Installation des dépendances avec pnpm..."
+# 2. Dependency installation
+# We use --frozen-lockfile to ensure pnpm-lock.yaml integrity
+echo "📦 Installing dependencies with pnpm..."
 pnpm install --frozen-lockfile
 
-# 3. Build de l'application Nuxt
-# Les variables d'environnement injectées au conteneur seront lues ici
-echo "🏗️  Compilation de Nuxt (Ceci peut prendre un moment)..."
+# 3. Nuxt application build
+# Environment variables injected into the container will be read here
+echo "🏗️  Compiling Nuxt (This may take a moment)..."
 pnpm build
 
-# 4. Nettoyage (Optionnel)
-# Vous pouvez supprimer les devDependencies pour alléger le conteneur en RAM
+# 4. Cleanup (Optional)
+# You can uncomment the line below to remove devDependencies and save RAM
 # pnpm prune --prod
 
-# 5. Lancement de l'application
+# 5. Application launch
 if [ -d ".output" ]; then
     echo "-------------------------------------------------------"
-    echo "✅ Build terminé avec succès."
-    echo "📡 Lancement du serveur sur le port ${PORT:-3000}..."
+    echo "✅ Build completed successfully."
+    echo "📡 Starting server on port ${PORT:-3000}..."
     echo "-------------------------------------------------------"
     
-    # exec permet à Node de devenir le processus principal (PID 1)
-    # C'est crucial pour que Docker puisse arrêter le conteneur proprement
+    # 'exec' allows Node to become the main process (PID 1)
+    # This is crucial for Docker to handle stop signals (SIGTERM) properly
     exec node .output/server/index.mjs
 else
-    echo "❌ Erreur : Le dossier de sortie .output est introuvable."
+    echo "❌ Error: Output directory .output not found."
     exit 1
 fi
