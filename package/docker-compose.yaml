@@ -1,5 +1,5 @@
 services:
-  worcable-app:
+  base:
     image: domutala/worcable-package:${IMAGE_TAG:-latest}
     container_name: worcable-${BRANCH_NAME:-main}
     restart: always
@@ -11,10 +11,6 @@ services:
       - NODE_ENV=production
       - NUXT_PUBLIC_APP_VERSION=${IMAGE_TAG:-latest}
     
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
-      
     logging:
       driver: "json-file"
       options:
