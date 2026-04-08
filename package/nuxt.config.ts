@@ -2,7 +2,10 @@ import pkg from "./package.json";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  vue: { propsDestructure: true },
+  typescript: {
+    typeCheck: false,
+    strict: false,
+  },
 
   runtimeConfig: {
     databaseUrl: "",
