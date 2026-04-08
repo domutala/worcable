@@ -1,12 +1,14 @@
 services:
-  worcable-app:
+  base:
+    build:
+      context: .
     container_name: worcable_base
     ports:
       - "${PORT:-3000}:3000"
     environment:
       - NODE_ENV=production
       - NUXT_DATABASE_URL=${DATABASE_URL:-mongodb://mongodb:27017/worcable}
-      - NUXT_ENABLED_SERVICES=${ENABLED_SERVICES}
+      # - NUXT_ENABLED_SERVICES=${ENABLED_SERVICES}
     
     networks:
       - worcable-network

@@ -10,8 +10,8 @@ WORKDIR /app
 
 # Copie des fichiers de définition des dépendances
 # On copie aussi pnpm-workspace.yaml si tu en as un à la racine
-COPY package.json pnpm-lock.yaml* ./
-COPY packages/package.json ./packages/
+COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml ./
+COPY package.json ./packages/
 
 # Installation des dépendances avec pnpm
 RUN pnpm install --frozen-lockfile
