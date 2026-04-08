@@ -1,6 +1,10 @@
 # --- Étape 1 : Build ---
 FROM node:20-slim AS builder
 
+ENV NUXT_TS_TYPECHECK=false
+ENV SKIP_TYPECHECK=true
+
+
 # Installation des dépendances système nécessaires pour la compilation de modules natifs (SQLite)
 RUN apt-get update && apt-get install -y \
     python3 \
@@ -20,6 +24,7 @@ RUN pnpm install --frozen-lockfile && pnpm add -D tailwindcss
 
 # On copie le reste du code et on build
 COPY . .
+RUN pnpm exec nuxt prepare
 RUN pnpm build
 
 # --- Étape 2 : Production ---
