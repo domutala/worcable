@@ -45,15 +45,27 @@ jobs:
       - name: Set outputs
         id: set-tag
         run: |
-          # 1. Nettoyage du nom de branche (remplace / par -)
+          # 1. Nettoyage du nom de branche (pour les noms de dossiers VPS)
           SAFE_NAME=$(echo "${{ github.ref_name }}" | sed 's/\//-/g')
           echo "branch=$SAFE_NAME" >> $GITHUB_OUTPUT
 
-          # 2. Choix du tag Docker (latest pour main, sinon safe_branch)
+          # 2. Logique de Tag Docker
           if [ "${{ github.ref_name }}" == "main" ]; then
-            echo "tag=latest" >> $GITHUB_OUTPUT
+              # Règle 1: Main -> latest
+              echo "tag=latest" >> $GITHUB_OUTPUT
+              
+          elif [[ "${{ github.ref_name }}" =~ ^release/ ]]; then
+              # Règle 2: release/v1.0 -> v1.0
+              # On récupère tout ce qui est après le dernier '/'
+              VERSION=${{ github.ref_name }}
+              echo "tag=${VERSION#*/}" >> $GITHUB_OUTPUT
+              
           else
-            echo "tag=$SAFE_NAME" >> $GITHUB_OUTPUT
+              # Règle 3: Autre -> sha-short (fourni par metadata-action)
+              # metadata-action génère un tag de type 'sha-xxxxxxx' avec type=sha
+              # On récupère le format court via github.sha
+              SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+              echo "tag=sha-$SHORT_SHA" >> $GITHUB_OUTPUT
           fi
 
       - name: Build and push
