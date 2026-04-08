@@ -36,8 +36,6 @@ services:
       - "traefik.http.routers.worcable-${BRANCH_NAME}-http.middlewares=redirect-to-https"
 
   traefik:
-    profiles:
-      - proxy
     image: traefik:v3.0
     container_name: traefik
     command:
