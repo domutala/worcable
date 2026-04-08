@@ -88,9 +88,9 @@ jobs:
           readme-filepath: ./package/docker/README.md
 
   deploy:
+    name: Deployment
     runs-on: ubuntu-latest
     needs: push-docker-image
-    # Le job s'exécute uniquement si le build a réussi
     if: success()
 
     steps:
@@ -167,9 +167,11 @@ jobs:
 
             # --- 2. Logique de Formatage des URLs ---
             if [ "$BRANCH" == "main" ]; then
+              DOMAIN="${{ vars.DEPLOY_BASE_URL }}"
               APP_URL="https://${{ vars.DEPLOY_BASE_URL }}"
               DB_NAME="worcable_prod"
             else
+              DOMAIN="$BRANCH.sandbox.${{ vars.DEPLOY_BASE_URL }}"
               APP_URL="https://$BRANCH.sandbox.${{ vars.DEPLOY_BASE_URL }}"
               DB_NAME="worcable_${BRANCH}_sandbox"
             fi
@@ -186,6 +188,7 @@ jobs:
             IMAGE_TAG=${{ needs.push-docker-image.outputs.docker_tag }}
             BRANCH_NAME=$BRANCH
             HOST_PORT=$FINAL_PORT
+            DOMAIN=$DOMAIN
             EOF
 
             cat <<EOF > package.env
