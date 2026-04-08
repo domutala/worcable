@@ -16,3 +16,14 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    networks:
+      - worcable-net
+      
+networks:
+  worcable-net:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: "1400"
