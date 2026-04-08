@@ -16,7 +16,7 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 
 # pnpm install va maintenant pouvoir compiler better-sqlite3 sans erreur
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile && pnpm add -D tailwindcss
 
 # On copie le reste du code et on build
 COPY . .
