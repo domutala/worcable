@@ -6,7 +6,7 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
 
 # On copie tout le contenu de package/ dans /app
-COPY package/ .
+COPY . .
 
 # On s'assure que le script a les droits d'exécution
 RUN chmod +x ./deploy.sh
