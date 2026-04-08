@@ -1,0 +1,18 @@
+services:
+  worcable-app:
+    image: domutala/worcable-package:${IMAGE_TAG:-latest}
+    container_name: worcable-${BRANCH_NAME:-main}
+    restart: always
+    ports:
+      - "${HOST_PORT:-3000}:3000"
+    environment:
+      # Nuxt runtime variables
+      - NODE_ENV=production
+      - NUXT_PUBLIC_APP_VERSION=${IMAGE_TAG:-latest}
+      # Ajoutez vos autres variables ici
+      - DATABASE_URL=${DATABASE_URL}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

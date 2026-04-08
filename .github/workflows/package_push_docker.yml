@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dev
       - "release/*"
 
 env:
@@ -12,7 +13,7 @@ env:
   IMAGE_NAME: domutala/worcable-package
 
 jobs:
-  push:
+  push-docker-image:
     runs-on: ubuntu-latest
 
     steps:
@@ -34,9 +35,6 @@ jobs:
         with:
           images: ${{ env.IMAGE_NAME }}
           tags: |
-            # type=raw,value=latest
-            # type=sha,format=short
-
             # If the push is on 'main', tag as 'latest'
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
 
@@ -52,7 +50,7 @@ jobs:
           context: ./package
           file: ./package/docker/Dockerfile
           build-args: |
-            APP_VERSION=${{ github.ref_name }}
+            NUXT_PUBLIC_APP_VERSION=${{ github.ref_name }}
 
           push: true
           tags: ${{ steps.meta.outputs.tags }}

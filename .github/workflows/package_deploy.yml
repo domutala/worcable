@@ -1,0 +1,87 @@
+name: Deploy to VPS
+
+on:
+  workflow_run:
+    workflows: ["Build and Publish Docker Image"]
+    types:
+      - completed
+    branches:
+      - dev
+      - main
+      - "release/*"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Extract Branch Name
+        id: branch
+        run: |
+          # Extract branch name and replace '/' with '-' for Docker compatibility
+          SAFE_NAME=$(echo "${{ github.event.workflow_run.head_branch }}" | sed 's/\//-/g')
+          echo "name=$SAFE_NAME" >> $GITHUB_OUTPUT
+
+      - name: Determine Port
+        id: port
+        run: |
+          # Assign ports based on branch
+          if [[ "${{ steps.branch.outputs.name }}" == "main" ]]; then
+            echo "number=3000" >> $GITHUB_OUTPUT
+          elif [[ "${{ steps.branch.outputs.name }}" == "dev" ]]; then
+            echo "number=3001" >> $GITHUB_OUTPUT
+          else
+            echo "number=3002" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create branch directory on VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_USER }}
+          script: |
+            mkdir -p /home/${{ secrets.SSH_USER }}/worcable/package-${{ steps.branch.outputs.name }}
+
+      - name: Copy docker-compose.yaml to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "./package/docker-compose.yaml"
+          target: "/home/${{ secrets.SSH_USER }}/worcable/package-${{ steps.branch.outputs.name }}"
+          strip_components: 1 # Pour copier directement le contenu de /package
+
+      - name: Deploy via Docker Compose
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            Variables locales
+            BRANCH="${{ steps.branch.outputs.name }}"
+            TARGET_DIR="/home/${{ secrets.SSH_USER }}/worcable/package-$BRANCH"
+
+            echo "$BRANCH"
+
+            # cd $TARGET_DIR
+
+            # # Create the .env file for Docker Compose
+            # cat <<EOF > .env
+            # IMAGE_TAG=$BRANCH
+            # BRANCH_NAME=$BRANCH
+            # HOST_PORT=${{ steps.port.outputs.number }}
+            # EOF
+
+            # # Login to Docker Hub
+            # echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+            # # Force pull and restart
+            # docker compose pull
+            # docker compose up -d --remove-orphans
+
+            # # Optional: Clean up unused images to save disk space
+            # docker image prune -f
