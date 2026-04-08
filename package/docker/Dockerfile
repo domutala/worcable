@@ -20,7 +20,7 @@ RUN pnpm install --frozen-lockfile && pnpm add -D tailwindcss
 
 # On copie le reste du code et on build
 COPY . .
-RUN pnpm build
+RUN NUXT_TELEMETRY_DISABLED=1 npx vue-tsc --noEmit && pnpm build
 
 # --- Étape 2 : Production ---
 FROM node:20-slim
