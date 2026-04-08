@@ -1,7 +1,8 @@
 services:
   base:
-    build:
-      context: .
+    # build:
+    #   context: .
+    image: domutala/worcable:latest
     container_name: worcable_base
     ports:
       - "${PORT:-3000}:3000"
