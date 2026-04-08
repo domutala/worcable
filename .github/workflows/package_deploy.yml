@@ -1,8 +1,8 @@
-name: Deploy
+name: package_push_docker
 
 on:
   workflow_run:
-    workflows: ["Build and Publish Docker Image"]
+    workflows: ["package_push_docker"]
     types: [completed]
 
 jobs:
