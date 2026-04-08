@@ -21,14 +21,6 @@ jobs:
 
             echo "🚀 Starting deployment..."
 
-            # Aller dans le repo
-            cd ~/worcable
-
-            echo "📥 Sync with GitHub..."
-            git fetch origin dev
-            git reset --hard origin/dev
-
-            echo "📦 Go to package folder..."
             cd package
 
             echo "🐳 Deploy with Docker..."
