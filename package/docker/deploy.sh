@@ -77,7 +77,7 @@ fi
 if [ -f "package.env" ] && grep -q "NUXT_DATABASE_URL=" package.env; then
   DATABASE_URL=$(grep "NUXT_DATABASE_URL=" package.env | cut -d'=' -f2-)
 else
-  DATABASE_URL="mongodb+srv://$MONGO_USER:$MONGO_PWD@cluster0.l1qnkbx.mongodb.net/$DB_NAME"
+  DATABASE_URL="mongodb+srv://$MONGO_USER:$MONGO_PWD@cluster0.l1qnkbx.mongodb.net/$DB_NAME?appName=Cluster0"
 fi
 
 # --- 4. Configuration File Generation ---
@@ -97,8 +97,7 @@ NUXT_DATABASE_URL=$DATABASE_URL
 NUXT_SECRET_KEY=$SECRET_KEY
 EOF
 
-docker network inspect traefik-public >/dev/null 2>&1 || \
-docker network create traefik-public
+docker network inspect proxy >/dev/null 2>&1 || docker network create proxy
 
 # --- 5. Deployment Execution ---
 echo "📥 Pulling latest images..."
