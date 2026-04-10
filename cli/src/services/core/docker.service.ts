@@ -6,6 +6,7 @@ export async function runDocker(config: Config) {
   const tag = config.version.replaceAll(".", "");
   const branchName = `worcable-${tag}`;
   const domain = config.services.core.appUrl.replace(/^https?:\/\//, "");
+  const networName = "proxy";
 
   const coreService: Service = {
     image: `domutala/worcable-package:${"latest"}`,
@@ -38,7 +39,7 @@ export async function runDocker(config: Config) {
 
   coreService.labels = labels;
 
-  coreService.networks = ["proxy"];
+  coreService.networks = [networName];
 
   const r = await compose.upAll({
     log: true,
@@ -46,7 +47,7 @@ export async function runDocker(config: Config) {
     compose: {
       services: { core: coreService },
       networks: {
-        proxy: { external: true },
+        [networName]: { external: true },
       },
     },
   });
