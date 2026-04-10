@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - dev
+      - develop
       - "release/*"
 
 env:
@@ -83,5 +83,3 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: ${{ env.IMAGE_NAME }}
           readme-filepath: ./package/docker/README.md
-
-  
