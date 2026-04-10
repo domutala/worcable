@@ -9,7 +9,7 @@ export async function runDocker(config: Config) {
   const networName = "proxy";
 
   const coreService: Service = {
-    image: `domutala/worcable-package:${"latest"}`,
+    image: `domutala/worcable-core:${config.version}`,
     container_name: branchName,
     restart: "always",
     env_file: ".env",

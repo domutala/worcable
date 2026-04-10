@@ -9,7 +9,7 @@ export async function installCommand(options: { resetConfig?: boolean }) {
   logger.title("🚀 Worcable installer").log();
 
   // Version
-  const version = "latest"; // await askVersion();
+  const version = "develop"; // await askVersion();
 
   //  User config
   const userConfig = await askUserInfo({ version });

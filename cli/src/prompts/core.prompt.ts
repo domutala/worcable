@@ -7,7 +7,7 @@ import { isPortAvailable } from "../utils/is_post_used";
 import { randomBytes } from "crypto";
 import { logger } from "../services/logger.service";
 import { existsSync, mkdirSync } from "fs";
-import { runDocker } from "../services/core";
+import { runCore } from "../services/core";
 
 const envSchema = z.object({
   PORT: z.string().transform(Number).pipe(z.number().positive()).optional(),
@@ -132,10 +132,7 @@ export async function askCoreConfig(config: Config): Promise<Config> {
 
   if (!existsSync(baseDir)) mkdirSync(baseDir, { recursive: true });
 
-  if (config.user.deployMethod === "docker") {
-    runDocker(config);
-  } else if (config.user.deployMethod === "native") {
-  }
+  await runCore(config);
 
   return config;
 }

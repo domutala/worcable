@@ -27,7 +27,7 @@ export async function askVersion(): Promise<string> {
   // Ajouter les versions spéciales
   const choices = [
     { name: "Latest (stable)", value: "latest" },
-    { name: "Development (dev)", value: "develop" },
+    { name: "Development", value: "develop" },
     ...versions.map((v) => ({
       name: v,
       value: v,
