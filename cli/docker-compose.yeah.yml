@@ -1,0 +1,32 @@
+name: docker
+services:
+  core:
+    container_name: worcable-latest
+    environment:
+      NODE_ENV: production
+      NUXT_PUBLIC_APP_URL: https://app.worcable.space
+      NUXT_SECRET_KEY: 7dc888deae84acb74447ee336d977658df6900525f0b0b43e41d691d817010a5
+      PORT: "4732"
+    image: domutala/worcable-package:latest
+    labels:
+      traefik.enable: "true"
+      traefik.http.middlewares.redirect-to-https.redirectscheme.scheme: https
+      traefik.http.routers.worcable-worcable-latest-http.entrypoints: web
+      traefik.http.routers.worcable-worcable-latest-http.middlewares: redirect-to-http
+      traefik.http.routers.worcable-worcable-latest-http.rule: Host('app.worcable.space')
+      traefik.http.routers.worcable-worcable-latest.entrypoints: web,websecure
+      traefik.http.routers.worcable-worcable-latest.rule: Host('app.worcable.space')
+      traefik.http.routers.worcable-worcable-latest.tls.certresolver: myresolver
+      traefik.http.services.worcable-worcable-latest.loadbalancer.server.port: "3000"
+    logging:
+      driver: json-file
+      options:
+        max-file: "3"
+        max-size: 10m
+    networks:
+      proxy: null
+    restart: always
+networks:
+  proxy:
+    name: proxy
+    external: true

@@ -62,10 +62,10 @@ jobs:
               
           else
               # Règle 3: Autre -> sha-short (fourni par metadata-action)
-              # metadata-action génère un tag de type 'sha-xxxxxxx' avec type=sha
-              # On récupère le format court via github.sha
-              SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
-              echo "tag=sha-$SHORT_SHA" >> $GITHUB_OUTPUT
+              # On récupère le format court via github.ref_name
+
+              BRANCH_NAME=${{ github.ref_name }}
+              echo "tag=$BRANCH_NAME" >> $GITHUB_OUTPUT
           fi
 
       - name: Build and push
@@ -87,79 +87,4 @@ jobs:
           repository: ${{ env.IMAGE_NAME }}
           readme-filepath: ./package/docker/README.md
 
-  deploy:
-    name: Deployment
-    runs-on: ubuntu-latest
-    needs: push-docker-image
-    if: success()
-
-    env:
-      BASE_DIR: /home/${{ secrets.SSH_USER }}/worcable
-
-    steps:
-      - name: Checkout repository (to get docker-compose.yaml)
-        uses: actions/checkout@v4
-
-      - name: Determine Port
-        id: port
-        run: |
-          if [[ "${{ github.ref_name }}" == "main" ]]; then
-            echo "number=3000" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.ref_name }}" == "dev" ]]; then
-            echo "number=3001" >> $GITHUB_OUTPUT
-          else
-            echo "number=3002" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Create directory and Copy docker-compose
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: mkdir -p "${{ env.BASE_DIR }}/package-${{ needs.push-docker-image.outputs.safe_branch }}"
-
-      - name: Copy docker-compose.yaml
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "package/docker-compose.yaml"
-          target: "${{ env.BASE_DIR }}/package-${{ needs.push-docker-image.outputs.safe_branch }}"
-          strip_components: 1
-
-      - name: Copy docker/deploy.sh
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "package/docker/deploy.sh"
-          target: "${{ env.BASE_DIR }}/package-${{ needs.push-docker-image.outputs.safe_branch }}"
-          strip_components: 2
-
-      - name: Execute Docker Compose
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            # Define the target directory path
-            TARGET_DIR="${{ env.BASE_DIR }}/package-${{ needs.push-docker-image.outputs.safe_branch }}"
-
-            # Log in to Docker Hub (performing this here is more secure)
-            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-
-            # Make the deployment script executable (copied previously to the target folder)
-            chmod +x $TARGET_DIR/deploy.sh
-
-            # Execute the deployment script with the necessary arguments
-            $TARGET_DIR/deploy.sh \
-              "${{ needs.push-docker-image.outputs.docker_tag }}" \
-              "${{ needs.push-docker-image.outputs.safe_branch }}" \
-              "${{ vars.DEPLOY_BASE_URL }}" \
-              "${{ secrets.MONGO_DB_USER }}" \
-              "${{ secrets.MONGO_DB_PWD }}" \
-              "${{ env.BASE_DIR }}"
+  
