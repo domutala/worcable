@@ -1,5 +1,5 @@
 {
-  "name": "cli",
+  "name": "worcable-cli",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -25,6 +25,7 @@
   "devDependencies": {
     "@types/dockerode": "^4.0.1",
     "@types/node": "^25.6.0",
+    "pkg": "^5.8.1",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2"
   }
