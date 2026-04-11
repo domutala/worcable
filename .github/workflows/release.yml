@@ -6,7 +6,7 @@ on:
       - main
       - develop
       - "release/*"
-      
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,6 +19,7 @@ jobs:
       - name: Build CLI
         run: |
           cd cli
+          bun install
           bun build src/index.ts --compile --outfile worcable
 
       - name: Rename binary
