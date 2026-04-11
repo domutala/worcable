@@ -6,7 +6,9 @@ on:
       - develop
     # tags:
     #   - "cli/*"
-
+permissions:
+  contents: write
+  
 jobs:
   build:
     runs-on: ubuntu-latest
