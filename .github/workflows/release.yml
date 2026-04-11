@@ -32,8 +32,9 @@ jobs:
 
           if git ls-remote --tags origin | grep -q "refs/tags/$TAG"; then
             echo "Tag already exists on remote"
-          elif 
+          else
             git tag $TAG
+            git push origin $TAG
           fi
 
 
