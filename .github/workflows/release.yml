@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd cli
-          pnpm install
+          pnpm install --frozen-lockfile
           pnpm build
 
       - uses: oven-sh/setup-bun@v1
