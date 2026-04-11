@@ -1,4 +1,4 @@
-name: Release CLI
+name: Build CLI
 
 on:
   push:
@@ -28,7 +28,7 @@ jobs:
       
       - name: Set tag name
         id: tag-name
-        run: echo "name=vcli" >> $GITHUB_OUTPUT
+        run: echo "name=cli" >> $GITHUB_OUTPUT
       - name: Create tag
         run: |
           TAG="${{ steps.tag-name.outputs.name }}"
