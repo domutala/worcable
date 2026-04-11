@@ -2,9 +2,11 @@ name: Release CLI
 
 on:
   push:
-    tags:
-      - "cli-v*"
-
+    branches:
+      - main
+      - develop
+      - "release/*"
+      
 jobs:
   build:
     runs-on: ubuntu-latest
