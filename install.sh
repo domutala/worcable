@@ -2,7 +2,7 @@
 
 set -e
 
-REPO="domutala/worcable"
+REPO="domutala/worcable-cli"
 
 OS="$(uname -s)"
 ARCH="$(uname -m)"
@@ -38,7 +38,7 @@ case "$ARCH" in
 esac
 
 FILE="worcable-${PLATFORM}-${ARCH}"
-URL="https://github.com/${REPO}/releases/cli/download/${FILE}"
+URL="https://github.com/${REPO}/releases/latest/download/${FILE}"
 
 echo "📦 Downloading $FILE..."
 
