@@ -16,10 +16,14 @@ jobs:
 
       - uses: oven-sh/setup-bun@v1
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Build CLI
         run: |
           cd cli
           pnpm install --frozen-lockfile
+          pnpm run build
           bun build src/index.ts --compile --outfile worcable
 
       - name: Rename binary
