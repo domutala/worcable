@@ -19,7 +19,7 @@ jobs:
       - name: Build CLI
         run: |
           cd cli
-          bun install
+          pnpm install --frozen-lockfile
           bun build src/index.ts --compile --outfile worcable
 
       - name: Rename binary
