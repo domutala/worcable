@@ -17,7 +17,9 @@ export async function askVersion(): Promise<string> {
     const res = await fetch(GITHUB_API);
     const data: GitTag[] = await res.json();
 
-    versions = data.map((tag) => tag.name);
+    versions = data
+      .map((tag) => tag.name)
+      .filter((tag) => !["main", "develop", "cli"].includes(tag));
 
     loader.stop();
   } catch (err) {

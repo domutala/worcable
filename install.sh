@@ -17,7 +17,7 @@ else
   exit 1
 fi
 
-URL="https://github.com/$REPO/releases/latest/download/$FILE"
+URL="https://github.com/$REPO/releases/cli/download/$FILE"
 
 curl -L "$URL" -o worcable
 chmod +x worcable
