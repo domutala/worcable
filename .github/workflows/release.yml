@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - develop
-      - "release/*"
+      - "v*"
    
 permissions:
   contents: write
@@ -32,8 +32,7 @@ jobs:
         id: tag-name
         run: |
           if [ "${{ github.ref_name }}" == "main" ]; then
-            # Règle 1: Main -> latest
-            echo "name=latest" >> $GITHUB_OUTPUT
+            echo "name=release/latest" >> $GITHUB_OUTPUT
           elif [[ "${{ github.ref_name }}" =~ ^release/ ]]; then
             VERSION=${{ github.ref_name }}
             echo "name=$VERSION" >> $GITHUB_OUTPUT
