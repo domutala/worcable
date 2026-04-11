@@ -7,7 +7,6 @@ import { isPortAvailable } from "../utils/is_post_used";
 import { randomBytes } from "crypto";
 import { logger } from "../services/logger.service";
 import { existsSync, mkdirSync } from "fs";
-import { runCore } from "../services/core";
 
 const envSchema = z.object({
   PORT: z.string().transform(Number).pipe(z.number().positive()).optional(),
@@ -32,16 +31,15 @@ export async function askCoreConfig(config: Config): Promise<Config> {
     ].join(" ")
   );
 
-  const baseDir = join(config.user.configDir, "core", config.user.deployMethod);
+  const baseDir = join(config.user.configDir, config.user.deployMethod, "core");
+  if (!existsSync(baseDir)) mkdirSync(baseDir, { recursive: true });
+
   const env = validateEnv(loadEnv(join(baseDir, ".env")), envSchema);
 
-  // Port
-  const defaultPort = await getDefaultPort();
-  let port = defaultPort;
-
+  let port = env.PORT ?? (await getDefaultPort());
   const usePort = await input({
     message: `Port`,
-    default: defaultPort.toString(),
+    default: port?.toString(),
     validate: async (value) => {
       const num = Number(value);
       if (isNaN(num) || num < 1 || num > 65535) {
@@ -85,13 +83,28 @@ export async function askCoreConfig(config: Config): Promise<Config> {
     });
   }
 
-  let secretKey = env.NUXT_SECRET_KEY ?? randomBytes(32).toString("hex");
+  let secretKey = env.NUXT_SECRET_KEY;
   secretKey = await input({
-    message: "Application secret key (NUXT_SECRET_KEY)",
-    default: secretKey,
+    message: "Application secret key (leave empty to auto-generate)",
     validate(value) {
-      if (!z.string().min(12).safeParse(value)) {
+      if (!z.string().min(12).optional().safeParse(value)) {
         return "Secret key is too short (at least 32 characters required for security)";
+      }
+
+      return true;
+    },
+  });
+
+  secretKey ||= randomBytes(32).toString("hex");
+
+  let databaseUrl = config.services.database.env.DATABASE_URL;
+  databaseUrl ||= env.NUXT_DATABASE_URL;
+  databaseUrl = await input({
+    message: "Database URL",
+    default: databaseUrl,
+    validate(value) {
+      if (!z.url().safeParse(value)) {
+        return "Database URL is not valid";
       }
 
       return true;
@@ -101,6 +114,15 @@ export async function askCoreConfig(config: Config): Promise<Config> {
   env.PORT = port;
   env.NUXT_PUBLIC_APP_URL = appUrl;
   env.NUXT_SECRET_KEY = secretKey;
+  env.NUXT_DATABASE_URL = databaseUrl;
+
+  saveEnv(env, join(baseDir, ".env"));
+  config.services.core = {
+    baseDir,
+    appUrl,
+    port,
+    env,
+  };
 
   async function getDefaultPort() {
     let port: number;
@@ -113,26 +135,6 @@ export async function askCoreConfig(config: Config): Promise<Config> {
 
     return port;
   }
-
-  saveEnv(env, join(baseDir, ".env"));
-  config.services.core = {
-    baseDir,
-    appUrl,
-    port,
-    env,
-  };
-
-  logger.log(
-    [
-      ">",
-      logger.accent({ color: "bgMagenta", val: "core" }).val,
-      "Deployment",
-    ].join(" ")
-  );
-
-  if (!existsSync(baseDir)) mkdirSync(baseDir, { recursive: true });
-
-  await runCore(config);
 
   return config;
 }

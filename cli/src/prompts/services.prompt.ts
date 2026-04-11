@@ -20,6 +20,7 @@ export async function askServices(): Promise<ServiceName[]> {
       {
         name: "3. Mailer",
         value: "mailer",
+        disabled: "(coming soon)",
       },
       {
         name: "4. CV Parser",

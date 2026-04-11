@@ -83,18 +83,16 @@ export function saveEnv(data: Record<string, any>, filePath: string): void {
     .map(([key, value]) => {
       let formattedValue = value;
 
-      // Handle special types (Objects/Arrays) by converting back to JSON
-      if (typeof value === "object" && value !== null) {
-        formattedValue = JSON.stringify(value);
+      // // Handle special types (Objects/Arrays) by converting back to JSON
+      // if (typeof value === "object" && value !== null) {
+      //   formattedValue = JSON.stringify(value);
+      // }
+
+      if (typeof formattedValue === "string") {
+        return `${key}="${formattedValue}"`;
       }
 
-      // Add quotes if the value contains spaces to prevent parsing issues later
-      const stringValue = String(formattedValue);
-      if (stringValue.includes(" ") && !stringValue.startsWith('"')) {
-        return `${key}="${stringValue}"`;
-      }
-
-      return `${key}=${stringValue}`;
+      return `${key}=${value}`;
     })
     .join("\n");
 

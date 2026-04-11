@@ -19,8 +19,8 @@ export async function useMongo() {
 
     connectionPromise = mongoose.connect(uri, {
       maxPoolSize: 10,
-      serverSelectionTimeoutMS: 30_000, // 5000,
-      socketTimeoutMS: 45000,
+      serverSelectionTimeoutMS: 30_000,
+      socketTimeoutMS: 45_000,
     });
   }
 

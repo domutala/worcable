@@ -1,5 +1,5 @@
 # --- Étape 1 : Build ---
-FROM node:20-slim AS builder
+FROM node:22-slim AS builder
 
 # Installation des dépendances système nécessaires pour la compilation de modules natifs (SQLite)
 RUN apt-get update && apt-get install -y \
@@ -27,14 +27,14 @@ RUN pnpm exec nuxt prepare
 RUN pnpm build
 
 # --- Étape 2 : Production ---
-FROM node:20-slim
+FROM node:22-slim
 
 WORKDIR /app
 
 # On n'a pas besoin de python/g++ en production, l'image reste légère
 COPY --from=builder /app/.output ./.output
 
-EXPOSE 3000
+EXPOSE ${PORT}
 ENV NODE_ENV=production
 
 CMD ["node", ".output/server/index.mjs"]

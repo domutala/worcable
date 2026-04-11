@@ -22,6 +22,7 @@ export async function askVersion(): Promise<string> {
     loader.stop();
   } catch (err) {
     loader.error("Failed to fetch versions, fallback to defaults");
+    throw "Failed to fetch versions, fallback to defaults";
   }
 
   // Ajouter les versions spéciales

@@ -5,7 +5,7 @@ const cli = cac("worcable");
 
 cli
   .command("install", "Install Worcable")
-  .option("--reset-config", "Reset config")
+  .option("--lisener", "Update on branch change")
   .action(installCommand);
 
 cli.help();

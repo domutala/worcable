@@ -9,7 +9,7 @@ export async function askUserInfo(options: { version: string }) {
   const configManager = new ConfigManager({ version: options.version });
   let userConfig = configManager.read();
 
-  if (userConfig) return userConfig;
+  // if (userConfig) return userConfig;
 
   userConfig = await ask();
 
@@ -80,21 +80,45 @@ export async function askUserInfo(options: { version: string }) {
           description: "Recommended - Isolated and reproducible",
         },
         {
-          name: "Native ",
+          name: "Native",
           description: "Run directly on the host system",
           value: "native",
+          disabled: "(Comming soon)",
         },
       ],
       default: userConfig?.deployMethod ?? "docker",
+    });
+
+    let dockerNetwork = userConfig?.dockerNetwork ?? "proxy";
+
+    if (deployMethod === "docker") {
+      dockerNetwork = await input({
+        message: "Docker newtwork",
+        default: dockerNetwork,
+      });
+    }
+
+    const reverseProxy = await select({
+      message: "Select Worcable version to install",
+      choices: [
+        { name: "None", value: "none" },
+        { name: "traefik", value: "traefik" },
+        { name: "nginx", value: "nginx", disabled: "(Comming soon)" },
+      ],
+      default: userConfig?.reverseProxy ?? "traefik",
     });
 
     return {
       name,
       email,
       orgName,
+
       baseUrl,
       protocole,
       deployMethod,
+      dockerNetwork,
+      reverseProxy,
+
       configDir: configManager.getDir(),
       configPath: configManager.getPath(),
     } as UserConfig;
