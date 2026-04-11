@@ -22,6 +22,7 @@ jobs:
           pnpm build
 
       - uses: oven-sh/setup-bun@v1
+
       - name: Build CLI
         run: |
           cd cli
@@ -34,3 +35,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: worcable-linux
+          tag_name: ${{ github.ref_name }}
+
+# git tag cli/1.0.0
+# git push origin cli/1.0.0
