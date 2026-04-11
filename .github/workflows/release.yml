@@ -2,8 +2,10 @@ name: Release CLI
 
 on:
   push:
-    tags:
-      - "cli/*"
+    branches:
+      - develop
+    # tags:
+    #   - "cli/*"
 
 jobs:
   build:
@@ -12,29 +14,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Enable Corepack
-        run: npm i -g --force corepack && corepack enable
-
-      - name: Install dependencies
+      - name: Create and push tag
         run: |
-          cd cli
-          pnpm install --frozen-lockfile
-          pnpm build
+          git tag cli-${{github.ref_name}}
+          git push origin cli-${{github.ref_name}}
 
-      - uses: oven-sh/setup-bun@v1
 
-      - name: Build CLI
-        run: |
-          cd cli
-          bun build src/index.ts --compile --outfile worcable
+      # - name: Enable Corepack
+      #   run: npm i -g --force corepack && corepack enable
 
-      - name: Rename binary
-        run: mv cli/worcable worcable-linux
+      # - name: Install dependencies
+      #   run: |
+      #     cd cli
+      #     pnpm install --frozen-lockfile
+      #     pnpm build
 
-      - name: Upload release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: worcable-linux
-          tag_name: ${{ github.ref_name }}
+      # - uses: oven-sh/setup-bun@v1
+
+      # - name: Build CLI
+      #   run: |
+      #     cd cli
+      #     bun build src/index.ts --compile --outfile worcable
+
+      # - name: Rename binary
+      #   run: mv cli/worcable worcable-linux
+
+      # - name: Upload release
+      #   uses: softprops/action-gh-release@v2
+      #   with:
+      #     files: worcable-linux
+      #     tag_name: ${{ github.ref_name }}
 
 # git push origin cli/1.0.0
