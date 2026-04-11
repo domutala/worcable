@@ -50,7 +50,7 @@ jobs:
               # Règle 3: Autre -> sha-short (fourni par metadata-action)
               # On récupère le format court via github.ref_name
 
-              BRANCH_NAME=${{ github.ref_name }}
+              BRANCH_NAME=v${{ github.ref_name }}
               echo "name=$BRANCH_NAME" >> $GITHUB_OUTPUT
           fi
           
