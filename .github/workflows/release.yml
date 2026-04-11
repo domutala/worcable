@@ -58,10 +58,10 @@ jobs:
       - name: Rename binary
         run: mv cli/worcable worcable-linux
 
-      # - name: Upload release
-      #   uses: softprops/action-gh-release@v2
-      #   with:
-      #     files: worcable-linux
-      #     tag_name: ${{ github.ref_name }}
+      - name: Upload release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: worcable-linux
+          tag_name: cli-${{ github.ref_name }}
 
 # git push origin cli/1.0.0
