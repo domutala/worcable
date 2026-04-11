@@ -1,5 +1,5 @@
 # --- Étape 1 : Build ---
-FROM node:22-slim AS builder
+FROM node:24-slim AS builder
 
 # Installation des dépendances système nécessaires pour la compilation de modules natifs (SQLite)
 RUN apt-get update && apt-get install -y \
@@ -27,7 +27,7 @@ RUN pnpm exec nuxt prepare
 RUN pnpm build
 
 # --- Étape 2 : Production ---
-FROM node:22-slim
+FROM node:24-slim
 
 WORKDIR /app
 
