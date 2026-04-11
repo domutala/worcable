@@ -1,8 +1,11 @@
 {
-  "name": "worcable-cli",
+  "name": "@worcable/cli",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "bin": {
+    "worcable": "dist/index.js"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/index.ts"
