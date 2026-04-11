@@ -93,5 +93,3 @@ jobs:
         with:
           files: worcable-linux
           tag_name: ${{ steps.set-tag-name.outputs.name }}
-
-# git push origin cli/1.0.0
