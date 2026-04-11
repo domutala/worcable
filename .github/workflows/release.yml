@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      tag_name: ${{ steps.set-tag-name.outputs.name }}
+      tag_name: ${{ steps.tag-name.outputs.name }}
 
     steps:
       - name: Checkout
@@ -29,7 +29,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
       
       - name: Set tag name
-        id: set-tag-name
+        id: tag-name
         run: |
           # 1. Nettoyage du nom de branche (pour les noms de dossiers VPS)
           SAFE_NAME=$(echo "${{ github.ref_name }}" | sed 's/\//-/g')
@@ -56,15 +56,12 @@ jobs:
           
       - name: Create tag
         run: |
-          TAG="${{ steps.set-tag-name.outputs.name }}"
-
-          echo "Checking if tag $TAG exists..."
+          TAG="${{ steps.tag-name.outputs.name }}"
 
           if git ls-remote --tags origin | grep -q "refs/tags/$TAG"; then
             echo "Tag already exists on remote"
           else
             git tag $TAG
-            git push origin $TAG
           fi
 
           git push origin $TAG
@@ -92,4 +89,4 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: worcable-linux
-          tag_name: ${{ steps.set-tag-name.outputs.name }}
+          tag_name: ${{ steps.tag-name.outputs.name }}
