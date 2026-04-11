@@ -17,15 +17,13 @@ jobs:
       - name: Enable Corepack
         run: npm i -g --force corepack && corepack enable
 
-      # - name: Setup Node.js
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: latest
-      #     cache: 'pnpm' # or 'yarn'
-
       - name: Install dependencies
-        run: pnpm install 
+        run: |
+          cd cli
+          pnpm install
+          pnpm build
 
+      - uses: oven-sh/setup-bun@v1
 
       # - name: Install pnpm
       #   uses: pnpm/action-setup@v4
@@ -38,7 +36,7 @@ jobs:
       #     node-version: 24
       #     cache: 'pnpm'
 
-      # - uses: oven-sh/setup-bun@v1
+     
       # - name: Build CLI
       #   run: |
       #     cd cli
