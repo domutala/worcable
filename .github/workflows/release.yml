@@ -30,10 +30,8 @@ jobs:
           git tag $TAG
           git push origin $TAG
 
-
-
-      # - name: Enable Corepack
-      #   run: npm i -g --force corepack && corepack enable
+      - name: Enable Corepack
+        run: npm i -g --force corepack && corepack enable
 
       # - name: Install dependencies
       #   run: |
