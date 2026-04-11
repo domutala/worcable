@@ -14,30 +14,42 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: oven-sh/setup-bun@v1
+      - name: Enable Corepack
+        run: corepack enable
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-
-      - name: Use Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
-          cache: 'pnpm'
+          node-version: '24'
+          cache: 'pnpm' # or 'yarn'
 
-      - name: Build CLI
-        run: |
-          cd cli
-          pnpm install --frozen-lockfile
-          pnpm run build
-          bun build src/index.ts --compile --outfile worcable
+      - name: Install dependencies
+        run: pnpm install 
 
-      - name: Rename binary
-        run: mv cli/worcable worcable-linux
 
-      - name: Upload release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: worcable-linux
+      # - name: Install pnpm
+      #   uses: pnpm/action-setup@v4
+      #   with:
+      #     version: 10
+
+      # - name: Use Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: 24
+      #     cache: 'pnpm'
+
+      # - uses: oven-sh/setup-bun@v1
+      # - name: Build CLI
+      #   run: |
+      #     cd cli
+      #     pnpm install --frozen-lockfile
+      #     pnpm run build
+      #     bun build src/index.ts --compile --outfile worcable
+
+      # - name: Rename binary
+      #   run: mv cli/worcable worcable-linux
+
+      # - name: Upload release
+      #   uses: softprops/action-gh-release@v2
+      #   with:
+      #     files: worcable-linux
