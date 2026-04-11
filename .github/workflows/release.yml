@@ -37,5 +37,4 @@ jobs:
           files: worcable-linux
           tag_name: ${{ github.ref_name }}
 
-# git tag cli/1.0.0
 # git push origin cli/1.0.0
