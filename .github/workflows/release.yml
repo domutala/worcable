@@ -3,9 +3,7 @@ name: Release CLI
 on:
   push:
     branches:
-      - main
       - develop
-      - "v*"
    
 permissions:
   contents: write
@@ -30,17 +28,7 @@ jobs:
       
       - name: Set tag name
         id: tag-name
-        run: |
-          if [ "${{ github.ref_name }}" == "main" ]; then
-            echo "name=release/latest" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.ref_name }}" =~ ^release/ ]]; then
-            VERSION=${{ github.ref_name }}
-            echo "name=$VERSION" >> $GITHUB_OUTPUT
-          else
-            BRANCH_NAME=release/${{ github.ref_name }}
-            echo "name=$BRANCH_NAME" >> $GITHUB_OUTPUT
-          fi
-          
+        run: echo "name=vcli" >> $GITHUB_OUTPUT
       - name: Create tag
         run: |
           TAG="${{ steps.tag-name.outputs.name }}"
