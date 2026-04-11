@@ -15,5 +15,5 @@ jobs:
       - name: Create cli tag
         run: |
           git tag cli/${{ github.ref_name }}
-          git push origin cli-v1.0.0
+          git push origin cli/${{ github.ref_name }}
 
