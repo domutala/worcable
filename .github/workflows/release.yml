@@ -26,6 +26,7 @@ jobs:
       - uses: oven-sh/setup-bun@v1
       - name: Build CLI
         run: |
+          cd cli
           bun build src/index.ts --compile --outfile worcable
 
       - name: Rename binary
@@ -35,7 +36,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: worcable-linux
-          
+
       # - name: Install pnpm
       #   uses: pnpm/action-setup@v4
       #   with:
