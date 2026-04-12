@@ -1,11 +1,11 @@
-# Worcable Package
+# Worcable Core
 
 Official Docker image for the **Worcable** platform.
 
 
 ## 🐳 Docker Image
 ```bash
-domutala/worcable-package:latest
+domutala/worcable-core:latest
 ```
 
 ## 🛠️ Quick Start
@@ -14,7 +14,7 @@ domutala/worcable-package:latest
 ```yaml
 services:
   worcable:
-    image: domutala/worcable-package:latest
+    image: domutala/worcable-core:latest
     ports:
       - "3000:3000"
     environment:
@@ -30,7 +30,7 @@ docker run -d -p 3000:3000 \
   -e NUXT_PUBLIC_APP_URL=https://your-app.com \
   -e NUXT_DATABASE_URL=mongodb://your-db-url \
   -e NUXT_SECRET_KEY=$(openssl rand -base64 32) \
-  domutala/worcable-package
+  domutala/worcable-core
 ```
 
 ---
