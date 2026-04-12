@@ -1,4 +1,4 @@
-name: CI
+name: Continuous Integration & Delivery Pipeline
 
 on:
   push:
