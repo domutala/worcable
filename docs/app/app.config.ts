@@ -1,7 +1,7 @@
 export default defineAppConfig({
   ui: {
     colors: {
-      primary: "lime",
+      primary: "blue",
       neutral: "neutral",
     },
 
@@ -12,7 +12,19 @@ export default defineAppConfig({
       },
     },
 
-    button: {},
+    button: {
+      compoundVariants: [
+        {
+          color: "primary",
+          variant: "solid",
+          class: "text-white",
+        },
+      ],
+    },
+
+    link: {
+      base: "hover:text-primary text-primary-400 transition-colors",
+    },
   },
 
   seo: {
@@ -20,6 +32,7 @@ export default defineAppConfig({
   },
 
   repository: "https://github.com/domutala/worcable",
+  contribueUrl: " https://github.com/domutala/worcable/issues/new/choose",
 
   links: [
     {

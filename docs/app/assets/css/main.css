@@ -8,8 +8,8 @@
   --container-8xl: 90rem;
   --font-sans: 'Public Sans', sans-serif;
 
-  --color-surface: #d7ded4;
-  --color-body: #cdd4cb;
+  --color-surface: #f8f8f8;
+  --color-body: #fff;
 
   --color-lime-50: #faffe5;
   --color-lime-100: #f5ffcc;
@@ -22,6 +22,18 @@
   --color-lime-800: #526600;
   --color-lime-900: #293300;
   --color-lime-950: #1d2400;
+
+  --color-blue-50: #e6e6ff;
+  --color-blue-100: #d1d0ff;
+  --color-blue-200: #9f9fff;
+  --color-blue-300: #706fff;
+  --color-blue-400: #3935ff;
+  --color-blue-500: #0900c2;
+  --color-blue-600: #0600a5;
+  --color-blue-700: #040085;
+  --color-blue-800: #020067;
+  --color-blue-900: #01004e;
+  --color-blue-950: #010031;
 }
 
 :root {
@@ -30,6 +42,6 @@
 
 .dark {
   --color-body: var(--ui-bg);
-  --color-surface: #000000;
+  --color-surface: #161616;
   --ui-primary: var(--ui-color-primary-500);
 }

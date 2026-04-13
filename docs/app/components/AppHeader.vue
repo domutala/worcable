@@ -1,13 +1,4 @@
-<script setup lang="ts">
-import type { ContentNavigationItem } from "@nuxt/content";
-
-const { header } = useAppConfig();
-
-const navigation = inject<Ref<ContentNavigationItem[]>>("navigation");
-const filteredNavigation = computed(() => {
-  return navigation?.value.filter((n) => !n.path.startsWith("/docs"));
-});
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <UHeader
@@ -28,21 +19,23 @@ const filteredNavigation = computed(() => {
 
     <template #right>
       <UButton
+        :to="$localePath({ name: 'docs-slug', params: { slug: 'deployment' } })"
+        size="xl"
+        variant="soft"
+        color="neutral"
+        class="rounded-4xl cursor-pointer border border-default"
+      >
+        {{ $t("header.get_started") }}
+      </UButton>
+
+      <UButton
+        :to="$localePath({ name: 'book-demo' })"
         size="xl"
         variant="solid"
         color="primary"
         class="rounded-4xl cursor-pointer"
       >
         {{ $t("header.book_demo") }}
-      </UButton>
-
-      <UButton
-        size="xl"
-        variant="soft"
-        color="neutral"
-        class="rounded-4xl cursor-pointer"
-      >
-        {{ $t("header.get_started") }}
       </UButton>
     </template>
 
