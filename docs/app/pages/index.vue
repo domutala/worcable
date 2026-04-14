@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import type {} from "nuxt-swiper";
 import { useClipboard } from "@vueuse/core";
-import type { CarouselItem } from "@nuxt/ui";
+import _ from "lodash";
 
 const { header, repository, contribueUrl, docHomePage } = useAppConfig();
 const copy = useClipboard({});
@@ -15,28 +14,10 @@ const advantages = {
   simplicity: { icon: "i-lucide-book-text", to: docHomePage },
 };
 
-const features = {
-  pipeline: {},
-  cvtheque: {},
-  collaboration: {},
-  career_site: {},
-};
+const features = ["pipeline", "cv_parser", "collaboration", "career_site"];
 
-const allFeatures = {
-  pipeline: { icon: "i-lucide-workflow" },
-  cv_parser: { icon: "i-lucide-file-text" },
-  candidate_management: { icon: "i-lucide-users-round" },
-  collaboration: { icon: "i-lucide-shield-user" },
-  communication: { icon: "i-lucide-messages-square" },
-  job_distribution: { icon: "i-lucide-share-2" },
-  security: { icon: "i-lucide-shield-check" },
-  deployment: { icon: "i-lucide-server" },
-  career_site: { icon: "i-lucide-globe" },
-  ai_matching: { icon: "i-lucide-sparkles" },
-};
-
-const featureCarouseContainer = useTemplateRef("features-carousel");
-const swiper = useSwiper(featureCarouseContainer, {
+const featureCarousel = ref(null);
+useSwiper(featureCarousel, {
   effect: "slide",
   loop: true,
   spaceBetween: 20,
@@ -116,7 +97,7 @@ const swiper = useSwiper(featureCarouseContainer, {
     <div
       class="flex not-lg:flex-col lg:divide-x not-lg:divide-y divide-default border-t border-default"
     >
-      <AppLinkAnime
+      <AppLinkBox
         v-for="(advantage, code) in advantages"
         :label="$t('words.know_more')"
         :key="code"
@@ -142,7 +123,7 @@ const swiper = useSwiper(featureCarouseContainer, {
             />
           </p>
         </div>
-      </AppLinkAnime>
+      </AppLinkBox>
     </div>
   </Container>
 
@@ -188,34 +169,66 @@ const swiper = useSwiper(featureCarouseContainer, {
   </Container>
   <Container :ui="{ content: 'bg-' }">
     <div class="flex flex-wrap divide-x divide-y divide-default">
-      <div
-        v-for="(feature, code) in features"
-        :key="code"
-        class="w-full md:w-1/2 block text-left lg:nth-[3]:border-b-0 lg:nth-[2]:border-r-0"
+      <AppLinkBox
+        v-for="idx in features"
+        :key="idx"
+        :to="$localePath(Features[idx]!.page)"
+        link-to-label
+        class="w-full md:w-1/2 flex flex-col text-left lg:nth-[3]:border-b-0 lg:nth-[2]:border-r-0 p-10"
       >
-        <div class="p-10 max-w-150">
+        <div class="max-w-120 mb-auto pb-5">
+          <u-icon :name="Features[idx]?.icon" class="size-10 mb-4" />
+
           <h3 class="text-xl font-blac text-primary">
             <MDC
               unwrap="p"
-              :value="$t(`pages.index.features.items.${code}.title`)"
+              :value="$t(`pages.index.features.items.${idx}.title`)"
             />
           </h3>
 
           <p class="mt-3 max-w-180">
             <MDC
               unwrap="p"
-              :value="$t(`pages.index.features.items.${code}.description`)"
+              :value="$t(`pages.index.features.items.${idx}.description`)"
             />
           </p>
         </div>
-
-        <!-- <img :src="feature.img" class="max-w-full h-auto mx-auto" /> -->
-      </div>
+      </AppLinkBox>
     </div>
+  </Container>
+  <Container>
+    <ClientOnly>
+      <div class="py-10">
+        <swiper-container ref="featureCarousel" :init="false">
+          <swiper-slide
+            v-for="idx in _.difference(Object.keys(Features), features)"
+            :key="idx"
+            :to="$localePath(Features[idx]!.page)"
+            class="w-100 h-auto"
+          >
+            <AppLinkBox
+              class="p-5 border border-default rounded-lg h-full flex flex-col"
+            >
+              <u-icon
+                :name="Features[idx]?.icon"
+                class="size-7 mb-4 text-primary"
+              />
+
+              <h3 class="text-xl font-">
+                <MDC unwrap="p" :value="$t(`features.${idx}.title`)" />
+              </h3>
+              <p class="py-3 mb-auto">
+                <MDC unwrap="p" :value="$t(`features.${idx}.description`)" />
+              </p>
+            </AppLinkBox>
+          </swiper-slide>
+        </swiper-container>
+      </div>
+    </ClientOnly>
   </Container>
 
   <Container :ui="{ content: 'group/opensource' }">
-    <AppLinkAnime
+    <AppLinkBox
       :label="$t('pages.index.open_source.cta_secondary')"
       :to="$localePath({ name: 'why-open-source' })"
       class="relative block px-10 py-10"
@@ -272,33 +285,6 @@ const swiper = useSwiper(featureCarouseContainer, {
           </nuxt-link>
         </div>
       </u-page-grid>
-    </AppLinkAnime>
-  </Container>
-
-  <Container :ui="{ content: 'bg-' }">
-    <ClientOnly>
-      <div class="py-10">
-        <swiper-container ref="features-carousel" :init="false">
-          <swiper-slide
-            v-for="(feature, idx) in allFeatures"
-            :key="idx"
-            class="w-100 h-auto"
-          >
-            <AppLinkAnime
-              class="p-5 border border-default rounded-lg h-full flex flex-col"
-            >
-              <u-icon :name="feature.icon" class="size-7 mb-4 text-primary" />
-
-              <h3 class="text-xl font-">
-                <MDC unwrap="p" :value="$t(`features.${idx}.title`)" />
-              </h3>
-              <p class="py-3 mb-auto">
-                <MDC unwrap="p" :value="$t(`features.${idx}.description`)" />
-              </p>
-            </AppLinkAnime>
-          </swiper-slide>
-        </swiper-container>
-      </div>
-    </ClientOnly>
+    </AppLinkBox>
   </Container>
 </template>

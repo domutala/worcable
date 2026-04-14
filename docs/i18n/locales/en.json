@@ -51,7 +51,7 @@
             "title": "Pipeline de Recrutement Dynamique",
             "description": "Visualisez et pilotez vos talents via un Kanban intuitif et entièrement personnalisable. Suivez l'évolution de chaque candidat en temps réel, de la prise de contact initiale jusqu'à la signature finale, avec une fluidité totale."
           },
-          "cvtheque": {
+          "cv_parser": {
             "title": "CVthèque Intelligente & IA",
             "description": "Centralisez et valorisez votre propre base de talents. Notre moteur d'analyse extrait automatiquement les données clés de vos CV pour vous offrir un scoring précis et une recherche multicritères ultra-rapide parmi vos candidats."
           },

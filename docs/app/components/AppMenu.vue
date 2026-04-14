@@ -143,7 +143,7 @@ const items = ref<NavigationMenuItem[]>([
         </ul>
 
         <div class="w-1/2">
-          <AppLinkAnime :label="$t('words.know_more')" class="p-5 w-120 hidden">
+          <AppLinkBox :label="$t('words.know_more')" class="p-5 w-120 hidden">
             <img
               src="https://www.docker.com/app/uploads/2024/10/banner-docker-logo-blue-wavy-bkgd-480x252.png"
               class="w-full object-cover object-center rounded-lg"
@@ -157,7 +157,7 @@ const items = ref<NavigationMenuItem[]>([
                 consequatur corrupti optio perferendis placeat nobis!
               </p>
             </div>
-          </AppLinkAnime>
+          </AppLinkBox>
         </div>
       </div>
     </template>
