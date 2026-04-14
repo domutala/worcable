@@ -35,7 +35,7 @@ withDefaults(
       class="relative flex items-center w-max"
     >
       <div
-        class="whitespace-nowrap w-0 group-hover/link-anime:w-full transition-all relative h-full overflow-hidden text-primary"
+        class="whitespace-nowrap w-0 not-lg:w-full group-hover/link-anime:w-full transition-all relative h-full overflow-hidden text-primary"
       >
         <span v-if="!$slots.label">{{ label }}</span>
         <slot name="label" />

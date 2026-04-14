@@ -109,13 +109,19 @@
         "content": "Worcable is not a black box. It's a community-driven project where every line of code is **auditable**. Avoid vendor lock-in and evolve the tool according to **your real needs**.",
         "contribute": "Become a contributor"
       },
-
       "open_source": {
         "badge": "Truly Open Source",
         "title": "Le recrutement comme du code",
         "content": "L'Open Source n'est pas seulement un choix technique, **c'est une stratégie business**. Pas de frais par licence, une extensibilité infinie via API, et la **garantie que vos données de recrutement vous appartiennent pour toujours**.",
         "cta_primary": "Contribuer",
         "cta_secondary": "Why open source"
+      },
+
+      "deployment": {
+        "badge": "Infrastructure & Ops",
+        "title": "Un déploiement **maîtrisé** en quelques secondes",
+        "description": "Déployez en 60 secondes. Grâce à notre **CLI interactif**, l'installation sur votre propre infrastructure (VPS, Cloud, On-premise) est un jeu d'enfant. Gardez le contrôle total sur votre base de données MongoDB et assurez une conformité RGPD native sans effort.",
+        "cta_primary": "Lancer l'installation"
       }
     }
   },
@@ -151,7 +157,7 @@
     },
     "deployment": {
       "title": "Déploiement Souverain",
-      "description": "Approche Docker-first et CLI interactif. Installez Worcable sur vos propres serveurs en quelques minutes pour une indépendance technique absolue."
+      "description": "Approche Docker-first et CLI interactif. Installez Worcable sur vos propres serveurs en quelques secondes pour une indépendance technique absolue."
     },
     "career_site": {
       "title": "Site Carrière Haute Performance",

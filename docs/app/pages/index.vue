@@ -2,7 +2,7 @@
 import { useClipboard } from "@vueuse/core";
 import _ from "lodash";
 
-const { header, repository, contribueUrl, docHomePage } = useAppConfig();
+const { repository, contribueUrl, docHomePage } = useAppConfig();
 const copy = useClipboard({});
 
 const advantages = {
@@ -15,6 +15,9 @@ const advantages = {
 };
 
 const features = ["pipeline", "cv_parser", "collaboration", "career_site"];
+const featuresCarousel = computed(() => {
+  return _.difference(Object.keys(Features), features);
+});
 
 const featureCarousel = ref(null);
 useSwiper(featureCarousel, {
@@ -22,9 +25,17 @@ useSwiper(featureCarousel, {
   loop: true,
   spaceBetween: 20,
   slidesPerView: "auto",
-  autoplay: { delay: 1500, pauseOnMouseEnter: true },
+  autoplay: {
+    delay: 1500,
+    pauseOnMouseEnter: true,
+    disableOnInteraction: true,
+  },
   slidesOffsetBefore: 20,
   slidesOffsetAfter: 20,
+  navigation: {
+    nextEl: ".swiper-button-next",
+    prevEl: ".swiper-button-prev",
+  },
 });
 </script>
 
@@ -198,10 +209,10 @@ useSwiper(featureCarousel, {
   </Container>
   <Container>
     <ClientOnly>
-      <div class="py-10">
+      <div class="py-10 relative">
         <swiper-container ref="featureCarousel" :init="false">
           <swiper-slide
-            v-for="idx in _.difference(Object.keys(Features), features)"
+            v-for="idx in featuresCarousel"
             :key="idx"
             :to="$localePath(Features[idx]!.page)"
             class="w-100 h-auto"
@@ -223,8 +234,86 @@ useSwiper(featureCarousel, {
             </AppLinkBox>
           </swiper-slide>
         </swiper-container>
+
+        <u-button
+          icon="i-lucide-arrow-left"
+          class="swiper-button-prev rounded-full cursor-pointer bg-default absolute top-1/2 -translate-y-1/2 left-2.5 z-5"
+          color="neutral"
+          variant="outline"
+          square
+        ></u-button>
+
+        <u-button
+          icon="i-lucide-arrow-right"
+          class="swiper-button-next rounded-full cursor-pointer absolute top-1/2 -translate-y-1/2 right-2.5 z-5"
+          color="neutral"
+          variant="outline"
+          square
+        ></u-button>
       </div>
     </ClientOnly>
+  </Container>
+
+  <Container :ui="{ content: 'group/deployment' }">
+    <AppLinkBox
+      :to="$localePath(Features.deployment!.page)"
+      class="relative block px-10 py-10"
+      link-to-label
+    >
+      <u-page-grid>
+        <div
+          class="flex justify-center not-lg:justify-start items-center not-lg:col-span-3 not-lg:order-2"
+        >
+          <u-button
+            :to="
+              $localePath({ name: 'docs-slug', params: { slug: 'deployment' } })
+            "
+            :color="$colorMode.value === 'dark' ? 'primary' : 'neutral'"
+            size="xl"
+            class="rounded-full px-5 py-4"
+            icon="i-lucide-play"
+          >
+            {{ $t("pages.index.deployment.cta_primary") }}
+          </u-button>
+        </div>
+
+        <div class="lg:col-span-2 col-span-3 text-right">
+          <div
+            class="group/dqdqsqdsqd flex items-center w-max gap-1 bg-black px-2 py-1 rounded- text-white ml-auto mb-3"
+          >
+            {{ $t("pages.index.deployment.badge") }}
+          </div>
+
+          <h2 class="font-bold text-5xl light:text-primary max-w-160 ml-auto">
+            <MDC :value="$t('pages.index.deployment.title')" unwrap="p" />
+          </h2>
+
+          <p class="mt-5 text-xl">
+            <MDC :value="$t('pages.index.deployment.description')" />
+          </p>
+        </div>
+      </u-page-grid>
+
+      <div class="flex items-center justify- pb-5">
+        <div
+          class="bg-surface border-default flex items-center justify-center gap-0 px-2 py-1 max-w-11/12 rounded-lg mt-5 cursor-copy"
+          @click="
+            copy.copy(
+              '// curl -o- https://raw.githubusercontent.com/domutala/worcable/install.sh | bash'
+            )
+          "
+        >
+          <div class="shrink-0">curl -o-</div>
+          <div class="truncate min-w-0 flex-1">
+            https://raw.githubusercontent.com/domutala/worcable
+          </div>
+          <div class="shrink-">/install.sh | bash</div>
+
+          <u-icon v-if="copy.copied.value" name="i-lucide-check" class="ml-3" />
+          <u-icon v-else name="i-lucide-copy" class="ml-3" />
+        </div>
+      </div>
+    </AppLinkBox>
   </Container>
 
   <Container :ui="{ content: 'group/opensource' }">
