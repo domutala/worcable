@@ -29,11 +29,10 @@ body {
     position: absolute;
     inset: 0;
     background: linear-gradient(
-        155deg,
-        color-mix(in srgb, var(--ui-bg-inverted) 3%, transparent) -57.71%,
-        transparent 100.25%
-      ),
-      rgba(0, 0, 0, 0);
+      155deg,
+      color-mix(in srgb, var(--ui-color-primary-50) 50%, transparent) 0%,
+      transparent 100%
+    );
     transition: opacity 0.4s ease;
     pointer-events: none;
     opacity: 0;

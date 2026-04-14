@@ -2,7 +2,7 @@
   "name": "docs",
   "private": false,
   "type": "module",
-  "version":"0.28.0",
+  "version": "0.28.0",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -27,6 +27,7 @@
     "nuxt": "^4.4.2",
     "nuxt-llms": "0.2.0",
     "nuxt-og-image": "^5.1.13",
+    "nuxt-swiper": "2.0.1",
     "tailwindcss": "^4.2.1",
     "ufo": "^1.6.3",
     "unist-util-visit": "^5.1.0",

@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import OgImageDocs from "~/components/OgImage/OgImageDocs.vue";
+import type {} from "nuxt-swiper";
 import { useClipboard } from "@vueuse/core";
 import type { CarouselItem } from "@nuxt/ui";
 
 const { header, repository, contribueUrl, docHomePage } = useAppConfig();
+const copy = useClipboard({});
 
 const advantages = {
   control: {
@@ -22,59 +23,28 @@ const features = {
 };
 
 const allFeatures = {
-  pipeline: {
-    title: "Pipeline Dynamique",
-    description:
-      "Un Kanban ultra-réactif conçu en Vue.js pour une gestion fluide des candidats. Personnalisez vos étapes de recrutement pour coller à la réalité de vos process métiers.",
-  },
-  cv_parser: {
-    title: "CVthèque & IA",
-    description:
-      "Moteur d'extraction Python haute précision. Transformez vos PDF en données structurées exploitables instantanément grâce à notre technologie de parsing propriétaire.",
-  },
-  candidate_management: {
-    title: "Gestion des Candidats",
-    description:
-      "Fiches profil enrichies avec historique complet des interactions. Une source de vérité unique pour centraliser chaque point de contact.",
-  },
-  collaboration: {
-    title: "Collaboration & Permissions",
-    description:
-      "Système de rôles granulaire (Admin, Recruteur, Manager). Partagez vos feedbacks et évaluez vos talents en équipe sans friction.",
-  },
-  communication: {
-    title: "Communication Centralisée",
-    description:
-      "Éliminez les silos. Gérez tous vos échanges mails et messages directement depuis l'interface pour une traçabilité totale.",
-  },
-  job_distribution: {
-    title: "Diffusion des Offres",
-    description:
-      "Multidiffusion simplifiée sur vos canaux stratégiques. Maximisez votre visibilité tout en gardant une interface de gestion unifiée.",
-  },
-  security: {
-    title: "Sécurité & Auditabilité",
-    description:
-      "Transparence totale du code source. Auditez, sécurisez et maîtrisez votre stack de recrutement conformément aux exigences RGPD les plus strictes.",
-  },
-  deployment: {
-    title: "Déploiement Souverain",
-    description:
-      "Approche Docker-first et CLI interactif. Installez Worcable sur vos propres serveurs en quelques minutes pour une indépendance technique absolue.",
-  },
-  career_site: {
-    title: "Site Carrière Haute Performance",
-    description:
-      "Propulsé par Nuxt 3. Profitez d'un SEO Google Jobs natif et de temps de chargement records pour convertir vos visiteurs en candidats.",
-  },
-  ai_matching: {
-    title: "Matching Intelligent",
-    description:
-      "Algorithmes de scoring basés sur l'IA pour identifier les meilleurs profils. Gagnez un temps précieux en priorisant les candidatures les plus pertinentes.",
-  },
+  pipeline: { icon: "i-lucide-workflow" },
+  cv_parser: { icon: "i-lucide-file-text" },
+  candidate_management: { icon: "i-lucide-users-round" },
+  collaboration: { icon: "i-lucide-shield-user" },
+  communication: { icon: "i-lucide-messages-square" },
+  job_distribution: { icon: "i-lucide-share-2" },
+  security: { icon: "i-lucide-shield-check" },
+  deployment: { icon: "i-lucide-server" },
+  career_site: { icon: "i-lucide-globe" },
+  ai_matching: { icon: "i-lucide-sparkles" },
 };
 
-const copy = useClipboard({});
+const featureCarouseContainer = useTemplateRef("features-carousel");
+const swiper = useSwiper(featureCarouseContainer, {
+  effect: "slide",
+  loop: true,
+  spaceBetween: 20,
+  slidesPerView: "auto",
+  autoplay: { delay: 1500, pauseOnMouseEnter: true },
+  slidesOffsetBefore: 20,
+  slidesOffsetAfter: 20,
+});
 </script>
 
 <template>
@@ -144,7 +114,7 @@ const copy = useClipboard({});
     </u-container>
 
     <div
-      class="flex not-lg:flex-col lg:divide-x not-lg:divide-y divide-default bg-surface/70 border-t border-default"
+      class="flex not-lg:flex-col lg:divide-x not-lg:divide-y divide-default border-t border-default"
     >
       <AppLinkAnime
         v-for="(advantage, code) in advantages"
@@ -306,25 +276,29 @@ const copy = useClipboard({});
   </Container>
 
   <Container :ui="{ content: 'bg-' }">
-    <UCarousel
-      v-slot="{ item }"
-      loop
-      auto-scroll
-      arrows
-      :items="Object.keys(allFeatures)"
-      :ui="{
-        item: 'basis-1/3 border-r border-default h-full',
-        controls: 'absolute top-1/2 -translate-y-1/2 inset-x-15',
-      }"
-    >
-      <div class="p-5">
-        <h3 class="text-xl font-bold">
-          <MDC unwrap="p" :value="$t(`features.${item}.title`)" />
-        </h3>
-        <p class="mt-3">
-          <MDC unwrap="p" :value="$t(`features.${item}.description`)" />
-        </p>
+    <ClientOnly>
+      <div class="py-10">
+        <swiper-container ref="features-carousel" :init="false">
+          <swiper-slide
+            v-for="(feature, idx) in allFeatures"
+            :key="idx"
+            class="w-100 h-auto"
+          >
+            <AppLinkAnime
+              class="p-5 border border-default rounded-lg h-full flex flex-col"
+            >
+              <u-icon :name="feature.icon" class="size-7 mb-4 text-primary" />
+
+              <h3 class="text-xl font-">
+                <MDC unwrap="p" :value="$t(`features.${idx}.title`)" />
+              </h3>
+              <p class="py-3 mb-auto">
+                <MDC unwrap="p" :value="$t(`features.${idx}.description`)" />
+              </p>
+            </AppLinkAnime>
+          </swiper-slide>
+        </swiper-container>
       </div>
-    </UCarousel>
+    </ClientOnly>
   </Container>
 </template>

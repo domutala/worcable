@@ -13,12 +13,20 @@ withDefaults(
   {
     icon: "i-lucide-arrow-right",
     linkToLabel: false,
+    label() {
+      const i18n = useI18n();
+      return i18n.t("words.know_more");
+    },
   }
 );
 </script>
 
 <template>
-  <component :is="!linkToLabel ? NuxtLink : 'div'" class="group/link-anime" :to>
+  <component
+    :is="!linkToLabel ? NuxtLink : 'div'"
+    class="group/link-anime relative"
+    :to
+  >
     <slot />
 
     <component

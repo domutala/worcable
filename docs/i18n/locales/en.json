@@ -164,8 +164,8 @@
   },
 
   "header": {
-    "why_worcable": { "title": "Why Open Source" },
-    "documentation": { "title": "Documentation" },
+    "why_open_source": { "title": "Why Open Source" },
+    "developers": { "title": "Developers" },
     "api": { "title": "Api" },
 
     "book_demo": "Book Demo",

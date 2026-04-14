@@ -22,7 +22,15 @@
           <div class="sticky top-0 z-10">
             <div
               class="h-(--ui-header-height) flex items-center px-5 bg-linear-to-b from-default to-transparent"
-            ></div>
+            >
+              <u-button
+                :to="$localePath({ name: 'index' })"
+                icon="i-lucide-home"
+                variant="ghost"
+                color="neutral"
+                square
+              ></u-button>
+            </div>
           </div>
 
           <!-- bg-linear-to-tl from-surface/50 dark:from-surface/35 to-default -->

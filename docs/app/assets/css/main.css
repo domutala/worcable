@@ -5,11 +5,13 @@
 @source "../../../content/**/*";
 
 @theme static {
+
   --container-8xl: 90rem;
   --font-sans: 'Public Sans', sans-serif;
 
   --color-surface: #f8f8f8;
   --color-body: #fff;
+
 
   --color-lime-50: #faffe5;
   --color-lime-100: #f5ffcc;
@@ -38,6 +40,7 @@
 
 :root {
   --ui-container: var(--container-8xl);
+  --ui-app-container: calc(var(--spacing) * 340);
 }
 
 .dark {

@@ -9,7 +9,7 @@ defineProps<{
   <component
     :is="tag || 'section'"
     :class="ui?.root"
-    class="ui-section group not-last:[&_.ui-section--content]:border-b"
+    class="app-container group not-last:[&_.app-container--content]:border-b"
   >
     <slot name="top" />
 
@@ -23,7 +23,7 @@ defineProps<{
       <div
         data-slot="content"
         :class="ui?.content"
-        class="ui-section--content border-default border-x max-w-340 w-full relative"
+        class="app-container--content border-default border-x max-w-340 w-full relative"
       >
         <slot />
       </div>
